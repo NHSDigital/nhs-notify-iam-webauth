@@ -1,0 +1,41 @@
+{
+  "name": "nhs-notify-iam",
+  "version": "1.0.0",
+  "description": "[![CI/CD Pull Request](https://github.com/nhs-england-tools/repository-template/actions/workflows/cicd-1-pull-request.yaml/badge.svg)](https://github.com/nhs-england-tools/repository-template/actions/workflows/cicd-1-pull-request.yaml) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=repository-template&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=repository-template)",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@aws-amplify/backend": "^1.0.3",
+    "@aws-amplify/backend-cli": "^1.0.4",
+    "@types/react": "^18.3.3",
+    "aws-cdk": "^2.146.0",
+    "aws-cdk-lib": "^2.146.0",
+    "constructs": "^10.3.0",
+    "esbuild": "^0.21.5",
+    "tsx": "^4.15.4",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "@aws-amplify/adapter-nextjs": "^1.2.4",
+    "@aws-amplify/ui-react": "^6.1.12",
+    "aws-amplify": "^6.3.6",
+    "next": "^14.2.4",
+    "nhsuk-frontend": "^8.2.0",
+    "nhsuk-react-components": "^4.1.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  }
+}

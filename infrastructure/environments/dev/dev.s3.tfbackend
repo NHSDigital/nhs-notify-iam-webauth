@@ -1,0 +1,3 @@
+bucket         = "tf-state-975050048865"
+key            = "auth/dev.tfstate"
+# dynamodb_table = "${project}-terraform-statelock"
