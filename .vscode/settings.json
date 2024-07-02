@@ -1,7 +1,19 @@
 {
-  "markdownlint.config": {
-    "MD013": false,
-    "MD024": { "siblings_only": true },
-    "MD033": false
+  "autoOpenWorkspace.enableAutoOpenIfSingleWorkspace": true,
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "**/.ruby-lsp": true,
+    "docs": true,
+    ".github": true,
+    ".devcontainer": true,
+    ".vscode": false,
+    "tests":true,
+    "infrastructure":true,
+    "scripts":true
   }
 }
