@@ -1,0 +1,21 @@
+name: "Package Terraform"
+description: "Validate and package terraform configuration as an artifact"
+inputs:
+  version:
+    description: "Version number"
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Validate
+      shell: bash
+      run: echo TODO Validate Terraform
+
+    - name: Upload artifact
+      uses: actions/actions/upload-artifact@v4
+      with:
+        path: "infrastructure"
+        name: iam-infrastructure-${{ inputs.version }}

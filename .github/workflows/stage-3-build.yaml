@@ -44,23 +44,18 @@ jobs:
         uses: ./.github/actions/build-docs
         with:
           version: "${{ inputs.version }}"
-  artefact-1:
-    name: "Artefact 1"
+  artefact-terraform:
+    name: "Package Terraform"
     runs-on: ubuntu-latest
     timeout-minutes: 3
     steps:
       - name: "Checkout code"
         uses: actions/checkout@v4
-      - name: "Build artefact 1"
-        run: |
-          echo "Building artefact 1 ..."
-      - name: "Check artefact 1"
-        run: |
-          echo "Checking artefact 1 ..."
-      - name: "Upload artefact 1"
-        run: |
-          echo "Uploading artefact 1 ..."
-          # TODO: Use either action/cache or action/upload-artifact
+
+      - name: "Upload artifact"
+        uses: ./.github/actions/package-terraform
+        with:
+          version: "${{ inputs.version }}"
   artefact-n:
     name: "Artefact n"
     runs-on: ubuntu-latest
