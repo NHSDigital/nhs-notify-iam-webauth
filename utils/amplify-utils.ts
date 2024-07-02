@@ -16,11 +16,10 @@ export async function AuthGetCurrentUserServer() {
         const currentUser = await getCurrentUser(contextSpec);
         console.log({ currentUser });
 
-        // const session = await fetchAuthSession(contextSpec);
-        // console.log({ session })
-        const attributes = await fetchUserAttributes(contextSpec);
-        console.log({ attributes });
-        return { currentUser, attributes };
+        const session = await fetchAuthSession(contextSpec);
+        const idToken = session.tokens?.idToken?.payload;
+        console.log({ idToken })
+        return { currentUser, idToken };
       }
     });
   } catch (error) {

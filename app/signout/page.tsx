@@ -5,14 +5,14 @@ import { redirect } from 'next/navigation';
 
 export default async function Page() {
 
-  const { currentUser, attributes } = await AuthGetCurrentUserServer() ?? {};
+  const { currentUser, idToken } = await AuthGetCurrentUserServer() ?? {};
   if (!currentUser) {
     redirect('/');
   }
 
   return <>
     <h1>Sign out</h1>
-    <p>You are currently logged in as <strong>{attributes?.email}</strong></p>
+    <p>You are currently logged in as <strong>{idToken?.email?.toString()}</strong></p>
     <Logout />
   </>
 }
