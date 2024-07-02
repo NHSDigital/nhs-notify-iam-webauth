@@ -34,16 +34,18 @@ function components(redirectPath: string): DefaultComponents {
             >
               Sign in to your account
             </Heading>
-            <div className="login-oidc"
-                 style={{
-                   position: 'relative',
-                   padding: `${tokens.space.xl} ${tokens.space.xl} 0 ${tokens.space.xl}` }}>
+            <div
+              className="login-oidc"
+              style={{
+                position: 'relative',
+                padding: `${tokens.space.xl} ${tokens.space.xl} 0 ${tokens.space.xl}`
+              }}>
               <Button
                 className="login-oidc__button"
-                style={{width: '100%'}}
+                style={{ width: '100%' }}
                 onClick={() => auth0Login(redirectPath)}>Log in with Auth0</Button>
             </div>
-            <div style={{textAlign:'center'}}>
+            <div style={{ textAlign: 'center' }}>
               or
             </div>
           </>
