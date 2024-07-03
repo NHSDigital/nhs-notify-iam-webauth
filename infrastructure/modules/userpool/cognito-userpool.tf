@@ -1,5 +1,5 @@
 resource "aws_cognito_user_pool" "userpool" {
-  name = "${local.csi}"
+  name = local.csi
 
   username_attributes = ["email"]
 

@@ -16,6 +16,6 @@ variable "module" {
 }
 
 variable "stage" {
-  type = string
+  type        = string
   description = "The domain PTL stage (prod|nonprod)"
 }

@@ -13,7 +13,7 @@ locals {
   )
 
   deployment_default_tags = {
-    Domain     = var.domain
+    Domain      = var.domain
     Environment = var.environment
     Component   = var.component
     Module      = var.module

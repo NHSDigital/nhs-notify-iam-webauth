@@ -11,16 +11,16 @@ variable "component" {
 }
 
 variable "module" {
-  type = string
+  type    = string
   default = "userpool"
 }
 
 variable "stage" {
-  type = string
+  type        = string
   description = "The domain PTL stage (prod|nonprod)"
 }
 
 variable "app_url" {
-  type = string
+  type        = string
   description = "URL of web application used for auth callbacks"
 }

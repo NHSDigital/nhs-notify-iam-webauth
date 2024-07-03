@@ -16,7 +16,7 @@ variable "module" {
 }
 
 variable "stage" {
-  type = string
+  type        = string
   description = "The domain PTL stage (prod|nonprod)"
 }
 
@@ -25,7 +25,7 @@ variable "cognito_user_pool_id" {
 }
 
 variable "cognito_hosted_login_domain" {
-  type = string
+  type        = string
   description = "The domain assigned to the cognito user pool to handle login callbacks"
 }
 
@@ -39,6 +39,6 @@ variable "domain_name" {
 }
 
 variable "github_pat" {
-  type = string
+  type        = string
   description = "GitHub Personal Access Token used to initialise a new Amplify app"
 }

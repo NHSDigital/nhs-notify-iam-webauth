@@ -1,9 +1,9 @@
 resource "aws_amplify_app" "app" {
-  name = "${local.csi}"
+  name = local.csi
 
   iam_service_role_arn = aws_iam_role.service_role.arn
 
-  repository = var.repository
+  repository   = var.repository
   access_token = var.github_pat
 
   # Only enable automation for dev environment
