@@ -1,13 +1,12 @@
 'use client';
 
-import { useAuthenticator } from '@aws-amplify/ui-react';
 import { Button } from 'nhsuk-react-components';
+import { signOut } from '@aws-amplify/auth';
 
 export default function Logout() {
-  const { authStatus, signOut } = useAuthenticator();
 
   async function handleSignOut() {
-    signOut();
+    await signOut();
     location.href = '/';
   }
 
