@@ -11,9 +11,6 @@
     "docs": true,
     ".github": true,
     ".devcontainer": true,
-    ".vscode": false,
-    "tests":true,
-    "infrastructure":true,
-    "scripts":true
+    ".vscode": false
   }
 }
