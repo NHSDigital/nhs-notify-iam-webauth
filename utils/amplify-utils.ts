@@ -14,11 +14,8 @@ export async function AuthGetCurrentUserServer() {
       nextServerContext: { cookies },
       operation: async (contextSpec) => {
         const currentUser = await getCurrentUser(contextSpec);
-        console.log({ currentUser });
-
         const session = await fetchAuthSession(contextSpec);
         const idToken = session.tokens?.idToken?.payload;
-        console.log({ idToken })
         return { currentUser, idToken };
       }
     });

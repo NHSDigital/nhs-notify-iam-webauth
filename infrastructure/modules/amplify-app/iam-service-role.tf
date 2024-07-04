@@ -31,13 +31,7 @@ resource "aws_iam_role_policy" "logging" {
           "logs:CreateLogStream",
           "logs:PutLogEvents"
         ],
-        "Resource" : "arn:aws:logs:eu-west-2:${local.account_id}:log-group:/aws/amplify/*:log-stream:*"
-      },
-      {
-        "Sid" : "CreateLogGroup",
-        "Effect" : "Allow",
-        "Action" : "logs:CreateLogGroup",
-        "Resource" : "arn:aws:logs:eu-west-2:${local.account_id}:log-group:/aws/amplify/*"
+        "Resource" : "arn:aws:logs:eu-west-2:${local.account_id}:log-group:/aws/amplify/${aws_amplify_app.app.id}:log-stream:*"
       },
       {
         "Sid" : "DescribeLogGroups",
