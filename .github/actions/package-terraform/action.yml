@@ -10,10 +10,6 @@ runs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Validate
-      shell: bash
-      run: echo TODO Validate Terraform
-
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
