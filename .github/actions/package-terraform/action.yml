@@ -15,7 +15,7 @@ runs:
       run: echo TODO Validate Terraform
 
     - name: Upload artifact
-      uses: actions/actions/upload-artifact@v4
+      uses: actions/upload-artifact@v4
       with:
         path: "infrastructure"
         name: iam-infrastructure-${{ inputs.version }}
