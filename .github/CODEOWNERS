@@ -1,7 +1,13 @@
 # NHS Notify Code Owners
 
-# Notify default owners
-* @rossbugginsnhs @m-houston @edmundcraske2-nhs @timireland
+* @NHSDigital/nhs-notify-iam
+
+# require review by github repo admins if changing any common github actions or platform ci/cd yaml files
+.github/actions/ @NHSDigital/nhs-notify-admins
+.github/workflows/platform_* @NHSDigital/nhs-notify-admins
+
+# require review by github repo admins if changing any of the terraform files
+infrastructure/ @NHSDigital/nhs-notify-admins
 
 # Codeowners must be final check
 /.github/CODEOWNERS @NHSDigital/nhs-notify-code-owners
