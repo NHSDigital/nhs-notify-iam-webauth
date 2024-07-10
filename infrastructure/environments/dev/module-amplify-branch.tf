@@ -3,7 +3,7 @@ module "amplify_branch" {
   domain      = var.domain
   environment = var.environment
   component   = var.component
-  stage       = var.stage
+  group       = var.group
 
   cognito_user_pool_id                      = module.userpool.user_pool_id
   cognito_user_pool_identity_provider_names = module.userpool.identity_provider_names

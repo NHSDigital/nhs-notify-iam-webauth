@@ -18,8 +18,8 @@ resource "aws_amplify_domain_association" "domain" {
   domain_name            = "${var.subdomain}.${var.domain_name}"
   enable_auto_sub_domain = false
 
-  # Wait for domain verification in prod stage environments
-  wait_for_verification = var.stage == "prod"
+  # Wait for domain verification in prod group environments
+  wait_for_verification = var.group == "prod"
 
   sub_domain {
     branch_name = aws_amplify_branch.branch.branch_name

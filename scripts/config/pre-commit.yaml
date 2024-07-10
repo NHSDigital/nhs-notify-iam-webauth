@@ -12,8 +12,8 @@ repos:
         exclude: .+\.cs
       - id: forbid-new-submodules
       - id: mixed-line-ending
-      - id: pretty-format-json
-        args: ['--autofix']
+#      - id: pretty-format-json # This re-orders object keys which is annoying for structured JSON config like package.json
+#        args: ['--autofix']
     # -   id: ...
   - repo: local
     hooks:

@@ -15,9 +15,9 @@ variable "module" {
   default = "branch"
 }
 
-variable "stage" {
+variable "group" {
   type        = string
-  description = "The domain PTL stage (prod|nonprod)"
+  description = "The domain PTL group (prod|nonprod)"
 }
 
 variable "cognito_user_pool_id" {

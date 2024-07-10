@@ -3,7 +3,7 @@ variable "domain" {
   default = "iam"
 }
 
-variable "stage" {
+variable "group" {
   type    = string
   default = "nonprod"
 }
@@ -25,7 +25,7 @@ variable "github_pat" {
 
 variable "repository" {
   type    = string
-  default = "https://github.com/NHSDigital/nhs-notify-iam"
+  default = "https://github.com/NHSDigital/nhs-notify-iam-webauth"
 }
 
 variable "branch" {

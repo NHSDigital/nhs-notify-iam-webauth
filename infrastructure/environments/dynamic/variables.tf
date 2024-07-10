@@ -3,7 +3,7 @@ variable "domain" {
   default = "iam"
 }
 
-variable "stage" {
+variable "group" {
   type    = string
   default = "nonprod"
 }

@@ -3,7 +3,7 @@ module "userpool" {
   domain      = var.domain
   environment = var.environment
   component   = var.component
-  stage       = var.stage
+  group       = var.group
 
   app_url = "https://${local.app_domain_name}"
 }

@@ -20,7 +20,7 @@ resource "aws_amplify_app" "app" {
   environment_variables = {
     USER_POOL_ID        = var.cognito_user_pool_id
     HOSTED_LOGIN_DOMAIN = var.cognito_hosted_login_domain
-    NOTIFY_STAGE        = var.stage
+    NOTIFY_GROUP        = var.group
     NOTIFY_ENVIRONMENT  = var.environment
     NOTIFY_DOMAIN_NAME  = var.domain_name
   }

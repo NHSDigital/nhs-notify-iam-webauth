@@ -3,7 +3,7 @@ module "amplify_app" {
   domain      = var.domain
   environment = var.environment
   component   = var.component
-  stage       = var.stage
+  group       = var.group
 
   cognito_user_pool_id        = module.userpool.user_pool_id
   cognito_hosted_login_domain = module.userpool.hosted_login_domain
