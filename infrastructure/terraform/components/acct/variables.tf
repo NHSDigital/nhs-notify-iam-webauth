@@ -51,6 +51,12 @@ variable "default_tags" {
 # Variables specific to the "dnsroot"component
 ##
 
+variable "log_retention_in_days" {
+  type        = number
+  description = "The retention period in days for the Cloudwatch Logs events to be retained, default of 0 is indefinite"
+  default     = 0
+}
+
 variable "root_domain_name" {
   type        = string
   description = "The service's root DNS root nameespace, like nonprod.nhsnotify.national.nhs.uk"
