@@ -1,7 +1,7 @@
 module "amplify_branch" {
-  source      = "../../modules/amp_branch"
+  source = "../../modules/amp_branch"
 
-  name           = lower(substr(join("", regexall("[a-zA-Z0-9-]+",var.branch_name)),0,25))
+  name           = lower(substr(join("", regexall("[a-zA-Z0-9-]+", var.branch_name)), 0, 25))
   aws_account_id = var.aws_account_id
   component      = var.component
   environment    = var.environment
