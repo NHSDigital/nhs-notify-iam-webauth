@@ -1,5 +1,5 @@
 module "amplify_branch" {
-  source      = "../../modules/amp_branch"
+  source = "../../modules/amp_branch"
 
   name           = var.environment
   aws_account_id = var.aws_account_id

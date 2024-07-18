@@ -62,22 +62,22 @@ variable "name" {
 
 variable "cognito_user_pool_client_id" {
   description = "Cognito User Pool client ID"
-  type = string
+  type        = string
 }
 
 variable "cognito_user_pool_identity_provider_names" {
   description = "A list of Cognito IDP names"
-  type = list(string)
+  type        = list(string)
 }
 
 variable "amplify_app_id" {
   description = "Amplify application ID"
-  type = string
+  type        = string
 }
 
 variable "branch" {
   description = "The name of the branch being deployed"
-  type = string
+  type        = string
 }
 
 variable "domain_name" {

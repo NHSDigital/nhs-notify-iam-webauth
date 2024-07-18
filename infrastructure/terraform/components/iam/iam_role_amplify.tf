@@ -1,5 +1,5 @@
 resource "aws_iam_role" "amplify" {
-  name = "${local.csi}-service-role"
+  name               = "${local.csi}-service-role"
   assume_role_policy = data.aws_iam_policy_document.assumerole_amplify.json
 }
 

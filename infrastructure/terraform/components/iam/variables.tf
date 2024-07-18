@@ -70,19 +70,19 @@ variable "root_domain_name" {
 }
 
 variable "enable_amplify_branch_auto_build" {
-  type = bool
+  type        = bool
   description = "Enable automatic building of branches"
-  default = false
+  default     = false
 }
 
 variable "cognito_user_pool_additional_callback_urls" {
-  type = list(string)
+  type        = list(string)
   description = "A list of additional callback_urls for the cognito user pool"
-  default = []
+  default     = []
 }
 
 variable "enable_cognito_built_in_idp" {
-  type = bool
+  type        = bool
   description = "Enable the use of Cognito as an IDP; CIS2 is prefered"
-  default = false
+  default     = false
 }
