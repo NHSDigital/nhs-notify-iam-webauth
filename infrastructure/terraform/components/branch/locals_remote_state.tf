@@ -1,7 +1,7 @@
 locals {
   bootstrap = data.terraform_remote_state.bootstrap.outputs
   acct      = data.terraform_remote_state.acct.outputs
-  iam       = data.terraform_remote_state.iam.outputs
+  iam      = data.terraform_remote_state.iam.outputs
 }
 
 data "terraform_remote_state" "bootstrap" {
