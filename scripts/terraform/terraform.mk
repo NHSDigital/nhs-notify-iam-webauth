@@ -42,9 +42,9 @@ clean:: # Remove Terraform files (terraform) - optional: terraform_dir|dir=[path
 
 _terraform: # Terraform command wrapper - mandatory: cmd=[command to execute]; optional: dir=[path to a directory where the command will be executed, relative to the project's top-level directory, default is one of the module variables or the example directory, if not set], opts=[options to pass to the Terraform command, default is none/empty]
 	# 'TERRAFORM_STACK' is passed to the functions as environment variable
-	TERRAFORM_STACK=$(or ${TERRAFORM_STACK}, $(or ${terraform_stack}, $(or ${STACK}, $(or ${stack}, scripts/terraform/examples/terraform-state-aws-s3))))
+	TERRAFORM_STACK=$(or ${TERRAFORM_STACK}, $(or ${terraform_stack}, $(or ${STACK}, ${stack})))
 	dir=$(or ${dir}, ${TERRAFORM_STACK})
-	source scripts/terraform/terraform.lib.sh
+	. "scripts/terraform/terraform.lib.sh"; \
 	terraform-${cmd} # 'dir' and 'opts' are accessible by the function as environment variables, if set
 
 # ==============================================================================
@@ -54,6 +54,12 @@ terraform-shellscript-lint: # Lint all Terraform module shell scripts @Quality
 	for file in $$(find scripts/terraform -type f -name "*.sh"); do
 		file=$${file} scripts/shellscript-linter.sh
 	done
+
+terraform-sec: # TFSEC check against Terraform files - optional: terraform_dir|dir=[path to a directory where the command will be executed, relative to the project's top-level directory, default is one of the module variables or the example directory, if not set], terraform_opts|opts=[options to pass to the Terraform fmt command, default is '-recursive'] @Quality
+	tfsec infrastructure/terraform \
+		--force-all-dirs \
+		--exclude-downloaded-modules \
+		--config-file scripts/config/tfsec.yml
 
 # ==============================================================================
 # Module tests and examples - please DO NOT edit this section!
@@ -68,7 +74,7 @@ terraform-example-destroy-aws-infrastructure: # Destroy example of AWS infrastru
 
 terraform-example-clean: # Remove Terraform example files @ExamplesAndTests
 	dir=$(or ${dir}, ${TERRAFORM_STACK})
-	source scripts/terraform/terraform.lib.sh
+	. "scripts/terraform/terraform.lib.sh"; \
 	terraform-clean
 	rm -f ${TERRAFORM_STACK}/.terraform.lock.hcl
 

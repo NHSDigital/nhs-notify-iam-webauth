@@ -2,7 +2,7 @@
 
 terraform 1.7.0
 pre-commit 3.6.0
-
+tfsec 1.28.6
 # ==============================================================================
 # The section below is reserved for Docker image versions.
 
