@@ -7,8 +7,6 @@ components/**/backend_tfscaffold.tf
 # password, private keys, and other secrets. These should not be part of version
 # control as they are data points which are potentially sensitive and subject
 # to change depending on the environment.
-*.tfvars
-*.tfvars.json
 
 # Compiled files
 **/*.tfstate
@@ -17,6 +15,8 @@ components/**/backend_tfscaffold.tf
 **/.terraform
 **/.terraform.lock.hcl
 **/.terraform/*
+**.tfvars
+**.tfvars.json
 **/build/*
 **/work/*
 **/*tfstate.lock.info

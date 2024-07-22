@@ -38,7 +38,7 @@ variable "group" {
 variable "component" {
   type        = string
   description = "The variable encapsulating the name of this component"
-  default     = "acct"
+  default     = "iam"
 }
 
 variable "default_tags" {
@@ -57,16 +57,32 @@ variable "log_retention_in_days" {
   default     = 0
 }
 
+variable "kms_deletion_window" {
+  type        = string
+  description = "When a kms key is deleted, how long should it wait in the pending deletion state?"
+  default     = "30"
+}
+
 variable "root_domain_name" {
   type        = string
   description = "The service's root DNS root nameespace, like nonprod.nhsnotify.national.nhs.uk"
   default     = "nonprod.nhsnotify.national.nhs.uk"
 }
 
-variable "initial_cli_secrets_provision_override" {
-  type        = map(string)
-  description = "A map of default value to intialise SSM secret values with. Only useful for initial setup of the account due to lifecycle rules."
-  default     = {}
-  # Usage like:
-  #  ... -a apply -- -var initial_cli_secrets_provision_override={\"github_pat\":\"l0ngstr1ng"}
+variable "enable_amplify_branch_auto_build" {
+  type        = bool
+  description = "Enable automatic building of branches"
+  default     = false
+}
+
+variable "cognito_user_pool_additional_callback_urls" {
+  type        = list(string)
+  description = "A list of additional callback_urls for the cognito user pool"
+  default     = []
+}
+
+variable "enable_cognito_built_in_idp" {
+  type        = bool
+  description = "Enable the use of Cognito as an IDP; CIS2 is prefered"
+  default     = false
 }

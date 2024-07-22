@@ -38,7 +38,7 @@ variable "group" {
 variable "component" {
   type        = string
   description = "The variable encapsulating the name of this component"
-  default     = "acct"
+  default     = "branch"
 }
 
 variable "default_tags" {
@@ -51,22 +51,15 @@ variable "default_tags" {
 # Variables specific to the "dnsroot"component
 ##
 
-variable "log_retention_in_days" {
-  type        = number
-  description = "The retention period in days for the Cloudwatch Logs events to be retained, default of 0 is indefinite"
-  default     = 0
-}
-
-variable "root_domain_name" {
+variable "parent_amplify_environment" {
   type        = string
-  description = "The service's root DNS root nameespace, like nonprod.nhsnotify.national.nhs.uk"
-  default     = "nonprod.nhsnotify.national.nhs.uk"
+  description = "The name of the environment which deployed the parent Amplify resource. Used to identify the appropriate state file."
+  default     = "main"
 }
 
-variable "initial_cli_secrets_provision_override" {
-  type        = map(string)
-  description = "A map of default value to intialise SSM secret values with. Only useful for initial setup of the account due to lifecycle rules."
-  default     = {}
-  # Usage like:
-  #  ... -a apply -- -var initial_cli_secrets_provision_override={\"github_pat\":\"l0ngstr1ng"}
+variable "branch_name" {
+  type        = string
+  description = "The branch name to deploy"
+  default     = "branch"
 }
+
