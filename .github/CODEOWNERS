@@ -11,7 +11,6 @@ infrastructure/ @NHSDigital/nhs-notify-admins
 
 # Codeowners must be final check
 /.github/CODEOWNERS @NHSDigital/nhs-notify-code-owners
-/CODEOWNERS @NHSDigital/nhs-notify-code-owners
 
 
 # Each NHS Notify repository should have clear code owners set.
