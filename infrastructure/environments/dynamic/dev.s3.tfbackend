@@ -1,3 +1,0 @@
-bucket         = "tf-state-975050048865"
-key            = "dynamic/branch.tfstate"
-# dynamodb_table = "${project}-terraform-statelock"
