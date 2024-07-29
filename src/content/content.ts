@@ -19,8 +19,8 @@ const footerComponent = {
 };
 
 const mainLayout = {
-  title: 'NHS Notify - WEB IAM',
-  description: 'NHS NOTIFY WEB IAM',
+  title: 'Sign in - Create and submit templates - NHS Notify',
+  description: 'Sign in - Create and submit templates - NHS Notify',
 };
 
 const content = {
