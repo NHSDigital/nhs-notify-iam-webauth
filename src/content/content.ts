@@ -34,5 +34,4 @@ const content = {
   pages: {},
 };
 
-
 export default content;

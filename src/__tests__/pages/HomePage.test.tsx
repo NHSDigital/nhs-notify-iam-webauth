@@ -5,6 +5,6 @@ describe('HomePage component', () => {
   it('renders component correctly', () => {
     render(<HomePage />);
 
-    expect(screen.getByTestId("page-heading")).toBeInTheDocument();
+    expect(screen.getByTestId('page-heading')).toBeInTheDocument();
   });
 });
