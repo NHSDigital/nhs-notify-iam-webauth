@@ -122,7 +122,6 @@ jobs:
   test-accessibility:
     name: "Accessibility test"
     runs-on: ubuntu-latest
-    needs: environment-set-up
     timeout-minutes: 10
     steps:
       - name: "Checkout code"
