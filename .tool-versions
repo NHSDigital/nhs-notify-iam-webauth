@@ -3,6 +3,9 @@
 terraform 1.7.0
 pre-commit 3.6.0
 tfsec 1.28.6
+nodejs 20.13.1
+gitleaks 8.15.3
+direnv 2.32.1
 # ==============================================================================
 # The section below is reserved for Docker image versions.
 
