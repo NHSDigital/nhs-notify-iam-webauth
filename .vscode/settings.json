@@ -3,5 +3,9 @@
     "MD013": false,
     "MD024": { "siblings_only": true },
     "MD033": false
-  }
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "eslint.codeActionsOnSave.mode": "problems"
 }
