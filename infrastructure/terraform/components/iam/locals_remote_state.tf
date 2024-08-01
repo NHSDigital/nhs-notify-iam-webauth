@@ -32,7 +32,7 @@ data "terraform_remote_state" "acct" {
       var.project,
       var.aws_account_id,
       "eu-west-2",
-      "main"
+      var.environment
     )
 
     region = "eu-west-2"
