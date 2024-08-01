@@ -22,12 +22,12 @@ jobs:
 
           DISPATCH_EVENT=$(jq -ncM \
             --arg infraRepoName "${this_repo_name}" \
-            --arg releaseVersion "${{ github.ref_name }}" \
+            --arg releaseVersion "${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" \
             --arg targetEnvironment "pr${{ github.event.number }}" \
             --arg targetAccountGroup "nhs-notify-iam-dev" \
             --arg targetComponent "branch" \
             --arg terraformAction "apply" \
-            --arg overrides "branch_name=${{ github.ref_name }}" \
+            --arg overrides "branch_name=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" \
             '{ "ref": "main",
               "inputs": {
                 "infraRepoName": $infraRepoName,

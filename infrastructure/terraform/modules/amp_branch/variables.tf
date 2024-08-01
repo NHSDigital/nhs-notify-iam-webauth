@@ -61,18 +61,18 @@ variable "name" {
 }
 
 variable "cognito_user_pool_client_id" {
-  description = "Cognito User Pool client ID"
   type        = string
+  description = "Cognito User Pool client ID"
 }
 
 variable "cognito_user_pool_identity_provider_names" {
-  description = "A list of Cognito IDP names"
   type        = list(string)
+  description = "A list of Cognito IDP names"
 }
 
 variable "amplify_app_id" {
-  description = "Amplify application ID"
   type        = string
+  description = "Amplify application ID"
 }
 
 variable "branch" {
@@ -89,4 +89,10 @@ variable "subdomain" {
   type        = string
   default     = "main"
   description = "Subdomain used as the branch alias"
+}
+
+variable "enable_auto_deploy" {
+  type        = bool
+  description = "Enable the auto deployment of the branch code as well as just the resources for it"
+  default     = false
 }

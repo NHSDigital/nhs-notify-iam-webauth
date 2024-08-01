@@ -16,7 +16,7 @@ resource "aws_amplify_app" "main" {
 
   environment_variables = {
     USER_POOL_ID = aws_cognito_user_pool.main.id
-    # HOSTED_LOGIN_DOMAIN = "auth.${var.environment}.${local.acct.dns_zone["name"]}"
+    # HOSTED_LOGIN_DOMAIN = "auth.${local.acct.dns_zone["name"]}"
     NOTIFY_GROUP       = var.group
     NOTIFY_ENVIRONMENT = var.environment
     NOTIFY_DOMAIN_NAME = local.acct.dns_zone["name"]
