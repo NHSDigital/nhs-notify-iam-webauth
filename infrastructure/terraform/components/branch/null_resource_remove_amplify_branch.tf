@@ -1,5 +1,5 @@
 resource "null_resource" "remove_amplify_branch" {
-  # Dispite destroying the resouce, apparently Amplify thinks we want to keep the branch resrouce around
+  # Despite destroying the resouce, apparently Amplify thinks we want to keep the branch resrouce around
   triggers = {
     csi = local.csi
     amplify_app_id = local.iam.amplify["id"]
