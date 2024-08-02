@@ -9,7 +9,7 @@ module "amplify_branch" {
   region         = var.region
   group          = var.group
 
-  cognito_user_pool_client_id               = aws_cognito_user_pool_client.main.user_pool_id
+  cognito_user_pool_client_id               = aws_cognito_user_pool_client.main.id
   cognito_user_pool_identity_provider_names = aws_cognito_user_pool_client.main.supported_identity_providers
   amplify_app_id                            = aws_amplify_app.main.id
   branch                                    = "main"
