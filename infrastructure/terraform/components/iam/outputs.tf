@@ -5,6 +5,12 @@ output "cognito_user_pool" {
   }
 }
 
+output "cognito_user_pool_client" {
+  value = {
+    id = aws_cognito_user_pool_client.main.id
+  }
+}
+
 output "amplify" {
   value = {
     id = aws_amplify_app.main.id
