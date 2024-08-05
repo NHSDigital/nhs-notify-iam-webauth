@@ -1,6 +1,6 @@
 # resource "aws_amplify_domain_association" "domain" {
 #   app_id                 = aws_amplify_app.main.id
-#   domain_name            = local.acct.dns_zone["name"]
+#   domain_name            = local.dns_prefix
 #   enable_auto_sub_domain = true
 
 #   sub_domain {
@@ -20,7 +20,7 @@ resource "null_resource" "amplify_domain_association" {
   triggers = {
     amplify_app_id      = aws_amplify_app.main.id
     amplify_branch_name = module.amplify_branch.name
-    amplify_domain_name = local.acct.dns_zone["name"]
+    amplify_domain_name = local.dns_prefix
   }
 
   provisioner "local-exec" {
