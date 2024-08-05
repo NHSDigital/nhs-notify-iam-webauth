@@ -13,7 +13,7 @@ module "amplify_branch" {
   cognito_user_pool_identity_provider_names = aws_cognito_user_pool_client.main.supported_identity_providers
   amplify_app_id                            = aws_amplify_app.main.id
   branch                                    = "main"
-  domain_name                               = local.acct.dns_zone["name"]
+  domain_name                               = local.dns_prefix
   subdomain                                 = var.environment
   enable_auto_deploy                        = true
 }
