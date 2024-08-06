@@ -76,6 +76,7 @@ jobs:
       - name: "Run test coverage check"
         uses: ArtiomTr/jest-coverage-report-action@v2
         with:
+          test-script: npm run test:coverage
           output: comment, report-markdown
       - name: "Save the coverage check result"
         run: |

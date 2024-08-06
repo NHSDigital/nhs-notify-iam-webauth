@@ -9,6 +9,7 @@
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "test:unit": "jest",
+    "test:coverage": "jest --silent --testLocationInResults --ci --all --coverage --json --outputFile=\"report.json\"",
     "test:accessibility": "pa11y-ci -c ./tests/accessibility/.pa11y-ci.js",
     "app:start": "pm2 start npm -- start",
     "app:wait": "wait-on -l http://localhost:3000",
