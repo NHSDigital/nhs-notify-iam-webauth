@@ -74,8 +74,7 @@ jobs:
       - name: "Checkout code"
         uses: actions/checkout@v4
       - name: "Run test coverage check"
-        run: |
-          make test-coverage
+        uses: ArtiomTr/jest-coverage-report-action@v2
       - name: "Save the coverage check result"
         run: |
           echo "Nothing to save"
