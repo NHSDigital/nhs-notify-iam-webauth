@@ -74,7 +74,7 @@ jobs:
       - name: "Checkout code"
         uses: actions/checkout@v4
       - name: Copy Coverage to new location
-        run: cp .reports/unit/coverage/clover.xml clover.xml
+        run: cp ./.reports/unit/coverage/clover.xml clover.xml
       - name: Code Coverage Summary Report
         uses: irongut/CodeCoverageSummary@v1.2.0
         with:
