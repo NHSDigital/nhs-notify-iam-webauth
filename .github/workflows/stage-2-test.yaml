@@ -76,7 +76,7 @@ jobs:
       - name: "Run test coverage check"
         uses: ArtiomTr/jest-coverage-report-action@v2
         with:
-          github-token: ${{ secrets.SECRET_TOKEN }}
+          output: comment, report-markdown
       - name: "Save the coverage check result"
         run: |
           echo "Nothing to save"
