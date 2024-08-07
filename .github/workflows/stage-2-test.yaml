@@ -80,8 +80,10 @@ jobs:
         run: |
           make test-coverage
       - name: "Save the coverage check result"
-        run: |
-          echo "Nothing to save"
+        uses: jgillick/test-coverage-reporter@v1.0.13
+        with:
+          coverage-file: report.json
+          base-coverage-file: report.json
   perform-static-analysis:
     name: "Perform static analysis"
     needs: [test-unit]
