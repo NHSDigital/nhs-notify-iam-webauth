@@ -75,13 +75,6 @@ jobs:
         uses: actions/checkout@v4
       - name: "Run test coverage check"
         uses: ArtiomTr/jest-coverage-report-action@v2
-        with:
-          test-script: npm run test:coverage
-      - name: "Run test coverage check"
-        uses: ArtiomTr/jest-coverage-report-action@v2
-        with:
-          coverage-file: report.json
-          output: comment, report-markdown
       - name: "Save the coverage check result"
         run: |
           echo "Nothing to save"
