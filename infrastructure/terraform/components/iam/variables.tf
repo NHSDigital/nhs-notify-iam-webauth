@@ -63,17 +63,12 @@ variable "kms_deletion_window" {
   default     = "30"
 }
 
-variable "root_domain_name" {
-  type        = string
-  description = "The service's root DNS root nameespace, like nonprod.nhsnotify.national.nhs.uk"
-  default     = "nonprod.nhsnotify.national.nhs.uk"
-}
-
 variable "parent_acct_environment" {
   type        = string
   description = "Name of the environment responsible for the acct resources used, affects things like DNS zone. Useful for named dev environments"
   default     = "main"
 }
+
 variable "enable_amplify_branch_auto_build" {
   type        = bool
   description = "Enable automatic building of branches"

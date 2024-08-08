@@ -13,6 +13,6 @@ module "amplify_branch" {
   cognito_user_pool_identity_provider_names = local.iam.cognito_user_pool["identity_providers"]
   amplify_app_id                            = local.iam.amplify["id"]
   branch                                    = var.branch_name
-  domain_name                               = local.dns_prefix
+  domain_name                               = local.root_domain_name
   subdomain                                 = var.environment
 }
