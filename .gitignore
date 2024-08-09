@@ -60,4 +60,4 @@ next-env.d.ts
 tests/test-team/test-results/
 tests/test-team/playwright-report/
 tests/test-team/blob-report/
-tests/test-team/playwright/.cache/ 
+tests/test-team/playwright/.cache/
