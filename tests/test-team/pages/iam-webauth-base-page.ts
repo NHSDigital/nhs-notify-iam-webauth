@@ -18,8 +18,7 @@ export class IamWebAuthBasePage {
 
   async NavigateWithIntercept(url: string) {
     await this.page.route('', (route) => {
-      route.request({})
-
+      route.request();
     });
 
     await this.page.goto(url);
