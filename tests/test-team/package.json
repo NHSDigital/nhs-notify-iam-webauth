@@ -1,5 +1,5 @@
 {
-  "name": "nhs-notify-web-template-management-user-story-tests",
+  "name": "nhs-notify-iam-webauth-user-story-tests",
   "version": "0.1.0",
   "private": true,
   "scripts": {
