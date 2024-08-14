@@ -7,6 +7,6 @@ csrf.init_app(app)
 
 @app.route("/")
 def index():
-    return "Hello World!"
+    return "Sprint Review Demo"
 
 app.run(host='0.0.0.0', port=8000)
