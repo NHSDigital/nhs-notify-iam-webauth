@@ -1,6 +1,6 @@
 resource "aws_cognito_user_pool_domain" "main" {
-  user_pool_id    = aws_cognito_user_pool.main.id
-  domain          = local.csi
+  user_pool_id = aws_cognito_user_pool.main.id
+  domain       = local.csi
 }
 
 resource "aws_cognito_user_pool_domain" "custom" {
@@ -8,5 +8,5 @@ resource "aws_cognito_user_pool_domain" "custom" {
   certificate_arn = aws_acm_certificate.cognito.arn
   domain          = local.auth_domain_name
 
-  depends_on = [ aws_route53_record.root ]
+  depends_on = [aws_route53_record.root]
 }

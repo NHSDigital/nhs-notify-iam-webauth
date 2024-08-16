@@ -1,5 +1,5 @@
 resource "aws_acm_certificate" "cognito" {
-  provider          = aws.us-east-1
+  provider = aws.us-east-1
 
   domain_name       = local.auth_domain_name
   validation_method = "DNS"
@@ -10,7 +10,7 @@ resource "aws_acm_certificate" "cognito" {
 }
 
 resource "aws_acm_certificate_validation" "cognito" {
-  provider        = aws.us-east-1
+  provider = aws.us-east-1
 
   certificate_arn = aws_acm_certificate.cognito.arn
 }
