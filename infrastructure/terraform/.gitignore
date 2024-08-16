@@ -14,6 +14,9 @@ components/**/backend_tfscaffold.tf
 **/work/*
 **/*tfstate.lock.info
 
+# NHS Notify Build context
+bootstrap
+
 # Scaffold Plugin Cache
 plugin-cache/*
 
