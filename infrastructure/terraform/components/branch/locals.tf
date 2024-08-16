@@ -1,3 +1,3 @@
 locals {
-  dns_prefix = "${var.environment}.${local.iam.amplify["domain_name"]}"
+  root_domain_name = "${var.environment}.${local.iam.amplify["domain_name"]}"
 }
