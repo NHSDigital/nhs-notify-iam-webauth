@@ -1,11 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  basePath: '/auth_aiva2ccm-6010test',
+  basePath: '/auth~aiva2ccm-6010test',
   async redirects() {
     return [
       {
         source: '/',
-        destination: '/auth_aiva2ccm-6010test',
+        destination: '/auth~aiva2ccm-6010test',
         basePath: false,
         permanent: false,
       },
