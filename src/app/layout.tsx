@@ -68,7 +68,10 @@ export default function RootLayout({
           defer
         />
         <NHSNotifyHeader />
-        <NHSNotifyContainer>{children}</NHSNotifyContainer>
+        <NHSNotifyContainer>
+          Hello
+          {children}
+        </NHSNotifyContainer>
         <NHSNotifyFooter />
       </body>
     </html>
