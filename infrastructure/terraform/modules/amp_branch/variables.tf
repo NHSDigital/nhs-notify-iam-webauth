@@ -96,3 +96,9 @@ variable "enable_auto_deploy" {
   description = "Enable the auto deployment of the branch code as well as just the resources for it"
   default     = false
 }
+
+variable "base_path" {
+  type        = string
+  default     = "/"
+  description = "Default base path to override NEXT_PUBLIC_BASE_PATH"
+}

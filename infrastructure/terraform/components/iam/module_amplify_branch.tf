@@ -16,4 +16,5 @@ module "amplify_branch" {
   domain_name                               = local.dns_prefix
   subdomain                                 = var.environment
   enable_auto_deploy                        = true
+  base_path                                 = "/auth"
 }

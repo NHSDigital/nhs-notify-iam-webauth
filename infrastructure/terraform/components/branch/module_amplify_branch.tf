@@ -15,4 +15,5 @@ module "amplify_branch" {
   branch                                    = var.branch_name
   domain_name                               = local.dns_prefix
   subdomain                                 = var.environment
+  base_path                                 = "/auth~${var.branch_name}"
 }
