@@ -1,7 +1,7 @@
 module "amplify_branch" {
   source = "../../modules/amp_branch"
 
-  name           = lower(substr(join("", regexall("[a-zA-Z0-9-]+", var.branch_name)), 0, 25))
+  name           = local.normalised_branch_name
   aws_account_id = var.aws_account_id
   component      = var.component
   environment    = var.environment
@@ -15,5 +15,5 @@ module "amplify_branch" {
   branch                                    = var.branch_name
   domain_name                               = local.dns_prefix
   subdomain                                 = var.environment
-  base_path                                 = "/auth~${var.branch_name}"
+  base_path                                 = "/auth~${local.normalised_branch_name}"
 }
