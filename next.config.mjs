@@ -1,11 +1,18 @@
 /** @type {import('next').NextConfig} */
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '/auth';
+
 const nextConfig = {
-  basePath: '/auth~aiva2ccm-6010test',
+  basePath,
+
+  env: {
+    basePath,
+  },
+
   async redirects() {
     return [
       {
         source: '/',
-        destination: '/auth~aiva2ccm-6010test',
+        destination: basePath,
         basePath: false,
         permanent: false,
       },
