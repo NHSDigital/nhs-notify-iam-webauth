@@ -5,7 +5,7 @@ const nextConfig = {
     return [
       {
         source: '/',
-        destination: '/auth_aiva2ccm',
+        destination: '/auth_aiva2ccm-6010test',
         basePath: false,
         permanent: false,
       },
