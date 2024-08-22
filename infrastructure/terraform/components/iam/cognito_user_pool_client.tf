@@ -5,8 +5,8 @@ resource "aws_cognito_user_pool_client" "main" {
   callback_urls = flatten([
     var.cognito_user_pool_additional_callback_urls,
     [
-      "https://${local.csi}.${var.root_domain_name}/auth/",
-      "https://${local.csi}.${aws_amplify_app.main.id}.amplifyapp.com/auth/"
+      "https://${var.environment}.${local.acct.dns_zone["name"]}/auth/",
+      "https://${aws_amplify_app.main.default_domain}/auth/"
     ]
   ])
 
