@@ -102,3 +102,14 @@ variable "base_path" {
   default     = "/"
   description = "Default base path to override NEXT_PUBLIC_BASE_PATH"
 }
+
+variable "stage" {
+  type        = string
+  default     = "NONE"
+  description = "Optional branch stage"
+
+  validation {
+    condition     = contains(["NONE", "PRODUCTION", "BETA", "DEVELOPMENT", "EXPERIMENTAL", "PULL_REQUEST"], var.stage)
+    error_message = "The branch stage is optional but needs to be one of the valid options if provided"
+  }
+}

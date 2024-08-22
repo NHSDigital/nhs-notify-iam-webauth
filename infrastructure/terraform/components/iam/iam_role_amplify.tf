@@ -39,13 +39,24 @@ data "aws_iam_policy_document" "amplify" {
     actions = [
       "logs:CreateLogStream",
       "logs:PutLogEvents",
-      "logs:DescribeLogGroups",
     ]
 
     #tfsec:ignore:aws-iam-no-policy-wildcards
     resources = [
       "${aws_cloudwatch_log_group.amplify.arn}:*",
       "${aws_cloudwatch_log_group.amplify.arn}:log-stream:*",
+    ]
+  }
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "logs:DescribeLogGroups",
+    ]
+
+    #tfsec:ignore:aws-iam-no-policy-wildcards
+    resources = [
+      "arn:aws:logs:${var.region}:${var.aws_account_id}:*"
     ]
   }
 }

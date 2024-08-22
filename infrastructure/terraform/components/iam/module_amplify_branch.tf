@@ -15,6 +15,7 @@ module "amplify_branch" {
   branch                                    = "main"
   domain_name                               = local.root_domain_name
   subdomain                                 = var.environment
-  enable_auto_deploy                        = true
   base_path                                 = "/auth"
+  enable_auto_deploy                        = true
+  stage                                     = "PRODUCTION"
 }
