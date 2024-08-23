@@ -10,6 +10,7 @@ module "amplify_branch" {
   description    = "Amplify branch for ${local.normalised_branch_name}"
   amplify_app_id = local.iam.amplify["id"]
   branch         = var.branch_name
+  display_name   = local.normalised_branch_name
   environment_variables = {
     USER_POOL_CLIENT_ID   = local.iam.cognito_user_pool_client["id"]
     NOTIFY_SUBDOMAIN      = var.environment
