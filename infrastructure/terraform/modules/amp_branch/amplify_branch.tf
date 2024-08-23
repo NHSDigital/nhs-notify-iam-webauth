@@ -4,9 +4,11 @@ resource "aws_amplify_branch" "main" {
   display_name                = var.name
   enable_pull_request_preview = false
   enable_auto_build           = var.enable_auto_deploy
+  stage                       = var.stage != "NONE" ? var.stage : null
 
   environment_variables = {
-    USER_POOL_CLIENT_ID = var.cognito_user_pool_client_id
-    NOTIFY_SUBDOMAIN    = var.subdomain
+    USER_POOL_CLIENT_ID   = var.cognito_user_pool_client_id
+    NOTIFY_SUBDOMAIN      = var.subdomain
+    NEXT_PUBLIC_BASE_PATH = var.base_path
   }
 }

@@ -96,3 +96,20 @@ variable "enable_auto_deploy" {
   description = "Enable the auto deployment of the branch code as well as just the resources for it"
   default     = false
 }
+
+variable "base_path" {
+  type        = string
+  default     = "/"
+  description = "Default base path to override NEXT_PUBLIC_BASE_PATH"
+}
+
+variable "stage" {
+  type        = string
+  default     = "NONE"
+  description = "Optional branch stage"
+
+  validation {
+    condition     = contains(["NONE", "PRODUCTION", "BETA", "DEVELOPMENT", "EXPERIMENTAL", "PULL_REQUEST"], var.stage)
+    error_message = "The branch stage is optional but needs to be one of the valid options if provided"
+  }
+}

@@ -1,10 +1,10 @@
 const { performCheck } = require('./helpers');
 
-const baseUrl = 'http://localhost:3000';
+const baseUrl = 'http://localhost:3000/auth';
 
 module.exports = {
   urls: [
-    performCheck({ url: 'http://localhost:3000/some-404', name: '404-test' }),
+    performCheck({ url: 'http://localhost:3000/auth/some-404', name: '404-test' }),
     performCheck({ url: baseUrl, name: 'landing-page' }),
   ],
   defaults: {
