@@ -116,3 +116,13 @@ Provide a way to contact the owners of this project. It can be a team, an indivi
 Unless stated otherwise, the codebase is released under the MIT License. This covers both the codebase and any sample code in the documentation.
 
 Any HTML or Markdown documentation is [© Crown Copyright](https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/uk-government-licensing-framework/crown-copyright/) and available under the terms of the [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/).
+
+### Shared Terraform Modules
+
+Before you setup modules for this repository and find that there might be modules that can be reused elsewhere, please do check out `https://github.com/NHSDigital/nhs-notify-shared-modules/`. If you find that the modules are shareable, you should set them up there as a separate PR and get that merged in and potentially tag the commit after testing it, so that it can be a stable release that can be used across all repos on Notify should others find the need to re-use that new module. You can simply point to the reference in your module call as below:
+
+```hcl
+module "amp_branch" {
+  source = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/amp_branch?ref=v1.0.0"
+  ...
+}
