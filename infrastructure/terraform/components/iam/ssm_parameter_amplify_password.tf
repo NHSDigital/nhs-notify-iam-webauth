@@ -1,5 +1,5 @@
 resource "aws_ssm_parameter" "amplify_password" {
-  count = var.enable_amplify_basic_auth ? 1:0
+  count = var.enable_amplify_basic_auth ? 1 : 0
 
   name  = "/${local.csi}/amplify_password"
   type  = "String"
@@ -7,8 +7,8 @@ resource "aws_ssm_parameter" "amplify_password" {
 }
 
 resource "random_password" "password" {
-  count = var.enable_amplify_basic_auth ? 1:0
+  count = var.enable_amplify_basic_auth ? 1 : 0
 
-  length = 16
+  length  = 16
   special = true
 }

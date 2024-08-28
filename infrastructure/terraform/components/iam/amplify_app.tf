@@ -13,11 +13,11 @@ resource "aws_amplify_app" "main" {
   basic_auth_credentials = var.enable_amplify_basic_auth ? base64encode("${local.csi}:${aws_ssm_parameter.amplify_password[0].value}") : null
 
   dynamic "auto_branch_creation_config" {
-    for_each = var.enable_amplify_basic_auth ?[1] : []
+    for_each = var.enable_amplify_basic_auth ? [1] : []
 
-    content{
+    content {
       basic_auth_credentials = base64encode("${local.csi}:${aws_ssm_parameter.amplify_password[0].value}")
-      enable_basic_auth = true
+      enable_basic_auth      = true
     }
   }
 
