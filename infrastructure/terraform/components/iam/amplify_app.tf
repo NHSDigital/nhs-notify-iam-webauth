@@ -9,6 +9,18 @@ resource "aws_amplify_app" "main" {
   enable_branch_auto_build    = var.enable_amplify_branch_auto_build
   platform                    = "WEB_COMPUTE"
 
+  enable_basic_auth      = var.enable_amplify_basic_auth ? true : false
+  basic_auth_credentials = var.enable_amplify_basic_auth ? base64encode("${local.csi}:${aws_ssm_parameter.amplify_password[0].value}") : null
+
+  dynamic "auto_branch_creation_config" {
+    for_each = var.enable_amplify_basic_auth ? [1] : []
+
+    content {
+      basic_auth_credentials = base64encode("${local.csi}:${aws_ssm_parameter.amplify_password[0].value}")
+      enable_basic_auth      = true
+    }
+  }
+
   auto_branch_creation_patterns = [
     "*",
     "*/**"

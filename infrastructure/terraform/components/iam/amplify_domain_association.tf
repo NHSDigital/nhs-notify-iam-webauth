@@ -25,7 +25,7 @@ resource "null_resource" "amplify_domain_association" {
 
   provisioner "local-exec" {
     when    = create
-    command = "aws amplify create-domain-association --app-id ${self.triggers.amplify_app_id} --domain-name ${self.triggers.amplify_domain_name} --sub-domain-settings prefix=\"\",branchName=\"${self.triggers.amplify_branch_name}\" prefix=\"${self.triggers.amplify_branch_name}\",branchName=\"${self.triggers.amplify_branch_name}\" --enable-auto-sub-domain --auto-sub-domain-creation-patterns \"*,pr*\""
+    command = "aws amplify create-domain-association --app-id ${self.triggers.amplify_app_id} --domain-name ${self.triggers.amplify_domain_name} --sub-domain-settings prefix=\"\",branchName=\"${self.triggers.amplify_branch_name}\" prefix=\"${self.triggers.amplify_branch_name}\",branchName=\"${self.triggers.amplify_branch_name}\" --enable-auto-sub-domain --auto-sub-domain-creation-patterns \"*,*/*,pr*\""
   }
 
   provisioner "local-exec" {
