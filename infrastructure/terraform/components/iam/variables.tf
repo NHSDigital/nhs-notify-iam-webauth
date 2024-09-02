@@ -92,3 +92,9 @@ variable "enable_amplify_basic_auth" {
   description = "Enable a basic set of credentials in the form of a dynamicly generated username and password for the amplify app branches. Not intended for production use"
   default     = false
 }
+
+variable "branch_name" {
+  type        = string
+  description = "The branch name to deploy"
+  default     = "main"
+}
