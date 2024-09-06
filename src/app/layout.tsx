@@ -18,53 +18,53 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <head>
-        <script src='/templates/lib/nhsuk-8.1.1.min.js' defer />
+        <script src={`${process.env.basePath}/lib/nhsuk-8.1.1.min.js`} defer />
         <title>{content.global.mainLayout.title}</title>
         <link
           rel='shortcut icon'
-          href='/templates/lib/assets/favicons/favicon.ico'
+          href={`${process.env.basePath}/lib/assets/favicons/favicon.ico`}
           type='image/x-icon'
         />
         <link
           rel='apple-touch-icon'
-          href='/templates/lib/assets/favicons/apple-touch-icon-180x180.png'
+          href={`${process.env.basePath}/lib/assets/favicons/apple-touch-icon-180x180.png`}
         />
         <link
           rel='mask-icon'
-          href='/templates/lib/assets/favicons/favicon.svg'
+          href={`${process.env.basePath}/lib/assets/favicons/favicon.svg`}
           color='#005eb8'
         />
         <link
           rel='icon'
           sizes='192x192'
-          href='/templates/lib/assets/favicons/favicon-192x192.png'
+          href={`${process.env.basePath}/lib/assets/favicons/favicon-192x192.png`}
         />
         <meta
           name='msapplication-TileImage'
-          content='/templates/lib/assets/favicons/mediumtile-144x144.png'
+          content={`${process.env.basePath}/lib/assets/favicons/mediumtile-144x144.png`}
         />
         <meta name='msapplication-TileColor' content='#005eb8' />
         <meta
           name='msapplication-square70x70logo'
-          content='/templates/lib/assets/favicons/smalltile-70x70.png'
+          content={`${process.env.basePath}/lib/assets/favicons/smalltile-70x70.png`}
         />
         <meta
           name='msapplication-square150x150logo'
-          content='/templates/lib/assets/favicons/mediumtile-150x150.png'
+          content={`${process.env.basePath}/lib/assets/favicons/mediumtile-150x150.png`}
         />
         <meta
           name='msapplication-wide310x150logo'
-          content='/templates/lib/assets/favicons/widetile-310x150.png'
+          content={`${process.env.basePath}/lib/assets/favicons/widetile-310x150.png`}
         />
         <meta
           name='msapplication-square310x310logo'
-          content='/templates/lib/assets/favicons/largetile-310x310.png'
+          content={`${process.env.basePath}/lib/assets/favicons/largetile-310x310.png`}
         />
       </head>
       <body suppressHydrationWarning>
         <script
           type='text/javascript'
-          src='/templates/lib/nhs-frontend-js-check.js'
+          src={`${process.env.basePath}/lib/nhs-frontend-js-check.js`}
           defer
         />
         <NHSNotifyHeader />

@@ -44,7 +44,7 @@ const config: Config = {
     'layout.tsx',
     'container.tsx',
     '.snap',
-    'app/create-template/page.tsx', // CCM-5752
+    'app/page.tsx', // CCM-5752
   ],
 
   // Use this configuration option to add custom reporters to Jest
@@ -63,7 +63,12 @@ const config: Config = {
   // The test environment that will be used for testing
   testEnvironment: 'jsdom',
 
-  testPathIgnorePatterns: ['/node_modules/', 'fixture', 'helpers.ts'],
+  testPathIgnorePatterns: [
+    '/node_modules/',
+    'fixture',
+    'helpers.ts',
+    '/tests/',
+  ],
 
   // Set the absolute path for imports
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {

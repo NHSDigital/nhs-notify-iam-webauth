@@ -63,10 +63,10 @@ variable "kms_deletion_window" {
   default     = "30"
 }
 
-variable "root_domain_name" {
+variable "parent_acct_environment" {
   type        = string
-  description = "The service's root DNS root nameespace, like nonprod.nhsnotify.national.nhs.uk"
-  default     = "nonprod.nhsnotify.national.nhs.uk"
+  description = "Name of the environment responsible for the acct resources used, affects things like DNS zone. Useful for named dev environments"
+  default     = "main"
 }
 
 variable "enable_amplify_branch_auto_build" {
@@ -85,4 +85,16 @@ variable "enable_cognito_built_in_idp" {
   type        = bool
   description = "Enable the use of Cognito as an IDP; CIS2 is prefered"
   default     = false
+}
+
+variable "enable_amplify_basic_auth" {
+  type        = bool
+  description = "Enable a basic set of credentials in the form of a dynamicly generated username and password for the amplify app branches. Not intended for production use"
+  default     = false
+}
+
+variable "branch_name" {
+  type        = string
+  description = "The branch name to deploy"
+  default     = "main"
 }

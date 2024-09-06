@@ -9,16 +9,28 @@ resource "aws_amplify_app" "main" {
   enable_branch_auto_build    = var.enable_amplify_branch_auto_build
   platform                    = "WEB_COMPUTE"
 
+  enable_basic_auth      = var.enable_amplify_basic_auth ? true : false
+  basic_auth_credentials = var.enable_amplify_basic_auth ? base64encode("${local.csi}:${aws_ssm_parameter.amplify_password[0].value}") : null
+
+  dynamic "auto_branch_creation_config" {
+    for_each = var.enable_amplify_basic_auth ? [1] : []
+
+    content {
+      basic_auth_credentials = base64encode("${local.csi}:${aws_ssm_parameter.amplify_password[0].value}")
+      enable_basic_auth      = true
+    }
+  }
+
   auto_branch_creation_patterns = [
     "*",
     "*/**"
   ]
 
   environment_variables = {
-    USER_POOL_ID = aws_cognito_user_pool.main.id
-    # HOSTED_LOGIN_DOMAIN = "auth.${local.acct.dns_zone["name"]}"
-    NOTIFY_GROUP       = var.group
-    NOTIFY_ENVIRONMENT = var.environment
-    NOTIFY_DOMAIN_NAME = local.acct.dns_zone["name"]
+    USER_POOL_ID        = aws_cognito_user_pool.main.id
+    HOSTED_LOGIN_DOMAIN = local.auth_domain_name
+    NOTIFY_GROUP        = var.group
+    NOTIFY_ENVIRONMENT  = var.environment
+    NOTIFY_DOMAIN_NAME  = local.root_domain_name
   }
 }

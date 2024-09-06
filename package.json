@@ -9,9 +9,10 @@
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "test:unit": "jest",
+    "test:coverage": "jest --coverage",
     "test:accessibility": "pa11y-ci -c ./tests/accessibility/.pa11y-ci.js",
     "app:start": "pm2 start npm -- start",
-    "app:wait": "wait-on -l http://localhost:3000",
+    "app:wait": "wait-on -l http://localhost:3000/auth",
     "app:stop": "pm2 kill"
   },
   "dependencies": {
@@ -30,6 +31,7 @@
     "@aws-amplify/adapter-nextjs": "^1.2.4",
     "@aws-amplify/plugin-types": "^0.4.1",
     "@aws-amplify/ui-react": "^6.1.12",
+    "@playwright/test": "^1.46.0",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.4.8",
     "@testing-library/react": "^16.0.0",

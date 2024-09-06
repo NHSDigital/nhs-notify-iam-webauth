@@ -1,0 +1,9 @@
+{
+  "name": "nhs-notify-iam-webauth-user-story-tests",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "test:story": "npx playwright test --project story",
+    "test:e2e-local": "npx playwright test --project e2e-local"
+  }
+}

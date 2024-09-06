@@ -51,3 +51,16 @@ next-env.d.ts
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+# playwright
+tests/test-team/test-results/
+tests/test-team/playwright-report/
+tests/test-team/blob-report/
+tests/test-team/playwright/.cache/
+
+#plugin-cache
+plugin-cache/
