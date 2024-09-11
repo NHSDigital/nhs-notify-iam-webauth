@@ -1,6 +1,9 @@
+'use client';
+import { Button } from "nhsuk-react-components";
 import Link from 'next/link';
 import concatClassNames from '@/src/utils/concat-class-names';
 import content from '@/src/content/content';
+import { signIn } from 'next-auth/react';
 import styles from './Header.module.scss';
 import { HeaderType } from './header.types';
 
@@ -52,9 +55,10 @@ export function NHSNotifyHeader({ className, dataTestId }: HeaderType) {
         >
           {/* I am currently testing the link wrapper, this will change later when we implement auth as the link will change based on auth state */}
           <div className='nhsuk-account__login' data-testid='login-link'>
-            <Link className='nhsuk-account__login--link' href='/'>
-              {content.components.headerComponent.links.logIn}
-            </Link>
+            {/* eslint-disable-next-line react/button-has-type */}
+            <button onClick={() => signIn('google', { callbackUrl: '/' })}>
+              Sign In
+            </button>
           </div>
         </div>
       </div>
