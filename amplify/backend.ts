@@ -1,5 +1,0 @@
-import { defineBackend } from '@aws-amplify/backend';
-import { authConfig } from './auth/resource';
-
-const backend = defineBackend({});
-
