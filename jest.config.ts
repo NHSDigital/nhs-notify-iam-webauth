@@ -45,6 +45,7 @@ const config: Config = {
     'container.tsx',
     '.snap',
     'app/page.tsx', // CCM-5752
+    'route.ts',
   ],
 
   // Use this configuration option to add custom reporters to Jest
