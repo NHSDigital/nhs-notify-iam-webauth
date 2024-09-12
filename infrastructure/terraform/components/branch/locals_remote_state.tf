@@ -1,6 +1,6 @@
 locals {
   bootstrap = data.terraform_remote_state.bootstrap.outputs
-  iam       = data.terraform_remote_state.iam.outputs
+  app       = data.terraform_remote_state.app.outputs
 }
 
 data "terraform_remote_state" "bootstrap" {
@@ -21,14 +21,14 @@ data "terraform_remote_state" "bootstrap" {
   }
 }
 
-data "terraform_remote_state" "iam" {
+data "terraform_remote_state" "app" {
   backend = "s3"
 
   config = {
     bucket = local.terraform_state_bucket
 
     key = format(
-      "%s/%s/%s/%s/iam.tfstate",
+      "%s/%s/%s/%s/app.tfstate",
       var.project,
       var.aws_account_id,
       "eu-west-2",
