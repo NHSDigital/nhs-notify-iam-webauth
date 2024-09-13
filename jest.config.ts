@@ -70,7 +70,6 @@ const config: Config = {
     'helpers.ts',
     '/tests/',
   ],
-75
   // Set the absolute path for imports
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
     prefix: '<rootDir>/',
