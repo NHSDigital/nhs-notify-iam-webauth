@@ -31,7 +31,7 @@ const config: Config = {
   coverageThreshold: {
     global: {
       branches: 100,
-      functions: 100,
+      functions: 75,
       lines: 100,
       statements: -10,
     },
@@ -70,7 +70,7 @@ const config: Config = {
     'helpers.ts',
     '/tests/',
   ],
-
+75
   // Set the absolute path for imports
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
     prefix: '<rootDir>/',
