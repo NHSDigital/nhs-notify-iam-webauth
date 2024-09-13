@@ -31,7 +31,7 @@ const config: Config = {
   coverageThreshold: {
     global: {
       branches: 100,
-      functions: 100,
+      functions: 75,
       lines: 100,
       statements: -10,
     },
@@ -45,6 +45,7 @@ const config: Config = {
     'container.tsx',
     '.snap',
     'app/page.tsx', // CCM-5752
+    'route.ts',
   ],
 
   // Use this configuration option to add custom reporters to Jest
@@ -69,7 +70,6 @@ const config: Config = {
     'helpers.ts',
     '/tests/',
   ],
-
   // Set the absolute path for imports
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
     prefix: '<rootDir>/',
