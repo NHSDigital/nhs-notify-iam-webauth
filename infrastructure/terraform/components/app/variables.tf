@@ -38,7 +38,7 @@ variable "group" {
 variable "component" {
   type        = string
   description = "The variable encapsulating the name of this component"
-  default     = "iam"
+  default     = "app"
 }
 
 variable "default_tags" {

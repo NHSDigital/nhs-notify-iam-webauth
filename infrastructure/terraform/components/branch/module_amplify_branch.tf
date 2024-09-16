@@ -12,12 +12,12 @@ module "amplify_branch" {
   region         = var.region
   group          = var.group
 
-  amplify_app_id    = local.iam.amplify["id"]
+  amplify_app_id    = local.app.amplify["id"]
   branch            = var.branch_name
   enable_auto_build = true
 
   environment_variables = {
-    USER_POOL_CLIENT_ID   = local.iam.cognito_user_pool_client["id"]
+    USER_POOL_CLIENT_ID   = local.app.cognito_user_pool_client["id"]
     NOTIFY_SUBDOMAIN      = var.environment
     NEXT_PUBLIC_BASE_PATH = "/auth~${local.normalised_branch_name}"
   }
