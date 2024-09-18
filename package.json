@@ -16,7 +16,7 @@
     "app:stop": "pm2 kill"
   },
   "dependencies": {
-    "next": "14.2.5",
+    "next": "14.2.12",
     "nhsuk-frontend": "^8.3.0",
     "nhsuk-react-components": "^4.1.0",
     "react": "^18",
