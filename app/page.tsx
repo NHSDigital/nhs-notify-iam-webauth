@@ -28,6 +28,7 @@ export default function Page({
   }, []);
 
   let redirectPath = redirect || [searchParams.redirect].flat().pop() || '/';
+  
   if (redirectPath === '/auth') redirectPath = '/';
 
   return <Login redirectPath={redirectPath} />;
