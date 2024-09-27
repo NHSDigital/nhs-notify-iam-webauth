@@ -30,5 +30,8 @@ export default function Page({
   let redirectPath = redirect || [searchParams.redirect].flat().pop() || '/';
   if (redirectPath === '/auth') redirectPath = '/';
 
+  console.log('redirect', redirectPath);
+  console.log('hostname', window.location.hostname);
+
   return <Login redirectPath={redirectPath} />;
 }
