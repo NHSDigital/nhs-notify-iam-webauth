@@ -1,0 +1,13 @@
+.nhsuk-header__content {
+  flex-grow: 100;
+  text-align: right;
+}
+
+div.nhsuk-header__content > li.nhsuk-header__navigation-item {
+  list-style: none;
+}
+
+div.nhsuk-header__content > li.nhsuk-header__navigation-item > a {
+  padding: 0;
+  display: inline-block;
+}
