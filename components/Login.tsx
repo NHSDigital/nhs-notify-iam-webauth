@@ -91,7 +91,11 @@ const LoginWithAuthenticator = (props: {
 }) => {
   const { redirectPath } = props;
   const searchParams = useSearchParams();
-  console.log('searchParams', searchParams.get('redirect'), searchParams.entries().next());
+  console.log(
+    'searchParams',
+    searchParams.get('redirect'),
+    searchParams.entries().next()
+  );
   return withAuthenticator(Login, {
     variation: 'default',
     hideSignUp: true,
