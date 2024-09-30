@@ -11,6 +11,7 @@ import React, { useEffect } from 'react';
 import { Amplify } from 'aws-amplify';
 import { signInWithRedirect } from '@aws-amplify/auth';
 import { Button } from 'nhsuk-react-components';
+import { useSearchParams } from 'next/navigation';
 
 function auth0Login(redirectPath: string) {
   console.log(Amplify.getConfig());
@@ -89,10 +90,12 @@ const LoginWithAuthenticator = (props: {
   user?: AuthUser;
 }) => {
   const { redirectPath } = props;
+  const searchParams = useSearchParams();
+  console.log('searchParams', searchParams.get('redirect'), searchParams.entries().next());
   return withAuthenticator(Login, {
     variation: 'default',
     hideSignUp: true,
-    components: components(redirectPath || '/'),
+    components: components(redirectPath || searchParams.get('redirect') || '/'),
   })(props);
 };
 

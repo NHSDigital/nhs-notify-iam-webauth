@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import { Hub } from '@aws-amplify/core';
 import Login from '../components/Login';
 
@@ -34,8 +34,9 @@ export default function Page({
 
   if (redirectPath === '/auth') redirectPath = '/';
 
-  console.log('redirect', redirectPath);
   console.log('hostname', window.location.hostname);
 
-  return <Login redirectPath={redirectPath} />;
+  return <Suspense>
+    <Login redirectPath={redirectPath} />
+  </Suspense>;
 }
