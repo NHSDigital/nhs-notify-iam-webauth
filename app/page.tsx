@@ -13,6 +13,7 @@ export default function Page({
 
   useEffect(() => {
     return Hub.listen('auth', ({ payload }) => {
+      console.log('payload', payload);
       if (payload.event === 'customOAuthState') {
         try {
           const { redirectPath } = JSON.parse(payload.data);
@@ -28,6 +29,9 @@ export default function Page({
   }, []);
 
   let redirectPath = redirect || [searchParams.redirect].flat().pop() || '/';
+
+  console.log('redirect', redirectPath, redirect, searchParams);
+
   if (redirectPath === '/auth') redirectPath = '/';
 
   console.log('redirect', redirectPath);
