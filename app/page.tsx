@@ -36,7 +36,9 @@ export default function Page({
 
   console.log('hostname', window.location.hostname);
 
-  return <Suspense>
-    <Login redirectPath={redirectPath} />
-  </Suspense>;
+  return (
+    <Suspense>
+      <Login redirectPath={redirectPath} />
+    </Suspense>
+  );
 }
