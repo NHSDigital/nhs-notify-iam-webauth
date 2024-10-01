@@ -3,6 +3,13 @@
 # Transient backends
 components/**/backend_tfscaffold.tf
 
+# Exclude all .tfvars files, which are likely to contain sensitive data, such as
+# password, private keys, and other secrets. These should not be part of version
+# control as they are data points which are potentially sensitive and subject
+# to change depending on the environment.
+*.tfvars
+*.tfvars.json
+
 # Compiled files
 **/*.tfstate
 **/*.tfplan
@@ -13,9 +20,6 @@ components/**/backend_tfscaffold.tf
 **/build/*
 **/work/*
 **/*tfstate.lock.info
-
-# NHS Notify Build context
-bootstrap
 
 # Scaffold Plugin Cache
 plugin-cache/*
