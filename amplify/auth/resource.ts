@@ -1,14 +1,13 @@
 import { DeepPartialAmplifyGeneratedConfigs } from '@aws-amplify/plugin-types';
 import { ClientConfig } from '@aws-amplify/client-config';
 
-const userPoolId = process.env.USER_POOL_ID!;
-const userPoolClientId = process.env.USER_POOL_CLIENT_ID ?? '67ts78qj65gn6l68kvae5gbcor'; // temporary hardcoded ID, remove once we can deploy the app
-const hostedLoginDomain = process.env.HOSTED_LOGIN_DOMAIN!;
+const userPoolId = process.env.USER_POOL_ID;
+const userPoolClientId = process.env.USER_POOL_CLIENT_ID;
+const hostedLoginDomain = process.env.HOSTED_LOGIN_DOMAIN ?? 'no-domain';
 
-const appId = process.env.AWS_APP_ID!;
-const group = process.env.NOTIFY_GROUP!;
-const subdomain = process.env.NOTIFY_SUBDOMAIN!;
-const domainName = process.env.NOTIFY_DOMAIN_NAME!;
+const appId = process.env.AWS_APP_ID;
+const subdomain = process.env.NOTIFY_SUBDOMAIN;
+const domainName = process.env.NOTIFY_DOMAIN_NAME;
 
 export const authConfig: DeepPartialAmplifyGeneratedConfigs<ClientConfig> = {
   auth: {
@@ -28,12 +27,10 @@ export const authConfig: DeepPartialAmplifyGeneratedConfigs<ClientConfig> = {
       'redirect_sign_in_uri': [
         `https://${subdomain}.${appId}.amplifyapp.com/auth/`,
         `https://${subdomain}.${domainName}/auth/`,
-        ...(group === 'nonprod' ? ['http://localhost:3000/auth/']: [])
       ],
       'redirect_sign_out_uri': [
         `https://${subdomain}.${appId}.amplifyapp.com/`,
         `https://${subdomain}.${domainName}/`,
-        ...(group === 'nonprod' ? ['http://localhost:3000/']: [])
       ],
       'response_type': 'code'
     },
