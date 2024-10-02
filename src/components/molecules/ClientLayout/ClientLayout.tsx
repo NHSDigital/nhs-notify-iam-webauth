@@ -2,9 +2,12 @@
 
 'use client';
 
+// import styles
+import '@/src/styles/app.scss';
+import '@aws-amplify/ui-react/styles.css';
+
 import { Amplify } from 'aws-amplify';
 import { Authenticator } from '@aws-amplify/ui-react';
-import '@/src/styles/app.scss';
 import content from '@/src/content/content';
 import Head from 'next/head';
 import { NHSNotifyHeader } from '../Header/Header';
