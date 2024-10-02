@@ -8,9 +8,11 @@ export default function Page() {
   const [signedOut, setSignedOut] = useState(false);
 
   useEffect(() => {
+    console.log('sign out use effect');
     if (!signedOut) {
       signOut()
         .then(() => setSignedOut(true))
+        .then(() => console.log('sign out complete'))
         .catch((error) => console.error(error));
     }
   });
