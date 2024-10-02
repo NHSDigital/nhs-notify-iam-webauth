@@ -1,22 +1,23 @@
-import React from 'react';
-import { redirect } from 'next/navigation';
-import { AuthGetCurrentUserServer } from '../../utils/amplify-utils';
-import Logout from '../../components/Logout';
+'use client';
 
-export default async function Page() {
-  const { currentUser, idToken } = (await AuthGetCurrentUserServer()) ?? {};
-  if (!currentUser) {
-    redirect('/');
+import React, { useEffect, useState } from 'react';
+import { signOut } from '@aws-amplify/auth';
+import { Redirect } from './Redirect';
+
+export default function Page() {
+  const [signedOut, setSignedOut] = useState(false);
+
+  useEffect(() => {
+    if (!signedOut) {
+      signOut()
+        .then(() => setSignedOut(true))
+        .catch((error) => console.error(error));
+    }
+  });
+
+  if (signedOut) {
+    <Redirect />;
+  } else {
+    <p>Signing out</p>;
   }
-
-  return (
-    <>
-      <h1>Sign out</h1>
-      <p>
-        You are currently logged in as{' '}
-        <strong>{idToken?.email?.toString()}</strong>
-      </p>
-      <Logout />
-    </>
-  );
 }
