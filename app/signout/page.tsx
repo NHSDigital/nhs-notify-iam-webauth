@@ -18,10 +18,11 @@ export default function Page() {
   });
 
   if (signedOut) {
-    return (<Suspense>
-      <Redirect />
-    </Suspense>);
-  } else {
-    return <p>Signing out</p>;
+    return (
+      <Suspense>
+        <Redirect />
+      </Suspense>
+    );
   }
+  return <p>Signing out</p>;
 }
