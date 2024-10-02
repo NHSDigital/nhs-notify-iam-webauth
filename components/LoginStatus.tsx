@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import { fetchAuthSession } from 'aws-amplify/auth';
 import { JwtPayload } from 'aws-jwt-verify/jwt-model';
+import { getBasePath } from '@/utils/get-base-path';
 
 export default function LoginStatus() {
   const { authStatus } = useAuthenticator();
@@ -22,14 +23,16 @@ export default function LoginStatus() {
         <Header.ServiceName key='serviceName'>
           {idToken?.email?.toString() || ''}
         </Header.ServiceName>,
-        <Header.NavItem key='navItem' href='/auth/signout'>
+        <Header.NavItem key='navItem' href={`/${getBasePath()}/signout`}>
           Sign out
         </Header.NavItem>,
       ];
     }
     case 'unauthenticated': {
       return (
-        <Header.NavItem href={`/auth/?redirect=${location.pathname}`}>
+        <Header.NavItem
+          href={`/${getBasePath()}/?redirect=${location.pathname}`}
+        >
           Sign in
         </Header.NavItem>
       );
