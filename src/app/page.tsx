@@ -1,12 +1,16 @@
 'use client';
 
 import React, { Suspense } from 'react';
-import Login from '../components/molecules/Login/Login';
+import { withAuthenticator } from '@aws-amplify/ui-react';
+import { Redirect } from '../components/molecules/Redirect/Redirect';
 
 export default function Page() {
   return (
     <Suspense>
-      <Login />
+      {withAuthenticator(Redirect, {
+        variation: 'default',
+        hideSignUp: true,
+      })({})}
     </Suspense>
   );
 }

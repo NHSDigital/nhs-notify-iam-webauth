@@ -9,18 +9,15 @@ export default function Page() {
 
   useEffect(() => {
     if (!signedOut) {
-      signOut()
-        .then(() => setSignedOut(true))
-        .catch((error) => console.error(error));
+      signOut().then(() => setSignedOut(true));
     }
   });
 
-  if (signedOut) {
-    return (
-      <Suspense>
-        <Redirect />
-      </Suspense>
-    );
-  }
-  return <p>Signing out</p>;
+  return signedOut ? (
+    <Suspense>
+      <Redirect />
+    </Suspense>
+  ) : (
+    <p>Signing out</p>
+  );
 }

@@ -3,7 +3,7 @@ import concatClassNames from '@/src/utils/concat-class-names';
 import content from '@/src/content/content';
 import styles from './Header.module.scss';
 import { HeaderType } from './header.types';
-import LoginStatus from '../LoginStatus/LoginStatus';
+import { LoginStatus } from '../LoginStatus/LoginStatus';
 
 export function NHSNotifyHeader({ className, dataTestId }: HeaderType) {
   return (
