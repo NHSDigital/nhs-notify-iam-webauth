@@ -3,18 +3,19 @@
 import { Header } from 'nhsuk-react-components';
 import React, { useEffect, useState } from 'react';
 import { useAuthenticator } from '@aws-amplify/ui-react';
-import { fetchAuthSession } from 'aws-amplify/auth';
-import { JwtPayload } from 'aws-jwt-verify/jwt-model';
+import { fetchAuthSession, JWT } from 'aws-amplify/auth';
 import { getBasePath } from '@/utils/get-base-path';
+import { usePathname } from 'next/navigation';
 
-export default function LoginStatus() {
+export const LoginStatus = () => {
   const { authStatus } = useAuthenticator();
-  const [idToken, setIdToken] = useState<JwtPayload | undefined>();
+  const pathname = usePathname();
+  const [idToken, setIdToken] = useState<JWT['payload'] | undefined>();
+
   useEffect(() => {
-    (async () => {
-      const session = await fetchAuthSession();
-      setIdToken(session.tokens?.idToken?.payload);
-    })().catch(console.error);
+    fetchAuthSession().then((session) =>
+      setIdToken(session.tokens?.idToken?.payload)
+    );
   }, [authStatus]);
 
   switch (authStatus) {
@@ -23,7 +24,10 @@ export default function LoginStatus() {
         <Header.ServiceName key='serviceName'>
           {idToken?.email?.toString() || ''}
         </Header.ServiceName>,
-        <Header.NavItem key='navItem' href={`/${getBasePath()}/signout`}>
+        <Header.NavItem
+          key='navItem'
+          href={`/${getBasePath()}/signout?redirect=${encodeURIComponent(getBasePath())}${encodeURIComponent(pathname)}`}
+        >
           Sign out
         </Header.NavItem>,
       ];
@@ -31,14 +35,12 @@ export default function LoginStatus() {
     case 'unauthenticated': {
       return (
         <Header.NavItem
-          href={`/${getBasePath()}/?redirect=${location.pathname}`}
+          href={`/${getBasePath()}?redirect=${encodeURIComponent(getBasePath())}${encodeURIComponent(pathname)}`}
         >
           Sign in
         </Header.NavItem>
       );
     }
-    default: {
-      return null;
-    }
+    default:
   }
-}
+};

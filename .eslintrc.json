@@ -62,12 +62,7 @@
     "sonarjs/no-duplicate-string": "off",
     "react/no-danger": "off",
     "no-param-reassign": "off",
-    "react/require-default-props": "off",
-    "unicorn/no-null": "off",
-    "unicorn/no-anonymous-default-export": "off",
-    "no-restricted-globals": "off",
-    "no-console": "off",
-    "unicorn/consistent-function-scoping": "off"
+    "react/require-default-props": "off"
   },
   "settings": {
     "import/resolver": {

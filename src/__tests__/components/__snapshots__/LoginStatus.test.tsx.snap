@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LoginStatus - authenticated 1`] = `
+<DocumentFragment>
+  <div
+    class="nhsuk-header__transactional-service-name"
+  >
+    <a
+      class="nhsuk-header__transactional-service-name--link"
+    >
+      test-email
+    </a>
+  </div>
+  <li
+    class="nhsuk-header__navigation-item"
+  >
+    <a
+      class="nhsuk-header__navigation-link"
+      href="//auth/signout?redirect=%2Fauthnull"
+    >
+      Sign out
+    </a>
+  </li>
+</DocumentFragment>
+`;
+
+exports[`LoginStatus - configuring 1`] = `<DocumentFragment />`;
+
+exports[`LoginStatus - unauthenticated 1`] = `
+<DocumentFragment>
+  <li
+    class="nhsuk-header__navigation-item"
+  >
+    <a
+      class="nhsuk-header__navigation-link"
+      href="//auth?redirect=%2Fauthnull"
+    >
+      Sign in
+    </a>
+  </li>
+</DocumentFragment>
+`;
