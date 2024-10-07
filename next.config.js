@@ -8,7 +8,7 @@ module.exports = {
     return [
       {
         source: `${basePath}/redirect/:path*`,
-        destination: ':path*',
+        destination: '/:path*',
         basePath: false,
         permanent: false,
       }
