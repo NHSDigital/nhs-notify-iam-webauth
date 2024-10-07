@@ -42,9 +42,9 @@ const config: Config = {
   coveragePathIgnorePatterns: [
     '.types.ts',
     'layout.tsx',
+    'ClientLayout.tsx',
     'container.tsx',
     '.snap',
-    'app/page.tsx', // CCM-5752
   ],
 
   // Use this configuration option to add custom reporters to Jest
