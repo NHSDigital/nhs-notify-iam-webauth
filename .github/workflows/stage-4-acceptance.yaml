@@ -127,12 +127,20 @@ jobs:
     steps:
       - name: "Checkout code"
         uses: actions/checkout@v4
+      - name: "Repo setup"
+        run: |
+          npm ci
       - name: "Run accessibility test"
         run: |
           make test-accessibility
       - name: "Save result"
         run: |
           echo "Nothing to save"
+      - name: Archive accessibility results
+        uses: actions/upload-artifact@v4
+        with:
+          name: accessibility
+          path: ".reports/accessibility"
   test-load:
     name: "Load test"
     runs-on: ubuntu-latest
