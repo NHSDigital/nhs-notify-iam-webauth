@@ -13,7 +13,7 @@ resource "aws_cognito_identity_pool_roles_attachment" "main" {
   identity_pool_id = aws_cognito_identity_pool.main.id
 
   role_mapping {
-    identity_provider         = aws_cognito_user_pool.main.endpoint
+    identity_provider         = "${aws_cognito_user_pool.main.endpoint}:${aws_cognito_user_pool_client.main.id}"
     ambiguous_role_resolution = "AuthenticatedRole"
     type                      = "Token"
   }
