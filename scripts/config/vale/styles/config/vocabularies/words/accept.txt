@@ -4,7 +4,12 @@ bot
 config
 Cyber
 Dependabot
+draw.io
+drawio
+endfor
+endraw
 env
+GitHub
 Gitleaks
 Grype
 idempotence
