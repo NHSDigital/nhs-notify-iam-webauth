@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-var-requires,unicorn/prefer-module,import/no-unresolved */
+/* eslint-disable @typescript-eslint/no-var-requires,unicorn/prefer-module,import/no-unresolved,@typescript-eslint/no-require-imports */
 
 'use client';
 
