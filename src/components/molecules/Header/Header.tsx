@@ -16,7 +16,7 @@ export function NHSNotifyHeader({ className, dataTestId }: HeaderType) {
           <Link
             className='nhsuk-header__link nhsuk-header__link--service'
             href={
-              process.env.FEATURE_VISIBILITY_TESTING === 'on'
+              process.env.NEXT_PUBLIC_FEATURE_VISIBILITY_TESTING === 'on'
                 ? '/'
                 : '/create-and-submit-templates'
             }
@@ -55,7 +55,8 @@ export function NHSNotifyHeader({ className, dataTestId }: HeaderType) {
           id='content-header'
         >
           {/* I am currently testing the link wrapper, this will change later when we implement auth as the link will change based on auth state */}
-          {process.env.FEATURE_VISIBILITY_TESTING === 'on' ? undefined : (
+          {process.env.NEXT_PUBLIC_FEATURE_VISIBILITY_TESTING ===
+          'on' ? undefined : (
             <div className='nhsuk-account__login' data-testid='login-link'>
               <Link className='nhsuk-account__login--link' href='/'>
                 {content.components.headerComponent.links.logIn}
