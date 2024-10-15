@@ -19,8 +19,8 @@ resource "aws_cognito_identity_pool_roles_attachment" "main" {
   }
 
   roles = {
-    "authenticated" = aws_iam_role.authenticated.arn
-    "unauthenticated" = aws_iam_role.unauthenticated.arn
+    "authenticated" = aws_iam_role.identity_pool_authenticated_role.arn
+    "unauthenticated" = aws_iam_role.identity_pool_unauthenticated_role.arn
   }
 }
 
