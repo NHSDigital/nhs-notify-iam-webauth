@@ -25,7 +25,7 @@ resource "aws_cognito_identity_pool_roles_attachment" "main" {
 }
 
 resource "aws_iam_role" "identity_pool_authenticated_role" {
-  name               = "${local.csi}-cognito-identity"
+  name               = "${local.csi}-identity-pool-authenticated"
   assume_role_policy = data.aws_iam_policy_document.identity_pool_authenticated_assume_role_policy.json
 }
 
@@ -61,7 +61,7 @@ data "aws_iam_policy_document" "identity_pool_authenticated_assume_role_policy" 
 }
 
 resource "aws_iam_role" "identity_pool_unauthenticated_role" {
-  name               = "${local.csi}-cognito-identity"
+  name               = "${local.csi}-identity-pool-unauthenticated"
   assume_role_policy = data.aws_iam_policy_document.identity_pool_unauthenticated_assume_role_policy.json
 }
 
