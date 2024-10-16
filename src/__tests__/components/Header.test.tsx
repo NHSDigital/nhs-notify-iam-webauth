@@ -21,7 +21,7 @@ describe('Header component', () => {
   });
 
   it('should not render login link', () => {
-    process.env.NEXT_PUBLIC_FEATURE_VISIBILITY_TESTING = 'on';
+    process.env.NEXT_PUBLIC_DISABLE_CONTENT = 'true';
     render(<NHSNotifyHeader />);
 
     expect(screen.queryByTestId('login-link')).not.toBeInTheDocument();

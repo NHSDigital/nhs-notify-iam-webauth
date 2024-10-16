@@ -6,7 +6,7 @@ export async function NHSNotifyContainer({
   return (
     <div className='nhsuk-width-container'>
       <main className='nhsuk-main-wrapper nhsuk-u-padding-top-4' role='main'>
-        {process.env.NEXT_PUBLIC_FEATURE_VISIBILITY_TESTING === 'on' ? (
+        {process.env.NEXT_PUBLIC_DISABLE_CONTENT === 'true' ? (
           <h1>Coming soon</h1>
         ) : (
           children
