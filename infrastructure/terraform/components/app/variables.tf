@@ -101,6 +101,6 @@ variable "branch_name" {
 
 variable "disable_content" {
   type        = string
-  description = "Value for turning on/off feature testing"
+  description = "Value for turning switching disble conten true/false"
   default     = "false"
 }
