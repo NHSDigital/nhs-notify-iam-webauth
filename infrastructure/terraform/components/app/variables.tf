@@ -98,3 +98,9 @@ variable "branch_name" {
   description = "The branch name to deploy"
   default     = "main"
 }
+
+variable "disable_content" {
+  type        = string
+  description = "Value for turning on/off feature testing"
+  default     = "false"
+}
