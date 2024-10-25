@@ -1,0 +1,30 @@
+name: Github Release Created
+
+on:
+  release:
+    types: ["published"] # Inherits all input defaults
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  deploy-main:
+    name: Deploy changes to main in nonprod AWS Account
+    runs-on: ubuntu-latest
+
+    strategy:
+      max-parallel: 1
+      matrix:
+        component: [dnsroot]
+
+    steps:
+      - name: Trigger nhs-notify-internal static environment workflow deployments
+        uses: ./.github/workflows/trigger_internal_repo_build.yaml
+        with:
+          secrets: inherit
+          release_version: ${{ github.event.release.tag_name }}
+          tf_environment: "main"
+          tf_group: "nhs-notify-iam-nonprod"
+          tf_component: ${{ matrix.component }}
+          tf_action: "apply"
