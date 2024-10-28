@@ -5,6 +5,7 @@ resource "aws_route53_record" "root" {
   type    = "A"
   ttl     = 300
   records = ["127.0.0.1"]
+
   lifecycle {
     # Amplify is going to overwrite this record, but due to some provider wierdness this must exist initialy or cognito fails to deploy, even with depends_on configured.
     ignore_changes = [

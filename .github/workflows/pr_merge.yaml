@@ -1,85 +1,34 @@
 name: PR Merged
 
 on:
+  workflow_dispatch:
   pull_request:
     types: [closed]
+    branches:
+      - main
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
-  destroy-dynamic-environment:
-    name: Destroy Dynamic Environment
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Trigger nhs-notify-internal dynamic environment workflow
-        shell: bash
-        run: |
-          set -x
-          this_repo_name=$(echo ${{ github.repository }} | cut -d'/' -f2)
-
-          DISPATCH_EVENT=$(jq -ncM \
-            --arg infraRepoName "${this_repo_name}" \
-            --arg releaseVersion "${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" \
-            --arg targetEnvironment "pr${{ github.event.number }}" \
-            --arg targetAccountGroup "nhs-notify-iam-dev" \
-            --arg targetComponent "branch" \
-            --arg terraformAction "destroy" \
-            --arg overrides "branch_name=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" \
-            '{ "ref": "main",
-              "inputs": {
-                "infraRepoName": $infraRepoName,
-                "releaseVersion", $releaseVersion,
-                "targetEnvironment", $targetEnvironment,
-                "targetAccountGroup", $targetAccountGroup,
-                "targetComponent", $targetComponent,
-                "terraformAction", $terraformAction,
-                "overrides", $overrides,
-              }
-            }')
-
-          curl -L \
-            -X POST \
-            -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer ${{ secrets.PR_TRIGGER_PAT }}" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            https://api.github.com/repos/NHSDigital/nhs-notify-internal/actions/workflows/dispatch-deploy-dynamic-env.yaml/dispatches \
-            -d "${DISPATCH_EVENT}"
-
   deploy-main:
-    name: Deploy changes to main
-    runs-on: ubuntu-latest
-    steps:
-      - name: Trigger nhs-notify-internal static environment workflow deployment
-        shell: bash
-        run: |
-          set -x
-          this_repo_name=$(echo ${{ github.repository }} | cut -d'/' -f2)
+    name: Deploy changes to main in dev AWS account
 
-          DISPATCH_EVENT=$(jq -ncM \
-            --arg infraRepoName "${this_repo_name}" \
-            --arg releaseVersion "main" \
-            --arg targetEnvironment "main" \
-            --arg targetAccountGroup "nhs-notify-iam-dev" \
-            --arg targetComponent "app" \
-            --arg terraformAction "apply" \
-            '{ "ref": "main",
-              "inputs": {
-                "infraRepoName": $infraRepoName,
-                "releaseVersion", $releaseVersion,
-                "targetEnvironment", $targetEnvironment,
-                "targetAccountGroup", $targetAccountGroup,
-                "targetComponent", $targetComponent,
-                "terraformAction", $terraformAction
-              }
-            }')
+    permissions:
+      id-token: write
+      contents: read
 
-          curl -L \
-            -X POST \
-            -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer ${{ secrets.PR_TRIGGER_PAT }}" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            https://api.github.com/repos/NHSDigital/nhs-notify-internal/actions/workflows/dispatch-deploy-static-env.yaml/dispatches \
-            -d "${DISPATCH_EVENT}"
+    strategy:
+      max-parallel: 1
+      matrix:
+        component: [dnsroot]
+
+    uses: ./.github/workflows/trigger_internal_repo_build.yaml
+    secrets: inherit
+    with:
+      release_version: main
+      tf_environment: "main"
+      tf_group: "nhs-notify-iam-dev"
+      tf_component: ${{ matrix.component }}
+      tf_action: "apply"
