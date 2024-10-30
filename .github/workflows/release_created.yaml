@@ -11,20 +11,22 @@ concurrency:
 jobs:
   deploy-main:
     name: Deploy changes to main in nonprod AWS Account
-    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
 
     strategy:
       max-parallel: 1
       matrix:
-        component: [dnsroot]
+        component: [acct, app]
 
-    steps:
-      - name: Trigger nhs-notify-internal static environment workflow deployments
-        uses: ./.github/workflows/trigger_internal_repo_build.yaml
-        with:
-          secrets: inherit
-          release_version: ${{ github.event.release.tag_name }}
-          tf_environment: "main"
-          tf_group: "nhs-notify-iam-nonprod"
-          tf_component: ${{ matrix.component }}
-          tf_action: "apply"
+    uses: ./.github/workflows/reusable_internal_repo_build.yaml
+    secrets: inherit
+    with:
+      release_version: ${{ github.event.release.tag_name }}
+      target_workflow: "dispatch-deploy-static-notify-iam-env.yaml"
+      tf_environment: "main"
+      tf_group: "nhs-notify-iam-nonprod"
+      tf_component: ${{ matrix.component }}
+      tf_action: "apply"

@@ -22,12 +22,13 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        component: [dnsroot]
+        component: [acct, app]
 
-    uses: ./.github/workflows/trigger_internal_repo_build.yaml
+    uses: ./.github/workflows/reusable_internal_repo_build.yaml
     secrets: inherit
     with:
       release_version: main
+      target_workflow: "dispatch-deploy-static-notify-iam-env.yaml"
       tf_environment: "main"
       tf_group: "nhs-notify-iam-dev"
       tf_component: ${{ matrix.component }}
