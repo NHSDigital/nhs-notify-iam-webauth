@@ -40,7 +40,7 @@ jobs:
               }
             }')
 
-          curl -L \
+          curl --fail -L \
             -X POST \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.PR_TRIGGER_PAT }}" \

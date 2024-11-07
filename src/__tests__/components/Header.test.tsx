@@ -9,9 +9,29 @@ describe('Header component', () => {
         <NHSNotifyHeader />
       </Authenticator.Provider>
     );
+    const ENV = process.env;
 
-    await screen.findByText('Sign in');
+    beforeEach(() => {
+      jest.resetModules();
+      process.env = { ...ENV };
+    });
 
-    expect(container.asFragment()).toMatchSnapshot();
+    afterAll(() => {
+      process.env = ENV;
+    });
+    it('renders component correctly', async () => {
+      render(<NHSNotifyHeader />);
+
+      await screen.findByText('Sign in');
+
+      expect(container.asFragment()).toMatchSnapshot();
+    });
+
+    it('should not render login link', () => {
+      process.env.NEXT_PUBLIC_DISABLE_CONTENT = 'true';
+      render(<NHSNotifyHeader />);
+
+      expect(screen.queryByTestId('login-link')).not.toBeInTheDocument();
+    });
   });
 });

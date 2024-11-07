@@ -1,11 +1,8 @@
-name: PR Merged
+name: Github Release Created
 
 on:
-  workflow_dispatch:
-  pull_request:
-    types: [closed]
-    branches:
-      - main
+  release:
+    types: ["published"] # Inherits all input defaults
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -13,7 +10,7 @@ concurrency:
 
 jobs:
   deploy-main:
-    name: Deploy changes to main in dev AWS account
+    name: Deploy changes to main in nonprod AWS Account
 
     permissions:
       id-token: write
@@ -27,9 +24,9 @@ jobs:
     uses: ./.github/workflows/reusable_internal_repo_build.yaml
     secrets: inherit
     with:
-      release_version: main
+      release_version: ${{ github.event.release.tag_name }}
       target_workflow: "dispatch-deploy-static-notify-iam-env.yaml"
       tf_environment: "main"
-      tf_group: "nhs-notify-iam-dev"
+      tf_group: "nhs-notify-iam-nonprod"
       tf_component: ${{ matrix.component }}
       tf_action: "apply"
