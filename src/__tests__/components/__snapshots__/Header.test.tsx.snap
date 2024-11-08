@@ -16,7 +16,7 @@ exports[`Header component renders component correctly 1`] = `
         <a
           aria-label="NHS homepage"
           class="nhsuk-header__link nhsuk-header__link--service"
-          href="/"
+          href="/create-and-submit-templates"
         >
           <svg
             class="nhsuk-logo"
@@ -48,16 +48,10 @@ exports[`Header component renders component correctly 1`] = `
         class="nhsuk-header__content header__content"
         id="content-header"
       >
-        <li
-          class="nhsuk-header__navigation-item"
-        >
-          <a
-            class="nhsuk-header__navigation-link"
-            href="//auth?redirect=%2Fauthnull"
-          >
-            Sign in
-          </a>
-        </li>
+        <div
+          class="nhsuk-account__login"
+          data-testid="login-link"
+        />
       </div>
     </div>
   </header>
