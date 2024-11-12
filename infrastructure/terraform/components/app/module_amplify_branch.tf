@@ -12,7 +12,7 @@ module "amplify_branch" {
   amplify_app_id    = aws_amplify_app.main.id
   branch            = var.branch_name
   stage             = "PRODUCTION"
-  enable_auto_build = true
+  enable_auto_build = false
   environment_variables = {
     USER_POOL_CLIENT_ID   = aws_cognito_user_pool_client.main.id
     NOTIFY_SUBDOMAIN      = var.environment
