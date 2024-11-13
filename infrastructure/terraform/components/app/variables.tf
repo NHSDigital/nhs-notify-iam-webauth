@@ -99,8 +99,20 @@ variable "branch_name" {
   default     = "main"
 }
 
+variable "commit_id" {
+  type        = string
+  description = "The commit to deploy. Must be in the tree for branch_name"
+  default     = "HEAD"
+}
+
+variable "deployment_description" {
+  type        = string
+  description = "A message describing the deployment"
+  default     = "Deploy HEAD"
+}
+
 variable "disable_content" {
   type        = string
-  description = "Value for turning switching disable conten true/false"
+  description = "Value for turning switching disable content true/false"
   default     = "false"
 }
