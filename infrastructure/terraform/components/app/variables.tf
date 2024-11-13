@@ -99,6 +99,12 @@ variable "branch_name" {
   default     = "main"
 }
 
+variable "url_prefix" {
+  type        = string
+  description = "The url prefix to use for the deployed branch"
+  default     = "main"
+}
+
 variable "commit_id" {
   type        = string
   description = "The commit to deploy. Must be in the tree for branch_name"
