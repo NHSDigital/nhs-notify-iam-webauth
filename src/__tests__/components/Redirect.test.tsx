@@ -1,4 +1,3 @@
-import { mockDeep } from 'jest-mock-extended';
 import { render } from '@testing-library/react';
 import {
   useSearchParams,
@@ -8,33 +7,33 @@ import {
 import { Redirect } from '../../components/molecules/Redirect/Redirect';
 
 jest.mock('next/navigation', () => ({
+  // Note: We have to requireActual because we need the concrete implementation of ReadonlyURLSearchParams
   ...jest.requireActual('next/navigation'),
-  redirect: jest.fn(),
   useSearchParams: jest.fn(),
+  redirect: jest.fn(),
 }));
 
-test('Redirect - URL provided', () => {
-  const mockRedirect = jest.fn(mockDeep<typeof redirect>());
-  jest.mocked(redirect).mockImplementation(mockRedirect);
+const redirectMock = jest.mocked(redirect);
+const useSearchParamsMock = jest.mocked(useSearchParams);
 
+test('Redirect - URL provided', () => {
   const mockSearchParams = new ReadonlyURLSearchParams({
-    redirect: '/redirect-path',
+    redirect: 'redirect-path',
   });
-  jest.mocked(useSearchParams).mockReturnValue(mockSearchParams);
+
+  useSearchParamsMock.mockReturnValue(mockSearchParams);
 
   render(<Redirect />);
 
-  expect(mockRedirect).toHaveBeenCalledWith('/redirect/redirect-path');
+  expect(redirectMock).toHaveBeenCalledWith('/redirect/redirect-path', 'push');
 });
 
 test('Redirect - URL not provided', () => {
-  const mockRedirect = jest.fn(mockDeep<typeof redirect>());
-  jest.mocked(redirect).mockImplementation(mockRedirect);
-
   const mockSearchParams = new ReadonlyURLSearchParams({});
+
   jest.mocked(useSearchParams).mockReturnValue(mockSearchParams);
 
   render(<Redirect />);
 
-  expect(mockRedirect).toHaveBeenCalledWith('/redirect/');
+  expect(redirectMock).toHaveBeenCalledWith('/home', 'push');
 });

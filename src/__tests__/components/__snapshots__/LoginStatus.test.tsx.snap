@@ -2,41 +2,33 @@
 
 exports[`LoginStatus - authenticated 1`] = `
 <DocumentFragment>
-  <div
-    class="nhsuk-header__transactional-service-name"
+  <a
+    class="nhsuk-account__login--link"
+    href="/auth/signout"
   >
-    <a
-      class="nhsuk-header__transactional-service-name--link"
-    >
-      test-email
-    </a>
-  </div>
-  <li
-    class="nhsuk-header__navigation-item"
-  >
-    <a
-      class="nhsuk-header__navigation-link"
-      href="//auth/signout?redirect=%2Fauthnull"
-    >
-      Sign out
-    </a>
-  </li>
+    Log out
+  </a>
 </DocumentFragment>
 `;
 
-exports[`LoginStatus - configuring 1`] = `<DocumentFragment />`;
+exports[`LoginStatus - configuring 1`] = `
+<DocumentFragment>
+  <a
+    class="nhsuk-account__login--link"
+    href="/auth"
+  >
+    Log in
+  </a>
+</DocumentFragment>
+`;
 
 exports[`LoginStatus - unauthenticated 1`] = `
 <DocumentFragment>
-  <li
-    class="nhsuk-header__navigation-item"
+  <a
+    class="nhsuk-account__login--link"
+    href="/auth"
   >
-    <a
-      class="nhsuk-header__navigation-link"
-      href="//auth?redirect=%2Fauthnull"
-    >
-      Sign in
-    </a>
-  </li>
+    Log in
+  </a>
 </DocumentFragment>
 `;

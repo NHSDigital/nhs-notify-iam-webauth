@@ -1,19 +1,16 @@
-/* eslint-disable @typescript-eslint/no-var-requires,unicorn/prefer-module,import/no-unresolved,@typescript-eslint/no-require-imports */
-
 'use client';
 
-// import styles
 import '@/src/styles/app.scss';
 import '@aws-amplify/ui-react/styles.css';
-
+import Head from 'next/head';
 import { Amplify } from 'aws-amplify';
 import { Authenticator } from '@aws-amplify/ui-react';
 import content from '@/src/content/content';
-import Head from 'next/head';
+import { NHSNotifyContainer } from '@/src/components/layouts/container/container';
 import { NHSNotifyHeader } from '../Header/Header';
-import { NHSNotifyContainer } from '../../layouts/container/container';
 import { NHSNotifyFooter } from '../Footer/Footer';
 
+/* eslint-disable @typescript-eslint/no-require-imports, unicorn/prefer-module */
 Amplify.configure(require('@/amplify_outputs.json'), { ssr: true });
 
 export const ClientLayout = ({ children }: { children: React.ReactNode }) => (

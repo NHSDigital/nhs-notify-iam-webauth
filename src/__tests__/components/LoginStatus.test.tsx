@@ -18,8 +18,10 @@ jest.mock('aws-amplify/auth', () => ({
     }),
 }));
 
+const useAuthenticatorMock = jest.mocked(useAuthenticator);
+
 test('LoginStatus - authenticated', async () => {
-  jest.mocked(useAuthenticator).mockReturnValue(
+  useAuthenticatorMock.mockReturnValue(
     mockDeep<UseAuthenticator>({
       authStatus: 'authenticated',
     })
@@ -27,13 +29,13 @@ test('LoginStatus - authenticated', async () => {
 
   const container = render(<LoginStatus />);
 
-  await screen.findByText('test-email');
+  await screen.findByText('Log out');
 
   expect(container.asFragment()).toMatchSnapshot();
 });
 
 test('LoginStatus - unauthenticated', async () => {
-  jest.mocked(useAuthenticator).mockReturnValue(
+  useAuthenticatorMock.mockReturnValue(
     mockDeep<UseAuthenticator>({
       authStatus: 'unauthenticated',
     })
@@ -41,7 +43,7 @@ test('LoginStatus - unauthenticated', async () => {
 
   const container = render(<LoginStatus />);
 
-  await screen.findByText('Sign in');
+  await screen.findByText('Log in');
 
   expect(container.asFragment()).toMatchSnapshot();
 });
@@ -55,7 +57,7 @@ test('LoginStatus - configuring', async () => {
 
   const container = render(<LoginStatus />);
 
-  await screen.findAllByText('');
+  await screen.findByText('Log in');
 
   expect(container.asFragment()).toMatchSnapshot();
 });

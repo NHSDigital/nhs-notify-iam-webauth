@@ -3,3 +3,5 @@ import { authConfig } from './auth/resource';
 
 const backend = defineBackend({});
 backend.addOutput(authConfig);
+
+export default backend;

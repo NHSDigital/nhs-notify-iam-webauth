@@ -1,26 +1,31 @@
-import { ReactNode, ComponentType } from 'react';
-import { render, screen } from '@testing-library/react';
-import SignoutPage from '../../../app/signout/page';
+import { render, screen, waitFor } from '@testing-library/react';
+import { signOut } from '@aws-amplify/auth';
+import SignOutPage from '../../../app/signout/page';
 
-jest.mock('@aws-amplify/auth', () => ({
-  signOut: () => Promise.resolve(),
-}));
+jest.mock('@aws-amplify/auth');
 
 jest.mock('../../../components/molecules/Redirect/Redirect', () => ({
-  Redirect: () => <p>redirect</p>,
+  Redirect: () => <p>redirected</p>,
 }));
 
-jest.mock('@aws-amplify/ui-react', () => ({
-  Authenticator: {
-    Provider: ({ children }: { children: ReactNode }) => children,
-  },
-  withAuthenticator: (Component: ComponentType) => Component,
-}));
+const signOutMock = jest.mocked(signOut);
 
-test('MockSignoutPage', async () => {
-  const container = render(<SignoutPage />);
+describe('Signout Page', () => {
+  beforeEach(jest.resetAllMocks);
 
-  await screen.findByText('redirect');
+  test('signs out user and redirects', async () => {
+    signOutMock.mockResolvedValueOnce();
 
-  expect(container.asFragment()).toMatchSnapshot();
+    render(<SignOutPage />);
+
+    await waitFor(() =>
+      expect(screen.getByText('Signing out')).toBeInTheDocument()
+    );
+
+    await waitFor(() =>
+      expect(screen.getByText('redirected')).toBeInTheDocument()
+    );
+
+    expect(signOut).toHaveBeenCalled();
+  });
 });

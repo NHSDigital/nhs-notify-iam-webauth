@@ -96,7 +96,6 @@ data "aws_iam_policy_document" "identity_pool_unauthenticated_assume_role_policy
   }
 }
 
-
 data "aws_iam_policy_document" "identity_pool_role_policy" {
   statement {
     effect = "Allow"
