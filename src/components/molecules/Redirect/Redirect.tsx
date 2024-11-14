@@ -1,16 +1,19 @@
 'use client';
 
 import { useSearchParams, redirect, RedirectType } from 'next/navigation';
+import path from 'path';
 
 export const Redirect = () => {
   const searchParams = useSearchParams();
 
-  const redirectPath = searchParams.get('redirect');
+  const requestDirectPath = searchParams.get('redirect');
 
-  if (!redirectPath) {
+  if (!requestDirectPath) {
     // Note: /home get's redirected to / This is to bypass NextJs' base path which is /auth.
     return redirect('/home', RedirectType.push);
   }
 
-  return redirect(`/redirect/${redirectPath}`, RedirectType.push);
+  const redirectPath = path.normalize(`/redirect/${requestDirectPath}`);
+
+  return redirect(redirectPath, RedirectType.push);
 };

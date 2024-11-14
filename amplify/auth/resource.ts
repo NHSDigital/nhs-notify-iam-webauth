@@ -23,10 +23,14 @@ export const authConfig: DeepPartialAmplifyGeneratedConfigs<ClientConfig> = {
       redirect_sign_in_uri: [
         `https://${subdomain}.${appId}.amplifyapp.com/auth/`,
         `https://${subdomain}.${domainName}/auth/`,
+        'http://localhost:3000/auth/',
+        'http://localhost/auth/',
       ],
       redirect_sign_out_uri: [
         `https://${subdomain}.${appId}.amplifyapp.com/`,
         `https://${subdomain}.${domainName}/`,
+        'http://localhost:3000/templates/create-and-submit',
+        'http://localhost/templates/create-and-submit',
       ],
       response_type: 'code',
     },
