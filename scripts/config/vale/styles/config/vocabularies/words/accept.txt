@@ -1,4 +1,5 @@
 [A-Z]+s
+.env
 Bitwarden
 bot
 Cognito
