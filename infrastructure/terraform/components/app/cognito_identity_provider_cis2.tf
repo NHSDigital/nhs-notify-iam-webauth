@@ -2,9 +2,9 @@ data "aws_secretsmanager_secret_version" "current" {
   secret_id = aws_secretsmanager_secret.cis2_client_credentials.id
 }
 
-resource "aws_cognito_identity_provider" "example_provider" {
+resource "aws_cognito_identity_provider" "cis2_idp" {
   count = var.enable_cis2_idp ? 1 : 0
-  
+
   user_pool_id  = aws_cognito_user_pool.main.id
   provider_name = local.cis2_idp_name
   provider_type = "OIDC"
@@ -17,11 +17,11 @@ resource "aws_cognito_identity_provider" "example_provider" {
   }
 
   attribute_mapping = {
-    email    = "email"
-    username = "sub"
-    uid = "uid"
-    name = "name"
-    given_name = "given_name"
+    email       = "email"
+    username    = "sub"
+    uid         = "uid"
+    name        = "name"
+    given_name  = "given_name"
     family_name = "family_name"
   }
 }
