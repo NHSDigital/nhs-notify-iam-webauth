@@ -1,7 +1,7 @@
 'use client';
 
 import { useSearchParams, redirect, RedirectType } from 'next/navigation';
-import path from 'path';
+import path from 'node:path';
 
 export const Redirect = () => {
   const searchParams = useSearchParams();
