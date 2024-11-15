@@ -96,7 +96,7 @@ Read more about the technical design at [REFCOM-2024-007: WebUI User Auth](https
 npm run test:unit
 ```
 
-### Playwright sutomated tests
+### Playwright automated tests
 
 ```bash
 cd /tests/test-team/
