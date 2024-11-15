@@ -1,5 +1,4 @@
-### Base
-FROM node:20-alpine AS base
+FROM node:20-alpine AS builder
 
 # Install necessary packages for Puppeteer
 # Installs latest Chromium (100) package.
@@ -12,11 +11,15 @@ ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
 
 WORKDIR /app
 
-# Copy base dependencies describing
-
 COPY package*.json ./
 
-RUN npm install
+RUN addgroup -S nonroot \
+    && adduser -S nonroot -G nonroot
+
+# Switch to the non-root user
+USER nonroot
+
+RUN npm install --ignore-scripts
 
 EXPOSE 3000
 
