@@ -2,7 +2,7 @@
 
 import React, { Suspense } from 'react';
 import { withAuthenticator } from '@aws-amplify/ui-react';
-import { Redirect } from '../components/molecules/Redirect/Redirect';
+import { Redirect } from '@/src/components/molecules/Redirect/Redirect';
 
 const AuthenticatorWrapper = () => {
   return withAuthenticator(Redirect, {

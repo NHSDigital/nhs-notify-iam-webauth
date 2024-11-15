@@ -2,7 +2,7 @@ import { mockDeep } from 'jest-mock-extended';
 import { UseAuthenticator, useAuthenticator } from '@aws-amplify/ui-react';
 import { render, screen } from '@testing-library/react';
 import { AuthSession } from '@aws-amplify/auth';
-import { LoginStatus } from '../../components/molecules/LoginStatus/LoginStatus';
+import { LoginStatus } from '@/src/components/molecules/LoginStatus/LoginStatus';
 
 jest.mock('@aws-amplify/ui-react');
 jest.mock('aws-amplify/auth', () => ({
