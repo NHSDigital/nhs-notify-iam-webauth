@@ -104,3 +104,20 @@ variable "disable_content" {
   description = "Value for turning switching disable conten true/false"
   default     = "false"
 }
+
+variable "enable_cis2_idp" {
+  type        = bool
+  description = "Switch to enable the CIS2 Cognito federation"
+  default     = false
+}
+
+variable "cis2_environment" {
+  type        = string
+  description = "Name of the CIS2 environment, e.g. int, live. See: https://digital.nhs.uk/services/care-identity-service/applications-and-services/cis2-authentication/guidance-for-developers/detailed-guidance/registration"
+  default     = ""
+
+  validation {
+    condition     = contains(["", "int", "live"], var.cis2_environment)
+    error_message = "Allowed values for cis2_environment are \"int\" or \"live\"."
+  }
+}

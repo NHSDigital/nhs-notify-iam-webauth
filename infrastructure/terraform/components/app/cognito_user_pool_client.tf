@@ -10,10 +10,9 @@ resource "aws_cognito_user_pool_client" "main" {
     ]
   ])
 
-  supported_identity_providers = flatten([
-    var.enable_cognito_built_in_idp ? ["COGNITO"] : [],
-    # identity_provider_names.provider.provider_name   #e.g. auth0
-  ])
+  supported_identity_providers = flatten(
+    concat(local.cognito_idp, local.cis2_idp)
+  )
 
   allowed_oauth_flows = ["code"]
   allowed_oauth_scopes = [
