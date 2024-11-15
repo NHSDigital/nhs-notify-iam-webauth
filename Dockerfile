@@ -1,12 +1,12 @@
 ### Base
-FROM node:20-alpine as base
+FROM node:20-alpine AS base
 
 # Install necessary packages for Puppeteer
 # Installs latest Chromium (100) package.
 RUN apk add --no-cache \
-    udev \
+    chromium \
     ttf-freefont \
-    chromium
+    udev
 
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
 

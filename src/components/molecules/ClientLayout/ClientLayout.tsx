@@ -11,7 +11,7 @@ import { BASE_PATH } from '@/src/utils/constants';
 import { NHSNotifyHeader } from '../Header/Header';
 import { NHSNotifyFooter } from '../Footer/Footer';
 
-/* eslint-disable @typescript-eslint/no-require-imports, unicorn/prefer-module */
+// eslint-disable-next-line @typescript-eslint/no-require-imports, unicorn/prefer-module, import/no-unresolved
 Amplify.configure(require('@/amplify_outputs.json'), { ssr: true });
 
 export const ClientLayout = ({ children }: { children: React.ReactNode }) => (
