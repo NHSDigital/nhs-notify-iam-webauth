@@ -61,7 +61,7 @@ copy and rename `.env.template` to `.env`
 
 #### USE_LOCAL_AUTH
 
-```
+```bash
 true/false
 ```
 
@@ -106,9 +106,11 @@ When `true` a new Cognito instance will be created within the Amplify sandbox. Y
 npm run test:unit
 ```
 
-### Playwright sutomated tests
+### Playwright automated tests
+
+You'll need to ensure you have an authenticated terminal to `nhs-notify-iam-dev` AWS account. Then run:
 
 ```bash
 cd /tests/test-team/
-npm run test:e2e-local
+npm run test:component
 ```
