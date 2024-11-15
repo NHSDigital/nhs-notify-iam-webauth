@@ -16,17 +16,23 @@ jest.mock('next/navigation', () => ({
 const redirectMock = jest.mocked(redirect);
 const useSearchParamsMock = jest.mocked(useSearchParams);
 
-test.each(['/redirect-path', 'redirect-path'])('Redirect - URL provided %p', (redirect) => {
-  const mockSearchParams = new ReadonlyURLSearchParams({
-    redirect,
-  });
+test.each(['/redirect-path', 'redirect-path'])(
+  'Redirect - URL provided %p',
+  (redirectPath) => {
+    const mockSearchParams = new ReadonlyURLSearchParams({
+      redirect: redirectPath,
+    });
 
-  useSearchParamsMock.mockReturnValue(mockSearchParams);
+    useSearchParamsMock.mockReturnValue(mockSearchParams);
 
-  render(<Redirect />);
+    render(<Redirect />);
 
-  expect(redirectMock).toHaveBeenCalledWith(`/redirect/redirect-path`, 'push');
-});
+    expect(redirectMock).toHaveBeenCalledWith(
+      `/redirect/redirect-path`,
+      'push'
+    );
+  }
+);
 
 test('Redirect - URL not provided', () => {
   const mockSearchParams = new ReadonlyURLSearchParams({});

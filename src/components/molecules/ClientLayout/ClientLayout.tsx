@@ -7,9 +7,9 @@ import { Amplify } from 'aws-amplify';
 import { Authenticator } from '@aws-amplify/ui-react';
 import content from '@/src/content/content';
 import { NHSNotifyContainer } from '@/src/components/layouts/container/container';
+import { BASE_PATH } from '@/src/utils/constants';
 import { NHSNotifyHeader } from '../Header/Header';
 import { NHSNotifyFooter } from '../Footer/Footer';
-import { BASE_PATH } from '@/src/utils/constants';
 
 /* eslint-disable @typescript-eslint/no-require-imports, unicorn/prefer-module */
 Amplify.configure(require('@/amplify_outputs.json'), { ssr: true });
@@ -66,11 +66,11 @@ export const ClientLayout = ({ children }: { children: React.ReactNode }) => (
         src={`${BASE_PATH}/lib/nhs-frontend-js-check.js`}
         defer
       />
-        <Authenticator.Provider>
-          <NHSNotifyHeader />
-          <NHSNotifyContainer>{children}</NHSNotifyContainer>
-          <NHSNotifyFooter />
-        </Authenticator.Provider>
+      <Authenticator.Provider>
+        <NHSNotifyHeader />
+        <NHSNotifyContainer>{children}</NHSNotifyContainer>
+        <NHSNotifyFooter />
+      </Authenticator.Provider>
     </body>
   </html>
 );

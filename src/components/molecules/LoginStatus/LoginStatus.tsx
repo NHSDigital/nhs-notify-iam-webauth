@@ -10,6 +10,7 @@ export const LoginStatus = () => {
   if (authStatus === 'authenticated') {
     return (
       <a
+        id='login-link'
         className='nhsuk-account__login--link'
         href={`${BASE_PATH}/signout`}
       >
@@ -19,7 +20,7 @@ export const LoginStatus = () => {
   }
 
   return (
-    <a className='nhsuk-account__login--link' href={BASE_PATH}>
+    <a id='logout-link' className='nhsuk-account__login--link' href={BASE_PATH}>
       Log in
     </a>
   );
