@@ -4,6 +4,11 @@
   "private": true,
   "scripts": {
     "test:story": "npx playwright test --project story",
+    "test:component": "playwright test --project component -c config/local.config.ts",
     "test:e2e-local": "npx playwright test --project e2e-local"
+  },
+  "dependencies": {
+    "@aws-sdk/client-cognito-identity-provider": "^3.691.0",
+    "generate-password": "^1.7.1"
   }
 }

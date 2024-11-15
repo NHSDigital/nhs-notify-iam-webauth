@@ -39,23 +39,33 @@ Read more about the technical design at [REFCOM-2024-007: WebUI User Auth](https
     npm install
   ```
 
-### Setup .env or Environment variables
+### Setup .env
 
-#### Env Var: USER_POOL_ID
+copy and rename `.env.template` to `.env`
+
+#### USER_POOL_ID (optional)
 
 1. Log into the `nhs-notify-iam-dev` AWS account
 2. Load AWS Cognito
 3. Open `nhs-notify-main-app` Cognito user pool
 4. Grab `User pool ID` value
 
-#### Env Var: USER_POOL_CLIENT_ID
+#### USER_POOL_CLIENT_ID (optional)
 
 1. Log into the `nhs-notify-iam-dev` AWS account
 2. Load AWS Cognito
 3. Open `nhs-notify-main-app` Cognito user pool
 4. Load `App integration` tab
-5. Find (at the bottom of the page)
-6. Grab `Client ID` value
+   1. Found (at the bottom of the page)
+5. Grab `Client ID` value
+
+#### USE_LOCAL_AUTH
+
+```bash
+true/false
+```
+
+When `true` a new Cognito instance will be created within the Amplify sandbox. You'll need to manually add users.
 
 ### Setup a user in Cognito
 
@@ -98,7 +108,9 @@ npm run test:unit
 
 ### Playwright automated tests
 
+You'll need to ensure you have an authenticated terminal to `nhs-notify-iam-dev` AWS account. Then run:
+
 ```bash
 cd /tests/test-team/
-npm run test:e2e-local
+npm run test:component
 ```

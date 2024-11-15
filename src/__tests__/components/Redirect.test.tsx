@@ -18,9 +18,9 @@ const useSearchParamsMock = jest.mocked(useSearchParams);
 
 test.each(['/redirect-path', 'redirect-path'])(
   'Redirect - URL provided %p',
-  (testPath) => {
+  (redirectPath) => {
     const mockSearchParams = new ReadonlyURLSearchParams({
-      testPath,
+      redirect: redirectPath,
     });
 
     useSearchParamsMock.mockReturnValue(mockSearchParams);

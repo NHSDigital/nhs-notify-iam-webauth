@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useAuthenticator } from '@aws-amplify/ui-react';
-import { getBasePath } from '@/utils/get-base-path';
+import { BASE_PATH } from '@/src/utils/constants';
 
 export const LoginStatus = () => {
   const { authStatus } = useAuthenticator();
@@ -10,8 +10,9 @@ export const LoginStatus = () => {
   if (authStatus === 'authenticated') {
     return (
       <a
+        id='login-link'
         className='nhsuk-account__login--link'
-        href={`${getBasePath()}/signout`}
+        href={`${BASE_PATH}/signout`}
       >
         Log out
       </a>
@@ -19,7 +20,7 @@ export const LoginStatus = () => {
   }
 
   return (
-    <a className='nhsuk-account__login--link' href={`${getBasePath()}`}>
+    <a id='logout-link' className='nhsuk-account__login--link' href={BASE_PATH}>
       Log in
     </a>
   );

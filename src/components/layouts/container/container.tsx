@@ -1,4 +1,4 @@
-export async function NHSNotifyContainer({
+export function NHSNotifyContainer({
   children,
 }: {
   children: React.ReactNode;

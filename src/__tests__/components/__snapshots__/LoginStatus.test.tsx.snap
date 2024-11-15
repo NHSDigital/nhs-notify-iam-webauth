@@ -5,6 +5,7 @@ exports[`LoginStatus - authenticated 1`] = `
   <a
     class="nhsuk-account__login--link"
     href="/auth/signout"
+    id="login-link"
   >
     Log out
   </a>
@@ -16,6 +17,7 @@ exports[`LoginStatus - configuring 1`] = `
   <a
     class="nhsuk-account__login--link"
     href="/auth"
+    id="logout-link"
   >
     Log in
   </a>
@@ -27,6 +29,7 @@ exports[`LoginStatus - unauthenticated 1`] = `
   <a
     class="nhsuk-account__login--link"
     href="/auth"
+    id="logout-link"
   >
     Log in
   </a>
