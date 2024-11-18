@@ -83,13 +83,13 @@ variable "cognito_user_pool_additional_callback_urls" {
 
 variable "enable_cognito_built_in_idp" {
   type        = bool
-  description = "Enable the use of Cognito as an IDP; CIS2 is prefered"
+  description = "Enable the use of Cognito as an IDP; CIS2 is preferred"
   default     = false
 }
 
 variable "enable_amplify_basic_auth" {
   type        = bool
-  description = "Enable a basic set of credentials in the form of a dynamicly generated username and password for the amplify app branches. Not intended for production use"
+  description = "Enable a basic set of credentials in the form of a dynamically generated username and password for the amplify app branches. Not intended for production use"
   default     = false
 }
 
@@ -109,12 +109,6 @@ variable "commit_id" {
   type        = string
   description = "The commit to deploy. Must be in the tree for branch_name"
   default     = "HEAD"
-}
-
-variable "deployment_description" {
-  type        = string
-  description = "A message describing the deployment"
-  default     = "Deploy HEAD"
 }
 
 variable "disable_content" {
