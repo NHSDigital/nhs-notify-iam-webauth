@@ -113,11 +113,11 @@ variable "enable_cis2_idp" {
 
 variable "cis2_environment" {
   type        = string
-  description = "Name of the CIS2 environment, e.g. int, live. See: https://digital.nhs.uk/services/care-identity-service/applications-and-services/cis2-authentication/guidance-for-developers/detailed-guidance/registration"
+  description = "Name of the CIS2 environment, e.g. mock, int, live. See: https://digital.nhs.uk/services/care-identity-service/applications-and-services/cis2-authentication/guidance-for-developers/detailed-guidance/registration"
   default     = ""
 
   validation {
-    condition     = contains(["", "int", "live"], var.cis2_environment)
+    condition     = contains(["mock", "int", "live"], var.cis2_environment)
     error_message = "Allowed values for cis2_environment are \"int\" or \"live\"."
   }
 }
