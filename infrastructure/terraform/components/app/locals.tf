@@ -8,5 +8,5 @@ locals {
   }
   cis2_idp_name = "CIS2-${var.cis2_environment}"
   cognito_idp   = var.enable_cognito_built_in_idp ? ["COGNITO"] : []
-  cis2_idp      = var.enable_cis2_idp ? [cis2_idp_name] : []
+  cis2_idp      = var.enable_cis2_idp ? [local.cis2_idp_name] : []
 }
