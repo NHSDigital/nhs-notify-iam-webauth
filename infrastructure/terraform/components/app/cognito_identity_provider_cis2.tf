@@ -10,10 +10,11 @@ resource "aws_cognito_identity_provider" "cis2_idp" {
   provider_type = "OIDC"
 
   provider_details = {
-    authorize_scopes = "openid profile email"
-    client_id        = jsondecode(data.aws_secretsmanager_secret_version.current.secret_string)["client_id"]
-    client_secret    = jsondecode(data.aws_secretsmanager_secret_version.current.secret_string)["client_secret"]
-    oidc_issuer      = local.cis2_issuer_urls[var.cis2_environment]
+    authorize_scopes          = "openid profile email"
+    client_id                 = jsondecode(data.aws_secretsmanager_secret_version.current.secret_string)["client_id"]
+    client_secret             = jsondecode(data.aws_secretsmanager_secret_version.current.secret_string)["client_secret"]
+    oidc_issuer               = local.cis2_issuer_urls[var.cis2_environment]
+    attributes_request_method = "GET"
   }
 
   attribute_mapping = {
