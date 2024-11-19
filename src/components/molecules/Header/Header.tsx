@@ -15,11 +15,7 @@ export function NHSNotifyHeader({ className, dataTestId }: HeaderType) {
         <div className='nhsuk-header__logo'>
           <a
             className='nhsuk-header__link nhsuk-header__link--service'
-            href={
-              process.env.NEXT_PUBLIC_DISABLE_CONTENT === 'true'
-                ? '/'
-                : '/create-and-submit-templates'
-            }
+            href='/'
             aria-label='NHS homepage'
           >
             <svg
