@@ -13,7 +13,7 @@ const AuthenticatorWrapper = () => {
 
 export default function Page() {
   return (
-    <Suspense>
+    <Suspense fallback={<p>Loading...</p>}>
       <AuthenticatorWrapper />
     </Suspense>
   );

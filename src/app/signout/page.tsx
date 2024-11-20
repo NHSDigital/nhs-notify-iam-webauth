@@ -18,7 +18,7 @@ const SignOut = () => {
 
 export default function Page() {
   return (
-    <Suspense>
+    <Suspense fallback={<p>Loading...</p>}>
       <SignOut />
     </Suspense>
   );
