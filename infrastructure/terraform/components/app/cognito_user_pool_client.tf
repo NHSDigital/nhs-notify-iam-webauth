@@ -14,11 +14,11 @@ resource "aws_cognito_user_pool_client" "main" {
     concat(local.cognito_idp, local.cis2_idp)
   )
 
-  allowed_oauth_flows = ["code"]
+  allowed_oauth_flows_user_pool_client = true
+  allowed_oauth_flows                  = ["code"]
   allowed_oauth_scopes = [
     "openid",
     "email",
-    "phone",
     "profile",
     "aws.cognito.signin.user.admin"
   ]
