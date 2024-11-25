@@ -20,6 +20,7 @@ export class CognitoUserHelper {
   }
 
   async createUser(username: string): Promise<User> {
+    // Note: we use a unique prefix to that we don't interfere with other users.
     const email = `${process.env.USER_EMAIL_PREFIX}-${username}@nhs.net`;
 
     const user = await this._client.send(
@@ -29,7 +30,6 @@ export class CognitoUserHelper {
         UserAttributes: [
           {
             Name: 'email',
-            // Note: we use a unique prefix to that we don't interfere with other users.
             Value: email,
           },
           {

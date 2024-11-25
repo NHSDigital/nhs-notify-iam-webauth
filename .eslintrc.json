@@ -34,11 +34,10 @@
     "prettier/prettier": "error",
     "unicorn/prevent-abbreviations": "off",
     "unicorn/filename-case": [
-      "error", {
+      "error",
+      {
         "case": "kebabCase",
-        "ignore": [
-          ".tsx"
-        ]
+        "ignore": [".tsx"]
       }
     ],
     "react/react-in-jsx-scope": "off",
@@ -62,7 +61,8 @@
     "sonarjs/no-duplicate-string": "off",
     "react/no-danger": "off",
     "no-param-reassign": "off",
-    "react/require-default-props": "off"
+    "react/require-default-props": "off",
+    "unicorn/prefer-node-protocol": "off"
   },
   "settings": {
     "import/resolver": {

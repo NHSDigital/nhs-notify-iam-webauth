@@ -6,7 +6,7 @@ module.exports = {
 
   async redirects() {
     /*
-    * Doing these redirect rewrite will bypass NextJs' base path
+    * Doing redirect rewrites will bypass NextJs' base path
     * Without it a redirect('/templates/create-and-submit') would go to /auth/templates/create-and-submit
     */
     return [

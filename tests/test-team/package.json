@@ -1,14 +1,15 @@
 {
-  "name": "nhs-notify-iam-webauth-user-story-tests",
+  "name": "nhs-notify-iam-webauth-ui-tests",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "test:story": "npx playwright test --project story",
-    "test:component": "playwright test --project component -c config/local.config.ts",
-    "test:e2e-local": "npx playwright test --project e2e-local"
+    "test:start-local-app": "npm run build --prefix ../../ && npm run start --prefix ../../",
+    "test:local-ui": "playwright test --project component -c config/local.config.ts",
+    "test:story": "echo 'Not implemented'"
   },
-  "dependencies": {
+  "devDependencies": {
     "@aws-sdk/client-cognito-identity-provider": "^3.691.0",
+    "@playwright/test": "^1.45.1",
     "generate-password": "^1.7.1"
   }
 }

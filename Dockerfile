@@ -16,10 +16,13 @@ COPY package*.json ./
 RUN addgroup -S nonroot \
     && adduser -S nonroot -G nonroot
 
+# Set permissions to add files/folders to /app
+RUN chown -R nonroot:nonroot /app
+
 # Switch to the non-root user
 USER nonroot
 
-RUN npm install --ignore-scripts
+RUN npm ci --ignore-scripts
 
 EXPOSE 3000
 

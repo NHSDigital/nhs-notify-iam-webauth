@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import '@/src/styles/app.scss';
 import content from '@/src/content/content';
-import { ClientLayout } from '../components/molecules/ClientLayout/ClientLayout';
+import { ClientLayout } from '@/src/components/molecules/ClientLayout/ClientLayout';
 import 'nhsuk-frontend/dist/nhsuk.css';
 
 export const metadata: Metadata = {

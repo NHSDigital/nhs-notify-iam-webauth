@@ -4,7 +4,7 @@ import baseConfig from './playwright.config';
 export default defineConfig({
   ...baseConfig,
 
-  timeout: 10000_000,
+  timeout: 10_000,
 
   projects: [
     {
@@ -14,7 +14,7 @@ export default defineConfig({
         screenshot: 'only-on-failure',
         baseURL: 'http://localhost:3000',
         ...devices['Desktop Chrome'],
-        headless: false,
+        headless: true,
       },
     },
     {

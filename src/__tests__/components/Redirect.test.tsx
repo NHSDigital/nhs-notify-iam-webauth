@@ -4,7 +4,7 @@ import {
   ReadonlyURLSearchParams,
   redirect,
 } from 'next/navigation';
-import { Redirect } from '../../components/molecules/Redirect/Redirect';
+import { Redirect } from '@/src/components/molecules/Redirect/Redirect';
 
 jest.mock('next/navigation', () => ({
   // Note: We have to requireActual because we need the concrete implementation of ReadonlyURLSearchParams
