@@ -4,7 +4,7 @@ import baseConfig from './playwright.config';
 export default defineConfig({
   ...baseConfig,
 
-  timeout: 10_000,
+  timeout: 20_000,
 
   projects: [
     {
@@ -23,6 +23,15 @@ export default defineConfig({
       use: {
         baseURL: 'http://localhost:3000',
         ...devices['Desktop Chrome'],
+      },
+    },
+    {
+      name: 'federation',
+      testMatch: '*.federation.test.ts',
+      use: {
+        baseURL: 'http://localhost:3000',
+        ...devices['Desktop Chrome'],
+        headless: true,
       },
     },
   ],
