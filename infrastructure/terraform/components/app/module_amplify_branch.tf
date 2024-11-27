@@ -1,7 +1,7 @@
 module "amplify_branch" {
   source            = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/amp_branch?ref=v1.0.0"
   name              = "main"
-  display_name      = "main"
+  display_name      = var.url_prefix
   aws_account_id    = var.aws_account_id
   component         = var.component
   environment       = var.environment
@@ -12,7 +12,7 @@ module "amplify_branch" {
   amplify_app_id    = aws_amplify_app.main.id
   branch            = var.branch_name
   stage             = "PRODUCTION"
-  enable_auto_build = true
+  enable_auto_build = false
   environment_variables = {
     USER_POOL_CLIENT_ID   = aws_cognito_user_pool_client.main.id
     NOTIFY_SUBDOMAIN      = var.environment
