@@ -88,10 +88,7 @@ test.describe('CIS2 federation', () => {
   });
 
   test.beforeEach(async ({ browser }) => {
-    browserContext = await configureBrowserContext(
-      browser,
-      appPassword
-    );
+    browserContext = await configureBrowserContext(browser, appPassword);
   });
 
   test.afterEach(async () => {
@@ -99,59 +96,57 @@ test.describe('CIS2 federation', () => {
   });
 
   test('should sign user in, then redirect user to redirect path', async () => {
-      const page = await browserContext.newPage();
-      
-      const modifiedCis2Url = await getCognitoToCis2RedirectUrl();
+    const page = await browserContext.newPage();
 
-      // Cognito to CIS2 redirect
-      await page.goto(modifiedCis2Url);
-      await page.waitForSelector(
-        `//label[contains(text(), 'Authenticator app')]`
-      );
-      await sleep(500);
+    const modifiedCis2Url = await getCognitoToCis2RedirectUrl();
 
-      // Auth method selection
-      await page.click(`//label[contains(text(), 'Authenticator app')]`);
-      await sleep(1500);
-      await page.click(`//button[contains(text(), 'Continue')]`);
-      await page.waitForSelector(`//input[@name='password']`);
-      await sleep(500);
+    // Cognito to CIS2 redirect
+    await page.goto(modifiedCis2Url);
+    await page.waitForSelector(
+      `//label[contains(text(), 'Authenticator app')]`
+    );
+    await sleep(500);
 
-      // Username password entry
-      await page
-        .locator(`//input[@name='email']`)
-        .fill(cis2Credentials.username);
-      await page
-        .locator(`//input[@name='password']`)
-        .fill(cis2Credentials.password);
-      await sleep(1500);
-      await page.click(`//button[contains(text(), 'Continue')]`);
-      await page.waitForSelector(
-        `//input[@data-vv-as='Enter verification code']`
-      );
-      await sleep(500);
+    // Auth method selection
+    await page.click(`//label[contains(text(), 'Authenticator app')]`);
+    await sleep(1500);
+    await page.click(`//button[contains(text(), 'Continue')]`);
+    await page.waitForSelector(`//input[@name='password']`);
+    await sleep(500);
 
-      // One time passcode entry
-      const { otp } = TOTP.generate(cis2Credentials.totpSecret, {
-        algorithm: 'SHA-1',
-      });
-      await page
-        .locator(`//input[@data-vv-as='Enter verification code']`)
-        .fill(otp);
-      await sleep(1500);
-      await page.click(`//button[contains(text(), 'Submit')]`);
-      await page.waitForSelector(
-        `//div[contains(@class, 'modal-content-desktop')]//form[@name='loginWithIdentityProvider']//input[@value='${identityProvider}']`
-      );
-      await sleep(500);
+    // Username password entry
+    await page.locator(`//input[@name='email']`).fill(cis2Credentials.username);
+    await page
+      .locator(`//input[@name='password']`)
+      .fill(cis2Credentials.password);
+    await sleep(1500);
+    await page.click(`//button[contains(text(), 'Continue')]`);
+    await page.waitForSelector(
+      `//input[@data-vv-as='Enter verification code']`
+    );
+    await sleep(500);
 
-      // Confirm logging in via CIS2
-      await page.click(
-        `//div[contains(@class, 'modal-content-desktop')]//form[@name='loginWithIdentityProvider']//input[@value='${identityProvider}']`
-      );
-
-      // Arrive at the app's landing page
-      await page.waitForSelector(`//h1[contains(text(), 'Hello World!')]`);
-      await sleep(2000);
+    // One time passcode entry
+    const { otp } = TOTP.generate(cis2Credentials.totpSecret, {
+      algorithm: 'SHA-1',
     });
+    await page
+      .locator(`//input[@data-vv-as='Enter verification code']`)
+      .fill(otp);
+    await sleep(1500);
+    await page.click(`//button[contains(text(), 'Submit')]`);
+    await page.waitForSelector(
+      `//div[contains(@class, 'modal-content-desktop')]//form[@name='loginWithIdentityProvider']//input[@value='${identityProvider}']`
+    );
+    await sleep(500);
+
+    // Confirm logging in via CIS2
+    await page.click(
+      `//div[contains(@class, 'modal-content-desktop')]//form[@name='loginWithIdentityProvider']//input[@value='${identityProvider}']`
+    );
+
+    // Arrive at the app's landing page
+    await page.waitForSelector(`//h1[contains(text(), 'Hello World!')]`);
+    await sleep(2000);
+  });
 });
