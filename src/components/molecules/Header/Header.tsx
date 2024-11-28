@@ -1,8 +1,8 @@
-import Link from 'next/link';
 import concatClassNames from '@/src/utils/concat-class-names';
 import content from '@/src/content/content';
 import styles from './Header.module.scss';
 import { HeaderType } from './header.types';
+import { LoginStatus } from '../LoginStatus/LoginStatus';
 
 export function NHSNotifyHeader({ className, dataTestId }: HeaderType) {
   return (
@@ -13,13 +13,9 @@ export function NHSNotifyHeader({ className, dataTestId }: HeaderType) {
     >
       <div className='nhsuk-header__container'>
         <div className='nhsuk-header__logo'>
-          <Link
+          <a
             className='nhsuk-header__link nhsuk-header__link--service'
-            href={
-              process.env.NEXT_PUBLIC_DISABLE_CONTENT === 'true'
-                ? '/'
-                : '/create-and-submit-templates'
-            }
+            href='/'
             aria-label='NHS homepage'
           >
             <svg
@@ -44,7 +40,7 @@ export function NHSNotifyHeader({ className, dataTestId }: HeaderType) {
             <span className='nhsuk-header__service-name'>
               {content.components.headerComponent.serviceName}
             </span>
-          </Link>
+          </a>
         </div>
         <div
           className={concatClassNames(
@@ -57,9 +53,7 @@ export function NHSNotifyHeader({ className, dataTestId }: HeaderType) {
           {/* I am currently testing the link wrapper, this will change later when we implement auth as the link will change based on auth state */}
           {process.env.NEXT_PUBLIC_DISABLE_CONTENT === 'true' ? undefined : (
             <div className='nhsuk-account__login' data-testid='login-link'>
-              <Link className='nhsuk-account__login--link' href='/'>
-                {content.components.headerComponent.links.logIn}
-              </Link>
+              <LoginStatus />
             </div>
           )}
         </div>

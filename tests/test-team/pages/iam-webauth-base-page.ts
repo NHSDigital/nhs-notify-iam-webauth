@@ -1,26 +1,17 @@
 import { Locator, type Page } from '@playwright/test';
 
-export class IamWebAuthBasePage {
-  readonly page: Page;
-
-  readonly pageHeader: Locator;
+export abstract class IamWebAuthBasePage {
+  public readonly page: Page;
+  public readonly pageHeader: Locator;
+  public readonly loginLink: Locator;
+  public readonly logoutLink: Locator;
 
   constructor(page: Page) {
     this.page = page;
-    this.pageHeader = page
-      .locator('[class="nhsuk-heading-xl"]')
-      .and(page.locator('h1'));
+    this.pageHeader = page.locator('h1');
+    this.loginLink = page.locator('[id="login-link"]');
+    this.logoutLink = page.locator('[id="logout-link"]');
   }
 
-  async navigateTo(url: string) {
-    await this.page.goto(url, { waitUntil: 'load' });
-  }
-
-  async NavigateWithIntercept(url: string) {
-    await this.page.route('', (route) => {
-      route.request();
-    });
-
-    await this.page.goto(url);
-  }
+  abstract loadPage({ redirectPath }: { redirectPath: string }): Promise<void>;
 }

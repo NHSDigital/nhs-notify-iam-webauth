@@ -6,7 +6,7 @@
 *vulnerabilities*report*.json
 *report*json.zip
 .version
-
+version.json
 *.code-workspace
 !project.code-workspace
 
@@ -64,3 +64,12 @@ tests/test-team/playwright/.cache/
 
 #plugin-cache
 plugin-cache/
+# amplify
+node_modules
+.amplify
+amplify_outputs*
+amplifyconfiguration*
+
+.next
+.env
+.idea

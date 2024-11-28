@@ -1,128 +1,116 @@
-# NHS Notify Repository Template
+# NHS Notify IAM Web Auth repository
 
-[![CI/CD Pull Request](https://github.com/nhs-england-tools/repository-template/actions/workflows/cicd-1-pull-request.yaml/badge.svg)](https://github.com/nhs-england-tools/repository-template/actions/workflows/cicd-1-pull-request.yaml)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=repository-template&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=repository-template)
+NextJS application deployed via AWS Amplify to act as a login portal for NHS users.
 
-Start with an overview or a brief description of what the project is about and what it does. For example -
+Read more about the technical design at [REFCOM-2024-007: WebUI User Auth](https://nhsd-confluence.digital.nhs.uk/display/RIS/REFCOM-2024-007%3A+WebUI+User+Auth).
 
-Welcome to our repository template designed to streamline your project setup! This robust template provides a reliable starting point for your new projects, covering an essential tech stack and encouraging best practices in documenting.
+## Setting up locally
 
-This repository template aims to foster a user-friendly development environment by ensuring that every included file is concise and adequately self-documented. By adhering to this standard, we can promote increased clarity and maintainability throughout your project's lifecycle. Bundled within this template are resources that pave the way for seamless repository creation. Currently supported technologies are:
+### Git
 
-- Terraform
-- Docker
+- Make sure you have GitHub access with the right permissions
+- Setup git locally on your machine
+- Set your local git email as you `*@nhs.net` email `e.g. git config --global user.email "firstname.lastname1@nhs.net"`
+- Setup commit signing (this is required before you can commit any code to the repository). This is a very good resource to help Mac users `https://gist.github.com/troyfontaine/18c9146295168ee9ca2b30c00bd1b41e`
+- Pull the repository here `git@github.com:NHSDigital/nhs-notify-web-template-management.git`
 
-Make use of this repository template to expedite your project setup and enhance your productivity right from the get-go. Enjoy the advantage of having a well-structured, self-documented project that reduces overhead and increases focus on what truly matters - coding!
+### Development and Tools
 
-## Table of Contents
+- Install `asdf` [HERE](https://asdf-vm.com/guide/getting-started.html#_2-download-asdf). We use this tool to manage the required version for packages (this can be found in the `.tool-versions` file at the root of the project) on the project. You can use other tools usch as `brew`, `apt`, etc, but you will be risking having different package versions to other developers.
+- Then you need to install the following plugins:
 
-- [NHS Notify Repository Template](#nhs-notify-repository-template)
-  - [Table of Contents](#table-of-contents)
-  - [Documentation](#documentation)
-  - [Setup](#setup)
-    - [Prerequisites](#prerequisites)
-    - [Configuration](#configuration)
-  - [Usage](#usage)
-    - [Testing](#testing)
-  - [Design](#design)
-    - [Diagrams](#diagrams)
-    - [Modularity](#modularity)
-  - [Contributing](#contributing)
-  - [Contacts](#contacts)
-  - [Licence](#licence)
+  ```shell
+    asdf plugin-add nodejs
+    asdf plugin-add direnv
+    asdf plugin-add terraform
+    asdf plugin-add gitleaks
+    asdf plugin-add pre-commit
+  ```
 
-## Documentation
+- Now you can install the tools, and they will be runnable from within the `nhs-notify-web-template-management` directory:
 
-- [Built](/)
-- [Source](/docs/README.md)
+  ```shell
+    asdf install
+  ```
 
-## Setup
+- Now you can run the command below to install the packages in the project:
 
-By including preferably a one-liner or if necessary a set of clear CLI instructions we improve user experience. This should be a frictionless installation process that works on various operating systems (macOS, Linux, Windows WSL) and handles all the dependencies.
+  ```shell
+    npm install
+  ```
 
-Clone the repository
+### Setup .env
 
-```shell
-git clone https://github.com/nhs-england-tools/repository-template.git
-cd nhs-england-tools/repository-template
+copy and rename `.env.template` to `.env`
+
+#### USER_POOL_ID (optional)
+
+1. Log into the `nhs-notify-iam-dev` AWS account
+2. Load AWS Cognito
+3. Open `nhs-notify-main-app` Cognito user pool
+4. Grab `User pool ID` value
+
+#### USER_POOL_CLIENT_ID (optional)
+
+1. Log into the `nhs-notify-iam-dev` AWS account
+2. Load AWS Cognito
+3. Open `nhs-notify-main-app` Cognito user pool
+4. Load `App integration` tab
+   1. Found (at the bottom of the page)
+5. Grab `Client ID` value
+
+#### USE_LOCAL_AUTH
+
+```bash
+true/false
 ```
 
-### Prerequisites
+When `true` a new Cognito instance will be created within the Amplify sandbox. You'll need to manually add users.
 
-The following software packages, or their equivalents, are expected to be installed and configured:
+### Setup a user in Cognito
 
-- [Docker](https://www.docker.com/) container runtime or a compatible tool, e.g. [Podman](https://podman.io/),
-- [asdf](https://asdf-vm.com/) version manager,
-- [GNU make](https://www.gnu.org/software/make/) 3.82 or later,
-- [GNU coreutils](https://www.gnu.org/software/coreutils/) and [GNU binutils](https://www.gnu.org/software/binutils/) may be required to build dependencies like Python, which may need to be compiled during installation. For macOS users, this has been scripted and automated by the `dotfiles` project; please see this [script](https://github.com/nhs-england-tools/dotfiles/blob/main/assets/20-install-base-packages.macos.sh) for details,
-- [Python](https://www.python.org/) required to run Git hooks,
-- [`jq`](https://jqlang.github.io/jq/) a lightweight and flexible command-line JSON processor.
+1. Log into the `nhs-notify-iam-dev` AWS account
+2. Load AWS Cognito
+3. Open `nhs-notify-main-app` Cognito user pool
+4. Select `Create user`
+5. Enter details
+   1. Use your .nhs email address
+   2. Select randomly generated password
+   3. Select Send an email invitation
+6. Wait for email to arrive in your .nhs inbox
+7. Load web application and sign in
 
-> [!NOTE]<br>
-> The version of GNU make available by default on macOS is earlier than 3.82. You will need to upgrade it or certain `make` tasks will fail. On macOS, you will need [Homebrew](https://brew.sh/) installed, then to install `make`, like so:
->
-> ```shell
-> brew install make
-> ```
->
-> You will then see instructions to fix your `$PATH` variable to make the newly installed version available. If you are using [dotfiles](https://github.com/nhs-england-tools/dotfiles), this is all done for you.
+## Running project locally
 
-### Configuration
+1. To run an Amplify sandbox. To do this, authenticate with the AWS account `nhs-notify-iam-dev` then run:
 
-Installation and configuration of the toolchain dependencies
+   ```bash
+   npx ampx sandbox --profile <your AWS profile for nhs-notify-iam-dev account>
+   ```
 
-```shell
-make config
+2. Then in a separate terminal, run the app locally:
+
+   ```bash
+   npm run dev
+   ```
+
+### Running WebAuth and Templates projects locally
+
+[Read more](https://github.com/NHSDigital/nhs-notify-web-template-management/blob/main/README.md#running-templates-and-webauth-projects-locally)
+
+## Testing
+
+### Unit tests
+
+```**bash**
+npm run test:unit
 ```
 
-## Usage
+### Playwright automated tests
 
-After a successful installation, provide an informative example of how this project can be used. Additional code snippets, screenshots and demos work well in this space. You may also link to the other documentation resources, e.g. the [User Guide](./docs/user-guide.md) to demonstrate more use cases and to show more features.
+You'll need to ensure you have an authenticated terminal to `nhs-notify-iam-dev` AWS account. Then run:
 
-### Testing
-
-There are `make` tasks for you to configure to run your tests.  Run `make test` to see how they work.  You should be able to use the same entry points for local development as in your CI pipeline.
-
-## Design
-
-### Diagrams
-
-The [C4 model](https://c4model.com/) is a simple and intuitive way to create software architecture diagrams that are clear, consistent, scalable and most importantly collaborative. This should result in documenting all the system interfaces, external dependencies and integration points.
-
-![Repository Template](./docs/diagrams/Repository_Template_GitHub_Generic.png)
-
-### Modularity
-
-Most of the projects are built with customisability and extendability in mind. At a minimum, this can be achieved by implementing service level configuration options and settings. The intention of this section is to show how this can be used. If the system processes data, you could mention here for example how the input is prepared for testing - anonymised, synthetic or live data.
-
-## Contributing
-
-Describe or link templates on how to raise an issue, feature request or make a contribution to the codebase. Reference the other documentation files, like
-
-- Environment setup for contribution, i.e. `CONTRIBUTING.md`
-- Coding standards, branching, linting, practices for development and testing
-- Release process, versioning, changelog
-- Backlog, board, roadmap, ways of working
-- High-level requirements, guiding principles, decision records, etc.
-
-## Contacts
-
-Provide a way to contact the owners of this project. It can be a team, an individual or information on the means of getting in touch via active communication channels, e.g. opening a GitHub discussion, raising an issue, etc.
-
-## Licence
-
-> The [LICENCE.md](./LICENCE.md) file will need to be updated with the correct year and owner
-
-Unless stated otherwise, the codebase is released under the MIT License. This covers both the codebase and any sample code in the documentation.
-
-Any HTML or Markdown documentation is [© Crown Copyright](https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/uk-government-licensing-framework/crown-copyright/) and available under the terms of the [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/).
-
-### Shared Terraform Modules
-
-Before you setup modules for this repository and find that there might be modules that can be reused elsewhere, please do check out `https://github.com/NHSDigital/nhs-notify-shared-modules/`. If you find that the modules are shareable, you should set them up there as a separate PR and get that merged in and potentially tag the commit after testing it, so that it can be a stable release that can be used across all repos on Notify should others find the need to re-use that new module. You can simply point to the reference in your module call as below:
-
-```hcl
-module "amp_branch" {
-  source = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/amp_branch?ref=v1.0.0"
-  ...
-}
+```bash
+cd /tests/test-team/
+npm run test:component
+```

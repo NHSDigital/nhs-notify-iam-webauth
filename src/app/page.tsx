@@ -1,13 +1,20 @@
 'use client';
 
-export default function HomePage() {
+import React, { Suspense } from 'react';
+import { withAuthenticator } from '@aws-amplify/ui-react';
+import { Redirect } from '@/src/components/molecules/Redirect/Redirect';
+
+const AuthenticatorWrapper = () => {
+  return withAuthenticator(Redirect, {
+    variation: 'default',
+    hideSignUp: true,
+  })({});
+};
+
+export default function Page() {
   return (
-    <div className='nhsuk-grid-row' data-testid='page-content-wrapper'>
-      <div className='nhsuk-grid-column-two-thirds'>
-        <h1 className='nhsuk-heading-xl' data-testid='page-heading'>
-          Hello World!
-        </h1>
-      </div>
-    </div>
+    <Suspense fallback={<p>Loading...</p>}>
+      <AuthenticatorWrapper />
+    </Suspense>
   );
 }
