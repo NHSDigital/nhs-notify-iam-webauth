@@ -5,11 +5,16 @@
   "scripts": {
     "test:start-local-app": "npm run build --prefix ../../ && npm run start --prefix ../../",
     "test:local-ui": "playwright test --project component -c config/local.config.ts",
+    "test:federation": "playwright test --project federation -c config/local.config.ts",
     "test:story": "echo 'Not implemented'"
   },
   "devDependencies": {
     "@aws-sdk/client-cognito-identity-provider": "^3.691.0",
-    "@playwright/test": "^1.45.1",
-    "generate-password": "^1.7.1"
+    "@aws-sdk/client-secrets-manager": "^3.699.0",
+    "@aws-sdk/client-ssm": "^3.699.0",
+    "@playwright/test": "^1.46.0",
+    "axios": "^1.7.8",
+    "generate-password": "^1.7.1",
+    "totp-generator": "^1.0.0"
   }
 }
