@@ -1,0 +1,52 @@
+name: Post-deployment tests
+description: "Run post-deployment tests for this repo"
+
+inputs:
+  targetEnvironment:
+    description: Name of the static environment under test
+    required: true
+    default: main
+
+  targetAccountGroup:
+    description: Name of the Account Group under test
+    default: nhs-notify-iam-dev
+    required: true
+
+  targetComponent:
+    description: Name of the Component under test
+    default: app
+
+runs:
+  using: "composite"
+
+  steps:
+    - name: Fetch terraform output
+      uses: actions/download-artifact@v4
+      with:
+        name: terraform-output-${{ inputs.targetComponent }}
+
+    - name: Extract configuration details
+      shell: bash
+      run: |
+        # Extract config from terraform outputs
+        ls
+        cat terraform_output.json | jq
+        echo APP=$(cat terraform_output.json | jq -r .amplify.value.id) >> $GITHUB_ENV
+        echo DOMAIN=$(cat terraform_output.json | jq -r .amplify.value.domain_name) >> $GITHUB_ENV
+        echo AWS_REGION=$(cat terraform_output.json | jq -r .deployment.value.aws_region) >> $GITHUB_ENV
+        echo AWS_ACCOUNT_ID=$(cat terraform_output.json | jq -r .deployment.value.aws_account_id) >> $GITHUB_ENV
+
+    - name: Check configuration
+      shell: bash
+      run: |
+        if [[ "DOMAIN" == "null" ]]; then
+          echo "::warning::Deployment output not available to trigger post-deployment workflow."
+          exit 1
+        fi
+
+    - name: Post-deployment
+      shell: bash
+      run: |
+        echo "Post deployment workflow for $DOMAIN"
+        pwd
+        ls -la
