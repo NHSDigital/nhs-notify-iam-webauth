@@ -25,15 +25,6 @@ export default defineConfig({
         ...devices['Desktop Chrome'],
       },
     },
-    {
-      name: 'federation',
-      testMatch: '*.federation.test.ts',
-      use: {
-        baseURL: 'http://localhost:3000',
-        ...devices['Desktop Chrome'],
-        headless: true,
-      },
-    },
   ],
   /* Run your local dev server before starting the tests */
   webServer: {
