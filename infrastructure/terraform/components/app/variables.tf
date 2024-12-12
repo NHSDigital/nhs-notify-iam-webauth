@@ -129,7 +129,7 @@ variable "cis2_environment" {
   default     = ""
 
   validation {
-    condition     = contains(["mock", "int", "live"], var.cis2_environment)
+    condition     = contains(["int", "live"], var.cis2_environment)
     error_message = "Allowed values for cis2_environment are \"int\" or \"live\"."
   }
 }
