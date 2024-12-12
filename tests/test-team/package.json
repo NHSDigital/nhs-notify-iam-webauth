@@ -5,7 +5,6 @@
   "scripts": {
     "test:start-local-app": "npm run build --prefix ../../ && npm run start --prefix ../../",
     "test:local-ui": "playwright test --project component -c config/local.config.ts",
-    "test:federation": "playwright test --project federation -c config/local.config.ts",
     "test:story": "echo 'Not implemented'"
   },
   "devDependencies": {
