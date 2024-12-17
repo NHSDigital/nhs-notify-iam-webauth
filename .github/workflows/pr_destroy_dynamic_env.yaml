@@ -27,7 +27,6 @@ jobs:
             --arg targetAccountGroup "nhs-notify-iam-dev" \
             --arg targetComponent "branch" \
             --arg terraformAction "destroy" \
-            --arg overrides "branch_name=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" \
             '{ "ref": "main",
               "inputs": {
                 "infraRepoName": $infraRepoName,
