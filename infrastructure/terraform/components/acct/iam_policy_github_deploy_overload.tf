@@ -19,6 +19,7 @@ data "aws_iam_policy_document" "github_deploy" {
       "cloudformation:*",
       "cognito-identity:*",
       "cognito-idp:*",
+      "distribution:*",
       "secretsmanager:*"
     ]
     resources = ["*"]
