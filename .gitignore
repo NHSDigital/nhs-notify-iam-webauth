@@ -61,6 +61,7 @@ tests/test-team/test-results/
 tests/test-team/playwright-report/
 tests/test-team/blob-report/
 tests/test-team/playwright/.cache/
+*.webm
 
 #plugin-cache
 plugin-cache/
