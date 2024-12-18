@@ -1,5 +1,6 @@
 resource "aws_secretsmanager_secret" "cis2_client_credentials" {
-  name = "${var.environment}/federation/credentials/cis2-${var.cis2_environment}"
+  name                    = "${var.environment}/federation/credentials/cis2-${var.cis2_environment}"
+  recovery_window_in_days = 0
 }
 
 variable "placeholder_credentials" {
