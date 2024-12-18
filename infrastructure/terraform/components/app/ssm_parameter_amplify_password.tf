@@ -3,7 +3,7 @@ resource "aws_ssm_parameter" "amplify_password" {
 
   name  = "/${local.csi}/amplify_password"
   type  = "String"
-  value = var.amplify_basic_auth_secret != "unset" ?  var.amplify_basic_auth_secret : random_password.password[0].result
+  value = var.amplify_basic_auth_secret != "unset" ? var.amplify_basic_auth_secret : random_password.password[0].result
 }
 
 resource "random_password" "password" {
