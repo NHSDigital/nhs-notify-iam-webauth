@@ -1,7 +1,3 @@
-data "aws_secretsmanager_secret_version" "current" {
-  secret_id = aws_secretsmanager_secret.cis2_client_credentials.id
-}
-
 resource "aws_cognito_identity_provider" "cis2_idp" {
   count = var.enable_cis2_idp ? 1 : 0
 
