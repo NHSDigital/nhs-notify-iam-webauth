@@ -11,8 +11,8 @@ resource "aws_cognito_identity_provider" "cis2_idp" {
 
   provider_details = {
     authorize_scopes          = "openid profile email nhsperson associatedorgs"
-    client_id                 = jsondecode(data.aws_secretsmanager_secret_version.current.secret_string)["client_id"]
-    client_secret             = jsondecode(data.aws_secretsmanager_secret_version.current.secret_string)["client_secret"]
+    client_id                 = aws_ssm_parameter.cis2_client_credentials_client_id.value
+    client_secret             = aws_ssm_parameter.cis2_client_credentials_client_secret.value
     oidc_issuer               = local.cis2_issuer_urls[var.cis2_environment]
     attributes_request_method = "GET"
   }
