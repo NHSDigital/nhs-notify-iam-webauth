@@ -1,7 +1,7 @@
 resource "aws_route53_record" "cognito_alias" {
   count = var.branch_name == "main" ? 1 : 0
 
-  name    = aws_cognito_user_pool_domain.custom.domain
+  name    = aws_cognito_user_pool_domain.custom[0].domain
   zone_id = local.acct.dns_zone["id"]
   type    = "A"
 
@@ -16,7 +16,7 @@ resource "aws_route53_record" "cognito_alias" {
 resource "aws_route53_record" "cognito_ipv6_alias" {
   count = var.branch_name == "main" ? 1 : 0
 
-  name    = aws_cognito_user_pool_domain.custom.domain
+  name    = aws_cognito_user_pool_domain.custom[0].domain
   zone_id = local.acct.dns_zone["id"]
   type    = "AAAA"
 
