@@ -90,7 +90,14 @@ variable "enable_cognito_built_in_idp" {
 variable "enable_amplify_basic_auth" {
   type        = bool
   description = "Enable a basic set of credentials in the form of a dynamically generated username and password for the amplify app branches. Not intended for production use"
-  default     = false
+  default     = true
+}
+
+variable "AMPLIFY_BASIC_AUTH_SECRET" {
+  # Github only does uppercase env vars
+  type        = string
+  description = "Secret key/password to use for Amplify Basic Auth - This is entended to be read from CI variables and not commited to any codebase"
+  default     = "unset"
 }
 
 variable "branch_name" {
