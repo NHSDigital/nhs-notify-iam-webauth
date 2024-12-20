@@ -93,10 +93,10 @@ variable "enable_amplify_basic_auth" {
   default     = true
 }
 
-variable "amplify_basic_auth_secret" {
+variable "AMPLIFY_BASIC_AUTH_SECRET" {
+  # Github only does uppercase env vars
   type        = string
   description = "Secret key/password to use for Amplify Basic Auth - This is entended to be read from CI variables and not commited to any codebase"
-  sensitive   = true
   default     = "unset"
 }
 
