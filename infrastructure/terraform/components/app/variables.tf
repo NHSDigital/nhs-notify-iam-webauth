@@ -81,6 +81,18 @@ variable "cognito_user_pool_additional_callback_urls" {
   default     = []
 }
 
+variable "cognito_user_pool_use_environment_specific_gateway_callback_url" {
+  type        = bool
+  description = "Enable an environment specific web gateway callback URL - for use in environments that are using dynamic domains"
+  default     = false
+}
+
+variable "cognito_user_pool_environment_specific_gateway_callback_url_suffix" {
+  type        = string
+  description = "The suffix for the environment specific web gateway callback URL - should be prefixed with with protocol and environment name"
+  default     = ""
+}
+
 variable "enable_cognito_built_in_idp" {
   type        = bool
   description = "Enable the use of Cognito as an IDP; CIS2 is preferred"
@@ -122,4 +134,21 @@ variable "disable_content" {
   type        = string
   description = "Value for turning switching disable content true/false"
   default     = "false"
+}
+
+variable "enable_cis2_idp" {
+  type        = bool
+  description = "Switch to enable the CIS2 Cognito federation"
+  default     = true
+}
+
+variable "cis2_environment" {
+  type        = string
+  description = "Name of the CIS2 environment, e.g. mock, int, live. See: https://digital.nhs.uk/services/care-identity-service/applications-and-services/cis2-authentication/guidance-for-developers/detailed-guidance/registration"
+  default     = ""
+
+  validation {
+    condition     = contains(["int", "live"], var.cis2_environment)
+    error_message = "Allowed values for cis2_environment are \"int\" or \"live\"."
+  }
 }

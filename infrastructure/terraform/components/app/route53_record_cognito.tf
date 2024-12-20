@@ -1,5 +1,7 @@
 resource "aws_route53_record" "cognito_alias" {
-  name    = aws_cognito_user_pool_domain.custom.domain
+  count = local.use_custom_cognito_domain ? 1 : 0
+
+  name    = aws_cognito_user_pool_domain.custom[0].domain
   zone_id = local.acct.dns_zone["id"]
   type    = "A"
 
@@ -12,7 +14,9 @@ resource "aws_route53_record" "cognito_alias" {
 }
 
 resource "aws_route53_record" "cognito_ipv6_alias" {
-  name    = aws_cognito_user_pool_domain.custom.domain
+  count = local.use_custom_cognito_domain ? 1 : 0
+
+  name    = aws_cognito_user_pool_domain.custom[0].domain
   zone_id = local.acct.dns_zone["id"]
   type    = "AAAA"
 

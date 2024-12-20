@@ -31,6 +31,6 @@ resource "null_resource" "amplify_domain_association" {
 
   provisioner "local-exec" {
     when    = destroy
-    command = "aws amplify delete-domain-association --app-id ${self.triggers.amplify_app_id} --domain-name ${self.triggers.amplify_domain_name}"
+    command = "aws amplify delete-domain-association --app-id ${self.triggers.amplify_app_id} --domain-name ${self.triggers.amplify_domain_name}; echo proceed if app does not exist"
   }
 }
