@@ -132,7 +132,7 @@ variable "disable_content" {
 variable "enable_cis2_idp" {
   type        = bool
   description = "Switch to enable the CIS2 Cognito federation"
-  default     = false
+  default     = true
 }
 
 variable "cis2_environment" {
