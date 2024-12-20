@@ -1,5 +1,5 @@
 resource "aws_cognito_user_pool_domain" "custom" {
-  count = var.branch_name == "main" ? 1 : 0
+  count = local.use_custom_cognito_domain ? 1 : 0
 
   user_pool_id    = aws_cognito_user_pool.main.id
   certificate_arn = aws_acm_certificate.cognito.arn
