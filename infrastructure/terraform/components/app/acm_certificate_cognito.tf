@@ -16,5 +16,5 @@ resource "aws_acm_certificate_validation" "cognito" {
 
   provider = aws.us-east-1
 
-  certificate_arn = aws_acm_certificate.cognito.arn
+  certificate_arn = aws_acm_certificate.cognito[0].arn
 }
