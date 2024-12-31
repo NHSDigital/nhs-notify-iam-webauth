@@ -25,4 +25,5 @@ resource "aws_cognito_user_pool_client" "main" {
     "profile",
     "aws.cognito.signin.user.admin"
   ]
+  generate_secret = true
 }
