@@ -49,9 +49,9 @@ To create a backend sandbox intended for use with local development, run the com
 
 substituting your environment name in as appropriate.
 
-This command will also generate an amplify_outputs file in the root of the repo that will be used when running the app locally.
+This command will also generate an amplify_outputs file in the root of the repository that will be used when running the app locally.
 
-To destroy the sandbox when it is no longer needed, run the command 
+To destroy the sandbox when it is no longer needed, run the command
 
 ```shell
   npm run destroy-backend-sandbox environment-name
