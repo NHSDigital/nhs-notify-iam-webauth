@@ -29,7 +29,7 @@ export async function generateClientSecretHash(
   username: string
 ): Promise<string> {
   const clientSecret = await getUserPoolClientSecret();
-  console.log(`clientSecret=${clientSecret}`);
+  console.log(`Generated secret: clientSecret length=${clientSecret.length}`);
   const hasher = crypto.createHmac('sha256', clientSecret);
   hasher.update(username);
   hasher.update(USER_POOL_CLIENT_ID);
