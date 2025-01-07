@@ -1,0 +1,12 @@
+{
+  "cognito_user_pool_client_id": {
+    "sensitive": false,
+    "type": "string",
+    "value": "3rl8i8dmmpsj1uqv0l4hahmr47"
+  },
+  "cognito_user_pool_id": {
+    "sensitive": false,
+    "type": "string",
+    "value": "eu-west-2_U4h5UN6cj"
+  }
+}
