@@ -39,39 +39,35 @@ Read more about the technical design at [REFCOM-2024-007: WebUI User Auth](https
     npm install
   ```
 
-### Setup .env
+### Creating a backend sandbox
 
-copy and rename `.env.template` to `.env`
+To create a backend sandbox intended for use with local development, run the command
 
-#### USER_POOL_ID (optional)
-
-1. Log into the `nhs-notify-iam-dev` AWS account
-2. Load AWS Cognito
-3. Open `nhs-notify-main-app` Cognito user pool
-4. Grab `User pool ID` value
-
-#### USER_POOL_CLIENT_ID (optional)
-
-1. Log into the `nhs-notify-iam-dev` AWS account
-2. Load AWS Cognito
-3. Open `nhs-notify-main-app` Cognito user pool
-4. Load `App integration` tab
-   1. Found (at the bottom of the page)
-5. Grab `Client ID` value
-
-#### USE_LOCAL_AUTH
-
-```bash
-true/false
+```shell
+  npm run create-backend-sandbox environment-name
 ```
 
-When `true` a new Cognito instance will be created within the Amplify sandbox. You'll need to manually add users.
+substituting your environment name in as appropriate.
+
+This command will also generate an amplify_outputs file in the root of the repo that will be used when running the app locally.
+
+To destroy the sandbox when it is no longer needed, run the command 
+
+```shell
+  npm run destroy-backend-sandbox environment-name
+```
+
+### Connecting to an existing Cognito instance
+
+You can point the app at any existing Cognito instance, not necessarily one you have created, by updating the user_pool_id and user_pool_client_id values in the amplify_outputs file.
 
 ### Setup a user in Cognito
 
+In order to use a new Cognito user pool, you will need to manually create a user in that user pool.
+
 1. Log into the `nhs-notify-iam-dev` AWS account
 2. Load AWS Cognito
-3. Open `nhs-notify-main-app` Cognito user pool
+3. Open the relevant Cognito user pool
 4. Select `Create user`
 5. Enter details
    1. Use your .nhs email address
@@ -82,17 +78,11 @@ When `true` a new Cognito instance will be created within the Amplify sandbox. Y
 
 ## Running project locally
 
-1. To run an Amplify sandbox. To do this, authenticate with the AWS account `nhs-notify-iam-dev` then run:
+Having created your backend sandbox or otherwise set up your amplify_outputs file, you can start the app locally by running
 
-   ```bash
-   npx ampx sandbox --profile <your AWS profile for nhs-notify-iam-dev account>
-   ```
-
-2. Then in a separate terminal, run the app locally:
-
-   ```bash
-   npm run dev
-   ```
+```bash
+npm run dev
+```
 
 ### Running WebAuth and Templates projects locally
 
