@@ -43,7 +43,7 @@ Read more about the technical design at [REFCOM-2024-007: WebUI User Auth](https
 
 copy and rename `.env.template` to `.env`
 
-#### USER_POOL_ID (optional)
+#### NEXT_PUBLIC_USER_POOL_ID (optional)
 
 1. Log into the `nhs-notify-iam-dev` AWS account
 2. Load AWS Cognito
