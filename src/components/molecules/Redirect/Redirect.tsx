@@ -16,8 +16,8 @@ export function getRedirectPath(): string {
   const redirectPath = path.normalize(`/redirect/${requestDirectPath}`);
 
   return redirectPath;
-} 
+}
 
 export function postLoginRedirect(): never {
   return redirect(getRedirectPath(), RedirectType.push);
-};
+}
