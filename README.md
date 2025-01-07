@@ -43,8 +43,27 @@ Read more about the technical design at [REFCOM-2024-007: WebUI User Auth](https
 
 To create a backend sandbox intended for use with local development, run the command
 
-```shell
-  npm run create-backend-sandbox environment-name
+
+#### NEXT_PUBLIC_USER_POOL_ID (optional)
+
+1. Log into the `nhs-notify-iam-dev` AWS account
+2. Load AWS Cognito
+3. Open `nhs-notify-main-app` Cognito user pool
+4. Grab `User pool ID` value
+
+#### USER_POOL_CLIENT_ID (optional)
+
+1. Log into the `nhs-notify-iam-dev` AWS account
+2. Load AWS Cognito
+3. Open `nhs-notify-main-app` Cognito user pool
+4. Load `App integration` tab
+   1. Found (at the bottom of the page)
+5. Grab `Client ID` value
+
+#### USE_LOCAL_AUTH
+
+```bash
+true/false
 ```
 
 substituting your environment name in as appropriate.
