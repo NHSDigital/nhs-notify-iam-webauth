@@ -3,16 +3,15 @@
 import '@/src/styles/app.scss';
 import '@aws-amplify/ui-react/styles.css';
 import Head from 'next/head';
-import { Amplify } from 'aws-amplify';
 import { Authenticator } from '@aws-amplify/ui-react';
 import content from '@/src/content/content';
 import { NHSNotifyContainer } from '@/src/components/layouts/container/container';
 import { BASE_PATH } from '@/src/utils/constants';
 import { NHSNotifyHeader } from '../Header/Header';
 import { NHSNotifyFooter } from '../Footer/Footer';
+import { configureAmplify } from '@/src/utils/amplify-config-util';
 
-// eslint-disable-next-line @typescript-eslint/no-require-imports, unicorn/prefer-module, import/no-unresolved
-Amplify.configure(require('@/amplify_outputs.json'), { ssr: true });
+configureAmplify();
 
 export const ClientLayout = ({ children }: { children: React.ReactNode }) => (
   <html lang='en'>

@@ -1,6 +1,7 @@
 [A-Z]+s
 Bitwarden
 bot
+Cognito
 config
 Cyber
 Dependabot
@@ -9,6 +10,7 @@ drawio
 endfor
 endraw
 env
+Env
 GitHub
 Gitleaks
 Grype

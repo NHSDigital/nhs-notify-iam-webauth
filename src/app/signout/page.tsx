@@ -2,7 +2,7 @@
 
 import React, { Suspense, useEffect, useState } from 'react';
 import { signOut } from '@aws-amplify/auth';
-import { Redirect } from '@/src/components/molecules/Redirect/Redirect';
+import { postLoginRedirect } from '@/src/components/molecules/Redirect/Redirect';
 
 const SignOut = () => {
   const [signedOut, setSignedOut] = useState(false);
@@ -13,7 +13,11 @@ const SignOut = () => {
     }
   }, [signedOut]);
 
-  return signedOut ? <Redirect /> : <p>Signing out</p>;
+  if (signedOut) {
+    postLoginRedirect();
+  }
+
+  return <p>Signing out</p>;
 };
 
 export default function Page() {
