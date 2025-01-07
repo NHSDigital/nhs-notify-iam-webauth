@@ -25,4 +25,15 @@ resource "aws_cognito_user_pool_client" "main" {
     "profile",
     "aws.cognito.signin.user.admin"
   ]
+  generate_secret = true
+
+  id_token_validity      = 1
+  access_token_validity  = 1
+  refresh_token_validity = 1
+
+  token_validity_units {
+    refresh_token = "days"
+    id_token      = "hours"
+    access_token  = "hours"
+  }
 }
