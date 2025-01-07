@@ -27,11 +27,15 @@ resource "aws_amplify_app" "main" {
   ]
 
   environment_variables = {
-    HOSTED_LOGIN_DOMAIN            = local.auth_domain_name
-    NOTIFY_GROUP                   = var.group
-    NOTIFY_ENVIRONMENT             = var.environment
-    NOTIFY_DOMAIN_NAME             = local.root_domain_name
-    NEXT_PUBLIC_DISABLE_CONTENT    = var.disable_content
-    NEXT_PUBLIC_CIS2_PROVIDER_NAME = local.cis2_idp_name
+    HOSTED_LOGIN_DOMAIN             = local.auth_domain_name
+    NOTIFY_GROUP                    = var.group
+    NOTIFY_ENVIRONMENT              = var.environment
+    NOTIFY_DOMAIN_NAME              = local.root_domain_name
+    NEXT_PUBLIC_DISABLE_CONTENT     = var.disable_content
+    NEXT_PUBLIC_USER_POOL_ID        = aws_cognito_user_pool.main.id
+    NEXT_PUBLIC_USER_POOL_CLIENT_ID = aws_cognito_user_pool_client.main.id
+    NEXT_PUBLIC_COGNITO_DOMAIN      = local.use_custom_cognito_domain ? aws_cognito_user_pool_domain.custom[0].domain : aws_cognito_user_pool_domain.main.domain
+    NEXT_PUBLIC_REDIRECT_DOMAIN     = local.auth_gateway_name
+    NEXT_PUBLIC_CIS2_PROVIDER_NAME  = local.cis2_idp_name
   }
 }
