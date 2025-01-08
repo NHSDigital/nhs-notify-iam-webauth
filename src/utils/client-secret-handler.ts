@@ -4,7 +4,7 @@ import crypto from 'crypto';
 import { USER_POOL_CLIENT_ID } from '@/src/utils/constants';
 import { SSMClient, GetParameterCommand } from '@aws-sdk/client-ssm';
 
-const AMPLIFY_APP_ID = process.env.AMPLIFY_APP_ID;
+const { AMPLIFY_APP_ID } = process.env;
 const ssmClient = new SSMClient({ region: 'eu-west-2' });
 
 // env var for convenient local testing, deployed apps should use SSM
@@ -29,7 +29,6 @@ export async function generateClientSecretHash(
   username: string
 ): Promise<string> {
   const clientSecret = await getUserPoolClientSecret();
-  console.log(`Generated secret: clientSecret length=${clientSecret.length}`);
   const hasher = crypto.createHmac('sha256', clientSecret);
   hasher.update(username);
   hasher.update(USER_POOL_CLIENT_ID);
