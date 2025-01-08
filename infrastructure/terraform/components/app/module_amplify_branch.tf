@@ -16,9 +16,9 @@ module "amplify_branch" {
   environment_variables = {
     NOTIFY_SUBDOMAIN                = var.environment
     NEXT_PUBLIC_BASE_PATH           = "/auth"
-    AMPLIFY_APP_ID                  = aws_amplify_app.main.id
     NEXT_PUBLIC_USER_POOL_ID        = aws_cognito_user_pool.main.id
     NEXT_PUBLIC_USER_POOL_CLIENT_ID = aws_cognito_user_pool_client.main.id
+    USER_POOL_CLIENT_SECRET         = aws_cognito_user_pool_client.main.client_secret
     NEXT_PUBLIC_COGNITO_DOMAIN      = local.use_custom_cognito_domain ? aws_cognito_user_pool_domain.custom[0].domain : aws_cognito_user_pool_domain.main.domain
     NEXT_PUBLIC_REDIRECT_DOMAIN     = local.auth_gateway_name
   }
