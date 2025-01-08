@@ -1,27 +1,35 @@
 // Hard to avoid due to FetchInterceptor using any
 /* eslint @typescript-eslint/no-explicit-any: 0 */
 import { FetchInterceptor } from 'fetch-intercept';
-import { generateClientSecretHash } from '@/src/utils/client-secret-handler';
+import { generateClientSecretHash } from './client-secret-handler';
 
-type TargetConfig = {
-  extractUsername: (body: any) => string;
-  injectSecretHash: (body: any, secretHash: string) => void;
-};
+const TARGET_INITIATE = 'AWSCognitoIdentityProviderService.InitiateAuth';
+const TARGET_RESPONSE_TO_CHALLENGE =
+  'AWSCognitoIdentityProviderService.RespondToAuthChallenge';
 
-const targetConfigs: Record<string, TargetConfig> = {
-  'AWSCognitoIdentityProviderService.InitiateAuth': {
-    extractUsername: (body: any) => body.AuthParameters.USERNAME,
-    injectSecretHash: (body: any, secretHash: string) => {
-      body.AuthParameters.SECRET_HASH = secretHash;
-    },
-  },
-  'AWSCognitoIdentityProviderService.RespondToAuthChallenge': {
-    extractUsername: (body: any) => body.ChallengeResponses.USERNAME,
-    injectSecretHash: (body: any, secretHash: string) => {
-      body.ChallengeResponses.SECRET_HASH = secretHash;
-    },
-  },
-};
+const fetchInterceptTargets = new Set([
+  TARGET_INITIATE,
+  TARGET_RESPONSE_TO_CHALLENGE,
+]);
+
+function extractUsername(target: string, body: any): string {
+  if (target === TARGET_INITIATE) {
+    return body.AuthParameters.USERNAME;
+  }
+  if (target === TARGET_RESPONSE_TO_CHALLENGE) {
+    return body.ChallengeResponses.USERNAME;
+  }
+  return '';
+}
+
+function injectSecretHash(target: string, body: any, secretHash: string): any {
+  if (target === TARGET_INITIATE) {
+    body.AuthParameters.SECRET_HASH = secretHash;
+  } else if (target === TARGET_RESPONSE_TO_CHALLENGE) {
+    body.ChallengeResponses.SECRET_HASH = secretHash;
+  }
+  return body;
+}
 
 export const basicCredentialsInterceptor: FetchInterceptor = {
   request: (url: string, config: any) => {
@@ -29,22 +37,17 @@ export const basicCredentialsInterceptor: FetchInterceptor = {
       return [url, config];
     }
 
-    if (config?.method !== 'POST') {
-      return [url, config];
-    }
-
     const target = config.headers['x-amz-target'] || '';
-    const targetConfig = targetConfigs[target];
-    if (!targetConfig) {
+    if (!fetchInterceptTargets.has(target)) {
       return [url, config];
     }
 
     const body = JSON.parse(config.body);
-    const username = targetConfig.extractUsername(body);
+    const username = extractUsername(target, body);
 
     return generateClientSecretHash(username).then((secretHash) => {
-      targetConfig.injectSecretHash(body, secretHash);
-      config.body = JSON.stringify(body);
+      const updatedBody = injectSecretHash(target, body, secretHash);
+      config.body = JSON.stringify(updatedBody);
       return [url, config];
     });
   },

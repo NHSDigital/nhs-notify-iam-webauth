@@ -4,17 +4,12 @@ import React, { Suspense } from 'react';
 import { withAuthenticator } from '@aws-amplify/ui-react';
 import fetchIntercept from 'fetch-intercept';
 import { basicCredentialsInterceptor } from '../utils/basic-credentials-interceptor';
-import { postLoginRedirect } from '@/src/components/molecules/Redirect/Redirect';
+import { Redirect } from '@/src/components/molecules/Redirect/Redirect';
 
 const AuthenticatorWrapper = () => {
-  return withAuthenticator(postLoginRedirect, {
+  return withAuthenticator(Redirect, {
     variation: 'default',
     hideSignUp: true,
-    components: {
-      SignIn: {
-        Header: () => <></>,
-      },
-    },
   })({});
 };
 
