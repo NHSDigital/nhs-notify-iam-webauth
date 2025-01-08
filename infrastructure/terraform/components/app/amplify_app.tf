@@ -27,11 +27,11 @@ resource "aws_amplify_app" "main" {
   ]
 
   environment_variables = {
-    HOSTED_LOGIN_DOMAIN             = local.auth_domain_name
-    NOTIFY_GROUP                    = var.group
-    NOTIFY_ENVIRONMENT              = var.environment
-    NOTIFY_DOMAIN_NAME              = local.root_domain_name
-    NEXT_PUBLIC_DISABLE_CONTENT     = var.disable_content
-    NEXT_PUBLIC_CIS2_PROVIDER_NAME  = local.cis2_idp_name
+    HOSTED_LOGIN_DOMAIN            = local.auth_domain_name
+    NOTIFY_GROUP                   = var.group
+    NOTIFY_ENVIRONMENT             = var.environment
+    NOTIFY_DOMAIN_NAME             = local.root_domain_name
+    NEXT_PUBLIC_DISABLE_CONTENT    = var.disable_content
+    NEXT_PUBLIC_CIS2_PROVIDER_NAME = local.cis2_idp_name
   }
 }
