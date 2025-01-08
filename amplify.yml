@@ -9,7 +9,6 @@ frontend:
   phases:
     build:
       commands:
-        - npm run generate-outputs env
         - npm run build
   artifacts:
     baseDirectory: .next
