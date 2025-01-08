@@ -63,7 +63,13 @@ You can point the app at any existing Cognito instance, not necessarily one you 
 
 ### Setup a user in Cognito
 
-In order to use a new Cognito user pool, you will need to manually create a user in that user pool.
+In order to use a new Cognito user pool, you can run the sandbox_auth script with your chosen email and password:
+
+```bash
+./scripts/sandbox_auth.sh email password
+```
+
+You can also manually create a user in that user pool:
 
 1. Log into the `nhs-notify-iam-dev` AWS account
 2. Load AWS Cognito
