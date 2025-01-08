@@ -63,7 +63,7 @@ You can point the app at any existing Cognito instance, not necessarily one you 
 
 ### Setup a user in Cognito
 
-In order to use a new Cognito user pool, you can run the sandbox_auth script with your chosen email and password:
+In order to use a new Cognito user pool, you can run the sandbox auth script with your chosen email and password:
 
 ```bash
 ./scripts/sandbox_auth.sh email password
