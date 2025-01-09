@@ -4,6 +4,11 @@
 
 set -euo pipefail
 
+ls -a
+pwd
+ls .reports
+ls .reports/unit
+ls .reports/unit/coverage
 cat .reports/unit/coverage/lcov.info
 
 # Script to perform static analysis of the repository content and upload the
