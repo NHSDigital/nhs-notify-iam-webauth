@@ -7,9 +7,11 @@ import { Amplify } from 'aws-amplify';
 import { Authenticator } from '@aws-amplify/ui-react';
 import content from '@/src/content/content';
 import { NHSNotifyContainer } from '@/src/components/layouts/container/container';
-import { BASE_PATH } from '@/src/utils/constants';
+import { getConstants } from '@/src/utils/public-constants';
 import { NHSNotifyHeader } from '../Header/Header';
 import { NHSNotifyFooter } from '../Footer/Footer';
+
+const { BASE_PATH } = getConstants();
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports, unicorn/prefer-module, import/no-unresolved
 Amplify.configure(require('@/amplify_outputs.json'), { ssr: true });

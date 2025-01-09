@@ -9,7 +9,6 @@ frontend:
   phases:
     build:
       commands:
-        - env
         - echo NEXT_PUBLIC_USER_POOL_ID=$NEXT_PUBLIC_USER_POOL_ID >> .env
         - echo NEXT_PUBLIC_USER_POOL_CLIENT_ID=$NEXT_PUBLIC_USER_POOL_CLIENT_ID >> .env
         - echo USER_POOL_CLIENT_SECRET=$USER_POOL_CLIENT_SECRET >> .env
