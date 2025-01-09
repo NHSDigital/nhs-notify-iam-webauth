@@ -4,6 +4,8 @@
 
 set -euo pipefail
 
+cat .reports/unit/coverage/lcov.info
+
 # Script to perform static analysis of the repository content and upload the
 # report to SonarCloud.
 #
