@@ -57,7 +57,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: code-coverage-report
-          path: ".reports/lcov.info"
+          path: ".reports/unit/coverage/lcov.info"
         if: always()
   test-lint:
     name: "Linting"
