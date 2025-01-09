@@ -18,4 +18,3 @@ cd "$(git rev-parse --show-toplevel)"
 # tasks in scripts/test.mk.
 
 npm run test:unit
-cat .reports/unit/coverage/lcov.info
