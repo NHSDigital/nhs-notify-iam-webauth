@@ -33,7 +33,6 @@ describe('basic-credentials-interceptor', () => {
     const result = basicCredentialsInterceptor.request!(
       'https://test.nhs.uk/test',
       {
-        method: 'POST',
         headers: {
           'x-amz-target': 'AWSCognitoIdentityProviderService.InitiateAuth',
         },
@@ -65,7 +64,6 @@ describe('basic-credentials-interceptor', () => {
     const result = basicCredentialsInterceptor.request!(
       'https://test.nhs.uk/test',
       {
-        method: 'POST',
         headers: {
           'x-amz-target':
             'AWSCognitoIdentityProviderService.RespondToAuthChallenge',
@@ -99,33 +97,13 @@ describe('basic-credentials-interceptor', () => {
   it('should ignore requests without config', () => {
     // act
     const result = basicCredentialsInterceptor.request!(
-      'https://test.nhs.uk/test',
-      undefined as unknown
+      'https://test.nhs.uk/test'
     );
 
     // assert
     const [url, config] = result as unknown[];
     expect(url).toBe('https://test.nhs.uk/test');
     expect(config).toBe(undefined);
-  });
-
-  it('should ignore non-POST requests', () => {
-    // act
-    const result = basicCredentialsInterceptor.request!(
-      'https://test.nhs.uk/test',
-      {
-        headers: {},
-        method: 'OPTIONS',
-      }
-    );
-
-    // assert
-    const [url, config] = result as unknown[];
-    expect(url).toBe('https://test.nhs.uk/test');
-    expect(config).toMatchObject({
-      headers: {},
-      method: 'OPTIONS',
-    });
   });
 
   it('should ignore requests without headers', () => {
@@ -146,7 +124,6 @@ describe('basic-credentials-interceptor', () => {
     const result = basicCredentialsInterceptor.request!(
       'https://test.nhs.uk/test',
       {
-        method: 'POST',
         headers: {
           'x-amz-target': 'AWSMisc',
         },
@@ -170,7 +147,6 @@ describe('basic-credentials-interceptor', () => {
     const result = basicCredentialsInterceptor.request!(
       'https://test.nhs.uk/test',
       {
-        method: 'POST',
         headers: {},
         body: '{"test":123}',
       }
