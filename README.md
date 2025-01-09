@@ -51,7 +51,7 @@ To create a backend sandbox intended for use with local development, run the com
 3. Open `nhs-notify-main-app` Cognito user pool
 4. Grab `User pool ID` value
 
-#### USER_POOL_CLIENT_ID (optional)
+#### NEXT_PUBLIC_USER_POOL_CLIENT_ID (optional)
 
 1. Log into the `nhs-notify-iam-dev` AWS account
 2. Load AWS Cognito
