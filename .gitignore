@@ -74,3 +74,6 @@ amplifyconfiguration*
 .next
 .env
 .idea
+
+sandbox_tf_outputs.json
+sandbox_cognito_auth_token.json

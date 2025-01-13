@@ -13,7 +13,10 @@
     "test:accessibility": "pa11y-ci -c ./tests/accessibility/.pa11y-ci.js",
     "app:start": "pm2 start npm -- start",
     "app:wait": "wait-on -l http://localhost:3000/auth",
-    "app:stop": "pm2 kill"
+    "app:stop": "pm2 kill",
+    "create-backend-sandbox": "./scripts/create_backend_sandbox.sh",
+    "destroy-backend-sandbox": "./scripts/destroy_backend_sandbox.sh",
+    "generate-outputs": "tsx scripts/generate-outputs.ts"
   },
   "dependencies": {
     "@aws-amplify/adapter-nextjs": "^1.3.1",
