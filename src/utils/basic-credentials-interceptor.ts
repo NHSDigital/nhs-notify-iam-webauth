@@ -29,6 +29,10 @@ export const basicCredentialsInterceptor: FetchInterceptor = {
       return [url, config];
     }
 
+    if (config?.method !== 'POST') {
+      return [url, config];
+    }
+
     const target = config.headers['x-amz-target'] || '';
     const targetConfig = targetConfigs[target];
     if (!targetConfig) {
