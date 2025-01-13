@@ -22,7 +22,6 @@ if (inputType === 'sandbox-output') {
     cis2ProviderName = outputsFileContent.cis2_provider_name.value;
 
     userPoolClientSecret = outputsFileContent.cognito_user_pool_client_secret.value;
-      
 } else if (inputType === 'env') {
     // do nothing
 } else {
