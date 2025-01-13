@@ -7,3 +7,8 @@ export const getConstants: () => Record<string, string> = () => ({
   REDIRECT_DOMAIN: process.env.NEXT_PUBLIC_REDIRECT_DOMAIN || '',
   CIS2_PROVIDER_NAME: process.env.NEXT_PUBLIC_CIS2_PROVIDER_NAME || '',
 });
+
+export const getServerConstants: () => Record<string, string> = () => ({
+  ...getConstants(),
+  ...{ USER_POOL_CLIENT_SECRET: process.env.USER_POOL_CLIENT_SECRET || '' },
+});
