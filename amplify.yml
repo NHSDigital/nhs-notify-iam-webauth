@@ -12,10 +12,11 @@ frontend:
         - npm run generate-outputs env
         - npm run build
   artifacts:
-    baseDirectory: dist
+    baseDirectory: .next
     files:
       - '**/*'
   cache:
     paths:
+      - .next/cache/**/*
       - .npm/**/*
       - node_modules/**/*
