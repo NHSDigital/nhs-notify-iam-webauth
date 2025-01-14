@@ -27,7 +27,7 @@ module "amplify_branch" {
     NEXT_PUBLIC_USER_POOL_ID        = local.app.cognito_user_pool["id"]
     NEXT_PUBLIC_USER_POOL_CLIENT_ID = data.aws_cognito_user_pool_client.client.id
     USER_POOL_CLIENT_SECRET         = data.aws_cognito_user_pool_client.client.client_secret
-    NEXT_PUBLIC_COGNITO_DOMAIN      = local.app.cognito_domain["domain"]
-    NEXT_PUBLIC_REDIRECT_DOMAIN     = local.app.auth_gateway_name["name"]
+    NEXT_PUBLIC_COGNITO_DOMAIN      = local.app.cognito_user_pool["domain"]
+    NEXT_PUBLIC_REDIRECT_DOMAIN     = local.app.amplify["auth_gateway_name"]
   }
 }
