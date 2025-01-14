@@ -1,3 +1,8 @@
+data "aws_cognito_user_pool_client" "client" {
+  client_id    = local.app.cognito_user_pool_client["id"]
+  user_pool_id = local.app.cognito_user_pool["id"]
+}
+
 module "amplify_branch" {
   source = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/amp_branch?ref=v1.0.0"
 
@@ -17,7 +22,12 @@ module "amplify_branch" {
   enable_auto_build = true
 
   environment_variables = {
-    NOTIFY_SUBDOMAIN      = var.environment
-    NEXT_PUBLIC_BASE_PATH = "/auth~${local.normalised_branch_name}"
+    NOTIFY_SUBDOMAIN                = var.environment
+    NEXT_PUBLIC_BASE_PATH           = "/auth~${local.normalised_branch_name}"
+    NEXT_PUBLIC_USER_POOL_ID        = local.app.cognito_user_pool["id"]
+    NEXT_PUBLIC_USER_POOL_CLIENT_ID = aws_cognito_user_pool_client.client.id
+    USER_POOL_CLIENT_SECRET         = aws_cognito_user_pool_client.client.client_secret
+    NEXT_PUBLIC_COGNITO_DOMAIN      = local.app.cognito_domain["domain"]
+    NEXT_PUBLIC_REDIRECT_DOMAIN     = local.app.auth_gateway_name["name"]
   }
 }
