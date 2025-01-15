@@ -4,17 +4,12 @@ backend:
     build:
       commands:
         - npm ci --cache .npm --prefer-offline
-        - npx ampx pipeline-deploy --branch $AWS_BRANCH --app-id $AWS_APP_ID
+        - npm run generate-outputs env
 frontend:
   phases:
     build:
       commands:
-        - echo NEXT_PUBLIC_USER_POOL_ID=$NEXT_PUBLIC_USER_POOL_ID >> .env
-        - echo NEXT_PUBLIC_USER_POOL_CLIENT_ID=$NEXT_PUBLIC_USER_POOL_CLIENT_ID >> .env
-        - echo USER_POOL_CLIENT_SECRET=$USER_POOL_CLIENT_SECRET >> .env
-        - echo NEXT_PUBLIC_COGNITO_DOMAIN=$NEXT_PUBLIC_COGNITO_DOMAIN >> .env
-        - echo NEXT_PUBLIC_REDIRECT_DOMAIN=$NEXT_PUBLIC_REDIRECT_DOMAIN >> .env
-        - echo NEXT_PUBLIC_CIS2_PROVIDER_NAME=$NEXT_PUBLIC_CIS2_PROVIDER_NAME >> .env
+        - npm run generate-outputs env
         - npm run build
   artifacts:
     baseDirectory: .next
@@ -24,3 +19,4 @@ frontend:
     paths:
       - .next/cache/**/*
       - .npm/**/*
+      - node_modules/**/*
