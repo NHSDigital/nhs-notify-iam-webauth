@@ -1,69 +1,118 @@
 'use client';
 
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { withAuthenticator } from '@aws-amplify/ui-react';
 import { Redirect } from '@/src/components/molecules/Redirect/Redirect';
 import fetchIntercept from 'fetch-intercept';
-import { basicCredentialsInterceptor } from '../utils/basic-credentials-interceptor';
+import { basicCredentialsInterceptor } from '@/src/utils/basic-credentials-interceptor';
 import { Button } from 'nhsuk-react-components';
-import { useSearchParams } from 'next/navigation';
-import { cis2Login, getCis2AmplifyConfiguration } from '../utils/cis2-login';
-import { cognitoUserPoolsTokenProvider } from '@aws-amplify/auth/cognito';
+import { redirect, RedirectType, useSearchParams } from 'next/navigation';
+import { cis2Login } from '@/src/utils/cis2-login';
+import { cognitoUserPoolsTokenProvider, getCurrentUser, GetCurrentUserOutput, signIn } from '@aws-amplify/auth/cognito';
 import { Amplify } from 'aws-amplify';
 import { defaultStorage } from 'aws-amplify/utils';
-import { getAuthTokens } from '../utils/cis2-token-retriever';
-import { randomUUID } from 'crypto';
-
+import { getAuthTokens, TokenResponse } from '@/src/utils/cis2-token-retriever';
+import { decodeJWT, fetchAuthSession } from '@aws-amplify/auth';
 
 fetchIntercept.register(basicCredentialsInterceptor);
 
 const clientId = Amplify.getConfig().Auth?.Cognito.userPoolClientId;
 const OAUTH_PKCE_KEY = `CognitoIdentityServiceProvider.${clientId}.oauthPKCE`;
 
-const AuthenticatorWrapper = (props: { redirectPath: string, requestRef: string }) => {
-  Amplify.configure(getCis2AmplifyConfiguration(), { ssr: true });
+const AuthenticatorWrapper = (props: {
+  redirectPath: string;
+}) => {
   return withAuthenticator(Redirect, {
     variation: 'default',
     hideSignUp: true,
     components: {
       SignIn: {
         Header: () => (
-          <Button onClick={() => cis2Login(props.redirectPath, props.requestRef)}>CIS2</Button>
+          <Button
+            onClick={() => cis2Login(props.redirectPath)}
+          >
+            CIS2
+          </Button>
         ),
       },
     },
   })({});
 };
 
-cognitoUserPoolsTokenProvider.authTokenStore.keyValueStorage?.getItem('')
+async function storeTokens(authTokens?: TokenResponse): Promise<boolean> {
+  if (!authTokens) {
+    return false;
+  }
+
+  const accessToken = decodeJWT(authTokens.access_token);
+  const idToken = decodeJWT(authTokens.id_token);
+  const refreshToken = authTokens.refresh_token;
+  const issuedAt = accessToken.payload.iat;
+  const clockDrift = issuedAt ? issuedAt * 1000 - new Date().getTime() : 0;
+  const username = accessToken.payload.sub || '';
+
+  const cognitoAuthTokens = {
+    accessToken: accessToken,
+    clockDrift: clockDrift,
+    username: username,
+    refreshToken: refreshToken,
+    idToken: idToken,
+    signInDetails: {
+      loginId: username,
+    },
+  };
+
+  const tokenOrchestrator = cognitoUserPoolsTokenProvider.tokenOrchestrator;
+  await tokenOrchestrator.setTokens({ tokens: cognitoAuthTokens });
+  return true;
+}
 
 export default function Page() {
+  const [postLoginState, setPostLoginState] = useState('');
+  const [user, setUser] = useState<GetCurrentUserOutput | undefined>();
 
-  console.log(JSON.stringify(Amplify.getConfig()));
-  console.log(Amplify.getConfig());
-  // const [requestRef] = useState(randomUUID().toString());
+  useEffect(() => {
+    getCurrentUser().then(setUser).catch(() => {});
+  }, [user]);
+  
   
   const searchParams = useSearchParams();
-  const redirectPath = searchParams.get('redirectPath');
-  const code = searchParams.get('code');
+  let redirectPath = searchParams.get('redirect');
+  let code = searchParams.get('code');
   const state = searchParams.get('state');
 
-  
+  if (!redirectPath && postLoginState) {
+    const parts = postLoginState.split('-');
+    if (parts.length > 1) {
+      const stateData = JSON.parse(
+        Buffer.from(parts[1], 'hex').toString('utf-8')
+      );
+      const finalRedirect = stateData['redirectPath'];
+      code = '';
+      redirect(`?redirect=${encodeURIComponent(finalRedirect)}`, RedirectType.replace );
+    }
+  }
 
-  // useEffect(() => {
-  //   if (!code) {
-  //     return;
-  //   }
+  useEffect(() => {
+    fetchAuthSession().then(sess => console.log(`auth sess ${JSON.stringify(sess)}`))
+    if (!code || postLoginState) {
+      return;
+    }
 
+    defaultStorage
+      .getItem(OAUTH_PKCE_KEY)
+      .then((codeVerifier) => getAuthTokens(code, codeVerifier || ''))
+      .then((authTokens) => storeTokens(authTokens))
+      .then((stored) => {
+        if (stored) {
+          return defaultStorage
+            .removeItem(OAUTH_PKCE_KEY).then(() => setPostLoginState(state || ''));
+        }
+      });
+  }, [code]);
 
-  //   defaultStorage.getItem(OAUTH_PKCE_KEY)
-  //     .then((codeVerifier) => getAuthTokens(code, codeVerifier || ''))
-  //     .then((tokens) => console.log(`Tokens ${JSON.stringify(tokens)}`));
-  // }, [code]);
-
-  return (
-    <Suspense fallback={<p>Loading...</p>}>
-      <AuthenticatorWrapper redirectPath={redirectPath || ''} requestRef={''} />
-    </Suspense>
-  );
+  return <>
+  <div>User: {user?.username || 'No user'}</div>
+  { user && redirectPath ? <Redirect /> : <AuthenticatorWrapper redirectPath={redirectPath || ''} />}
+  </>;
 }

@@ -23,39 +23,39 @@ export type State = {
 //       }
 // }
 
-export function cis2Login(redirectPath: string, requestRef: string) {
+export function cis2Login(redirectPath: string) {
   const provider = getConstants().CIS2_PROVIDER_NAME;
   return signInWithRedirect({
     provider: {
       custom: provider,
     },
-    customState: JSON.stringify({ redirectPath, requestRef }),
+    customState: JSON.stringify({ redirectPath }),
   });
 }
 
-export function getCis2AmplifyConfiguration(): AmplifyOutputs {
-  const {
-    USER_POOL_ID,
-    USER_POOL_CLIENT_ID,
-    COGNITO_DOMAIN,
-    REDIRECT_DOMAIN,
-    CIS2_PROVIDER_NAME,
-  } = getConstants();
+// export function getCis2AmplifyConfiguration(): AmplifyOutputs {
+//   const {
+//     USER_POOL_ID,
+//     USER_POOL_CLIENT_ID,
+//     COGNITO_DOMAIN,
+//     REDIRECT_DOMAIN,
+//     CIS2_PROVIDER_NAME,
+//   } = getConstants();
 
-  return {
-    version: '1.3', // version is important for the framework to recognise that this type of config is AmplifyOutputs
-    auth: {
-      aws_region: 'eu-west-2',
-      user_pool_id: USER_POOL_ID,
-      user_pool_client_id: USER_POOL_CLIENT_ID,
-      oauth: {
-        identity_providers: [CIS2_PROVIDER_NAME],
-        domain: COGNITO_DOMAIN,
-        scopes: ['aws.cognito.signin.user.admin', 'email', 'openid', 'profile'],
-        redirect_sign_in_uri: [REDIRECT_DOMAIN],
-        redirect_sign_out_uri: [],
-        response_type: 'code',
-      },
-    },
-  };
-}
+//   return {
+//     version: '1.3', // version is important for the framework to recognise that this type of config is AmplifyOutputs
+//     auth: {
+//       aws_region: 'eu-west-2',
+//       user_pool_id: USER_POOL_ID,
+//       user_pool_client_id: USER_POOL_CLIENT_ID,
+//       oauth: {
+//         identity_providers: [CIS2_PROVIDER_NAME],
+//         domain: COGNITO_DOMAIN,
+//         scopes: ['aws.cognito.signin.user.admin', 'email', 'openid', 'profile'],
+//         redirect_sign_in_uri: [REDIRECT_DOMAIN],
+//         redirect_sign_out_uri: [],
+//         response_type: 'code',
+//       },
+//     },
+//   };
+// }

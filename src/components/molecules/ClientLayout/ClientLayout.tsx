@@ -10,11 +10,11 @@ import { NHSNotifyContainer } from '@/src/components/layouts/container/container
 import { getConstants } from '@/src/utils/public-constants';
 import { NHSNotifyHeader } from '../Header/Header';
 import { NHSNotifyFooter } from '../Footer/Footer';
-import { getCis2AmplifyConfiguration } from '@/src/utils/cis2-login';
 
 const { BASE_PATH } = getConstants();
 
-Amplify.configure(getCis2AmplifyConfiguration(), { ssr: true });
+// eslint-disable-next-line @typescript-eslint/no-require-imports, unicorn/prefer-module, import/no-unresolved
+Amplify.configure(require('@/amplify_outputs.json'), { ssr: true });
 
 export const ClientLayout = ({ children }: { children: React.ReactNode }) => (
   <html lang='en'>
