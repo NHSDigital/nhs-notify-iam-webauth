@@ -3,6 +3,8 @@
 import React, { Suspense } from 'react';
 import { withAuthenticator } from '@aws-amplify/ui-react';
 import { Redirect } from '@/src/components/molecules/Redirect/Redirect';
+import fetchIntercept from 'fetch-intercept';
+import { basicCredentialsInterceptor } from '../utils/basic-credentials-interceptor';
 
 const AuthenticatorWrapper = () => {
   return withAuthenticator(Redirect, {
@@ -10,6 +12,8 @@ const AuthenticatorWrapper = () => {
     hideSignUp: true,
   })({});
 };
+
+fetchIntercept.register(basicCredentialsInterceptor);
 
 export default function Page() {
   return (

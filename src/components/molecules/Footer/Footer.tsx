@@ -1,4 +1,4 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable jsx-a11y/anchor-is-valid,sonarjs/todo-tag */
 /*
  * TODO: REMOVE ESLINT DISABLE WHEN WE HAVE FOOTER LINK
  */
