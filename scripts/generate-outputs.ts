@@ -11,8 +11,8 @@ if (inputType === 'file') {
     userPoolId = outputsFileContent.cognito_user_pool_id.value;
     userPoolClientId = outputsFileContent.cognito_user_pool_client_id.value;
 } else if (inputType === 'env') {
-    userPoolId = process.env.USER_POOL_ID ?? 'unknown-user-pool-id';
-    userPoolClientId = process.env.USER_POOL_CLIENT_ID ?? 'unknown-user-pool-client-id';
+    userPoolId = process.env.NEXT_PUBLIC_USER_POOL_ID ?? 'unknown-user-pool-id';
+    userPoolClientId = process.env.NEXT_PUBLIC_USER_POOL_CLIENT_ID ?? 'unknown-user-pool-client-id';
 } else {
     throw new Error('Unexpected input type');
 }

@@ -17,9 +17,9 @@ module "amplify_branch" {
   enable_auto_build = true
 
   environment_variables = {
-    USER_POOL_ID          = local.app.cognito_user_pool["id"]
-    USER_POOL_CLIENT_ID   = local.app.cognito_user_pool_client["id"]
-    NOTIFY_SUBDOMAIN      = var.environment
-    NEXT_PUBLIC_BASE_PATH = "/auth~${local.normalised_branch_name}"
+    NEXT_PUBLIC_USER_POOL_ID        = local.app.cognito_user_pool["id"]
+    NEXT_PUBLIC_USER_POOL_CLIENT_ID = local.app.cognito_user_pool_client["id"]
+    NOTIFY_SUBDOMAIN                = var.environment
+    NEXT_PUBLIC_BASE_PATH           = "/auth~${local.normalised_branch_name}"
   }
 }
