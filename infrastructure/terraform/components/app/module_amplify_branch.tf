@@ -14,7 +14,6 @@ module "amplify_branch" {
   stage             = "PRODUCTION"
   enable_auto_build = false
   environment_variables = {
-    NOTIFY_SUBDOMAIN                = var.environment
     NEXT_PUBLIC_BASE_PATH           = "/auth"
     NEXT_PUBLIC_USER_POOL_ID        = aws_cognito_user_pool.main.id
     NEXT_PUBLIC_USER_POOL_CLIENT_ID = aws_cognito_user_pool_client.main.id
