@@ -1,4 +1,4 @@
-import { basicCredentialsInterceptor } from '@/src/utils/basic-credentials-interceptor';
+import { basicCredentialsInterceptor } from '@/src/utils/basic-auth/basic-credentials-interceptor';
 
 jest.mock('@/src/utils/client-secret-handler', () => ({
   generateClientSecretHash: () => Promise.resolve('testhash'),

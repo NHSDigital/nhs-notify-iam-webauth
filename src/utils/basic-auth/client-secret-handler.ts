@@ -17,6 +17,10 @@ export async function generateClientSecretHash(
       `Missing client id or secret: ID(${!!userPoolClientSecret}) Secret(${!!userPoolClientId})`
     );
   }
+
+  if (!username) {
+    throw new Error('Missing username');
+  }
   const hasher = crypto.createHmac('sha256', userPoolClientSecret);
   hasher.update(username);
   hasher.update(userPoolClientId);

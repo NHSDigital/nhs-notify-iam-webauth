@@ -1,7 +1,7 @@
 // Hard to avoid due to FetchInterceptor using any
 /* eslint @typescript-eslint/no-explicit-any: 0 */
 import { FetchInterceptor } from 'fetch-intercept';
-import { generateClientSecretHash } from '@/src/utils/client-secret-handler';
+import { generateClientSecretHash } from '@/src/utils/basic-auth/client-secret-handler';
 
 type TargetConfig = {
   extractUsername: (body: any) => string;
@@ -41,6 +41,14 @@ export const basicCredentialsInterceptor: FetchInterceptor = {
 
     const body = JSON.parse(config.body);
     const username = targetConfig.extractUsername(body);
+
+    if (!username) {
+      console.log('Missing username');
+      console.log(url);
+      console.log(JSON.stringify(config));
+      console.log(config);
+      return [url, config];
+    }
 
     return generateClientSecretHash(username).then((secretHash) => {
       targetConfig.injectSecretHash(body, secretHash);

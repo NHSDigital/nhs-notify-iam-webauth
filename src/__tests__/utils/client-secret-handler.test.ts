@@ -1,4 +1,4 @@
-import { generateClientSecretHash } from '@/src/utils/client-secret-handler';
+import { generateClientSecretHash } from '@/src/utils/basic-auth/client-secret-handler';
 import { getConstants } from '@/src/utils/public-constants';
 
 jest.mock('@/src/utils/public-constants');
