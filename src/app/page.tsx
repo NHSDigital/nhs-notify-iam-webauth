@@ -1,9 +1,8 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { withAuthenticator } from '@aws-amplify/ui-react';
 import fetchIntercept from 'fetch-intercept';
-import { basicCredentialsInterceptor } from '../utils/basic-credentials-interceptor';
 import { Redirect } from '@/src/components/molecules/Redirect/Redirect';
 import { Button } from 'nhsuk-react-components';
 import { redirect, RedirectType, useSearchParams } from 'next/navigation';
@@ -17,6 +16,7 @@ import { Amplify } from 'aws-amplify';
 import { defaultStorage } from 'aws-amplify/utils';
 import { getAuthTokens, TokenResponse } from '@/src/utils/cis2-token-retriever';
 import { decodeJWT, fetchAuthSession } from '@aws-amplify/auth';
+import { basicCredentialsInterceptor } from '../utils/basic-credentials-interceptor';
 
 fetchIntercept.register(basicCredentialsInterceptor);
 
@@ -65,7 +65,7 @@ async function storeTokens(authTokens?: TokenResponse): Promise<boolean> {
   return true;
 }
 
-export default function Page() {
+function Page() {
   const [postLoginState, setPostLoginState] = useState('');
   const [user, setUser] = useState<GetCurrentUserOutput | undefined>();
 
@@ -127,3 +127,11 @@ export default function Page() {
     </>
   );
 }
+
+const WrappedPage = () => (
+  <Suspense>
+    <Page />
+  </Suspense>
+);
+
+export default WrappedPage;
