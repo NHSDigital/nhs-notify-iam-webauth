@@ -1,7 +1,5 @@
 import { signInWithRedirect } from '@aws-amplify/auth';
 import { getConstants } from '@/src/utils/public-constants';
-import { ResourcesConfig } from 'aws-amplify';
-import { AmplifyOutputs } from 'aws-amplify/adapter-core';
 
 export type State = {
   redirectPath: string;

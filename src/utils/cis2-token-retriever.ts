@@ -26,7 +26,8 @@ export async function getAuthTokens(
 
   const cognitoConfig = amplifyConfig.Auth?.Cognito;
   const userPoolClientId = cognitoConfig?.userPoolClientId || '';
-  const redirectDomain = (cognitoConfig?.loginWith?.oauth?.redirectSignIn || [])[0];
+  const redirectDomain = (cognitoConfig?.loginWith?.oauth?.redirectSignIn ||
+    [])[0];
   const cognitoDomain = cognitoConfig?.loginWith?.oauth?.domain;
 
   const params = new URLSearchParams();
