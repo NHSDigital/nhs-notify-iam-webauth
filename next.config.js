@@ -1,7 +1,8 @@
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '/auth';
 const domain = process.env.NOTIFY_DOMAIN_NAME ?? 'localhost:3000';
-const subdomain = `${basePath}.`.split('~')[1] || '';
-const allowedOrigins = Array.from(new Set([domain, domain.replace('iam', 'web-gateway'), `${subdomain}${domain}`]).values());
+// const subdomain = `${basePath}.`.split('~')[1] || '';
+// const allowedOrigins = Array.from(new Set([domain, domain.replace('iam', 'web-gateway'), `${subdomain}${domain}`]).values());
+const allowedOrigins = [domain, domain.replace('iam', 'web-gateway')];
 
 console.log(`allowedOrigins ${allowedOrigins}`);
 
