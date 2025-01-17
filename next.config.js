@@ -1,8 +1,16 @@
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '/auth';
+const domain = process.env.NOTIFY_DOMAIN_NAME ?? 'localhost:3000';
 
 module.exports = {
   basePath,
+
+  experimental: {
+    serverActions: {
+      allowedOrigins: [domain, domain.replace('auth', 'web-gateway')],
+    },
+  },
+  
 
   async redirects() {
     /*
