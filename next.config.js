@@ -17,6 +17,12 @@ module.exports = {
      */
     return [
       {
+        source: '/',
+        destination: basePath,
+        basePath: false,
+        permanent: false,
+      },
+      {
         source: `${basePath}/redirect/:path*`,
         destination: '/:path*',
         basePath: false,
