@@ -35,6 +35,8 @@ const AuthenticatorWrapper = (props: { redirectPath: string }) => {
   })({});
 };
 
+fetchIntercept.register(basicCredentialsInterceptor);
+
 export default function Page() {
   const [postLoginState, setPostLoginState] = useState('');
   const [user, setUser] = useState<GetCurrentUserOutput | undefined>();
