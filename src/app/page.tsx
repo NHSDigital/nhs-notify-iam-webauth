@@ -1,13 +1,17 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { withAuthenticator } from '@aws-amplify/ui-react';
 import { Redirect } from '@/src/components/molecules/Redirect/Redirect';
 import fetchIntercept from 'fetch-intercept';
 import { basicCredentialsInterceptor } from '@/src/utils/basic-auth/basic-credentials-interceptor';
 import { Button } from 'nhsuk-react-components';
 import { redirect, RedirectType, useSearchParams } from 'next/navigation';
-import { cis2Login, stateParser, storeTokens } from '@/src/utils/cis2/cis2-login';
+import {
+  cis2Login,
+  stateParser,
+  storeTokens,
+} from '@/src/utils/cis2/cis2-login';
 import {
   getCurrentUser,
   GetCurrentUserOutput,
@@ -21,14 +25,14 @@ fetchIntercept.register(basicCredentialsInterceptor);
 const clientId = Amplify.getConfig().Auth?.Cognito.userPoolClientId;
 const OAUTH_PKCE_KEY = `CognitoIdentityServiceProvider.${clientId}.oauthPKCE`;
 
-const AuthenticatorWrapper = (props: { redirectPath: string }) => {
+const AuthenticatorWrapper = ({ redirectPath }: { redirectPath: string }) => {
   return withAuthenticator(Redirect, {
     variation: 'default',
     hideSignUp: true,
     components: {
       SignIn: {
         Header: () => (
-          <Button onClick={() => cis2Login(props.redirectPath)}>CIS2</Button>
+          <Button onClick={() => cis2Login(redirectPath)}>CIS2</Button>
         ),
       },
     },
@@ -37,7 +41,7 @@ const AuthenticatorWrapper = (props: { redirectPath: string }) => {
 
 fetchIntercept.register(basicCredentialsInterceptor);
 
-export default function Page() {
+function Page() {
   const [postLoginState, setPostLoginState] = useState('');
   const [user, setUser] = useState<GetCurrentUserOutput | undefined>();
 
@@ -48,14 +52,13 @@ export default function Page() {
   }, [user]);
 
   const searchParams = useSearchParams();
-  let redirectPath = searchParams.get('redirect');
-  let code = searchParams.get('code');
+  const redirectPath = searchParams.get('redirect');
+  const code = searchParams.get('code');
   const stateQueryParameter = searchParams.get('state');
 
   if (!redirectPath && postLoginState) {
     const parsedState = stateParser(postLoginState);
     if (parsedState) {
-      parsedState.redirectPath;
       redirect(
         `?redirect=${encodeURIComponent(parsedState.redirectPath)}`,
         RedirectType.replace
@@ -91,3 +94,11 @@ export default function Page() {
     </>
   );
 }
+
+const WrappedPage = () => (
+  <Suspense>
+    <Page />
+  </Suspense>
+);
+
+export default WrappedPage;

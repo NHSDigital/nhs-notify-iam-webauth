@@ -1,34 +1,36 @@
 import { decodeJWT, signInWithRedirect } from '@aws-amplify/auth';
 import { AmplifyOutputs } from 'aws-amplify/adapter-core';
-import { TokenResponse } from './cis2-token-retriever';
 import { cognitoUserPoolsTokenProvider } from '@aws-amplify/auth/cognito';
 import { z } from 'zod';
+import { TokenResponse } from './cis2-token-retriever';
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports, unicorn/prefer-module, import/no-unresolved
 const amplifyOutputs: AmplifyOutputs = require('@/amplify_outputs.json');
 
 const stateValidator = z.object({
-  redirectPath: z.string().min(1)
-})
+  redirectPath: z.string().min(1),
+});
 
 export type State = {
   redirectPath: string;
 };
 
-export function stateParser(stateQueryParameter?: string | null): State | undefined {
+export function stateParser(
+  stateQueryParameter?: string | null
+): State | undefined {
   if (!stateQueryParameter) {
     return undefined;
   }
-  
+
   const parts = stateQueryParameter.split('-');
   if (parts.length <= 1) {
     return undefined;
   }
 
-  let decodedState; 
+  let decodedState;
   try {
-    decodedState = Buffer.from(parts[1], 'hex').toString('utf-8');
-  } catch(error) {
+    decodedState = Buffer.from(parts[1], 'hex').toString('utf8');
+  } catch {
     return undefined;
   }
 
@@ -67,21 +69,21 @@ export async function storeTokens(
   const idToken = decodeJWT(authTokens.id_token);
   const refreshToken = authTokens.refresh_token;
   const issuedAt = accessToken.payload.iat;
-  const clockDrift = issuedAt ? issuedAt * 1000 - new Date().getTime() : 0;
+  const clockDrift = issuedAt ? issuedAt * 1000 - Date.now() : 0;
   const username = accessToken.payload.sub || '';
 
   const cognitoAuthTokens = {
-    accessToken: accessToken,
-    clockDrift: clockDrift,
-    username: username,
-    refreshToken: refreshToken,
-    idToken: idToken,
+    accessToken,
+    clockDrift,
+    username,
+    refreshToken,
+    idToken,
     signInDetails: {
       loginId: username,
     },
   };
 
-  const tokenOrchestrator = cognitoUserPoolsTokenProvider.tokenOrchestrator;
+  const { tokenOrchestrator } = cognitoUserPoolsTokenProvider;
   await tokenOrchestrator.setTokens({ tokens: cognitoAuthTokens });
   return true;
 }
