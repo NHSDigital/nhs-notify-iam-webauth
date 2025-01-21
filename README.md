@@ -107,6 +107,6 @@ npm run test:unit
 You'll need to ensure you have an authenticated terminal to `nhs-notify-iam-dev` AWS account. Then run:
 
 ```bash
-cd /tests/test-team/
-npm run test:component
+cd tests/test-team
+npm run test:local-ui
 ```

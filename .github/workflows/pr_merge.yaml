@@ -24,7 +24,7 @@ jobs:
       matrix:
         component: [acct, app]
 
-    uses: ./.github/workflows/reusable_internal_repo_build.yaml
+    uses: ./.github/workflows/dispatch_internal_repo_workflow.yaml
     secrets: inherit
     with:
       releaseVersion: main
