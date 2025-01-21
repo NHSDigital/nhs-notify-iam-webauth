@@ -1,5 +1,5 @@
 module "pre_authentication_lambda" {
-  depends_on  = [module.build_pre_authentication_lambda]
+  depends_on = [module.build_pre_authentication_lambda]
 
   source      = "../../modules/lambda-function"
   description = "Pre authentication lambda trigger"
@@ -13,8 +13,8 @@ module "pre_authentication_lambda" {
   log_retention_in_days = var.log_retention_in_days
 
   environment_variables = {
-    EXPECTED_ID_ASSURANCE_LEVEL = "3"
-    EXPECTED_AUTHENTICATION_ASSURANCE_LEVEL = "2"
+    EXPECTED_ID_ASSURANCE_LEVEL                   = "3"
+    EXPECTED_AUTHENTICATION_ASSURANCE_LEVEL       = "2"
     MAXIMUM_EXPECTED_AUTH_TIME_DIVERGENCE_SECONDS = "60"
   }
 }
