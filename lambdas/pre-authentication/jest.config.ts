@@ -47,10 +47,7 @@ const config: Config = {
   // The test environment that will be used for testing
   testEnvironment: 'node',
 
-  testPathIgnorePatterns: [
-    '/node_modules/',
-    '/tests/',
-  ],
+  testPathIgnorePatterns: ['/node_modules/', '/tests/'],
 };
 
 export default config;

@@ -1,19 +1,23 @@
 import type { PreAuthenticationTriggerHandler } from 'aws-lambda';
 import { differenceInSeconds } from 'date-fns';
 
-const getEnv = () => {
+const getEnvironmentVariables = () => {
+  if (
+    !process.env.EXPECTED_ID_ASSURANCE_LEVEL ||
+    !process.env.EXPECTED_AUTHENTICATION_ASSURANCE_LEVEL ||
+    !process.env.MAXIMUM_EXPECTED_AUTH_TIME_DIVERGENCE_SECONDS
+  ) {
+    throw new Error('Lambda misconfiguration');
+  }
 
-    if (!process.env.EXPECTED_ID_ASSURANCE_LEVEL || !process.env.EXPECTED_AUTHENTICATION_ASSURANCE_LEVEL || !process.env.MAXIMUM_EXPECTED_AUTH_TIME_DIVERGENCE_SECONDS) {
-        throw new Error('Lambda misconfiguration');
-    }
-
-    return {
-  expectedIdAssuranceLevel: process.env.EXPECTED_ID_ASSURANCE_LEVEL,
-  expectedAuthenticationAssuranceLevel:
-    process.env.EXPECTED_AUTHENTICATION_ASSURANCE_LEVEL,
-  maximumExpectedAuthTimeDivergenceSeconds:
-    process.env.MAXIMUM_EXPECTED_AUTH_TIME_DIVERGENCE_SECONDS,
-};};
+  return {
+    expectedIdAssuranceLevel: process.env.EXPECTED_ID_ASSURANCE_LEVEL,
+    expectedAuthenticationAssuranceLevel:
+      process.env.EXPECTED_AUTHENTICATION_ASSURANCE_LEVEL,
+    maximumExpectedAuthTimeDivergenceSeconds:
+      process.env.MAXIMUM_EXPECTED_AUTH_TIME_DIVERGENCE_SECONDS,
+  };
+};
 
 export const handler: PreAuthenticationTriggerHandler = async (event) => {
   const { userName } = event;
@@ -32,7 +36,7 @@ export const handler: PreAuthenticationTriggerHandler = async (event) => {
     expectedIdAssuranceLevel,
     expectedAuthenticationAssuranceLevel,
     maximumExpectedAuthTimeDivergenceSeconds,
-  } = getEnv();
+  } = getEnvironmentVariables();
 
   if (
     Number.parseInt(idAssuranceLevel, 10) <
@@ -54,8 +58,9 @@ export const handler: PreAuthenticationTriggerHandler = async (event) => {
 
   const currentDateTime = Date.now();
   if (
-    Math.abs(differenceInSeconds(currentDateTime, Number.parseInt(authTime, 10) * 1000)) >
-    Number.parseInt(maximumExpectedAuthTimeDivergenceSeconds, 10)
+    Math.abs(
+      differenceInSeconds(currentDateTime, Number.parseInt(authTime, 10) * 1000)
+    ) > Number.parseInt(maximumExpectedAuthTimeDivergenceSeconds, 10)
   ) {
     throw new Error('auth_time claim does not match current time');
   }
