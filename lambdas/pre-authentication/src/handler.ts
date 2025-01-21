@@ -6,7 +6,7 @@ const getEnv = () => {
     if (!process.env.EXPECTED_ID_ASSURANCE_LEVEL || !process.env.EXPECTED_AUTHENTICATION_ASSURANCE_LEVEL || !process.env.MAXIMUM_EXPECTED_AUTH_TIME_DIVERGENCE_SECONDS) {
         throw new Error('Lambda misconfiguration');
     }
-    
+
     return {
   expectedIdAssuranceLevel: process.env.EXPECTED_ID_ASSURANCE_LEVEL,
   expectedAuthenticationAssuranceLevel:
