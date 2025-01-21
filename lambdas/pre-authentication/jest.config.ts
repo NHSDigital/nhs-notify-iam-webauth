@@ -4,14 +4,6 @@
  */
 
 import type { Config } from 'jest';
-import nextJest from 'next/jest.js';
-import { pathsToModuleNameMapper } from 'ts-jest';
-import { compilerOptions } from './tsconfig.json';
-
-const createJestConfig = nextJest({
-  // Provide the path to your Next.js app to load next.config.js and .env files in your test environment
-  dir: './src',
-});
 
 const config: Config = {
   preset: 'ts-jest',
@@ -39,19 +31,11 @@ const config: Config = {
 
   collectCoverageFrom: ['src/**/*.ts*'],
 
-  coveragePathIgnorePatterns: [
-    '.types.ts',
-    'layout.tsx',
-    'ClientLayout.tsx',
-    'container.tsx',
-    '.snap',
-  ],
-
   // Use this configuration option to add custom reporters to Jest
   reporters: [
     'default',
     [
-      './node_modules/jest-html-reporter',
+      '../../node_modules/jest-html-reporter',
       {
         pageTitle: 'Test Report',
         outputPath: './.reports/unit/test-report.html',
@@ -61,24 +45,12 @@ const config: Config = {
   ],
 
   // The test environment that will be used for testing
-  testEnvironment: 'jsdom',
+  testEnvironment: 'node',
 
   testPathIgnorePatterns: [
     '/node_modules/',
-    'fixture',
-    'helpers.ts',
     '/tests/',
-    'lambdas',
   ],
-
-  // Set the absolute path for imports
-  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
-    prefix: '<rootDir>/',
-  }),
-
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
 };
 
-// createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
-// https://nextjs.org/docs/app/building-your-application/testing/jest
-export default createJestConfig(config);
+export default config;
