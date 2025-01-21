@@ -24,6 +24,7 @@ jobs:
     uses: ./.github/workflows/dispatch_internal_repo_workflow.yaml
     secrets: inherit
     with:
+      jobName: Deploy changes to main in nonprod AWS Account
       releaseVersion: ${{ github.event.release.tag_name }}
       targetWorkflow: "dispatch-deploy-static-notify-iam-env.yaml"
       targetEnvironment: "main"

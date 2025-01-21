@@ -3,6 +3,10 @@ name: Call Notify Internal Infrastructure Workflow
 on:
   workflow_call:
     inputs:
+      jobName:
+        type: string
+        description: The name of the job triggering the remote workflow
+        required: true
       infraRepoName:
         type: string
         description: Repository (this one) in the NHSDigital Github Org to deploy from
@@ -37,6 +41,7 @@ concurrency:
 
 jobs:
   trigger:
+    name: ${{ inputs.jobName }}
     runs-on: ubuntu-latest
 
     permissions:

@@ -14,6 +14,7 @@ jobs:
     uses: ./.github/workflows/dispatch_internal_repo_workflow.yaml
     secrets: inherit
     with:
+      jobName: Sandbox set up
       infraRepoName: nhs-notify-iam-webauth
       releaseVersion: ${{ github.head_ref || github.ref_name }}
       targetWorkflow: dispatch-deploy-dynamic-env.yaml
@@ -36,6 +37,7 @@ jobs:
     uses: ./.github/workflows/dispatch_internal_repo_workflow.yaml
     secrets: inherit
     with:
+      jobName: Acceptance tests
       infraRepoName: nhs-notify-iam-webauth
       releaseVersion: ${{ github.head_ref || github.ref_name }}
       targetWorkflow: dispatch-acceptance-tests-dynamic-env.yaml
@@ -55,6 +57,7 @@ jobs:
     uses: ./.github/workflows/dispatch_internal_repo_workflow.yaml
     secrets: inherit
     with:
+      jobName: Sandbox tear down
       infraRepoName: nhs-notify-iam-webauth
       releaseVersion: ${{ github.head_ref || github.ref_name }}
       targetWorkflow: dispatch-deploy-dynamic-env.yaml
