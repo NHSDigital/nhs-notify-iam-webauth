@@ -38,9 +38,9 @@ export const handler: PreAuthenticationTriggerHandler = async (event) => {
   }
 
   const {
-    id_assurance_level: idAssuranceLevel,
-    auth_assurance_level: authenticationAssuranceLevel,
-    auth_time: authTime,
+    'custom:id_assurance_level': idAssuranceLevel,
+    'custom:auth_assurance_level': authenticationAssuranceLevel,
+    'custom:auth_time': authTime,
   } = event.request.userAttributes;
   const {
     expectedIdAssuranceLevel,

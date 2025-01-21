@@ -30,9 +30,9 @@ test('fails with lambda misconfiguration', async () => {
     userName: 'CIS2-test',
     request: {
       userAttributes: {
-        id_assurance_level: '3',
-        auth_assurance_level: '3',
-        auth_time: '1641027675',
+        'custom:id_assurance_level': '3',
+        'custom:auth_assurance_level': '3',
+        'custom:auth_time': '1641027615',
       },
     },
   });
@@ -47,9 +47,9 @@ test('passes with non-CIS2 user', async () => {
     userName: 'test-user',
     request: {
       userAttributes: {
-        id_assurance_level: '1',
-        auth_assurance_level: '1',
-        auth_time: '1641027675',
+        'custom:id_assurance_level': '1',
+        'custom:auth_assurance_level': '1',
+        'custom:auth_time': '1641027615',
       },
     },
   });
@@ -64,9 +64,9 @@ test('fails with invalid id_assurance_level', async () => {
     userName: 'CIS2-test',
     request: {
       userAttributes: {
-        id_assurance_level: '2',
-        auth_assurance_level: '3',
-        auth_time: '1641027615',
+        'custom:id_assurance_level': '2',
+        'custom:auth_assurance_level': '3',
+        'custom:auth_time': '1641027615',
       },
     },
   });
@@ -81,9 +81,9 @@ test('fails with invalid authentication_assurance_level', async () => {
     userName: 'CIS2-test',
     request: {
       userAttributes: {
-        id_assurance_level: '3',
-        auth_assurance_level: '1',
-        auth_time: '1641027615',
+        'custom:id_assurance_level': '3',
+        'custom:auth_assurance_level': '1',
+        'custom:auth_time': '1641027615',
       },
     },
   });
@@ -98,9 +98,9 @@ test('fails with invalid auth_time', async () => {
     userName: 'CIS2-test',
     request: {
       userAttributes: {
-        id_assurance_level: '3',
-        auth_assurance_level: '3',
-        auth_time: '1641027675',
+        'custom:id_assurance_level': '3',
+        'custom:auth_assurance_level': '3',
+        'custom:auth_time': '1641027675',
       },
     },
   });
@@ -115,9 +115,9 @@ test('passes with valid user attributes', async () => {
     userName: 'CIS2-test',
     request: {
       userAttributes: {
-        id_assurance_level: '3',
-        authentication_assurance_level: '3',
-        auth_time: '1641027615',
+        'custom:id_assurance_level': '3',
+        'custom:auth_assurance_level': '3',
+        'custom:auth_time': '1641027615',
       },
     },
   });
