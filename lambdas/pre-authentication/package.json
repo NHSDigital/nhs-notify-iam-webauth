@@ -14,6 +14,7 @@
     "jest-mock-extended": "^4.0.0-beta1"
   },
   "dependencies": {
-    "date-fns": "^4.1.0"
+    "date-fns": "^4.1.0",
+    "winston": "^3.14.2"
   }
 }

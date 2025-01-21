@@ -1,5 +1,6 @@
 import type { PreAuthenticationTriggerHandler } from 'aws-lambda';
 import { differenceInSeconds } from 'date-fns';
+import { logger } from './logger';
 
 const getEnvironmentVariables = () => {
   if (
@@ -20,10 +21,19 @@ const getEnvironmentVariables = () => {
 };
 
 export const handler: PreAuthenticationTriggerHandler = async (event) => {
+  logger.info({
+    description: 'Starting validation checks',
+    event,
+  });
+
   const { userName } = event;
 
   // only run these checks on cis2 users
   if (!userName.startsWith('CIS2-')) {
+    logger.info({
+      description: 'Not running validation checks on non-CIS2 user',
+      event,
+    });
     return event;
   }
 
@@ -42,6 +52,11 @@ export const handler: PreAuthenticationTriggerHandler = async (event) => {
     Number.parseInt(idAssuranceLevel, 10) <
     Number.parseInt(expectedIdAssuranceLevel, 10)
   ) {
+    logger.info({
+      description:
+        'User attempted to log in with insufficient id_assurance_level',
+      event,
+    });
     throw new Error(
       `Invalid id_assurance_level. Expected ${expectedIdAssuranceLevel}`
     );
@@ -51,6 +66,11 @@ export const handler: PreAuthenticationTriggerHandler = async (event) => {
     Number.parseInt(authenticationAssuranceLevel, 10) <
     Number.parseInt(expectedAuthenticationAssuranceLevel, 10)
   ) {
+    logger.info({
+      description:
+        'User attempted to log in with insufficient authentication_assurance_level',
+      event,
+    });
     throw new Error(
       `Invalid authentication_assurance_level. Expected ${expectedAuthenticationAssuranceLevel}`
     );
@@ -62,8 +82,18 @@ export const handler: PreAuthenticationTriggerHandler = async (event) => {
       differenceInSeconds(currentDateTime, Number.parseInt(authTime, 10) * 1000)
     ) > Number.parseInt(maximumExpectedAuthTimeDivergenceSeconds, 10)
   ) {
+    logger.info({
+      description:
+        'Difference between auth_time claim and system time was too large',
+      event,
+    });
     throw new Error('auth_time claim does not match current time');
   }
+
+  logger.info({
+    description: 'User has passed validation checks',
+    event,
+  });
 
   return event;
 };

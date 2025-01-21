@@ -24,4 +24,6 @@ resource "aws_lambda_permission" "cognito" {
   function_name = module.pre_authentication_lambda.function_name
   principal     = "cognito-idp.amazonaws.com"
   source_arn    = aws_cognito_user_pool.main.arn
+
+  statement_id = "cognito-permission"
 }
