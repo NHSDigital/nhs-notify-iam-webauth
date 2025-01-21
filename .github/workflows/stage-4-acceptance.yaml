@@ -22,8 +22,8 @@ jobs:
       targetComponent: sandbox
       terraformAction: apply
 
-  acceptance-stage:
-    name: Acceptance stage
+  acceptance-tests:
+    name: Acceptance tests
     needs: sandbox-set-up
 
     permissions:
@@ -45,7 +45,7 @@ jobs:
 
   sandbox-tear-down:
     name: Sandbox tear down
-    needs: acceptance-stage
+    needs: acceptance-tests
     if: always()
 
     permissions:
