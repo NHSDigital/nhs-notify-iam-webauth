@@ -1,13 +1,9 @@
 version: 1
-backend:
-  phases:
-    build:
-      commands:
-        - npm ci --cache .npm --prefer-offline
 frontend:
   phases:
     build:
       commands:
+        - npm ci --cache .npm --prefer-offline
         - npm run generate-outputs env
         - npm run build
   artifacts:
