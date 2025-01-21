@@ -5,7 +5,7 @@ on:
 
 jobs:
   sandbox-set-up:
-    name: Sandbox set up
+    name: Step 1
 
     permissions:
       id-token: write
@@ -24,7 +24,7 @@ jobs:
       terraformAction: apply
 
   acceptance-tests:
-    name: Acceptance tests
+    name: Step 2
     needs: sandbox-set-up
 
     permissions:
@@ -46,7 +46,7 @@ jobs:
       targetComponent: sandbox
 
   sandbox-tear-down:
-    name: Sandbox tear down
+    name: Step 3
     needs: acceptance-tests
     if: always()
 
