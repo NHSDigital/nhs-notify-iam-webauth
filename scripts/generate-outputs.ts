@@ -49,7 +49,8 @@ const amplifyOutputs = {
     oauth: {
       identity_providers: [cis2ProviderName],
       domain: cognitoDomain,
-      scopes: ['aws.cognito.signin.user.admin', 'email', 'openid', 'profile'],
+      // scopes: ['aws.cognito.signin.user.admin', 'email', 'openid', 'profile'],
+      scopes: ['email', 'openid'],
       redirect_sign_in_uri: [redirectDomain],
       redirect_sign_out_uri: [],
       response_type: 'code',

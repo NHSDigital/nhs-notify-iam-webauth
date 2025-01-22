@@ -9,12 +9,18 @@ import { Button } from 'nhsuk-react-components';
 import { redirect, RedirectType, useSearchParams } from 'next/navigation';
 import { cis2Login, stateParser, storeTokens } from '@/src/utils/cis2/cis2-login';
 import {
+  cognitoCredentialsProvider,
+  cognitoUserPoolsTokenProvider,
   getCurrentUser,
   GetCurrentUserOutput,
 } from '@aws-amplify/auth/cognito';
 import { Amplify } from 'aws-amplify';
 import { defaultStorage } from 'aws-amplify/utils';
 import { getAuthTokens } from '@/src/utils/cis2/cis2-token-retriever';
+import { AuthTokens } from '@aws-amplify/auth';
+import { AuthConfig } from '@aws-amplify/core';
+import { generateClientSecretHash } from '../utils/basic-auth/client-secret-handler';
+import axios from 'axios';
 
 fetchIntercept.register(basicCredentialsInterceptor);
 
@@ -37,6 +43,42 @@ const AuthenticatorWrapper = (props: { redirectPath: string }) => {
 
 fetchIntercept.register(basicCredentialsInterceptor);
 
+export type CognitoAuthTokens = AuthTokens & {
+    refreshToken?: string;
+    clockDrift: number;
+    username: string;
+};
+
+type TokenRefreshOptions = {
+  tokens: CognitoAuthTokens;
+  authConfig?: AuthConfig;
+  username: string;
+};
+
+// const tokenRefresher = ({ tokens, authConfig, username, }: TokenRefreshOptions) => Promise<CognitoAuthTokens> 
+
+// const tokenRefresher = (options: TokenRefreshOptions) => {
+//   console.log(`Custom token refresher ${options.username}`);
+//   return generateClientSecretHash(options.username).then(secretHash => {
+//     console.log(`Got secret ${secretHash}`);
+//     return axios.post('https://cognito-idp.eu-west-2.amazonaws.com/', {
+//       AuthFlow: 'REFRESH_TOKEN_AUTH',
+//       ClientId: options.authConfig?.Cognito.userPoolClientId,
+//       AuthParameters: {
+//         REFRESH_TOKEN: options.tokens.refreshToken,
+//         SECRET_HASH: secretHash
+//       }
+//     }).then(result => {
+//       console.log(`Refresh response code ${result.status}`);
+//       console.log(`Refresh data ${result.data}`);
+//       return {
+//       } as CognitoAuthTokens;
+//     })
+//   })
+// };
+
+// cognitoUserPoolsTokenProvider.tokenOrchestrator.setTokenRefresher(tokenRefresher);
+
 export default function Page() {
   const [postLoginState, setPostLoginState] = useState('');
   const [user, setUser] = useState<GetCurrentUserOutput | undefined>();
@@ -55,7 +97,6 @@ export default function Page() {
   if (!redirectPath && postLoginState) {
     const parsedState = stateParser(postLoginState);
     if (parsedState) {
-      parsedState.redirectPath;
       redirect(
         `?redirect=${encodeURIComponent(parsedState.redirectPath)}`,
         RedirectType.replace
@@ -79,7 +120,7 @@ export default function Page() {
             .then(() => setPostLoginState(stateQueryParameter || ''));
         }
       });
-  }, [code]);
+  }, [code, postLoginState]);
 
   return (
     <>
