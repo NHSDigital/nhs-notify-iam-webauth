@@ -3,9 +3,13 @@ import { IamWebAuthBasePage } from './iam-webauth-base-page';
 
 export class IamWebAuthSignInPage extends IamWebAuthBasePage {
   public readonly emailInput: Locator;
+
   public readonly passwordInput: Locator;
+
   public readonly confirmPasswordInput: Locator;
+
   public readonly submitButton: Locator;
+
   public readonly errorMessage: Locator;
 
   constructor(page: Page) {
