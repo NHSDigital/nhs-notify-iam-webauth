@@ -24,7 +24,7 @@ afterAll(() => {
 });
 
 test('fails with lambda misconfiguration', async () => {
-    process.env.EXPECTED_ID_ASSURANCE_LEVEL = '';
+  process.env.EXPECTED_ID_ASSURANCE_LEVEL = '';
 
   const event = mockDeep<PreAuthenticationTriggerEvent>({
     userName: 'CIS2-test',
@@ -37,7 +37,8 @@ test('fails with lambda misconfiguration', async () => {
     },
   });
 
-  await expect(handler(event, mockDeep<Context>(), mockDeep<Callback>())
+  await expect(
+    handler(event, mockDeep<Context>(), mockDeep<Callback>())
   ).rejects.toThrow('Lambda misconfiguration');
 });
 
