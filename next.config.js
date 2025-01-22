@@ -1,14 +1,14 @@
-
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '/auth';
+const domain = process.env.NOTIFY_DOMAIN_NAME ?? 'localhost:3000';
 
 module.exports = {
   basePath,
 
   async redirects() {
     /*
-    * Doing redirect rewrites will bypass NextJs' base path
-    * Without it a redirect('/templates/create-and-submit') would go to /auth/templates/create-and-submit
-    */
+     * Doing redirect rewrites will bypass NextJs' base path
+     * Without it a redirect('/templates/create-and-submit') would go to /auth/templates/create-and-submit
+     */
     return [
       {
         source: `${basePath}/redirect/:path*`,
@@ -22,7 +22,13 @@ module.exports = {
         destination: '/',
         basePath: false,
         permanent: false,
-      }
+      },
     ];
   },
-}
+
+  experimental: {
+    serverActions: {
+      allowedOrigins: [domain, domain.replace('iam', 'web-gateway')],
+    },
+  },
+};
