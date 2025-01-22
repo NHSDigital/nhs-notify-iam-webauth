@@ -6,7 +6,7 @@ export function middleware(request: NextRequest) {
   const cspUnsafeEval =
     process.env.NODE_ENV === 'production' ? '' : `'unsafe-eval'`;
 
-  const csp = `base-uri 'self'; form-action 'self'; frame-ancestors 'none'; default-src 'none'; connect-src 'self' https://cognito-idp.eu-west-2.amazonaws.com; font-src 'self' https://assets.nhs.uk; img-src 'self'; script-src 'self' 'nonce-${nonce}' https: http: ${cspUnsafeEval} 'strict-dynamic'; style-src 'self' 'nonce-${nonce}'; upgrade-insecure-requests;`;
+  const csp = `base-uri 'self'; form-action 'self'; frame-ancestors 'none'; default-src 'none'; connect-src 'self' https://cognito-idp.eu-west-2.amazonaws.com; font-src 'self' https://assets.nhs.uk; img-src 'self'; script-src 'self' 'nonce-${nonce}' https: http: ${cspUnsafeEval}; style-src 'self' 'nonce-${nonce}'; upgrade-insecure-requests;`;
 
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set('x-nonce', nonce);
