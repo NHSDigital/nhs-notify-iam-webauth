@@ -8,27 +8,29 @@ import { z } from 'zod';
 const amplifyOutputs: AmplifyOutputs = require('@/amplify_outputs.json');
 
 const stateValidator = z.object({
-  redirectPath: z.string().min(1)
-})
+  redirectPath: z.string().min(1),
+});
 
 export type State = {
   redirectPath: string;
 };
 
-export function stateParser(stateQueryParameter?: string | null): State | undefined {
+export function stateParser(
+  stateQueryParameter?: string | null
+): State | undefined {
   if (!stateQueryParameter) {
     return undefined;
   }
-  
+
   const parts = stateQueryParameter.split('-');
   if (parts.length <= 1) {
     return undefined;
   }
 
-  let decodedState; 
+  let decodedState;
   try {
     decodedState = Buffer.from(parts[1], 'hex').toString('utf-8');
-  } catch(error) {
+  } catch (error) {
     return undefined;
   }
 

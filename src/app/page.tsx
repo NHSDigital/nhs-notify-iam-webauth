@@ -7,7 +7,11 @@ import fetchIntercept from 'fetch-intercept';
 import { basicCredentialsInterceptor } from '@/src/utils/basic-auth/basic-credentials-interceptor';
 import { Button } from 'nhsuk-react-components';
 import { redirect, RedirectType, useSearchParams } from 'next/navigation';
-import { cis2Login, stateParser, storeTokens } from '@/src/utils/cis2/cis2-login';
+import {
+  cis2Login,
+  stateParser,
+  storeTokens,
+} from '@/src/utils/cis2/cis2-login';
 import {
   cognitoCredentialsProvider,
   cognitoUserPoolsTokenProvider,
@@ -43,19 +47,19 @@ const AuthenticatorWrapper = (props: { redirectPath: string }) => {
 
 fetchIntercept.register(basicCredentialsInterceptor);
 
-export type CognitoAuthTokens = AuthTokens & {
-    refreshToken?: string;
-    clockDrift: number;
-    username: string;
-};
+// export type CognitoAuthTokens = AuthTokens & {
+//   refreshToken?: string;
+//   clockDrift: number;
+//   username: string;
+// };
 
-type TokenRefreshOptions = {
-  tokens: CognitoAuthTokens;
-  authConfig?: AuthConfig;
-  username: string;
-};
+// type TokenRefreshOptions = {
+//   tokens: CognitoAuthTokens;
+//   authConfig?: AuthConfig;
+//   username: string;
+// };
 
-// const tokenRefresher = ({ tokens, authConfig, username, }: TokenRefreshOptions) => Promise<CognitoAuthTokens> 
+// const tokenRefresher = ({ tokens, authConfig, username, }: TokenRefreshOptions) => Promise<CognitoAuthTokens>
 
 // const tokenRefresher = (options: TokenRefreshOptions) => {
 //   console.log(`Custom token refresher ${options.username}`);

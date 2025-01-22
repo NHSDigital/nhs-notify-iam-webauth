@@ -61,14 +61,16 @@ export const basicCredentialsInterceptor: FetchInterceptor = {
         }
       );
 
-      
-      return axios.get('https://timeapi.io/api/time/current/zone?timeZone=Europe%2FAmsterdam')
-      .then(result => {
-        console.log(`Got result ${result.status}, ${result.data}`);
-        targetConfig.injectSecretHash(body, 'REDACTED');
-        config.body = JSON.stringify(body);
-        return [url, config];
-      });
+      return axios
+        .get(
+          'https://timeapi.io/api/time/current/zone?timeZone=Europe%2FAmsterdam'
+        )
+        .then((result) => {
+          console.log(`Got result ${result.status}, ${result.data}`);
+          targetConfig.injectSecretHash(body, 'REDACTED');
+          config.body = JSON.stringify(body);
+          return [url, config];
+        });
     }
 
     return usernameSupplier.then((un) => {
