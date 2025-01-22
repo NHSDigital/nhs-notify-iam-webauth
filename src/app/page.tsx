@@ -18,7 +18,6 @@ fetchIntercept.register(basicCredentialsInterceptor);
 export default function Page() {
   return (
     <Suspense fallback={<p>Loading...</p>}>
-      test this
       <AuthenticatorWrapper />
     </Suspense>
   );
