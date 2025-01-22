@@ -13,6 +13,11 @@ export function middleware(request: NextRequest) {
 
   requestHeaders.set('Content-Security-Policy', csp);
 
+  // requestHeaders.set(
+  //   'x-forwarded-host',
+  //   requestHeaders.get('origin')?.replace('https://', '') || '*'
+  // );
+
   const response = NextResponse.next({
     request: {
       headers: requestHeaders,
