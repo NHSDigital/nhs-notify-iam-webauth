@@ -42,4 +42,44 @@ resource "aws_cognito_user_pool" "main" {
       max_length = 2048
     }
   }
+
+  schema {
+    name                     = "id_assurance_level"
+    attribute_data_type      = "String"
+    developer_only_attribute = false
+    mutable                  = true
+    required                 = false
+    string_attribute_constraints {
+      min_length = 0
+      max_length = 2048
+    }
+  }
+
+  schema {
+    name                     = "auth_assurance_level"
+    attribute_data_type      = "String"
+    developer_only_attribute = false
+    mutable                  = true
+    required                 = false
+    string_attribute_constraints {
+      min_length = 0
+      max_length = 2048
+    }
+  }
+
+  schema {
+    name                     = "auth_time"
+    attribute_data_type      = "String"
+    developer_only_attribute = false
+    mutable                  = true
+    required                 = false
+    string_attribute_constraints {
+      min_length = 0
+      max_length = 2048
+    }
+  }
+
+  lambda_config {
+    pre_authentication = module.pre_authentication_lambda.function_arn
+  }
 }
