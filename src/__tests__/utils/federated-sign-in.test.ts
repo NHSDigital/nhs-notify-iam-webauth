@@ -1,8 +1,6 @@
+/* eslint-disable unicorn/consistent-function-scoping */
 import { federatedSignIn } from '@/src/utils/federated-sign-in';
 import { signInWithRedirect } from '@aws-amplify/auth';
-
-// import { signInWithRedirect } from '@aws-amplify/auth';
-// const amplifyOutputs: AmplifyOutputs = require('@/amplify_outputs.json');
 
 jest.mock('@/amplify_outputs.json', () => ({
   version: '1.3',
@@ -12,8 +10,8 @@ jest.mock('@aws-amplify/auth', () => ({
   signInWithRedirect: jest.fn(),
 }));
 
-
 const signInWithRedirectMock = jest.mocked(signInWithRedirect);
+// eslint-disable-next-line @typescript-eslint/no-require-imports, unicorn/prefer-module, import/no-unresolved
 const mockedAmplifyOutputs = jest.mocked(require('@/amplify_outputs.json'));
 
 describe('federated-sign-in', () => {

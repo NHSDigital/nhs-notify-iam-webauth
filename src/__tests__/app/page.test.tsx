@@ -24,6 +24,17 @@ jest.mock('@aws-amplify/ui-react', () => ({
 const mockedHub = jest.mocked(Hub);
 const mockedRedirect = jest.mocked(redirect);
 
+function getEventListener() {
+  const lastHubListenCall = mockedHub.listen.mock.lastCall;
+  const eventType = lastHubListenCall?.[0];
+  const eventListener = lastHubListenCall?.[1];
+
+  expect(eventType).toBe('auth');
+
+  expect(eventListener).toBeTruthy();
+  return eventListener!;
+}
+
 describe('SignInPage', () => {
   it('renders', async () => {
     const container = render(<SignInPage />);
@@ -48,11 +59,7 @@ describe('SignInPage', () => {
       ).toBeInTheDocument()
     );
 
-    const lastHubListenCall = mockedHub.listen.mock.lastCall;
-    const eventType = lastHubListenCall?.[0]!;
-    const eventListener = lastHubListenCall?.[1]!;
-
-    expect(eventType).toBe('auth');
+    const eventListener = getEventListener();
 
     act(() => {
       eventListener({
@@ -65,7 +72,12 @@ describe('SignInPage', () => {
       container.rerender(page);
     });
 
-    await waitFor(() => expect(mockedRedirect).toHaveBeenCalledWith('?redirect=%2Ftesting', 'replace'));
+    await waitFor(() =>
+      expect(mockedRedirect).toHaveBeenCalledWith(
+        '?redirect=%2Ftesting',
+        'replace'
+      )
+    );
   });
 
   it('ignores other state events', async () => {
@@ -78,11 +90,7 @@ describe('SignInPage', () => {
       ).toBeInTheDocument()
     );
 
-    const lastHubListenCall = mockedHub.listen.mock.lastCall;
-    const eventType = lastHubListenCall?.[0]!;
-    const eventListener = lastHubListenCall?.[1]!;
-
-    expect(eventType).toBe('auth');
+    const eventListener = getEventListener();
 
     act(() => {
       eventListener({
@@ -108,11 +116,7 @@ describe('SignInPage', () => {
       ).toBeInTheDocument()
     );
 
-    const lastHubListenCall = mockedHub.listen.mock.lastCall;
-    const eventType = lastHubListenCall?.[0]!;
-    const eventListener = lastHubListenCall?.[1]!;
-
-    expect(eventType).toBe('auth');
+    const eventListener = getEventListener();
 
     act(() => {
       eventListener({
@@ -125,6 +129,11 @@ describe('SignInPage', () => {
       container.rerender(page);
     });
 
-    await waitFor(() => expect(mockedRedirect).toHaveBeenCalledWith('?redirect=%2Fhome', 'replace'));
+    await waitFor(() =>
+      expect(mockedRedirect).toHaveBeenCalledWith(
+        '?redirect=%2Fhome',
+        'replace'
+      )
+    );
   });
 });
