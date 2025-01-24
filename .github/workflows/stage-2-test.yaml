@@ -89,6 +89,7 @@ jobs:
           npm install
       - name: "Run test coverage check"
         run: |
+          npm run generate-outputs env
           make test-coverage
   perform-static-analysis:
     name: "Perform static analysis"
