@@ -18,7 +18,7 @@ const AuthenticatorWrapper = () => {
     components: {
       SignIn: {
         Header: () => (
-          <div
+          <h1
             style={{
               marginTop: '2.0rem',
               marginBottom: 0,
@@ -28,7 +28,7 @@ const AuthenticatorWrapper = () => {
             <CIS2LoginButton
               onClick={() => federatedSignIn(redirectPath || '/home')}
             />
-          </div>
+          </h1>
         ),
       },
     },

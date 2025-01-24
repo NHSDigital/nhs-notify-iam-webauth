@@ -8,6 +8,7 @@ export function CIS2LoginButton({
 }) {
   return (
     <Button
+      alt='NHS Care Identity'
       onClick={onClick}
       style={{
         width: '234.63px',

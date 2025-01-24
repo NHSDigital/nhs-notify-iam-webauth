@@ -3,6 +3,7 @@
 exports[`CIS2LoginButton renders CIS2LoginButton correctly 1`] = `
 <DocumentFragment>
   <button
+    alt="NHS Care Identity"
     aria-disabled="false"
     class="nhsuk-button"
     style="width: 234.63px; height: 59px; margin: 0px 0px 0px 0px; background: none; box-shadow: none; padding: 0px;"
