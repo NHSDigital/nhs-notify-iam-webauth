@@ -22,4 +22,15 @@ resource "aws_cognito_user_pool_client" "main" {
   ]
 
   generate_secret = true
+
+  access_token_validity  = 5
+  id_token_validity      = 5
+  refresh_token_validity = 1
+
+  token_validity_units {
+    access_token  = "minutes"
+    id_token      = "minutes"
+    refresh_token = "hours"
+  }
+
 }
