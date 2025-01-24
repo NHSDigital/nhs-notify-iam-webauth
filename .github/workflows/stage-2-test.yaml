@@ -45,6 +45,7 @@ jobs:
           npm install
       - name: "Run unit test suite"
         run: |
+          npm run generate-outputs env
           make test-unit
       - name: "Save the result of fast test suite"
         uses: actions/upload-artifact@v4
