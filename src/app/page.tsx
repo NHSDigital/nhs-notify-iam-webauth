@@ -1,16 +1,17 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { withAuthenticator } from '@aws-amplify/ui-react';
 import { Redirect } from '@/src/components/molecules/Redirect/Redirect';
-import { Button } from 'nhsuk-react-components';
 import { redirect, RedirectType, useSearchParams } from 'next/navigation';
 import { cis2Login, State } from '@/src/utils/cis2/cis2-login';
-import { Hub } from '@aws-amplify/core';
 import { CIS2LoginButton } from '@/src/components/CIS2LoginButton/CIS2LoginButton';
-import { getCurrentUser } from '@aws-amplify/auth';
+import { Hub } from 'aws-amplify/utils';
 
-const AuthenticatorWrapper = (props: { redirectPath: string }) => {
+const AuthenticatorWrapper = () => {
+  const searchParams = useSearchParams();
+  const redirectPath = searchParams.get('redirect');
+
   return withAuthenticator(Redirect, {
     variation: 'default',
     hideSignUp: true,
@@ -25,8 +26,8 @@ const AuthenticatorWrapper = (props: { redirectPath: string }) => {
             }}
           >
             <CIS2LoginButton
-              onClick={() => cis2Login(props.redirectPath)}
-            ></CIS2LoginButton>
+              onClick={() => cis2Login(redirectPath || '/home')}
+            />
           </div>
         ),
       },
@@ -37,18 +38,6 @@ const AuthenticatorWrapper = (props: { redirectPath: string }) => {
 export default function Page() {
   const [customState, setCustomState] = useState<State>();
 
-  useEffect(() => {
-    return Hub.listen('auth', ({ payload }) => {
-      switch (payload.event) {
-        case 'customOAuthState':
-          setCustomState(JSON.parse(payload.data));
-      }
-    });
-  }, []);
-
-  const searchParams = useSearchParams();
-  let redirectPath = searchParams.get('redirect');
-
   if (customState) {
     redirect(
       `?redirect=${encodeURIComponent(customState.redirectPath || '/home')}`,
@@ -56,5 +45,17 @@ export default function Page() {
     );
   }
 
-  return <AuthenticatorWrapper redirectPath={redirectPath || ''} />;
+  useEffect(() => {
+    return Hub.listen('auth', ({ payload }) => {
+      if (payload.event === 'customOAuthState') {
+        setCustomState(JSON.parse(payload.data));
+      }
+    });
+  }, []);
+
+  return (
+    <Suspense>
+      <AuthenticatorWrapper />
+    </Suspense>
+  );
 }
