@@ -4,7 +4,7 @@ import React, { Suspense, useEffect, useState } from 'react';
 import { withAuthenticator } from '@aws-amplify/ui-react';
 import { Redirect } from '@/src/components/molecules/Redirect/Redirect';
 import { redirect, RedirectType, useSearchParams } from 'next/navigation';
-import { cis2Login, State } from '@/src/utils/cis2/cis2-login';
+import { federatedSignIn, State } from '@/src/utils/federated-sign-in';
 import { CIS2LoginButton } from '@/src/components/CIS2LoginButton/CIS2LoginButton';
 import { Hub } from 'aws-amplify/utils';
 
@@ -26,7 +26,7 @@ const AuthenticatorWrapper = () => {
             }}
           >
             <CIS2LoginButton
-              onClick={() => cis2Login(redirectPath || '/home')}
+              onClick={() => federatedSignIn(redirectPath || '/home')}
             />
           </div>
         ),

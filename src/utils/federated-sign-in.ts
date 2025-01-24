@@ -8,10 +8,10 @@ export type State = {
   redirectPath: string;
 };
 
-export function cis2Login(redirectPath: string) {
+export function federatedSignIn(redirectPath: string) {
   const providers = amplifyOutputs.auth?.oauth?.identity_providers || [];
   if (providers.length !== 1) {
-    throw new Error('Missing OAUTH provider configuration');
+    throw new Error('Invalid OAUTH provider configuration');
   }
   const provider = providers[0];
   if (!provider) {
