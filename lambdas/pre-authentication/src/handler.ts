@@ -38,7 +38,7 @@ export const extractStringRecord = (
 };
 
 export const handler: APIGatewayProxyHandler = async (event) => {
-  const tokenUrl = `${process.env.CIS2_URL}/authorize`;
+  const tokenUrl = `${process.env.CIS2_URL}/access_token`;
 
   if (!event.body) {
     throw new Error('Missing event body');

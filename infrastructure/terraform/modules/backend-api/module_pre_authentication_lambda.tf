@@ -1,7 +1,5 @@
 module "pre_authentication_lambda" {
-  depends_on = [module.build_pre_authentication_lambda]
-
-  source      = "../../modules/lambda-function"
+  source      = "../lambda-function"
   description = "Pre authentication lambda trigger"
 
   function_name    = "${local.csi}-pre-authentication"

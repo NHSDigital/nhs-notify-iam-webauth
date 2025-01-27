@@ -41,6 +41,7 @@ data "aws_iam_policy_document" "api_gateway_execution_policy" {
 
     resources = [
       module.proxy_lambda.function_arn,
+      module.pre_authentication_lambda.function_arn,
     ]
   }
 }

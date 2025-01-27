@@ -7,6 +7,6 @@ locals {
     AWS_REGION              = var.region
     APIG_EXECUTION_ROLE_ARN = aws_iam_role.api_gateway_execution_role.arn
     AUTHORIZE_LAMBDA_ARN    = module.proxy_lambda.function_arn
-    TOKEN_LAMBDA_ARN        = module.proxy_lambda.function_arn
+    TOKEN_LAMBDA_ARN        = module.pre_authentication_lambda.function_arn
   })
 }
