@@ -1,7 +1,8 @@
 import type { APIGatewayProxyHandler } from 'aws-lambda';
-import { differenceInSeconds } from 'date-fns';
+import { jwtDecode } from 'jwt-decode';
+import { differenceInSeconds } from 'date-fns/differenceInSeconds';
 import { logger } from './logger';
-import axios, { AxiosHeaderValue} from 'axios';
+import axios, { AxiosHeaderValue } from 'axios';
 
 const getEnvironmentVariables = () => {
   if (
@@ -24,17 +25,23 @@ const getEnvironmentVariables = () => {
 export const extractStringRecord = (
   object: Record<string, AxiosHeaderValue | undefined>
 ): Record<string, string> => {
-  const entries = Object.entries(object);
-
-  const stringEntries: [string, string][] = entries.flatMap(([key, value]) => {
-    if (!value) {
-      return [];
-    }
-
-    return [[key, value.toString()]];
-  });
+  const stringEntries = Object.entries(object).flatMap(([key, value]) => value ? [[key, value.toString()]] : []);
 
   return Object.fromEntries(stringEntries);
+};
+
+type Cis2TokenResponse = {
+  access_token: string;
+  id_token: string;
+  expires_in: number;
+  scope: string;
+  token_type: string;
+};
+
+type Cis2IdToken = {
+  auth_time: number;
+  authentication_assurance_level: number;
+  id_assurance_level: number;
 };
 
 export const handler: APIGatewayProxyHandler = async (event) => {
@@ -46,40 +53,38 @@ export const handler: APIGatewayProxyHandler = async (event) => {
 
   logger.info(event);
 
-  const response = await axios.post(tokenUrl, event.body, {
+  const cis2Response = await axios.post<Cis2TokenResponse>(tokenUrl, event.body, {
     headers: event.headers,
   });
 
-  logger.info(response);
+  const { status, headers, data } = cis2Response;
 
-  return {
-    statusCode: response.status,
-    headers: extractStringRecord(response.headers),
-    body: response.data,
+  const apiGatewayResponse = {
+    statusCode: status,
+    headers: extractStringRecord(headers),
+    body: JSON.stringify(data),
   };
 
-  /*
+  if (status !== 200) {
+    return apiGatewayResponse;
+  }
+
+  // Cognito will do some verification checks:
+  // - validate iss
+  // - validate aud
+  // - validate exp
+  // - verify signature
+  // but we need to do some additional checks here to comply with CIS2 requirements
+
+  const idToken = jwtDecode<Cis2IdToken>(data.id_token);
 
   logger.info({
     description: 'Starting validation checks',
     event,
   });
 
+  const { id_assurance_level: idAssuranceLevel, authentication_assurance_level: authenticationAssuranceLevel, auth_time: authTime } = idToken;
 
-  // only run these checks on cis2 users
-  if (!userName.startsWith('CIS2-')) {
-    logger.info({
-      description: 'Not running validation checks on non-CIS2 user',
-      event,
-    });
-    return event;
-  }
-
-  const {
-    'custom:id_assurance_level': idAssuranceLevel,
-    'custom:auth_assurance_level': authenticationAssuranceLevel,
-    'custom:auth_time': authTime,
-  } = event.request.userAttributes;
   const {
     expectedIdAssuranceLevel,
     expectedAuthenticationAssuranceLevel,
@@ -87,7 +92,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
   } = getEnvironmentVariables();
 
   if (
-    Number.parseInt(idAssuranceLevel, 10) <
+    idAssuranceLevel <
     Number.parseInt(expectedIdAssuranceLevel, 10)
   ) {
     logger.info({
@@ -96,11 +101,14 @@ export const handler: APIGatewayProxyHandler = async (event) => {
       expectedIdAssuranceLevel,
       event,
     });
-    throw new Error('User failed validation checks');
+    return {
+      statusCode: 403,
+      body: 'ID token failed validation'
+    }
   }
 
   if (
-    Number.parseInt(authenticationAssuranceLevel, 10) <
+    authenticationAssuranceLevel <
     Number.parseInt(expectedAuthenticationAssuranceLevel, 10)
   ) {
     logger.info({
@@ -109,13 +117,16 @@ export const handler: APIGatewayProxyHandler = async (event) => {
       expectedAuthenticationAssuranceLevel,
       event,
     });
-    throw new Error('User failed validation checks');
+    return {
+      statusCode: 403,
+      body: 'ID token failed validation'
+    }
   }
 
   const currentDateTime = Date.now();
   if (
     Math.abs(
-      differenceInSeconds(currentDateTime, Number.parseInt(authTime, 10) * 1000)
+      differenceInSeconds(currentDateTime, authTime * 1000)
     ) > Number.parseInt(maximumExpectedAuthTimeDivergenceSeconds, 10)
   ) {
     logger.info({
@@ -124,7 +135,10 @@ export const handler: APIGatewayProxyHandler = async (event) => {
       maximumExpectedAuthTimeDivergenceSeconds,
       event,
     });
-    throw new Error('User failed validation checks');
+    return {
+      statusCode: 403,
+      body: 'ID token failed validation'
+    }
   }
 
   logger.info({
@@ -132,5 +146,5 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     event,
   });
 
-  return event;*/
+  return apiGatewayResponse;
 };
