@@ -86,6 +86,7 @@
   "workspaces": [
     ".",
     "lambdas/pre-authentication",
-    "tests/test-team"
+    "tests/test-team",
+    "proxy"
   ]
 }

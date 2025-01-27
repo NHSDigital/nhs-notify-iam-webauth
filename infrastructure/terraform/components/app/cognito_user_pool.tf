@@ -78,8 +78,4 @@ resource "aws_cognito_user_pool" "main" {
       max_length = 2048
     }
   }
-
-  lambda_config {
-    pre_authentication = module.pre_authentication_lambda.function_arn
-  }
 }

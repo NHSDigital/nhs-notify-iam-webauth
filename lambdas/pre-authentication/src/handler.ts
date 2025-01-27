@@ -1,6 +1,7 @@
-import type { PreAuthenticationTriggerHandler } from 'aws-lambda';
+import type { APIGatewayProxyHandler } from 'aws-lambda';
 import { differenceInSeconds } from 'date-fns';
 import { logger } from './logger';
+import axios, { AxiosHeaderValue} from 'axios';
 
 const getEnvironmentVariables = () => {
   if (
@@ -20,13 +21,50 @@ const getEnvironmentVariables = () => {
   };
 };
 
-export const handler: PreAuthenticationTriggerHandler = async (event) => {
+export const extractStringRecord = (
+  object: Record<string, AxiosHeaderValue | undefined>
+): Record<string, string> => {
+  const entries = Object.entries(object);
+
+  const stringEntries: [string, string][] = entries.flatMap(([key, value]) => {
+    if (!value) {
+      return [];
+    }
+
+    return [[key, value.toString()]];
+  });
+
+  return Object.fromEntries(stringEntries);
+};
+
+export const handler: APIGatewayProxyHandler = async (event) => {
+  const tokenUrl = `${process.env.CIS2_URL}/authorize`;
+
+  if (!event.body) {
+    throw new Error('Missing event body');
+  }
+
+  logger.info(event);
+
+  const response = await axios.post(tokenUrl, event.body, {
+    headers: event.headers,
+  });
+
+  logger.info(response);
+
+  return {
+    statusCode: response.status,
+    headers: extractStringRecord(response.headers),
+    body: response.data,
+  };
+
+  /*
+
   logger.info({
     description: 'Starting validation checks',
     event,
   });
 
-  const { userName } = event;
 
   // only run these checks on cis2 users
   if (!userName.startsWith('CIS2-')) {
@@ -94,5 +132,5 @@ export const handler: PreAuthenticationTriggerHandler = async (event) => {
     event,
   });
 
-  return event;
+  return event;*/
 };

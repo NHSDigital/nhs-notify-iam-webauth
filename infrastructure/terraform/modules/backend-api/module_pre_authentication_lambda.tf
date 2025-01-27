@@ -16,14 +16,6 @@ module "pre_authentication_lambda" {
     EXPECTED_ID_ASSURANCE_LEVEL                   = "3"
     EXPECTED_AUTHENTICATION_ASSURANCE_LEVEL       = "2"
     MAXIMUM_EXPECTED_AUTH_TIME_DIVERGENCE_SECONDS = "60"
+    CIS2_URL                                      = var.cis2_url
   }
-}
-
-resource "aws_lambda_permission" "cognito" {
-  action        = "lambda:InvokeFunction"
-  function_name = module.pre_authentication_lambda.function_name
-  principal     = "cognito-idp.amazonaws.com"
-  source_arn    = aws_cognito_user_pool.main.arn
-
-  statement_id = "cognito-permission"
 }
