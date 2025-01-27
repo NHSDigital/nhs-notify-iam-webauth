@@ -1,10 +1,10 @@
 import winston from 'winston';
 
-const { combine, timestamp, json } = winston.format;
+const { combine, timestamp, json, errors } = winston.format;
 
 const logger = winston.createLogger({
   level: 'info',
-  format: combine(timestamp(), json()),
+  format: combine(errors({ stack: true }), timestamp(), json()),
   transports: [
     new winston.transports.Stream({
       stream: process.stdout,
