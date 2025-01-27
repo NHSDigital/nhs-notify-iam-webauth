@@ -4,7 +4,6 @@ const allowedOrigins = [domain, domain.replace('iam', 'web-gateway')];
 
 module.exports = {
   basePath,
-  reactStrictMode: false,
 
   experimental: {
     serverActions: {

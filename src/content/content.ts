@@ -10,7 +10,10 @@ const footerComponent = {
   nhsEngland: 'NHS England',
   supportLinks: 'Support links',
   links: {
-    accessibilityStatement: 'Accessibility statement',
+    accessibilityStatement: {
+      text: 'Accessibility statement',
+      url: '/accessibility',
+    },
     contactUs: 'Contact us',
     cookies: 'Cookies',
     privacyPolicy: 'Privacy policy',

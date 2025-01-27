@@ -14,6 +14,5 @@ export const Redirect = () => {
   }
 
   const redirectPath = path.normalize(`/redirect/${requestDirectPath}`);
-
   return redirect(redirectPath, RedirectType.push);
 };

@@ -3,95 +3,60 @@
 import React, { Suspense, useEffect, useState } from 'react';
 import { withAuthenticator } from '@aws-amplify/ui-react';
 import { Redirect } from '@/src/components/molecules/Redirect/Redirect';
-import fetchIntercept from 'fetch-intercept';
-import { basicCredentialsInterceptor } from '@/src/utils/basic-auth/basic-credentials-interceptor';
-import { Button } from 'nhsuk-react-components';
 import { redirect, RedirectType, useSearchParams } from 'next/navigation';
-import {
-  cis2Login,
-  stateParser,
-  storeTokens,
-} from '@/src/utils/cis2/cis2-login';
-import {
-  getCurrentUser,
-  GetCurrentUserOutput,
-} from '@aws-amplify/auth/cognito';
-import { Amplify } from 'aws-amplify';
-import { defaultStorage } from 'aws-amplify/utils';
-import { getAuthTokens } from '@/src/utils/cis2/cis2-token-retriever';
+import { federatedSignIn, State } from '@/src/utils/federated-sign-in';
+import { CIS2LoginButton } from '@/src/components/CIS2LoginButton/CIS2LoginButton';
+import { Hub } from 'aws-amplify/utils';
 
-fetchIntercept.register(basicCredentialsInterceptor);
+const AuthenticatorWrapper = () => {
+  const searchParams = useSearchParams();
+  const redirectPath = searchParams.get('redirect');
 
-const clientId = Amplify.getConfig().Auth?.Cognito.userPoolClientId;
-const OAUTH_PKCE_KEY = `CognitoIdentityServiceProvider.${clientId}.oauthPKCE`;
-
-const AuthenticatorWrapper = ({ redirectPath }: { redirectPath: string }) => {
   return withAuthenticator(Redirect, {
     variation: 'default',
     hideSignUp: true,
     components: {
       SignIn: {
         Header: () => (
-          <Button onClick={() => cis2Login(redirectPath)}>CIS2</Button>
+          <h1
+            style={{
+              marginTop: '2.0rem',
+              marginBottom: 0,
+              marginLeft: '2.0rem',
+            }}
+          >
+            <CIS2LoginButton
+              onClick={() => federatedSignIn(redirectPath || '/home')}
+            />
+          </h1>
         ),
       },
     },
   })({});
 };
 
-fetchIntercept.register(basicCredentialsInterceptor);
+export default function Page() {
+  const [customState, setCustomState] = useState<State>();
 
-function Page() {
-  const [postLoginState, setPostLoginState] = useState('');
-  const [user, setUser] = useState<GetCurrentUserOutput | undefined>();
-
-  useEffect(() => {
-    getCurrentUser()
-      .then(setUser)
-      .catch(() => {});
-  }, [user]);
-
-  const searchParams = useSearchParams();
-  const redirectPath = searchParams.get('redirect');
-  const code = searchParams.get('code');
-  const stateQueryParameter = searchParams.get('state');
-
-  if (!redirectPath && postLoginState) {
-    const parsedState = stateParser(postLoginState);
-    if (parsedState) {
-      redirect(
-        `?redirect=${encodeURIComponent(parsedState.redirectPath)}`,
-        RedirectType.replace
-      );
-    }
+  if (customState) {
+    redirect(
+      `?redirect=${encodeURIComponent(customState.redirectPath || '/home')}`,
+      RedirectType.replace
+    );
   }
 
   useEffect(() => {
-    if (!code || postLoginState) {
-      return;
-    }
-
-    defaultStorage
-      .getItem(OAUTH_PKCE_KEY)
-      .then((codeVerifier) => getAuthTokens(code, codeVerifier || ''))
-      .then((authTokens) => storeTokens(authTokens))
-      .then((stored) => {
-        if (stored) {
-          return defaultStorage
-            .removeItem(OAUTH_PKCE_KEY)
-            .then(() => setPostLoginState(stateQueryParameter || ''));
-        }
-      });
-  }, [code]);
+    return Hub.listen('auth', ({ payload }) => {
+      if (payload.event === 'customOAuthState') {
+        setCustomState(JSON.parse(payload.data));
+      }
+    });
+  }, []);
 
   return (
-    <>
-      {user && redirectPath ? (
-        <Redirect />
-      ) : (
-        <AuthenticatorWrapper redirectPath={redirectPath || ''} />
-      )}
-    </>
+    <Suspense>
+      <AuthenticatorWrapper />
+    </Suspense>
   );
 }
 
