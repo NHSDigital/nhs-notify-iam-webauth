@@ -59,11 +59,3 @@ export default function Page() {
     </Suspense>
   );
 }
-
-const WrappedPage = () => (
-  <Suspense>
-    <Page />
-  </Suspense>
-);
-
-export default WrappedPage;
