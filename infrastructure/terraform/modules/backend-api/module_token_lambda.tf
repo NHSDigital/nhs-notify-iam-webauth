@@ -1,12 +1,12 @@
-module "pre_authentication_lambda" {
+module "token_lambda" {
   source      = "../lambda-function"
-  description = "Pre authentication lambda trigger"
+  description = "CIS2 token lambda"
 
-  function_name    = "${local.csi}-pre-authentication"
-  filename         = module.build_pre_authentication_lambda.zips["src/handler.ts"].path
-  source_code_hash = module.build_pre_authentication_lambda.zips["src/handler.ts"].base64sha256
+  function_name    = "${local.csi}-proxy"
+  filename         = module.build_cis2_lambdas.zips["src/token-handler.ts"].path
+  source_code_hash = module.build_cis2_lambdas.zips["src/token-handler.ts"].base64sha256
   runtime          = "nodejs20.x"
-  handler          = "handler.handler"
+  handler          = "token-handler.handler"
 
   log_retention_in_days = var.log_retention_in_days
 

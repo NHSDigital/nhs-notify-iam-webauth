@@ -1,8 +1,9 @@
 import type { APIGatewayProxyHandler } from 'aws-lambda';
 import { jwtDecode } from 'jwt-decode';
 import { differenceInSeconds } from 'date-fns/differenceInSeconds';
-import { logger } from './logger';
-import axios, { AxiosHeaderValue } from 'axios';
+import axios from 'axios';
+import { logger } from './utils/logger';
+import { extractStringRecord } from './utils/extract-string-record';
 
 const getEnvironmentVariables = () => {
   if (
@@ -22,14 +23,6 @@ const getEnvironmentVariables = () => {
   };
 };
 
-export const extractStringRecord = (
-  object: Record<string, AxiosHeaderValue | undefined>
-): Record<string, string> => {
-  const stringEntries = Object.entries(object).flatMap(([key, value]) => value ? [[key, value.toString()]] : []);
-
-  return Object.fromEntries(stringEntries);
-};
-
 type Cis2TokenResponse = {
   access_token: string;
   id_token: string;
@@ -38,24 +31,39 @@ type Cis2TokenResponse = {
   token_type: string;
 };
 
-type Cis2IdToken = {
+export type Cis2IdToken = {
   auth_time: number;
   authentication_assurance_level: number;
   id_assurance_level: number;
 };
 
+export const validateStatus = () => true;
+
 export const handler: APIGatewayProxyHandler = async (event) => {
+  const {
+    expectedIdAssuranceLevel,
+    expectedAuthenticationAssuranceLevel,
+    maximumExpectedAuthTimeDivergenceSeconds,
+  } = getEnvironmentVariables();
+
   const tokenUrl = `${process.env.CIS2_URL}/access_token`;
 
   if (!event.body) {
-    throw new Error('Missing event body');
+    return {
+      statusCode: 400,
+      body: 'Missing event body',
+    };
   }
 
   logger.info(event);
 
-  const cis2Response = await axios.post<Cis2TokenResponse>(tokenUrl, event.body, {
-    headers: event.headers,
-  });
+  const cis2Response = await axios.post<Cis2TokenResponse>(
+    tokenUrl,
+    event.body,
+    {
+      validateStatus,
+    }
+  );
 
   const { status, headers, data } = cis2Response;
 
@@ -83,18 +91,13 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     event,
   });
 
-  const { id_assurance_level: idAssuranceLevel, authentication_assurance_level: authenticationAssuranceLevel, auth_time: authTime } = idToken;
-
   const {
-    expectedIdAssuranceLevel,
-    expectedAuthenticationAssuranceLevel,
-    maximumExpectedAuthTimeDivergenceSeconds,
-  } = getEnvironmentVariables();
+    id_assurance_level: idAssuranceLevel,
+    authentication_assurance_level: authenticationAssuranceLevel,
+    auth_time: authTime,
+  } = idToken;
 
-  if (
-    idAssuranceLevel <
-    Number.parseInt(expectedIdAssuranceLevel, 10)
-  ) {
+  if (idAssuranceLevel < Number.parseInt(expectedIdAssuranceLevel, 10)) {
     logger.info({
       description:
         'User attempted to log in with insufficient id_assurance_level',
@@ -103,8 +106,8 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     });
     return {
       statusCode: 403,
-      body: 'ID token failed validation'
-    }
+      body: 'ID token failed validation',
+    };
   }
 
   if (
@@ -119,15 +122,14 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     });
     return {
       statusCode: 403,
-      body: 'ID token failed validation'
-    }
+      body: 'ID token failed validation',
+    };
   }
 
   const currentDateTime = Date.now();
   if (
-    Math.abs(
-      differenceInSeconds(currentDateTime, authTime * 1000)
-    ) > Number.parseInt(maximumExpectedAuthTimeDivergenceSeconds, 10)
+    Math.abs(differenceInSeconds(currentDateTime, authTime * 1000)) >
+    Number.parseInt(maximumExpectedAuthTimeDivergenceSeconds, 10)
   ) {
     logger.info({
       description:
@@ -137,8 +139,8 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     });
     return {
       statusCode: 403,
-      body: 'ID token failed validation'
-    }
+      body: 'ID token failed validation',
+    };
   }
 
   logger.info({

@@ -1,20 +1,5 @@
 import type { APIGatewayProxyHandler } from 'aws-lambda';
-
-export const extractStringRecord = (
-  object: Record<string, string | undefined>
-): Record<string, string> => {
-  const entries = Object.entries(object);
-
-  const stringEntries: [string, string][] = entries.flatMap(([key, value]) => {
-    if (!value) {
-      return [];
-    }
-
-    return [[key, value]];
-  });
-
-  return Object.fromEntries(stringEntries);
-};
+import { extractStringRecord } from './utils/extract-string-record';
 
 export const handler: APIGatewayProxyHandler = async (event) => {
   const originalUrl = `${process.env.CIS2_URL}/authorize`;

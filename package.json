@@ -49,11 +49,12 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "@typescript-eslint/eslint-plugin": "^8.8.1",
+    "@typescript-eslint/eslint-plugin": "^8.22.0",
+    "@typescript-eslint/parser": "^8.22.0",
     "eslint": "^8",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-config-next": "14.2.5",
+    "eslint-config-next": "15.1.6",
     "eslint-config-prettier": "^9.1.0",
     "eslint-import-resolver-typescript": "^3.6.3",
     "eslint-plugin-html": "^8.1.1",
@@ -86,8 +87,6 @@
   },
   "workspaces": [
     ".",
-    "lambdas/pre-authentication",
-    "tests/test-team",
-    "proxy"
+    "lambdas/cis2-api"
   ]
 }
