@@ -2,7 +2,7 @@ module "authorize_lambda" {
   source      = "../lambda-function"
   description = "CIS2 authorize lambda"
 
-  function_name    = "${local.csi}-pre-authentication"
+  function_name    = "${local.csi}-authorize"
   filename         = module.build_cis2_lambdas.zips["src/authorize-handler.ts"].path
   source_code_hash = module.build_cis2_lambdas.zips["src/authorize-handler.ts"].base64sha256
   runtime          = "nodejs20.x"

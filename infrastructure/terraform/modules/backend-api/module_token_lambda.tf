@@ -2,7 +2,7 @@ module "token_lambda" {
   source      = "../lambda-function"
   description = "CIS2 token lambda"
 
-  function_name    = "${local.csi}-proxy"
+  function_name    = "${local.csi}-token"
   filename         = module.build_cis2_lambdas.zips["src/token-handler.ts"].path
   source_code_hash = module.build_cis2_lambdas.zips["src/token-handler.ts"].base64sha256
   runtime          = "nodejs20.x"
