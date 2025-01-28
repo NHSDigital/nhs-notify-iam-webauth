@@ -9,15 +9,15 @@ type AmplifyOutput = {
 };
 
 export class AmplifyConfigurationHelper {
-  private readonly _configuration: AmplifyOutput;
+  private readonly configuration: AmplifyOutput;
 
   constructor() {
-    this._configuration = JSON.parse(
+    this.configuration = JSON.parse(
       fs.readFileSync('../../amplify_outputs.json', 'utf8')
     );
   }
 
   getUserPoolId() {
-    return this._configuration.auth.user_pool_id;
+    return this.configuration.auth.user_pool_id;
   }
 }

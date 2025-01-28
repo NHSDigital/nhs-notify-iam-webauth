@@ -10,6 +10,10 @@ resource "aws_cognito_identity_provider" "cis2_idp" {
     client_id                 = aws_ssm_parameter.cis2_client_credentials_client_id.value
     client_secret             = aws_ssm_parameter.cis2_client_credentials_client_secret.value
     oidc_issuer               = local.cis2_issuer_urls[var.cis2_environment]
+    attributes_url            = "${local.cis2_issuer_urls[var.cis2_environment]}/userinfo"
+    authorize_url             = "${module.backend_api.api_base_url}/v1/cis2-authorize"
+    token_url                 = "${module.backend_api.api_base_url}/v1/cis2-token"
+    jwks_uri                  = "${local.cis2_issuer_urls[var.cis2_environment]}/connect/jwk_uri"
     attributes_request_method = "GET"
   }
 
