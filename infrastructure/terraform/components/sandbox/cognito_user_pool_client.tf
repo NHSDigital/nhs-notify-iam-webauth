@@ -25,5 +25,5 @@ resource "aws_cognito_user_pool_client" "main" {
     "ALLOW_USER_SRP_AUTH"
   ]
 
-  generate_secret = true
+  generate_secret = false
 }
