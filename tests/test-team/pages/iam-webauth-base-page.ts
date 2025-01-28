@@ -2,8 +2,11 @@ import { Locator, type Page } from '@playwright/test';
 
 export abstract class IamWebAuthBasePage {
   public readonly page: Page;
+
   public readonly pageHeader: Locator;
+
   public readonly loginLink: Locator;
+
   public readonly logoutLink: Locator;
 
   constructor(page: Page) {

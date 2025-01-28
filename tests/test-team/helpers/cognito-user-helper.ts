@@ -11,10 +11,10 @@ export type User = {
 };
 
 export class CognitoUserHelper {
-  private readonly _client: CognitoIdentityProviderClient;
+  private readonly client: CognitoIdentityProviderClient;
 
   constructor() {
-    this._client = new CognitoIdentityProviderClient({
+    this.client = new CognitoIdentityProviderClient({
       region: 'eu-west-2',
     });
   }
@@ -23,7 +23,7 @@ export class CognitoUserHelper {
     // Note: we use a unique prefix to that we don't interfere with other users.
     const email = `${process.env.USER_EMAIL_PREFIX}-${username}@nhs.net`;
 
-    const user = await this._client.send(
+    const user = await this.client.send(
       new AdminCreateUserCommand({
         UserPoolId: process.env.AWS_COGNITO_USER_POOL_ID,
         Username: email,
@@ -54,14 +54,14 @@ export class CognitoUserHelper {
 
   async deleteUser(username: string) {
     // Note: we must disable the user first before we can delete them
-    await this._client.send(
+    await this.client.send(
       new AdminDisableUserCommand({
         UserPoolId: process.env.AWS_COGNITO_USER_POOL_ID,
         Username: username,
       })
     );
 
-    await this._client.send(
+    await this.client.send(
       new AdminDeleteUserCommand({
         UserPoolId: process.env.AWS_COGNITO_USER_POOL_ID,
         Username: username,
