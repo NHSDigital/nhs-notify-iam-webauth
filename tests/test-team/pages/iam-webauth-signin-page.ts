@@ -17,7 +17,7 @@ export class IamWebAuthSignInPage extends IamWebAuthBasePage {
     this.emailInput = page.locator('input[name="username"]');
     this.passwordInput = page.locator('input[name="password"]');
     this.confirmPasswordInput = page.locator('input[name="confirm_password"]');
-    this.submitButton = page.locator('button[type="submit"]');
+    this.submitButton = page.getByText('Sign in');
     this.errorMessage = page.locator('.amplify-alert__body');
   }
 
