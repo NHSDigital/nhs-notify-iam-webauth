@@ -86,6 +86,7 @@
   },
   "workspaces": [
     ".",
-    "lambdas/cis2-api"
+    "lambdas/cis2-api",
+    "tests/test-team"
   ]
 }
