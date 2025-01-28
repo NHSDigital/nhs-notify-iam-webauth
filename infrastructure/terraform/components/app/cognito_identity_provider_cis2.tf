@@ -27,8 +27,5 @@ resource "aws_cognito_identity_provider" "cis2_idp" {
     "custom:idassurancelevel"     = "idassurancelevel"
     "custom:nhsid_user_orgs"      = "nhsid_user_orgs"
     "custom:nhsid_useruid"        = "nhsid_useruid"
-    "custom:id_assurance_level"   = "id_assurance_level"
-    "custom:auth_assurance_level" = "authentication_assurance_level"
-    "custom:auth_time"            = "auth_time"
   }
 }
