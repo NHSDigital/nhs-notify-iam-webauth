@@ -6,6 +6,10 @@ resource "aws_cognito_user_pool_client" "main" {
     "http://localhost:3000/auth/"
   ]
 
+  logout_urls = [
+    "http://localhost:3000/auth/"
+  ]
+
   allowed_oauth_flows_user_pool_client = true
   allowed_oauth_flows                  = ["code"]
   allowed_oauth_scopes = [
