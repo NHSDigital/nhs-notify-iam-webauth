@@ -20,7 +20,9 @@ export class IamWebAuthSignInPage extends IamWebAuthBasePage {
     this.passwordInput = page.locator('input[name="password"]');
     this.confirmPasswordInput = page.locator('input[name="confirm_password"]');
     this.submitButton = page.getByRole('button', { name: 'Sign in' });
-    this.changePasswordButton = page.getByRole('button', { name: 'Change Password' });
+    this.changePasswordButton = page.getByRole('button', {
+      name: 'Change Password',
+    });
     this.errorMessage = page.locator('.amplify-alert__body');
   }
 
@@ -36,7 +38,6 @@ export class IamWebAuthSignInPage extends IamWebAuthBasePage {
   }
 
   async cognitoUpdateUserPassword() {
-
     await this.confirmPasswordInput.fill(process.env.USER_PASSWORD);
 
     await this.passwordInput.fill(process.env.USER_PASSWORD);
