@@ -55,8 +55,6 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     };
   }
 
-  logger.info(event);
-
   const cis2Response = await axios.post<Cis2TokenResponse>(
     tokenUrl,
     event.body,

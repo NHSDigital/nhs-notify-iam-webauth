@@ -6,18 +6,6 @@ output "cognito_user_pool" {
   }
 }
 
-output "cognito_domain" {
-  value = {
-    domain = local.use_custom_cognito_domain ? aws_cognito_user_pool_domain.custom[0].domain : aws_cognito_user_pool_domain.main.domain
-  }
-}
-
-output "auth_gateway_name" {
-  value = {
-    name = local.auth_gateway_name
-  }
-}
-
 output "cognito_user_pool_client" {
   value = {
     id = aws_cognito_user_pool_client.main.id
