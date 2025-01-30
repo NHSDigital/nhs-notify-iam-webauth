@@ -48,11 +48,12 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "@typescript-eslint/eslint-plugin": "^8.8.1",
+    "@typescript-eslint/eslint-plugin": "^8.22.0",
+    "@typescript-eslint/parser": "^8.22.0",
     "eslint": "^8",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-config-next": "14.2.5",
+    "eslint-config-next": "15.1.6",
     "eslint-config-prettier": "^9.1.0",
     "eslint-import-resolver-typescript": "^3.6.3",
     "eslint-plugin-html": "^8.1.1",
@@ -76,12 +77,16 @@
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
     "typescript": "^5",
-    "wait-on": "^7.2.0",
-    "nhs-notify-iam-webauth-ui-tests": "file:tests/test-team"
+    "wait-on": "^7.2.0"
   },
   "overrides": {
     "pa11y-ci": {
       "pa11y": "^8.0.0"
     }
-  }
+  },
+  "workspaces": [
+    ".",
+    "lambdas/cis2-api",
+    "tests/test-team"
+  ]
 }

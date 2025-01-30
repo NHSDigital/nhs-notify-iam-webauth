@@ -3,13 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "lint": "eslint .",
     "test:start-local-app": "npm run build --prefix ../../ && npm run start --prefix ../../",
     "test:local-ui": "playwright test --project component -c config/local.config.ts",
-    "test:story": "echo 'Not implemented'"
+    "test:story": "echo 'Not implemented'",
+    "test:unit": "echo 'unit tests not required'"
   },
   "devDependencies": {
     "@aws-sdk/client-cognito-identity-provider": "^3.691.0",
     "@playwright/test": "^1.46.0",
+    "@types/uuid": "^10.0.0",
     "generate-password": "^1.7.1"
   }
 }

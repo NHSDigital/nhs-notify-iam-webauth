@@ -2,4 +2,4 @@
 
 set -euo pipefail
 
-npm run lint
+npm run lint --workspaces
