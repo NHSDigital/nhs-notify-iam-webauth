@@ -3,9 +3,15 @@ import { IamWebAuthBasePage } from './iam-webauth-base-page';
 
 export class IamWebAuthSignInPage extends IamWebAuthBasePage {
   public readonly emailInput: Locator;
+
   public readonly passwordInput: Locator;
+
   public readonly confirmPasswordInput: Locator;
+
   public readonly submitButton: Locator;
+
+  public readonly changePasswordButton: Locator;
+
   public readonly errorMessage: Locator;
 
   constructor(page: Page) {
@@ -13,7 +19,10 @@ export class IamWebAuthSignInPage extends IamWebAuthBasePage {
     this.emailInput = page.locator('input[name="username"]');
     this.passwordInput = page.locator('input[name="password"]');
     this.confirmPasswordInput = page.locator('input[name="confirm_password"]');
-    this.submitButton = page.locator('button[type="submit"]');
+    this.submitButton = page.getByRole('button', { name: 'Sign in' });
+    this.changePasswordButton = page.getByRole('button', {
+      name: 'Change Password',
+    });
     this.errorMessage = page.locator('.amplify-alert__body');
   }
 
@@ -29,11 +38,11 @@ export class IamWebAuthSignInPage extends IamWebAuthBasePage {
   }
 
   async cognitoUpdateUserPassword() {
-    await this.passwordInput.fill(process.env.USER_PASSWORD);
-
     await this.confirmPasswordInput.fill(process.env.USER_PASSWORD);
 
-    await this.clickSubmitButton();
+    await this.passwordInput.fill(process.env.USER_PASSWORD);
+
+    await this.changePasswordButton.click();
   }
 
   async clickSubmitButton() {
