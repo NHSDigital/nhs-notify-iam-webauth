@@ -1,4 +1,6 @@
 resource "aws_cognito_user_pool_client" "main" {
+  depends_on = [aws_cognito_identity_provider.cis2_idp]
+
   name         = local.csi
   user_pool_id = aws_cognito_user_pool.main.id
 
@@ -25,7 +27,7 @@ resource "aws_cognito_user_pool_client" "main" {
     "profile",
     "aws.cognito.signin.user.admin"
   ]
-  generate_secret = true
+  generate_secret = false
 
   access_token_validity  = 1
   id_token_validity      = 1

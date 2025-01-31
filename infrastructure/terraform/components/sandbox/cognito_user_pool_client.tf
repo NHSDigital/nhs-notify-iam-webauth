@@ -21,6 +21,8 @@ resource "aws_cognito_user_pool_client" "main" {
     "ALLOW_USER_SRP_AUTH"
   ]
 
+  generate_secret = false
+
   access_token_validity  = 15
   id_token_validity      = 15
   refresh_token_validity = 1

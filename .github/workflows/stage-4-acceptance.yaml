@@ -1,178 +1,67 @@
-name: "Acceptance stage"
+name: Acceptance stage
 
 on:
   workflow_call:
-    inputs:
-      build_datetime:
-        description: "Build datetime, set by the CI/CD pipeline workflow"
-        required: true
-        type: string
-      build_timestamp:
-        description: "Build timestamp, set by the CI/CD pipeline workflow"
-        required: true
-        type: string
-      build_epoch:
-        description: "Build epoch, set by the CI/CD pipeline workflow"
-        required: true
-        type: string
-      nodejs_version:
-        description: "Node.js version, set by the CI/CD pipeline workflow"
-        required: true
-        type: string
-      python_version:
-        description: "Python version, set by the CI/CD pipeline workflow"
-        required: true
-        type: string
-      terraform_version:
-        description: "Terraform version, set by the CI/CD pipeline workflow"
-        required: true
-        type: string
-      version:
-        description: "Version of the software, set by the CI/CD pipeline workflow"
-        required: true
-        type: string
 
 jobs:
-  environment-set-up:
-    name: "Environment set up"
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - name: "Checkout code"
-        uses: actions/checkout@v4
-      - name: "Create infractructure"
-        run: |
-          echo "Creating infractructure..."
-      - name: "Update database"
-        run: |
-          echo "Updating database..."
-      - name: "Deploy application"
-        run: |
-          echo "Deploying application..."
-  test-contract:
-    name: "Contract test"
-    runs-on: ubuntu-latest
-    needs: environment-set-up
-    timeout-minutes: 10
-    steps:
-      - name: "Checkout code"
-        uses: actions/checkout@v4
-      - name: "Run contract test"
-        run: |
-          make test-contract
-      - name: "Save result"
-        run: |
-          echo "Nothing to save"
-  test-security:
-    name: "Security test"
-    runs-on: ubuntu-latest
-    needs: environment-set-up
-    timeout-minutes: 10
-    steps:
-      - name: "Checkout code"
-        uses: actions/checkout@v4
-      - name: "Run security test"
-        run: |
-          make test-security
-      - name: "Save result"
-        run: |
-          echo "Nothing to save"
-  test-ui:
-    name: "UI test"
-    runs-on: ubuntu-latest
-    needs: environment-set-up
-    timeout-minutes: 10
-    steps:
-      - name: "Checkout code"
-        uses: actions/checkout@v4
-      - name: "Run UI test"
-        run: |
-          make test-ui
-      - name: "Save result"
-        run: |
-          echo "Nothing to save"
-  test-ui-performance:
-    name: "UI performance test"
-    runs-on: ubuntu-latest
-    needs: environment-set-up
-    timeout-minutes: 10
-    steps:
-      - name: "Checkout code"
-        uses: actions/checkout@v4
-      - name: "Run UI performance test"
-        run: |
-          make test-ui-performance
-      - name: "Save result"
-        run: |
-          echo "Nothing to save"
-  test-integration:
-    name: "Integration test"
-    runs-on: ubuntu-latest
-    needs: environment-set-up
-    timeout-minutes: 10
-    steps:
-      - name: "Checkout code"
-        uses: actions/checkout@v4
-      - name: "Run integration test"
-        run: |
-          make test-integration
-      - name: "Save result"
-        run: |
-          echo "Nothing to save"
-  test-accessibility:
-    name: "Accessibility test"
-    runs-on: ubuntu-latest
-    needs: environment-set-up
-    timeout-minutes: 10
-    steps:
-      - name: "Checkout code"
-        uses: actions/checkout@v4
-      - name: "Repo setup"
-        run: |
-          npm ci
-      - name: "Run accessibility test"
-        run: |
-          make test-accessibility
-      - name: "Save result"
-        run: |
-          echo "Nothing to save"
-      - name: Archive accessibility results
-        uses: actions/upload-artifact@v4
-        with:
-          name: accessibility
-          path: ".reports/accessibility"
-  test-load:
-    name: "Load test"
-    runs-on: ubuntu-latest
-    needs: environment-set-up
-    timeout-minutes: 10
-    steps:
-      - name: "Checkout code"
-        uses: actions/checkout@v4
-      - name: "Run load tests"
-        run: |
-          make test-load
-      - name: "Save result"
-        run: |
-          echo "Nothing to save"
-  environment-tear-down:
-    name: "Environment tear down"
-    runs-on: ubuntu-latest
-    needs:
-      [
-        test-accessibility,
-        test-contract,
-        test-integration,
-        test-load,
-        test-security,
-        test-ui-performance,
-        test-ui,
-      ]
+  sandbox-set-up:
+    name: Step 1
+
+    permissions:
+      id-token: write
+      contents: read
+
+    uses: ./.github/workflows/dispatch_internal_repo_workflow.yaml
+    secrets: inherit
+    with:
+      jobName: Sandbox set up
+      infraRepoName: nhs-notify-iam-webauth
+      releaseVersion: ${{ github.head_ref || github.ref_name }}
+      targetWorkflow: dispatch-deploy-dynamic-env.yaml
+      targetEnvironment: pr${{ github.event.number }}
+      targetAccountGroup: nhs-notify-iam-dev
+      targetComponent: sandbox
+      terraformAction: apply
+
+  acceptance-tests:
+    name: Step 2
+    needs: sandbox-set-up
+
+    permissions:
+      id-token: write
+      contents: read
+
+    # Calls out to the nhs-notify-internal repo.
+    # The nhs-notify-internal repo will run the tests
+    # setup in ./.github/actions/acceptance-tests/action.yaml
+    uses: ./.github/workflows/dispatch_internal_repo_workflow.yaml
+    secrets: inherit
+    with:
+      jobName: Acceptance tests
+      infraRepoName: nhs-notify-iam-webauth
+      releaseVersion: ${{ github.head_ref || github.ref_name }}
+      targetWorkflow: dispatch-acceptance-tests-dynamic-env.yaml
+      targetEnvironment: pr${{ github.event.number }}
+      targetAccountGroup: nhs-notify-iam-dev
+      targetComponent: sandbox
+
+  sandbox-tear-down:
+    name: Step 3
+    needs: acceptance-tests
     if: always()
-    timeout-minutes: 5
-    steps:
-      - name: "Checkout code"
-        uses: actions/checkout@v4
-      - name: "Tear down environment"
-        run: |
-          echo "Tearing down environment..."
+
+    permissions:
+      id-token: write
+      contents: read
+
+    uses: ./.github/workflows/dispatch_internal_repo_workflow.yaml
+    secrets: inherit
+    with:
+      jobName: Sandbox tear down
+      infraRepoName: nhs-notify-iam-webauth
+      releaseVersion: ${{ github.head_ref || github.ref_name }}
+      targetWorkflow: dispatch-deploy-dynamic-env.yaml
+      targetEnvironment: pr${{ github.event.number }}
+      targetAccountGroup: nhs-notify-iam-dev
+      targetComponent: sandbox
+      terraformAction: destroy
