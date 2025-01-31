@@ -68,6 +68,7 @@ const config: Config = {
     'fixture',
     'helpers.ts',
     '/tests/',
+    'lambdas',
   ],
 
   // Set the absolute path for imports

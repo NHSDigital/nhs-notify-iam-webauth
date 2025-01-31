@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import concatClassNames from '@/src/utils/concat-class-names';
 import content from '@/src/content/content';
 import styles from './Header.module.scss';
@@ -13,7 +14,7 @@ export function NHSNotifyHeader({ className, dataTestId }: HeaderType) {
     >
       <div className='nhsuk-header__container'>
         <div className='nhsuk-header__logo'>
-          <a
+          <Link
             className='nhsuk-header__link nhsuk-header__link--service'
             href='/'
             aria-label='NHS homepage'
@@ -40,7 +41,7 @@ export function NHSNotifyHeader({ className, dataTestId }: HeaderType) {
             <span className='nhsuk-header__service-name'>
               {content.components.headerComponent.serviceName}
             </span>
-          </a>
+          </Link>
         </div>
         <div
           className={concatClassNames(
