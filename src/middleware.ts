@@ -1,12 +1,34 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+function getContentSecurityPolicy(nonce: string) {
+  const contentSecurityPolicyDirective = {
+    'base-uri': [`'self'`],
+    'default-src': [`'none'`],
+    'frame-ancestors': [`'none'`],
+    'font-src': [`'self'`, 'https://assets.nhs.uk'],
+    'form-action': [`'self'`],
+    'frame-src': [`'self'`],
+    'connect-src': [`'self'`, 'https://cognito-idp.eu-west-2.amazonaws.com'],
+    'img-src': [`'self'`],
+    'manifest-src': [`'self'`],
+    'object-src': [`'none'`],
+    'script-src': [`'nonce-${nonce}'`, `'strict-dynamic'`],
+    'style-src': [`'self'`],
+  };
+
+  if (process.env.NODE_ENV === 'development') {
+    contentSecurityPolicyDirective['script-src'].push(`'unsafe-eval'`);
+  }
+
+  return Object.entries(contentSecurityPolicyDirective)
+    .map(([key, value]) => `${key} ${value.join(' ')}`)
+    .join('; ');
+}
+
 export function middleware(request: NextRequest) {
   const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
 
-  const cspUnsafeEval =
-    process.env.NODE_ENV === 'production' ? '' : `http: 'unsafe-eval'`;
-
-  const csp = `base-uri 'self'; form-action 'self'; frame-ancestors 'none'; default-src 'none'; connect-src 'self' https://cognito-idp.eu-west-2.amazonaws.com; font-src 'self' https://assets.nhs.uk; img-src 'self'; script-src 'self' 'nonce-${nonce}' ${cspUnsafeEval}; style-src 'self' 'nonce-${nonce}'; upgrade-insecure-requests;`;
+  const csp = getContentSecurityPolicy(nonce);
 
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set('x-nonce', nonce);
@@ -27,17 +49,12 @@ export const config = {
   matcher: [
     /*
      * Match all request paths except for the ones starting with:
-     * - api (API routes)
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      */
     {
-      source: '/((?!api|_next/static|_next/image|favicon.ico).*)',
-      missing: [
-        { type: 'header', key: 'next-router-prefetch' },
-        { type: 'header', key: 'purpose', value: 'prefetch' },
-      ],
+      source: '/((?!_next/static|_next/image|favicon.ico).*)',
     },
   ],
 };
