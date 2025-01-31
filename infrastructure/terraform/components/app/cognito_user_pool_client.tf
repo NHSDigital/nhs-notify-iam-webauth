@@ -7,8 +7,8 @@ resource "aws_cognito_user_pool_client" "main" {
   callback_urls = flatten([
     var.cognito_user_pool_additional_callback_urls,
     [
-      "https://${var.environment}.${local.acct.dns_zone["name"]}/auth/",
-      "https://${aws_amplify_app.main.default_domain}/auth/"
+      "https://${var.environment}.${local.acct.dns_zone["name"]}/auth",
+      "https://${aws_amplify_app.main.default_domain}/auth"
     ],
     var.cognito_user_pool_use_environment_specific_gateway_callback_url ? [
       "https://${var.environment}.${var.cognito_user_pool_environment_specific_gateway_callback_url_suffix}"
@@ -18,8 +18,8 @@ resource "aws_cognito_user_pool_client" "main" {
   logout_urls = flatten([
     var.cognito_user_pool_additional_callback_urls,
     [
-      "https://${var.environment}.${local.acct.dns_zone["name"]}/auth/",
-      "https://${aws_amplify_app.main.default_domain}/auth/"
+      "https://${var.environment}.${local.acct.dns_zone["name"]}/auth",
+      "https://${aws_amplify_app.main.default_domain}/auth"
     ],
     var.cognito_user_pool_use_environment_specific_gateway_callback_url ? [
       "https://${var.environment}.${var.cognito_user_pool_environment_specific_gateway_callback_url_suffix}"
