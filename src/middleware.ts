@@ -12,8 +12,9 @@ function getContentSecurityPolicy(nonce: string) {
     'img-src': [`'self'`],
     'manifest-src': [`'self'`],
     'object-src': [`'none'`],
-    'script-src': [`'nonce-${nonce}'`, `'strict-dynamic'`],
-    'style-src': [`'self'`],
+    'script-src': [`'self'`, `'nonce-${nonce}'`, `'strict-dynamic'`],
+    'style-src': [`'self'`, `'nonce-${nonce}'`],
+    'upgrade-insecure-requests;': [],
   };
 
   if (process.env.NODE_ENV === 'development') {
@@ -31,8 +32,6 @@ export function middleware(request: NextRequest) {
   const csp = getContentSecurityPolicy(nonce);
 
   const requestHeaders = new Headers(request.headers);
-  requestHeaders.set('x-nonce', nonce);
-
   requestHeaders.set('Content-Security-Policy', csp);
 
   const response = NextResponse.next({
@@ -54,7 +53,7 @@ export const config = {
      * - favicon.ico (favicon file)
      */
     {
-      source: '/((?!_next/static|_next/image|favicon.ico).*)',
+      source: '/((?!_next/static|_next/image|favicon.ico|lib).*)',
     },
   ],
 };
