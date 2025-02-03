@@ -13,7 +13,7 @@ function getContentSecurityPolicy(nonce: string) {
     'manifest-src': [`'self'`],
     'object-src': [`'none'`],
     'script-src': [`'self'`, `'nonce-${nonce}'`],
-    'style-src': [`'self'`, `'nonce-${nonce}'`],
+    'style-src': [`'self'`, `'unsafe-inline'`],
     'upgrade-insecure-requests;': [],
   };
 
@@ -52,8 +52,7 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      */
-    {
-      source: '/((?!_next/static|_next/image|favicon.ico|lib).*)',
-    },
+    '/',
+    '/((?!_next/static|_next/image|favicon.ico|lib/).*)',
   ],
 };
