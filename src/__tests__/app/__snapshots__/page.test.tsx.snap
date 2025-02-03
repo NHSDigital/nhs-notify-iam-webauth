@@ -2,8 +2,33 @@
 
 exports[`SignInPage renders 1`] = `
 <DocumentFragment>
-  <div>
-    Placeholder Sign-in form
+  <div
+    class="nhsuk-grid-row"
+  >
+    <div
+      class="nhsuk-grid-column-two-thirds"
+    >
+      <h1
+        class="nhsuk-heading-xl"
+      >
+        Sign in
+      </h1>
+      <div
+        class="nhsuk-u-padding-6 notify-content"
+      >
+        <h2
+          class="nhsuk-heading-m"
+        >
+          Sign in using an NHS account
+        </h2>
+        <button
+          data-testid="mock-cis2-button"
+          type="button"
+        >
+          Mock CIS2 Login Button
+        </button>
+      </div>
+    </div>
   </div>
 </DocumentFragment>
 `;

@@ -1,42 +1,16 @@
 'use client';
 
 import React, { Suspense, useEffect, useState } from 'react';
-import { withAuthenticator } from '@aws-amplify/ui-react';
-import { Redirect } from '@/src/components/molecules/Redirect/Redirect';
 import { redirect, RedirectType, useSearchParams } from 'next/navigation';
+import { Hub } from 'aws-amplify/utils';
 import { federatedSignIn, State } from '@/src/utils/federated-sign-in';
 import { CIS2LoginButton } from '@/src/components/CIS2LoginButton/CIS2LoginButton';
-import { Hub } from 'aws-amplify/utils';
-
-const AuthenticatorWrapper = () => {
-  const searchParams = useSearchParams();
-  const redirectPath = searchParams.get('redirect');
-
-  return withAuthenticator(Redirect, {
-    variation: 'default',
-    hideSignUp: true,
-    components: {
-      SignIn: {
-        Header: () => (
-          <h1
-            style={{
-              marginTop: '2.0rem',
-              marginBottom: 0,
-              marginLeft: '2.0rem',
-            }}
-          >
-            <CIS2LoginButton
-              onClick={() => federatedSignIn(redirectPath || '/home')}
-            />
-          </h1>
-        ),
-      },
-    },
-  })({});
-};
 
 export default function Page() {
   const [customState, setCustomState] = useState<State>();
+  const searchParams = useSearchParams();
+
+  const redirectPath = searchParams.get('redirect');
 
   if (customState) {
     redirect(
@@ -55,7 +29,17 @@ export default function Page() {
 
   return (
     <Suspense>
-      <AuthenticatorWrapper />
+      <div className='nhsuk-grid-row'>
+        <div className='nhsuk-grid-column-two-thirds'>
+          <h1 className='nhsuk-heading-xl'>Sign in</h1>
+          <div className='nhsuk-u-padding-6 notify-content'>
+            <h2 className='nhsuk-heading-m'>Sign in using an NHS account</h2>
+            <CIS2LoginButton
+              onClick={() => federatedSignIn(redirectPath || '/home')}
+            />
+          </div>
+        </div>
+      </div>
     </Suspense>
   );
 }

@@ -1,7 +1,9 @@
 import { act, render, waitFor } from '@testing-library/react';
-import SignInPage from '@/src/app/page';
+import userEvent from '@testing-library/user-event';
 import { Hub } from 'aws-amplify/utils';
 import { redirect } from 'next/navigation';
+import { federatedSignIn } from '@/src/utils/federated-sign-in';
+import SignInPage from '@/src/app/page';
 
 jest.mock('aws-amplify/utils', () => ({
   Hub: {
@@ -9,20 +11,29 @@ jest.mock('aws-amplify/utils', () => ({
   },
 }));
 
+const mockGetSearchParams = jest.fn();
+
 jest.mock('next/navigation', () => ({
   redirect: jest.fn(),
   RedirectType: { replace: 'replace' },
   useSearchParams: () => ({
-    get: () => '',
+    get: mockGetSearchParams,
   }),
 }));
 
-jest.mock('@aws-amplify/ui-react', () => ({
-  withAuthenticator: () => () => <div>Placeholder Sign-in form</div>,
+jest.mock('@/src/components/CIS2LoginButton/CIS2LoginButton', () => ({
+  CIS2LoginButton: ({ onClick }: { onClick: () => void }) => (
+    <button type='button' data-testid='mock-cis2-button' onClick={onClick}>
+      Mock CIS2 Login Button
+    </button>
+  ),
 }));
+
+jest.mock('@/src/utils/federated-sign-in');
 
 const mockedHub = jest.mocked(Hub);
 const mockedRedirect = jest.mocked(redirect);
+const mockFederatedSignIn = jest.mocked(federatedSignIn);
 
 function getEventListener() {
   const lastHubListenCall = mockedHub.listen.mock.lastCall;
@@ -39,25 +50,38 @@ describe('SignInPage', () => {
   it('renders', async () => {
     const container = render(<SignInPage />);
 
-    // Note: we do this because the Amplify UI for login takes a moment to load.
-    await waitFor(() =>
-      expect(
-        container.getByText('Placeholder Sign-in form')
-      ).toBeInTheDocument()
-    );
-
     expect(container.asFragment()).toMatchSnapshot();
+  });
+
+  it('does federated sign in when clicking cis2 button', async () => {
+    const user = userEvent.setup();
+
+    const container = render(<SignInPage />);
+
+    const button = container.getByTestId('mock-cis2-button');
+
+    await user.click(button);
+
+    expect(mockFederatedSignIn).toHaveBeenCalledWith('/home');
+  });
+
+  it('sets redirect based on search params when clicking cis2 button', async () => {
+    const user = userEvent.setup();
+
+    mockGetSearchParams.mockReturnValueOnce('/example-redirect');
+
+    const container = render(<SignInPage />);
+
+    const button = container.getByTestId('mock-cis2-button');
+
+    await user.click(button);
+
+    expect(mockFederatedSignIn).toHaveBeenCalledWith('/example-redirect');
   });
 
   it('listens for oauth state events', async () => {
     const page = <SignInPage />;
     const container = render(page);
-
-    await waitFor(() =>
-      expect(
-        container.getByText('Placeholder Sign-in form')
-      ).toBeInTheDocument()
-    );
 
     const eventListener = getEventListener();
 
@@ -84,12 +108,6 @@ describe('SignInPage', () => {
     const page = <SignInPage />;
     const container = render(page);
 
-    await waitFor(() =>
-      expect(
-        container.getByText('Placeholder Sign-in form')
-      ).toBeInTheDocument()
-    );
-
     const eventListener = getEventListener();
 
     act(() => {
@@ -109,12 +127,6 @@ describe('SignInPage', () => {
   it('defaults redirect path', async () => {
     const page = <SignInPage />;
     const container = render(page);
-
-    await waitFor(() =>
-      expect(
-        container.getByText('Placeholder Sign-in form')
-      ).toBeInTheDocument()
-    );
 
     const eventListener = getEventListener();
 
