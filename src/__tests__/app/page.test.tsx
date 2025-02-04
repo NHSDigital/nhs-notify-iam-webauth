@@ -21,6 +21,10 @@ jest.mock('next/navigation', () => ({
   }),
 }));
 
+jest.mock('@aws-amplify/ui-react', () => ({
+  Authenticator: () => <div>Placeholder Sign-in form</div>,
+}));
+
 jest.mock('@/src/components/CIS2LoginButton/CIS2LoginButton', () => ({
   CIS2LoginButton: ({ onClick }: { onClick: () => void }) => (
     <button type='button' data-testid='mock-cis2-button' onClick={onClick}>
@@ -47,10 +51,26 @@ function getEventListener() {
 }
 
 describe('SignInPage', () => {
+  const originalCognitoIdpSetting = process.env.NEXT_PUBLIC_ENABLE_COGNITO_IDP;
+
   it('renders', async () => {
+    process.env.NEXT_PUBLIC_ENABLE_COGNITO_IDP = 'false';
+
     const container = render(<SignInPage />);
 
     expect(container.asFragment()).toMatchSnapshot();
+
+    process.env.NEXT_PUBLIC_ENABLE_COGNITO_IDP = originalCognitoIdpSetting;
+  });
+
+  it('renders with cognito login form if env var switch is enabled', () => {
+    process.env.NEXT_PUBLIC_ENABLE_COGNITO_IDP = 'true';
+
+    const container = render(<SignInPage />);
+
+    expect(container.asFragment()).toMatchSnapshot();
+
+    process.env.NEXT_PUBLIC_ENABLE_COGNITO_IDP = originalCognitoIdpSetting;
   });
 
   it('does federated sign in when clicking cis2 button', async () => {

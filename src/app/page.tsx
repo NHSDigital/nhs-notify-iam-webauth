@@ -5,8 +5,10 @@ import { redirect, RedirectType, useSearchParams } from 'next/navigation';
 import { Hub } from 'aws-amplify/utils';
 import { federatedSignIn, State } from '@/src/utils/federated-sign-in';
 import { CIS2LoginButton } from '@/src/components/CIS2LoginButton/CIS2LoginButton';
+import { Authenticator } from '@aws-amplify/ui-react';
+import { Redirect } from '../components/molecules/Redirect/Redirect';
 
-export default function Page() {
+function LoginPage() {
   const [customState, setCustomState] = useState<State>();
   const searchParams = useSearchParams();
 
@@ -28,7 +30,7 @@ export default function Page() {
   }, []);
 
   return (
-    <Suspense>
+    <>
       <div className='nhsuk-grid-row'>
         <div className='nhsuk-grid-column-two-thirds'>
           <h1 className='nhsuk-heading-xl'>Sign in</h1>
@@ -40,6 +42,19 @@ export default function Page() {
           </div>
         </div>
       </div>
+      {process.env.NEXT_PUBLIC_ENABLE_COGNITO_IDP === 'true' && (
+        <Authenticator variation='default' hideSignUp>
+          <Redirect />
+        </Authenticator>
+      )}
+    </>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense>
+      <LoginPage />
     </Suspense>
   );
 }
