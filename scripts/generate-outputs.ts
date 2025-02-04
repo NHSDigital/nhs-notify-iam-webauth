@@ -43,7 +43,7 @@ const amplifyOutputs = {
       domain: cognitoDomain,
       scopes: ['email', 'openid', 'aws.cognito.signin.user.admin'],
       redirect_sign_in_uri: [redirectDomain],
-      redirect_sign_out_uri: [],
+      redirect_sign_out_uri: [redirectDomain],
       response_type: 'code',
     },
   },
