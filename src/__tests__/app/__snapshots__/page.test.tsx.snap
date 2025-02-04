@@ -25,7 +25,7 @@ exports[`SignInPage renders 1`] = `
           data-testid="mock-cis2-button"
           type="button"
         >
-          Mock CIS2 Login Button
+          Mock CIS2 Sign In Button
         </button>
       </div>
     </div>
@@ -58,11 +58,14 @@ exports[`SignInPage renders with cognito login form if env var switch is enabled
           data-testid="mock-cis2-button"
           type="button"
         >
-          Mock CIS2 Login Button
+          Mock CIS2 Sign In Button
         </button>
       </div>
+      <hr
+        class="nhsuk-section-break nhsuk-section-break--m"
+      />
       <div
-        class="nhsuk-u-padding-6 notify-content notify-cognito-login-form"
+        class="nhsuk-u-padding-6 notify-content notify-cognito-sign-in-form"
       >
         <h2
           class="nhsuk-heading-m"

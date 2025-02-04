@@ -25,10 +25,10 @@ jest.mock('@aws-amplify/ui-react', () => ({
   Authenticator: () => <div>Placeholder Sign-in form</div>,
 }));
 
-jest.mock('@/src/components/CIS2LoginButton/CIS2LoginButton', () => ({
-  CIS2LoginButton: ({ onClick }: { onClick: () => void }) => (
+jest.mock('@/src/components/CIS2SignInButton/CIS2SignInButton', () => ({
+  CIS2SignInButton: ({ onClick }: { onClick: () => void }) => (
     <button type='button' data-testid='mock-cis2-button' onClick={onClick}>
-      Mock CIS2 Login Button
+      Mock CIS2 Sign In Button
     </button>
   ),
 }));

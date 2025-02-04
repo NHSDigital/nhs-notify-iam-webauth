@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { NHSNotifyHeader } from '@/src/components/molecules/Header/Header';
 
-jest.mock('@/src/components/molecules/LoginStatus/LoginStatus');
+jest.mock('@/src/components/molecules/AuthLinks/AuthLinks');
 
 describe('Header component', () => {
   const ENV = process.env;
@@ -26,6 +26,6 @@ describe('Header component', () => {
 
     render(<NHSNotifyHeader />);
 
-    expect(screen.queryByTestId('login-link')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('sign-in-link')).not.toBeInTheDocument();
   });
 });

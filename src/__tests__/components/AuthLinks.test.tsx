@@ -2,7 +2,7 @@ import { mockDeep } from 'jest-mock-extended';
 import { UseAuthenticator, useAuthenticator } from '@aws-amplify/ui-react';
 import { render, screen } from '@testing-library/react';
 import { AuthSession } from '@aws-amplify/auth';
-import { LoginStatus } from '@/src/components/molecules/LoginStatus/LoginStatus';
+import { AuthLinks } from '@/src/components/molecules/AuthLinks/AuthLinks';
 
 jest.mock('@aws-amplify/ui-react');
 jest.mock('aws-amplify/auth', () => ({
@@ -20,44 +20,44 @@ jest.mock('aws-amplify/auth', () => ({
 
 const useAuthenticatorMock = jest.mocked(useAuthenticator);
 
-test('LoginStatus - authenticated', async () => {
+test('AuthLinks - authenticated', async () => {
   useAuthenticatorMock.mockReturnValue(
     mockDeep<UseAuthenticator>({
       authStatus: 'authenticated',
     })
   );
 
-  const container = render(<LoginStatus />);
+  const container = render(<AuthLinks />);
 
-  await screen.findByText('Log out');
+  await screen.findByText('Sign out');
 
   expect(container.asFragment()).toMatchSnapshot();
 });
 
-test('LoginStatus - unauthenticated', async () => {
+test('AuthLinks - unauthenticated', async () => {
   useAuthenticatorMock.mockReturnValue(
     mockDeep<UseAuthenticator>({
       authStatus: 'unauthenticated',
     })
   );
 
-  const container = render(<LoginStatus />);
+  const container = render(<AuthLinks />);
 
-  await screen.findByText('Log in');
+  await screen.findByText('Sign in');
 
   expect(container.asFragment()).toMatchSnapshot();
 });
 
-test('LoginStatus - configuring', async () => {
+test('AuthLinks - configuring', async () => {
   jest.mocked(useAuthenticator).mockReturnValue(
     mockDeep<UseAuthenticator>({
       authStatus: 'configuring',
     })
   );
 
-  const container = render(<LoginStatus />);
+  const container = render(<AuthLinks />);
 
-  await screen.findByText('Log in');
+  await screen.findByText('Sign in');
 
   expect(container.asFragment()).toMatchSnapshot();
 });

@@ -3,7 +3,7 @@ import concatClassNames from '@/src/utils/concat-class-names';
 import content from '@/src/content/content';
 import styles from './Header.module.scss';
 import { HeaderType } from './header.types';
-import { LoginStatus } from '../LoginStatus/LoginStatus';
+import { AuthLinks } from '../AuthLinks/AuthLinks';
 
 export function NHSNotifyHeader({ className, dataTestId }: HeaderType) {
   return (
@@ -53,8 +53,8 @@ export function NHSNotifyHeader({ className, dataTestId }: HeaderType) {
         >
           {/* I am currently testing the link wrapper, this will change later when we implement auth as the link will change based on auth state */}
           {process.env.NEXT_PUBLIC_DISABLE_CONTENT === 'true' ? undefined : (
-            <div className='nhsuk-account__login' data-testid='login-link'>
-              <LoginStatus />
+            <div className='nhsuk-account__sign-in' data-testid='sign-in-link'>
+              <AuthLinks />
             </div>
           )}
         </div>

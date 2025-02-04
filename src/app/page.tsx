@@ -4,10 +4,14 @@ import React, { Suspense, useEffect, useState } from 'react';
 import { redirect, RedirectType, useSearchParams } from 'next/navigation';
 import { Hub } from 'aws-amplify/utils';
 import { federatedSignIn, State } from '@/src/utils/federated-sign-in';
-import { CIS2LoginButton } from '@/src/components/CIS2LoginButton/CIS2LoginButton';
-import { CognitoLoginForm } from '../components/CognitoLoginForm/CognitoLoginForm';
+import { CIS2SignInButton } from '@/src/components/CIS2SignInButton/CIS2SignInButton';
+import { CognitoSignInForm } from '@/src/components/CognitoSignInForm/CognitoSignInForm';
+import content from '@/src/content/content';
 
-function LoginPage() {
+function SignInPage() {
+  const {
+    pages: { signInPage: pageContent },
+  } = content;
   const [customState, setCustomState] = useState<State>();
   const searchParams = useSearchParams();
 
@@ -31,15 +35,20 @@ function LoginPage() {
   return (
     <div className='nhsuk-grid-row'>
       <div className='nhsuk-grid-column-two-thirds'>
-        <h1 className='nhsuk-heading-xl'>Sign in</h1>
+        <h1 className='nhsuk-heading-xl'>{pageContent.pageHeading}</h1>
         <div className='nhsuk-u-padding-6 notify-content'>
-          <h2 className='nhsuk-heading-m'>Sign in using an NHS account</h2>
-          <CIS2LoginButton
+          <h2 className='nhsuk-heading-m'>
+            {pageContent.federatedSignInSectionHeading}
+          </h2>
+          <CIS2SignInButton
             onClick={() => federatedSignIn(redirectPath || '/home')}
           />
         </div>
         {process.env.NEXT_PUBLIC_ENABLE_COGNITO_IDP === 'true' && (
-          <CognitoLoginForm />
+          <>
+            <hr className='nhsuk-section-break nhsuk-section-break--m' />
+            <CognitoSignInForm />
+          </>
         )}
       </div>
     </div>
@@ -49,7 +58,7 @@ function LoginPage() {
 export default function Page() {
   return (
     <Suspense>
-      <LoginPage />
+      <SignInPage />
     </Suspense>
   );
 }
