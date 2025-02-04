@@ -11,7 +11,7 @@ output "cognito_domain" {
 }
 
 output "redirect_domain" {
-  value = "http://localhost:3000/auth/"
+  value = "http://localhost:3000/auth"
 }
 
 output "cis2_provider_name" {
