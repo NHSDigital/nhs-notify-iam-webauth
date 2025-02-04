@@ -61,10 +61,19 @@ exports[`SignInPage renders with cognito login form if env var switch is enabled
           Mock CIS2 Login Button
         </button>
       </div>
+      <div
+        class="nhsuk-u-padding-6 notify-content notify-cognito-login-form"
+      >
+        <h2
+          class="nhsuk-heading-m"
+        >
+          Dev Only - Sign in with Email / Password
+        </h2>
+        <div>
+          Placeholder Sign-in form
+        </div>
+      </div>
     </div>
-  </div>
-  <div>
-    Placeholder Sign-in form
   </div>
 </DocumentFragment>
 `;
