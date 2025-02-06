@@ -1,6 +1,8 @@
+import { mockDeep } from 'jest-mock-extended';
 import { act, render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Hub } from 'aws-amplify/utils';
+import { UseAuthenticator, useAuthenticator } from '@aws-amplify/ui-react';
 import { redirect } from 'next/navigation';
 import { federatedSignIn } from '@/src/utils/federated-sign-in';
 import SignInPage from '@/src/app/page';
@@ -23,6 +25,7 @@ jest.mock('next/navigation', () => ({
 
 jest.mock('@aws-amplify/ui-react', () => ({
   Authenticator: () => <div>Placeholder Sign-in form</div>,
+  useAuthenticator: jest.fn(() => ({ authStatus: 'unauthenticated' })),
 }));
 
 jest.mock('@/src/components/CIS2SignInButton/CIS2SignInButton', () => ({
@@ -38,6 +41,7 @@ jest.mock('@/src/utils/federated-sign-in');
 const mockedHub = jest.mocked(Hub);
 const mockedRedirect = jest.mocked(redirect);
 const mockFederatedSignIn = jest.mocked(federatedSignIn);
+const mockUseAuthenticator = jest.mocked(useAuthenticator);
 
 function getEventListener() {
   const lastHubListenCall = mockedHub.listen.mock.lastCall;
@@ -49,6 +53,10 @@ function getEventListener() {
   expect(eventListener).toBeTruthy();
   return eventListener!;
 }
+
+beforeEach(() => {
+  jest.clearAllMocks();
+});
 
 describe('SignInPage', () => {
   const originalCognitoIdpSetting = process.env.NEXT_PUBLIC_ENABLE_COGNITO_IDP;
@@ -73,99 +81,122 @@ describe('SignInPage', () => {
     process.env.NEXT_PUBLIC_ENABLE_COGNITO_IDP = originalCognitoIdpSetting;
   });
 
-  it('does federated sign in when clicking cis2 button', async () => {
-    const user = userEvent.setup();
-
-    const container = render(<SignInPage />);
-
-    const button = container.getByTestId('mock-cis2-button');
-
-    await user.click(button);
-
-    expect(mockFederatedSignIn).toHaveBeenCalledWith('/home');
-  });
-
-  it('sets redirect based on search params when clicking cis2 button', async () => {
-    const user = userEvent.setup();
+  it('redirects if auth state is authenticated', () => {
+    mockUseAuthenticator.mockReturnValueOnce(
+      mockDeep<UseAuthenticator>({ authStatus: 'authenticated' })
+    );
 
     mockGetSearchParams.mockReturnValueOnce('/example-redirect');
 
-    const container = render(<SignInPage />);
+    render(<SignInPage />);
 
-    const button = container.getByTestId('mock-cis2-button');
-
-    await user.click(button);
-
-    expect(mockFederatedSignIn).toHaveBeenCalledWith('/example-redirect');
-  });
-
-  it('listens for oauth state events', async () => {
-    const page = <SignInPage />;
-    const container = render(page);
-
-    const eventListener = getEventListener();
-
-    act(() => {
-      eventListener({
-        payload: {
-          event: 'customOAuthState',
-          data: '{"redirectPath":"/testing"}',
-        },
-        channel: '',
-      });
-      container.rerender(page);
-    });
-
-    await waitFor(() =>
-      expect(mockedRedirect).toHaveBeenCalledWith(
-        '?redirect=%2Ftesting',
-        'replace'
-      )
+    expect(mockedRedirect).toHaveBeenCalledWith(
+      '/redirect/example-redirect',
+      'replace'
     );
   });
+  it('had default redirect if auth state is authenticated', () => {
+    mockUseAuthenticator.mockReturnValueOnce(
+      mockDeep<UseAuthenticator>({ authStatus: 'authenticated' })
+    );
 
-  it('ignores other state events', async () => {
-    const page = <SignInPage />;
-    const container = render(page);
+    render(<SignInPage />);
 
-    const eventListener = getEventListener();
-
-    act(() => {
-      eventListener({
-        payload: {
-          event: 'ignoreThis',
-          data: '{"redirectPath":"/testing"}',
-        },
-        channel: '',
-      });
-      container.rerender(page);
-    });
-
-    await waitFor(() => expect(mockedRedirect).not.toHaveBeenCalled());
+    expect(mockedRedirect).toHaveBeenCalledWith('/redirect/home', 'replace');
   });
 
-  it('defaults redirect path', async () => {
-    const page = <SignInPage />;
-    const container = render(page);
+  describe('CIS2 login', () => {
+    it('does federated sign in when clicking cis2 button', async () => {
+      const user = userEvent.setup();
 
-    const eventListener = getEventListener();
+      const container = render(<SignInPage />);
 
-    act(() => {
-      eventListener({
-        payload: {
-          event: 'customOAuthState',
-          data: '{"redirectPath":""}',
-        },
-        channel: '',
-      });
-      container.rerender(page);
+      const button = container.getByTestId('mock-cis2-button');
+
+      await user.click(button);
+
+      expect(mockFederatedSignIn).toHaveBeenCalledWith('/home');
     });
 
-    await waitFor(() =>
-      expect(mockedRedirect).toHaveBeenCalledWith(
-        '?redirect=%2Fhome',
-        'replace'
-      )
-    );
+    it('sets redirect based on search params when clicking cis2 button', async () => {
+      const user = userEvent.setup();
+
+      mockGetSearchParams.mockReturnValueOnce('/example-redirect');
+
+      const container = render(<SignInPage />);
+
+      const button = container.getByTestId('mock-cis2-button');
+
+      await user.click(button);
+
+      expect(mockFederatedSignIn).toHaveBeenCalledWith('/example-redirect');
+    });
+
+    it('listens for oauth state events', async () => {
+      const page = <SignInPage />;
+      const container = render(page);
+
+      const eventListener = getEventListener();
+
+      act(() => {
+        eventListener({
+          payload: {
+            event: 'customOAuthState',
+            data: '{"redirectPath":"/testing"}',
+          },
+          channel: '',
+        });
+        container.rerender(page);
+      });
+
+      await waitFor(() =>
+        expect(mockedRedirect).toHaveBeenCalledWith(
+          '/redirect/testing',
+          'replace'
+        )
+      );
+    });
+
+    it('ignores other state events', async () => {
+      const page = <SignInPage />;
+      const container = render(page);
+
+      const eventListener = getEventListener();
+
+      act(() => {
+        eventListener({
+          payload: {
+            event: 'ignoreThis',
+            data: '{"redirectPath":"/testing"}',
+          },
+          channel: '',
+        });
+        container.rerender(page);
+      });
+
+      await waitFor(() => expect(mockedRedirect).not.toHaveBeenCalled());
+    });
+
+    it('defaults redirect path', async () => {
+      const page = <SignInPage />;
+      const container = render(page);
+
+      const eventListener = getEventListener();
+
+      act(() => {
+        eventListener({
+          payload: {
+            event: 'customOAuthState',
+            data: '{"redirectPath":""}',
+          },
+          channel: '',
+        });
+        container.rerender(page);
+      });
+
+      await waitFor(() =>
+        expect(mockedRedirect).toHaveBeenCalledWith('/redirect/home', 'replace')
+      );
+    });
   });
 });

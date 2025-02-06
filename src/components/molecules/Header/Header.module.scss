@@ -1,13 +1,11 @@
-.header__content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.header {
+  & &__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
-  a {
-    color: #fff;
-
-    &:visited {
-      color: #fff;
+    @media (max-width: 40.0525em) {
+      padding-bottom: 20px;
     }
   }
 }

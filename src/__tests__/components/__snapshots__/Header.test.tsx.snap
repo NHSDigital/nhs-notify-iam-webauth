@@ -3,12 +3,12 @@
 exports[`Header component renders component correctly 1`] = `
 <DocumentFragment>
   <header
-    class="nhsuk-header"
+    class="nhsuk-header header"
     data-testid="page-header"
     role="banner"
   >
     <div
-      class="nhsuk-header__container"
+      class="nhsuk-header__container header__container"
     >
       <div
         class="nhsuk-header__logo"
@@ -45,12 +45,11 @@ exports[`Header component renders component correctly 1`] = `
         </a>
       </div>
       <div
-        class="nhsuk-header__content header__content"
+        class="nhsuk-header__content"
         id="content-header"
       >
         <div
-          class="nhsuk-account__sign-in"
-          data-testid="sign-in-link"
+          data-testid="auth-link"
         />
       </div>
     </div>

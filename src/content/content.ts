@@ -1,8 +1,12 @@
+import { getConstants } from '../utils/public-constants';
+
+const { BASE_PATH } = getConstants();
+
 const headerComponent = {
   serviceName: 'Notify',
   links: {
-    signIn: 'Sign in',
-    signOut: 'Sign out',
+    signIn: { text: 'Sign in', href: BASE_PATH },
+    signOut: { text: 'Sign out', href: `${BASE_PATH}/signout` },
   },
 };
 
