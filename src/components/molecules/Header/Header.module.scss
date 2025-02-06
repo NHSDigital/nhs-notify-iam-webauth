@@ -1,11 +1,5 @@
-.header {
-  & &__container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    @media (max-width: 40.0525em) {
-      padding-bottom: 20px;
-    }
-  }
+.header__container {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
 }

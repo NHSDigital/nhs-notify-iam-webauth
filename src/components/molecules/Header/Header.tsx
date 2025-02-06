@@ -8,7 +8,7 @@ import { AuthLink } from '../AuthLink/AuthLink';
 export function NHSNotifyHeader({ dataTestId }: HeaderType) {
   return (
     <header
-      className={concatClassNames('nhsuk-header', styles.header)}
+      className='nhsuk-header'
       role='banner'
       data-testid={dataTestId ?? 'page-header'}
     >
