@@ -81,7 +81,7 @@ describe('SignInPage', () => {
     process.env.NEXT_PUBLIC_ENABLE_COGNITO_IDP = originalCognitoIdpSetting;
   });
 
-  it('redirects if auth state is authenticated', () => {
+  it('redirects if auth state is authenticated and there is a redirect query parameter', () => {
     mockUseAuthenticator.mockReturnValueOnce(
       mockDeep<UseAuthenticator>({ authStatus: 'authenticated' })
     );
@@ -95,14 +95,14 @@ describe('SignInPage', () => {
       'replace'
     );
   });
-  it('had default redirect if auth state is authenticated', () => {
+  it('does not redirect if auth state is authenticated and there is no redirect parameter', () => {
     mockUseAuthenticator.mockReturnValueOnce(
       mockDeep<UseAuthenticator>({ authStatus: 'authenticated' })
     );
 
     render(<SignInPage />);
 
-    expect(mockedRedirect).toHaveBeenCalledWith('/redirect/home', 'replace');
+    expect(mockedRedirect).not.toHaveBeenCalled();
   });
 
   describe('CIS2 login', () => {

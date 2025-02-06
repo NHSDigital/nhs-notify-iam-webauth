@@ -34,9 +34,9 @@ function SignInPage() {
   }, []);
 
   useEffect(() => {
-    if (authStatus === 'authenticated') {
+    if (authStatus === 'authenticated' && redirectPath) {
       redirect(
-        path.normalize(`/redirect/${redirectPath || '/home'}`),
+        path.normalize(`/redirect/${redirectPath}`),
         RedirectType.replace
       );
     }
