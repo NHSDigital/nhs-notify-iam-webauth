@@ -23,7 +23,7 @@ export const ClientLayout = ({ children }: { children: React.ReactNode }) => (
       <title>{content.global.mainLayout.title}</title>
       <link
         rel='shortcut icon'
-        href={`${BASE_PATH}/lib/assets/favicons/favicon.icon`}
+        href={`${BASE_PATH}/lib/assets/favicons/favicon.ico`}
         type='image/x-icon'
       />
       <link
