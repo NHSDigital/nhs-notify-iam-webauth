@@ -1,6 +1,6 @@
 'use client';
 
-import React, { Suspense, useEffect } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import path from 'path';
 import { redirect, RedirectType, useSearchParams } from 'next/navigation';
 import { Hub } from 'aws-amplify/utils';
@@ -16,6 +16,8 @@ function SignInPage() {
   } = content;
   const searchParams = useSearchParams();
 
+  const [customState, setCustomState] = useState<State>();
+
   const redirectPath = searchParams.get('redirect');
 
   const { authStatus } = useAuthenticator((ctx) => [ctx.authStatus]);
@@ -23,24 +25,24 @@ function SignInPage() {
   useEffect(() => {
     return Hub.listen('auth', ({ payload }) => {
       if (payload.event === 'customOAuthState') {
-        const customState: State = JSON.parse(payload.data);
-
-        redirect(
-          `?redirect=${encodeURIComponent(customState.redirectPath || '/home')}`,
-          RedirectType.replace
-        );
+        setCustomState(JSON.parse(payload.data));
       }
     });
   }, []);
 
   useEffect(() => {
-    if (authStatus === 'authenticated' && redirectPath) {
-      redirect(
-        path.normalize(`/redirect/${redirectPath}`),
-        RedirectType.replace
-      );
+    let to = '';
+
+    if (customState) {
+      to = customState.redirectPath || '/home';
+    } else if (authStatus === 'authenticated' && redirectPath) {
+      to = redirectPath;
     }
-  }, [authStatus, redirectPath]);
+
+    if (to) {
+      redirect(path.normalize(`/redirect/${to}`), RedirectType.replace);
+    }
+  }, [authStatus, customState, redirectPath]);
 
   return (
     <div className='nhsuk-grid-row'>

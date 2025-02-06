@@ -151,7 +151,7 @@ describe('SignInPage', () => {
 
       await waitFor(() =>
         expect(mockedRedirect).toHaveBeenCalledWith(
-          '?redirect=%2Ftesting',
+          '/redirect/testing',
           'replace'
         )
       );
@@ -195,10 +195,7 @@ describe('SignInPage', () => {
       });
 
       await waitFor(() =>
-        expect(mockedRedirect).toHaveBeenCalledWith(
-          '?redirect=%2Fhome',
-          'replace'
-        )
+        expect(mockedRedirect).toHaveBeenCalledWith('/redirect/home', 'replace')
       );
     });
   });
