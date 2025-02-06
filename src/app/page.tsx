@@ -26,7 +26,7 @@ function SignInPage() {
         const customState: State = JSON.parse(payload.data);
 
         redirect(
-          path.normalize(`/redirect/${customState.redirectPath || '/home'}`),
+          `?redirect=${encodeURIComponent(customState.redirectPath || '/home')}`,
           RedirectType.replace
         );
       }
