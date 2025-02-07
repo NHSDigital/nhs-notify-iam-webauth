@@ -4,6 +4,8 @@ import { type ReactNode, useEffect } from 'react';
 import path from 'path';
 import { redirect, RedirectType } from 'next/navigation';
 import { Hub } from 'aws-amplify/utils';
+// https://docs.amplify.aws/gen1/react/build-a-backend/auth/add-social-provider/#required-for-multi-page-applications-complete-social-sign-in-after-redirect
+import 'aws-amplify/auth/enable-oauth-listener';
 import type { State } from '@/src/utils/federated-sign-in';
 
 export default function CIS2CallbackPage(): ReactNode {
