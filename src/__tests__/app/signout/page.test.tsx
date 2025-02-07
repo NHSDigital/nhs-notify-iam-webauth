@@ -1,31 +1,27 @@
-import { render, screen, waitFor } from '@testing-library/react';
-import { signOut } from '@aws-amplify/auth';
+import { render } from '@testing-library/react';
+import { UseAuthenticator } from '@aws-amplify/ui-react';
 import SignOutPage from '../../../app/signout/page';
+import { mockDeep } from 'jest-mock-extended';
 
-jest.mock('@aws-amplify/auth');
+const signOutMock = jest.fn();
 
-jest.mock('../../../components/molecules/Redirect/Redirect', () => ({
-  Redirect: () => <p>redirected</p>,
+jest.mock('@aws-amplify/ui-react', () => ({
+  useAuthenticator: jest.fn(() =>
+    mockDeep<UseAuthenticator>({
+      authStatus: 'authenticated',
+      signOut: signOutMock,
+    })
+  ),
 }));
 
-const signOutMock = jest.mocked(signOut);
-
 describe('Signout Page', () => {
-  beforeEach(jest.resetAllMocks);
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
 
-  test('signs out user and redirects', async () => {
-    signOutMock.mockResolvedValueOnce();
-
+  test('calls signOut when user is authenticated', async () => {
     render(<SignOutPage />);
 
-    await waitFor(() =>
-      expect(screen.getByText('Signing out')).toBeInTheDocument()
-    );
-
-    await waitFor(() =>
-      expect(screen.getByText('redirected')).toBeInTheDocument()
-    );
-
-    expect(signOut).toHaveBeenCalled();
+    expect(signOutMock).toHaveBeenCalled();
   });
 });
