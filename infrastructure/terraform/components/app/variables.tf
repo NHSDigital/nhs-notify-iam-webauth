@@ -87,6 +87,12 @@ variable "cognito_user_pool_additional_logout_urls" {
   default     = []
 }
 
+variable "cognito_prevent_deletion" {
+  type        = bool
+  description = "Prevents accidental deletion of the cognito user pool"
+  default     = true
+}
+
 variable "cognito_user_pool_use_environment_specific_gateway_callback_url" {
   type        = bool
   description = "Enable an environment specific web gateway callback URL - for use in environments that are using dynamic domains"
