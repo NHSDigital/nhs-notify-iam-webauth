@@ -8,7 +8,11 @@ function getContentSecurityPolicy(nonce: string) {
     'font-src': [`'self'`, 'https://assets.nhs.uk'],
     'form-action': [`'self'`],
     'frame-src': [`'self'`],
-    'connect-src': [`'self'`, 'https://cognito-idp.eu-west-2.amazonaws.com'],
+    'connect-src': [
+      `'self'`,
+      'https://cognito-idp.eu-west-2.amazonaws.com',
+      'https://nhs-notify-975050048865-eu-west-2-alnu1-app.auth.eu-west-2.amazoncognito.com/oauth2/token',
+    ],
     'img-src': [`'self'`],
     'manifest-src': [`'self'`],
     'object-src': [`'none'`],
