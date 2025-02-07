@@ -1,21 +1,33 @@
 'use client';
 
-import React, { Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
-import { Authenticator } from '@aws-amplify/ui-react';
+import React, { Suspense, useEffect } from 'react';
+import { redirect, RedirectType, useSearchParams } from 'next/navigation';
+import { Authenticator, useAuthenticator } from '@aws-amplify/ui-react';
+import path from 'path';
 import { federatedSignIn } from '@/src/utils/federated-sign-in';
 import { CIS2SignInButton } from '@/src/components/CIS2SignInButton/CIS2SignInButton';
 import content from '@/src/content/content';
 import styles from './page.module.scss';
-import { Redirect } from '../components/molecules/Redirect/Redirect';
 
 function SignInPage() {
   const {
     pages: { signInPage: pageContent },
   } = content;
+
+  const { authStatus } = useAuthenticator((ctx) => [ctx.authStatus]);
+
   const searchParams = useSearchParams();
 
   const redirectPath = searchParams.get('redirect');
+
+  useEffect(() => {
+    if (authStatus === 'authenticated') {
+      redirect(
+        path.normalize(redirectPath ? `/redirect/${redirectPath}` : '/home'),
+        RedirectType.push
+      );
+    }
+  }, [authStatus]);
 
   return (
     <div className='nhsuk-grid-row'>
@@ -38,9 +50,7 @@ function SignInPage() {
               <h2 className='nhsuk-heading-m'>
                 {content.components.cognitoSignInComponent.heading}
               </h2>
-              <Authenticator variation='default' hideSignUp>
-                <Redirect />
-              </Authenticator>
+              <Authenticator variation='default' hideSignUp />
             </div>
           </>
         )}

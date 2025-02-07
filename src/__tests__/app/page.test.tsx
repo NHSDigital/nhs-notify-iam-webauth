@@ -1,23 +1,25 @@
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { UseAuthenticator, useAuthenticator } from '@aws-amplify/ui-react';
+import { redirect, RedirectType } from 'next/navigation';
+import { mockDeep } from 'jest-mock-extended';
 import { federatedSignIn } from '@/src/utils/federated-sign-in';
 import SignInPage from '@/src/app/page';
-import { ReactNode } from 'react';
 
 const mockGetSearchParams = jest.fn();
 
 jest.mock('next/navigation', () => ({
+  ...jest.requireActual('next/navigation'),
   useSearchParams: () => ({
     get: mockGetSearchParams,
   }),
+  redirect: jest.fn(),
 }));
 
 jest.mock('@aws-amplify/ui-react', () => ({
-  Authenticator: ({ children }: { children: ReactNode }) => (
-    <div>
-      <h2>Placeholder Sign-in form</h2>
-      {children}
-    </div>
+  Authenticator: () => <p>Placeholder Sign-in form</p>,
+  useAuthenticator: jest.fn(() =>
+    mockDeep<UseAuthenticator>({ authStatus: 'unauthenticated' })
   ),
 }));
 
@@ -29,13 +31,11 @@ jest.mock('@/src/components/CIS2SignInButton/CIS2SignInButton', () => ({
   ),
 }));
 
-jest.mock('@/src/components/molecules/Redirect/Redirect', () => ({
-  Redirect: () => <p>Mock Redirect Component</p>,
-}));
-
 jest.mock('@/src/utils/federated-sign-in');
 
 const mockFederatedSignIn = jest.mocked(federatedSignIn);
+const mockUseAuthenticator = jest.mocked(useAuthenticator);
+const mockRedirect = jest.mocked(redirect);
 
 describe('SignInPage', () => {
   const originalCognitoIdpSetting = process.env.NEXT_PUBLIC_ENABLE_COGNITO_IDP;
@@ -58,6 +58,31 @@ describe('SignInPage', () => {
     expect(container.asFragment()).toMatchSnapshot();
 
     process.env.NEXT_PUBLIC_ENABLE_COGNITO_IDP = originalCognitoIdpSetting;
+  });
+
+  it('redirects using search parameter if already signed in', () => {
+    mockUseAuthenticator.mockReturnValueOnce(
+      mockDeep<UseAuthenticator>({ authStatus: 'authenticated' })
+    );
+
+    mockGetSearchParams.mockReturnValueOnce('/example-redirect');
+
+    render(<SignInPage />);
+
+    expect(mockRedirect).toHaveBeenCalledWith(
+      '/redirect/example-redirect',
+      RedirectType.push
+    );
+  });
+
+  it('redirects to /home if already signed in and there is no redirect search parameter', () => {
+    mockUseAuthenticator.mockReturnValueOnce(
+      mockDeep<UseAuthenticator>({ authStatus: 'authenticated' })
+    );
+
+    render(<SignInPage />);
+
+    expect(mockRedirect).toHaveBeenCalledWith('/home', RedirectType.push);
   });
 
   describe('CIS2 login', () => {

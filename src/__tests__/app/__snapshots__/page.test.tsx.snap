@@ -72,14 +72,9 @@ exports[`SignInPage renders with cognito login form if env var switch is enabled
         >
           Dev Only - Sign in with Email / Password
         </h2>
-        <div>
-          <h2>
-            Placeholder Sign-in form
-          </h2>
-          <p>
-            Mock Redirect Component
-          </p>
-        </div>
+        <p>
+          Placeholder Sign-in form
+        </p>
       </div>
     </div>
   </div>
