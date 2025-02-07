@@ -1,6 +1,8 @@
 resource "aws_cognito_user_pool" "main" {
   name = local.csi
 
+  deletion_protection = var.cognito_prevent_deletion ? "ACTIVE" : "INACTIVE"
+
   username_attributes = ["email"]
 
   admin_create_user_config {
