@@ -3,7 +3,7 @@
 exports[`Header component renders component correctly 1`] = `
 <DocumentFragment>
   <header
-    class="nhsuk-header header"
+    class="nhsuk-header"
     data-testid="page-header"
     role="banner"
   >

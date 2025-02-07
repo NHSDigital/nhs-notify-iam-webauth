@@ -81,6 +81,12 @@ variable "cognito_user_pool_additional_callback_urls" {
   default     = []
 }
 
+variable "cognito_user_pool_additional_logout_urls" {
+  type        = list(string)
+  description = "A list of additional logout_urls for the cognito user pool"
+  default     = []
+}
+
 variable "cognito_user_pool_use_environment_specific_gateway_callback_url" {
   type        = bool
   description = "Enable an environment specific web gateway callback URL - for use in environments that are using dynamic domains"
@@ -90,6 +96,12 @@ variable "cognito_user_pool_use_environment_specific_gateway_callback_url" {
 variable "cognito_user_pool_environment_specific_gateway_callback_url_suffix" {
   type        = string
   description = "The suffix for the environment specific web gateway callback URL - should be prefixed with with protocol and environment name"
+  default     = ""
+}
+
+variable "cognito_user_pool_environment_specific_gateway_logout_url_suffix" {
+  type        = string
+  description = "The suffix for the environment specific web gateway logout callback URL - should be prefixed with with protocol and environment name"
   default     = ""
 }
 
