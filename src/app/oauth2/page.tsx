@@ -1,6 +1,6 @@
 'use client';
 
-import { type ReactNode, useEffect } from 'react';
+import { type ReactNode, useEffect, useState } from 'react';
 import path from 'path';
 import { redirect, RedirectType } from 'next/navigation';
 import { Hub } from 'aws-amplify/utils';
@@ -9,17 +9,22 @@ import 'aws-amplify/auth/enable-oauth-listener';
 import type { State } from '@/src/utils/federated-sign-in';
 
 export default function CIS2CallbackPage(): ReactNode {
+  const [customState, setCustomState] = useState<State>();
+
   useEffect(() => {
     return Hub.listen('auth', ({ payload }) => {
       if (payload.event === 'customOAuthState') {
-        const customState: State = JSON.parse(payload.data);
-        redirect(
-          path.normalize(`/redirect/${customState.redirectPath || '/home'}`),
-          RedirectType.replace
-        );
+        setCustomState(JSON.parse(payload.data));
       }
     });
   }, []);
+
+  if (customState) {
+    redirect(
+      path.normalize(`/redirect/${customState.redirectPath || '/home'}`),
+      RedirectType.replace
+    );
+  }
 
   return undefined;
 }
