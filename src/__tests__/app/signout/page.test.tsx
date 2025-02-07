@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react';
+import { mockDeep } from 'jest-mock-extended';
 import { UseAuthenticator } from '@aws-amplify/ui-react';
 import SignOutPage from '../../../app/signout/page';
-import { mockDeep } from 'jest-mock-extended';
 
 const signOutMock = jest.fn();
 

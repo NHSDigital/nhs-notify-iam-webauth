@@ -27,7 +27,7 @@ function SignInPage() {
         RedirectType.push
       );
     }
-  }, [authStatus]);
+  }, [authStatus, redirectPath]);
 
   return (
     <div className='nhsuk-grid-row'>

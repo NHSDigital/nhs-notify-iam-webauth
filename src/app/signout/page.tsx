@@ -10,7 +10,7 @@ const SignOut = () => {
     if (authStatus === 'authenticated') {
       signOut();
     }
-  }, [authStatus]);
+  }, [authStatus, signOut]);
 
   return <p>Signing out</p>;
 };
