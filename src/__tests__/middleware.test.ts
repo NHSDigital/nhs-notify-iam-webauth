@@ -4,6 +4,12 @@
 import { NextRequest } from 'next/server';
 import { middleware } from '../middleware';
 
+jest.mock('../utils/public-constants', () => ({
+  getConstants: () => ({
+    COGNITO_DOMAIN: 'auth.env.iam.dev.nhsnotify.national.nhs.uk',
+  }),
+}));
+
 const OLD_ENV = { ...process.env };
 afterAll(() => {
   process.env = OLD_ENV;
@@ -29,7 +35,7 @@ describe('middleware function', () => {
       "font-src 'self' https://assets.nhs.uk",
       "form-action 'self'",
       "frame-src 'self'",
-      "connect-src 'self' https://cognito-idp.eu-west-2.amazonaws.com",
+      "connect-src 'self' https://cognito-idp.eu-west-2.amazonaws.com https://auth.env.iam.dev.nhsnotify.national.nhs.uk/oauth2/token",
       "img-src 'self'",
       "manifest-src 'self'",
       "object-src 'none'",
@@ -51,7 +57,7 @@ describe('middleware function', () => {
       "font-src 'self' https://assets.nhs.uk",
       "form-action 'self'",
       "frame-src 'self'",
-      "connect-src 'self' https://cognito-idp.eu-west-2.amazonaws.com",
+      "connect-src 'self' https://cognito-idp.eu-west-2.amazonaws.com https://auth.env.iam.dev.nhsnotify.national.nhs.uk/oauth2/token",
       "img-src 'self'",
       "manifest-src 'self'",
       "object-src 'none'",
