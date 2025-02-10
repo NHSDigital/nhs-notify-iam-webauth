@@ -26,7 +26,7 @@
     "@aws-amplify/backend-cli": "^1.4.9",
     "@aws-amplify/client-config": "^1.5.5",
     "@aws-amplify/plugin-types": "^1.7.0",
-    "@aws-amplify/ui-react": "^6.8.1",
+    "@aws-amplify/ui-react": "^6.9.1",
     "aws-amplify": "^6.12.0",
     "axios": "^1.7.9",
     "fetch-intercept": "^2.4.0",
@@ -82,9 +82,7 @@
   "overrides": {
     "pa11y-ci": {
       "pa11y": "^8.0.0"
-    },
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    }
   },
   "workspaces": [
     ".",
