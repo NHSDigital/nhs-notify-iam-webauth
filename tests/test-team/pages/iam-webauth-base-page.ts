@@ -5,15 +5,15 @@ export abstract class IamWebAuthBasePage {
 
   public readonly pageHeader: Locator;
 
-  public readonly loginLink: Locator;
+  public readonly signInLink: Locator;
 
-  public readonly logoutLink: Locator;
+  public readonly signOutLink: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.pageHeader = page.locator('h1');
-    this.loginLink = page.locator('[id="login-link"]');
-    this.logoutLink = page.locator('[id="logout-link"]');
+    this.signInLink = page.locator('[id="sign-in-link"]');
+    this.signOutLink = page.locator('[id="sign-out-link"]');
   }
 
   abstract loadPage({ redirectPath }: { redirectPath: string }): Promise<void>;

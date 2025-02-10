@@ -11,6 +11,10 @@ output "cognito_domain" {
 }
 
 output "redirect_domain" {
+  value = "http://localhost:3000/auth/oauth2"
+}
+
+output "signout_redirect_domain" {
   value = "http://localhost:3000/auth"
 }
 

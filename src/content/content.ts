@@ -1,8 +1,12 @@
+import { getConstants } from '../utils/public-constants';
+
+const { BASE_PATH } = getConstants();
+
 const headerComponent = {
   serviceName: 'Notify',
   links: {
-    logIn: 'Log in',
-    logOut: 'Log out',
+    signIn: { text: 'Sign in', href: BASE_PATH },
+    signOut: { text: 'Sign out', href: `${BASE_PATH}/signout` },
   },
 };
 
@@ -21,9 +25,18 @@ const footerComponent = {
   },
 };
 
+const cognitoSignInComponent = {
+  heading: 'Dev Only - Sign in with Email / Password',
+};
+
 const mainLayout = {
   title: 'Sign in - Create and submit templates - NHS Notify',
   description: 'Sign in - Create and submit templates - NHS Notify',
+};
+
+const signInPage = {
+  pageHeading: 'Sign in',
+  federatedSignInSectionHeading: 'Sign in using an NHS account',
 };
 
 const content = {
@@ -33,8 +46,11 @@ const content = {
   components: {
     headerComponent,
     footerComponent,
+    cognitoSignInComponent,
   },
-  pages: {},
+  pages: {
+    signInPage,
+  },
 };
 
 export default content;

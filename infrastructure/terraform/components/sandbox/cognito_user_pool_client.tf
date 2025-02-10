@@ -3,7 +3,7 @@ resource "aws_cognito_user_pool_client" "main" {
   user_pool_id = aws_cognito_user_pool.main.id
 
   callback_urls = [
-    "http://localhost:3000/auth"
+    "http://localhost:3000/auth/oauth2"
   ]
 
   logout_urls = [

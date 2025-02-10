@@ -1,0 +1,12 @@
+@import 'node_modules/nhsuk-frontend/packages/core/settings/colours';
+
+.auth-link {
+  &__link {
+    color: $color_nhsuk-white;
+    padding: 1em;
+
+    &:visited {
+      color: $color_nhsuk-white;
+    }
+  }
+}

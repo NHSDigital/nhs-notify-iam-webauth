@@ -23,28 +23,7 @@ data "aws_iam_policy_document" "apigateway_assumerole" {
   }
 }
 
-resource "aws_iam_role_policy" "apigateway_logging" {
-  role   = aws_iam_role.apigateway_logging.name
-  name   = "${local.csi}-logging"
-  policy = data.aws_iam_policy_document.apigateway_logging.json
+resource "aws_iam_role_policy_attachment" "apigateway_logging" {
+  role       = aws_iam_role.apigateway_logging.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
 }
-
-data "aws_iam_policy_document" "apigateway_logging" {
-  statement {
-    sid    = "AllowLogs"
-    effect = "Allow"
-
-    actions = [
-      "logs:CreateLogGroup",
-      "logs:CreateLogStream",
-      "logs:DescribeLogGroups",
-      "logs:DescribeLogStreams",
-      "logs:PutLogEvents",
-      "logs:GetLogEvents",
-      "logs:FilterLogEvents",
-    ]
-
-    resources = ["*"]
-  }
-}
-

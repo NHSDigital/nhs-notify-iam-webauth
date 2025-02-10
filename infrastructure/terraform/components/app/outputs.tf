@@ -14,10 +14,11 @@ output "cognito_user_pool_client" {
 
 output "amplify" {
   value = {
-    id                = aws_amplify_app.main.id
-    domain_name       = local.root_domain_name
-    branch_name       = var.branch_name
-    auth_gateway_name = local.auth_gateway_name
+    id                           = aws_amplify_app.main.id
+    domain_name                  = local.root_domain_name
+    branch_name                  = var.branch_name
+    auth_gateway_name            = local.auth_gateway_name
+    auth_signout_redirect_domain = local.auth_signout_redirect_domain
   }
 }
 

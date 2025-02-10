@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`CIS2LoginButton renders CIS2LoginButton correctly 1`] = `
+exports[`CIS2SignInButton renders CIS2SignInButton correctly 1`] = `
 <DocumentFragment>
   <button
     alt="NHS Care Identity"
