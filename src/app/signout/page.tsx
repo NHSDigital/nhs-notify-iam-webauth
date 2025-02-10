@@ -12,7 +12,7 @@ const SignOut = () => {
     }
   }, [authStatus, signOut]);
 
-  return <p>Signing out</p>;
+  return <p>{authStatus === 'unauthenticated' ? 'Signed' : 'Signing'} out</p>;
 };
 
 export default function Page() {
