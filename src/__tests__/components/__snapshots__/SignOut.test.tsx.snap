@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Signout calls signOut when user is authenticated 1`] = `
+<DocumentFragment>
+  <p>
+    Signing out
+  </p>
+</DocumentFragment>
+`;
+
+exports[`Signout does not call signOut when user is unauthenticated 1`] = `
+<DocumentFragment>
+  test
+</DocumentFragment>
+`;

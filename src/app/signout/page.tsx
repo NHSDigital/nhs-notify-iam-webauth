@@ -1,25 +1,13 @@
 'use client';
 
-import React, { Suspense, useEffect, useState } from 'react';
-import { signOut } from '@aws-amplify/auth';
+import React from 'react';
 import { Redirect } from '@/src/components/molecules/Redirect/Redirect';
-
-const SignOut = () => {
-  const [signedOut, setSignedOut] = useState(false);
-
-  useEffect(() => {
-    if (!signedOut) {
-      signOut().then(() => setSignedOut(true));
-    }
-  }, [signedOut]);
-
-  return signedOut ? <Redirect /> : <p>Signing out</p>;
-};
+import { SignOut } from '@/src/components/molecules/SignOut/SignOut';
 
 export default function Page() {
   return (
-    <Suspense fallback={<p>Loading...</p>}>
-      <SignOut />
-    </Suspense>
+    <SignOut>
+      <Redirect />
+    </SignOut>
   );
 }
