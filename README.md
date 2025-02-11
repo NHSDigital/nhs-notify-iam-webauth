@@ -110,3 +110,29 @@ You'll need to ensure you have an authenticated terminal to `nhs-notify-iam-dev`
 cd tests/test-team
 npm run test:local-ui
 ```
+
+## Environment variables
+
+### NEXT_PUBLIC_USER_POOL_ID
+
+Value from your Cognito instance
+
+### NEXT_PUBLIC_USER_POOL_CLIENT_ID
+
+Value from your Cognito instance
+
+### NEXT_PUBLIC_COGNITO_DOMAIN
+
+Value from your Cognito instance
+
+### NEXT_PUBLIC_REDIRECT_DOMAIN
+
+Value from your Cognito instance
+
+### NEXT_PUBLIC_CIS2_PROVIDER_NAME
+
+Value from your Cognito instance
+
+### NEXT_PUBLIC_TIME_TILL_LOGOUT_SECONDS
+
+The inactive page displays configurable content that informs users of the duration of inactivity before logout. This duration is determined by the `NEXT_PUBLIC_TIME_TILL_LOGOUT_SECONDS` variable, which should be synchronized with the corresponding value in the `nhs-notify-web-template-management` repository.
