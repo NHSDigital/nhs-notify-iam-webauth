@@ -46,7 +46,7 @@ it('listens for oauth state events from amplify hub', async () => {
   });
 
   await waitFor(() =>
-    expect(mockedRedirect).toHaveBeenCalledWith('/redirect/testing', 'replace')
+    expect(mockedRedirect).toHaveBeenCalledWith('/signin/testing', 'replace')
   );
 });
 
@@ -88,6 +88,6 @@ it('defaults redirect path', async () => {
   });
 
   await waitFor(() =>
-    expect(mockedRedirect).toHaveBeenCalledWith('/redirect/home', 'replace')
+    expect(mockedRedirect).toHaveBeenCalledWith('/signin/home', 'replace')
   );
 });

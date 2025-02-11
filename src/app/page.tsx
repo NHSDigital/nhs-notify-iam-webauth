@@ -23,7 +23,7 @@ function SignInPage() {
   useEffect(() => {
     if (authStatus === 'authenticated') {
       redirect(
-        path.normalize(redirectPath ? `/redirect/${redirectPath}` : '/home'),
+        path.normalize(redirectPath ? `/signin/${redirectPath}` : '/home'),
         RedirectType.push
       );
     }

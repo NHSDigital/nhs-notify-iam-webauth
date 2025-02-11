@@ -70,7 +70,7 @@ describe('SignInPage', () => {
     render(<SignInPage />);
 
     expect(mockRedirect).toHaveBeenCalledWith(
-      '/redirect/example-redirect',
+      '/signin/example-redirect',
       RedirectType.push
     );
   });
