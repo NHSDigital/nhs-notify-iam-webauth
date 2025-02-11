@@ -36,4 +36,6 @@ output "deployment" {
 
 output "csrf_secret" {
   value = random_bytes.csrf_secret.hex
+
+  sensitive = true
 }
