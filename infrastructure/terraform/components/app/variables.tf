@@ -130,6 +130,13 @@ variable "AMPLIFY_BASIC_AUTH_SECRET" {
   default     = "unset"
 }
 
+variable "CSRF_SECRET" {
+  # Github only does uppercase env vars
+  type        = string
+  description = "Secure cryptographic key to be used for generating CSRF tokens - This is entended to be read from CI variables and not commited to any codebase"
+  default     = "unset"
+}
+
 variable "branch_name" {
   type        = string
   description = "The branch name to deploy"
