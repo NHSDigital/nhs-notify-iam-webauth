@@ -21,7 +21,9 @@ export default function CIS2CallbackPage(): ReactNode {
 
   if (customState) {
     redirect(
-      path.normalize(`/signin/${customState.redirectPath || '/home'}`),
+      path.normalize(
+        `/signin?redirect=${encodeURIComponent(customState.redirectPath || '/home')}`
+      ),
       RedirectType.replace
     );
   }
