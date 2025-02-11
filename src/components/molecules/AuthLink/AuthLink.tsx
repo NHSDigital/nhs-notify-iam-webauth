@@ -4,9 +4,10 @@ import React from 'react';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import content from '@/src/content/content';
 import styles from './AuthLink.module.scss';
+import { authenticatorSelector } from '../../../utils/authenticator-selector';
 
 export const AuthLink = () => {
-  const { authStatus } = useAuthenticator((ctx) => [ctx.authStatus]);
+  const { authStatus } = useAuthenticator(authenticatorSelector);
 
   let id = 'sign-in-link';
   let linkContent = content.components.headerComponent.links.signIn;

@@ -1,3 +1,6 @@
+/**
+ * @jest-environment node
+ */
 import { mockDeep } from 'jest-mock-extended';
 import { cookies } from 'next/headers';
 import { sign } from 'jsonwebtoken';
@@ -10,6 +13,7 @@ import {
   verifyCsrfTokenFull,
   getCsrfFormValue,
 } from '../../utils/csrf-utils';
+import { getAccessTokenServer } from '../../utils/amplify-utils';
 
 class MockHmac {
   update(_: BinaryLike) {
@@ -34,6 +38,7 @@ jest.mock('node:crypto', () => ({
   createHmac: () => new MockHmac(),
   randomBytes: () => 'salt',
 }));
+jest.mock('../../utils/amplify-utils');
 
 const OLD_ENV = { ...process.env };
 
@@ -79,11 +84,7 @@ describe('getCsrfFormValue', () => {
 
 describe('getSessionId', () => {
   test('errors when access token not found', async () => {
-    jest.mocked(cookies).mockReturnValue(
-      mockDeep<ReadonlyRequestCookies>({
-        getAll: () => [],
-      })
-    );
+    jest.mocked(getAccessTokenServer).mockResolvedValue();
 
     await expect(() => getSessionId()).rejects.toThrow(
       'Could not get access token'
@@ -98,16 +99,7 @@ describe('getSessionId', () => {
       'key'
     );
 
-    jest.mocked(cookies).mockReturnValue(
-      mockDeep<ReadonlyRequestCookies>({
-        getAll: () => [
-          {
-            name: 'Cognito.123.accessToken',
-            value: mockEmptyJwt,
-          },
-        ],
-      })
-    );
+    jest.mocked(getAccessTokenServer).mockResolvedValue(mockEmptyJwt);
 
     await expect(() => getSessionId()).rejects.toThrow(
       'Could not get session ID'
@@ -115,16 +107,7 @@ describe('getSessionId', () => {
   });
 
   test('returns session id', async () => {
-    jest.mocked(cookies).mockReturnValue(
-      mockDeep<ReadonlyRequestCookies>({
-        getAll: () => [
-          {
-            name: 'Cognito.123.accessToken',
-            value: mockJwt,
-          },
-        ],
-      })
-    );
+    jest.mocked(getAccessTokenServer).mockResolvedValue(mockJwt);
 
     const sessionId = await getSessionId();
 
@@ -163,16 +146,7 @@ describe('verifyCsrfTokenFull', () => {
   test('missing CSRF cookie', async () => {
     const formData = mockDeep<FormData>();
 
-    jest.mocked(cookies).mockReturnValue(
-      mockDeep<ReadonlyRequestCookies>({
-        getAll: () => [
-          {
-            name: 'Cognito.123.accessToken',
-            value: mockJwt,
-          },
-        ],
-      })
-    );
+    jest.mocked(getAccessTokenServer).mockResolvedValue(mockJwt);
 
     await expect(() => verifyCsrfTokenFull(formData)).rejects.toThrow(
       'missing CSRF cookie'
@@ -184,14 +158,9 @@ describe('verifyCsrfTokenFull', () => {
       get: () => null,
     });
 
+    jest.mocked(getAccessTokenServer).mockResolvedValue(mockJwt);
     jest.mocked(cookies).mockReturnValue(
       mockDeep<ReadonlyRequestCookies>({
-        getAll: () => [
-          {
-            name: 'Cognito.123.accessToken',
-            value: mockJwt,
-          },
-        ],
         get: (_: string) => ({
           name: 'csrf_token',
           value: 'hmac.salt',
@@ -209,14 +178,9 @@ describe('verifyCsrfTokenFull', () => {
       get: () => 'hmac2.salt',
     });
 
+    jest.mocked(getAccessTokenServer).mockResolvedValue(mockJwt);
     jest.mocked(cookies).mockReturnValue(
       mockDeep<ReadonlyRequestCookies>({
-        getAll: () => [
-          {
-            name: 'Cognito.123.accessToken',
-            value: mockJwt,
-          },
-        ],
         get: (_: string) => ({
           name: 'csrf_token',
           value: 'hmac.salt',
@@ -234,14 +198,9 @@ describe('verifyCsrfTokenFull', () => {
       get: () => 'hmac2.salt',
     });
 
+    jest.mocked(getAccessTokenServer).mockResolvedValue(mockJwt);
     jest.mocked(cookies).mockReturnValue(
       mockDeep<ReadonlyRequestCookies>({
-        getAll: () => [
-          {
-            name: 'Cognito.123.accessToken',
-            value: mockJwt,
-          },
-        ],
         get: (_: string) => ({
           name: 'csrf_token',
           value: 'hmac2.salt',
@@ -259,14 +218,9 @@ describe('verifyCsrfTokenFull', () => {
       get: () => 'hmac.salt',
     });
 
+    jest.mocked(getAccessTokenServer).mockResolvedValue(mockJwt);
     jest.mocked(cookies).mockReturnValue(
       mockDeep<ReadonlyRequestCookies>({
-        getAll: () => [
-          {
-            name: 'Cognito.123.accessToken',
-            value: mockJwt,
-          },
-        ],
         get: (_: string) => ({
           name: 'csrf_token',
           value: 'hmac.salt',

@@ -4,14 +4,13 @@ import { jwtDecode } from 'jwt-decode';
 import { createHmac, randomBytes } from 'node:crypto';
 import { cookies } from 'next/headers';
 import { getEnvironmentVariable } from './get-environment-variable';
+import { getAccessTokenServer } from './amplify-utils';
 
 export const getCsrfFormValue = async () =>
   cookies().get('csrf_token')?.value ?? 'no_token';
 
 export const getSessionId = async () => {
-  const accessToken = cookies()
-    .getAll()
-    .find(({ name }) => name.endsWith('accessToken'))?.value;
+  const accessToken = await getAccessTokenServer();
 
   if (!accessToken) {
     throw new Error('Could not get access token');

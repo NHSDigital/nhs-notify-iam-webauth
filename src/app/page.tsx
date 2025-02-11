@@ -8,13 +8,14 @@ import { federatedSignIn } from '@/src/utils/federated-sign-in';
 import { CIS2SignInButton } from '@/src/components/CIS2SignInButton/CIS2SignInButton';
 import content from '@/src/content/content';
 import styles from './page.module.scss';
+import { authenticatorSelector } from '../utils/authenticator-selector';
 
 function SignInPage() {
   const {
     pages: { signInPage: pageContent },
   } = content;
 
-  const { authStatus } = useAuthenticator((ctx) => [ctx.authStatus]);
+  const { authStatus } = useAuthenticator(authenticatorSelector);
 
   const searchParams = useSearchParams();
 
