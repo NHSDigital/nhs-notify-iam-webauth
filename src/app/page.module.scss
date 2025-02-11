@@ -1,0 +1,27 @@
+@import 'node_modules/nhsuk-frontend/packages/core/settings/colours';
+
+.notify-cognito-sign-in-form {
+  [data-amplify-authenticator] {
+    [data-amplify-container] {
+      font-family: 'Frutiger W01', 'Arial', sans-serif;
+      place-self: auto;
+
+      .amplify-label {
+        color: $nhsuk-text-color;
+      }
+
+      .amplify-button.amplify-button--primary {
+        background-color: $color_nhsuk-blue;
+      }
+
+      .amplify-button.amplify-button--link {
+        color: $nhsuk-link-color;
+      }
+
+      [data-amplify-router] {
+        border-color: $nhsuk-border-color;
+        box-shadow: none;
+      }
+    }
+  }
+}

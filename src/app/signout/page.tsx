@@ -1,19 +1,18 @@
 'use client';
 
-import React, { Suspense, useEffect, useState } from 'react';
-import { signOut } from '@aws-amplify/auth';
-import { Redirect } from '@/src/components/molecules/Redirect/Redirect';
+import React, { Suspense, useEffect } from 'react';
+import { useAuthenticator } from '@aws-amplify/ui-react';
 
 const SignOut = () => {
-  const [signedOut, setSignedOut] = useState(false);
+  const { authStatus, signOut } = useAuthenticator((ctx) => [ctx.authStatus]);
 
   useEffect(() => {
-    if (!signedOut) {
-      signOut().then(() => setSignedOut(true));
+    if (authStatus === 'authenticated') {
+      signOut();
     }
-  }, [signedOut]);
+  }, [authStatus, signOut]);
 
-  return signedOut ? <Redirect /> : <p>Signing out</p>;
+  return <p>{authStatus === 'unauthenticated' ? 'Signed' : 'Signing'} out</p>;
 };
 
 export default function Page() {
