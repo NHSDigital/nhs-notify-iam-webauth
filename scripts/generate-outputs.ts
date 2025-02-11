@@ -21,7 +21,7 @@ if (inputType === 'sandbox-output') {
   redirectDomain = outputsFileContent.redirect_domain.value;
   signoutRedirectDomain = outputsFileContent.signout_redirect_domain.value;
   cis2ProviderName = outputsFileContent.cis2_provider_name.value;
-  enableCognitoIdp = 'true' // always enable cognito idp if we're using a sandbox 
+  enableCognitoIdp = 'true' // always enable cognito idp if we're using a sandbox
   csrfSecret = outputsFileContent.csrf_secret.value
 } else if (inputType === 'env') {
   // do nothing
