@@ -7,7 +7,7 @@ module.exports = {
 
   experimental: {
     serverActions: {
-      allowedOrigins: allowedOrigins,
+      allowedOrigins,
     },
   },
 
