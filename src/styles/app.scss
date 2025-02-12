@@ -1,7 +1,6 @@
 @use 'nhsuk-frontend/packages/nhsuk.scss' as nhsuk;
 
-code {
-  display: inline-block;
-  padding: 0.6rem;
-  background-color: nhsuk.$nhsuk-border-color;
+.notify-content {
+  background-color: nhsuk.$color_nhsuk-white;
+  border: 1px solid nhsuk.$nhsuk-border-color;
 }
