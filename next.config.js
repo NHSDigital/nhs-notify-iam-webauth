@@ -23,12 +23,6 @@ module.exports = {
         basePath: false,
         permanent: false,
       },
-      {
-        source: `${basePath}/redirect/:path*`,
-        destination: '/:path*',
-        basePath: false,
-        permanent: false,
-      },
       // Note: This redirect is for the home page which would be the web-cms
       {
         source: `${basePath}/home`,

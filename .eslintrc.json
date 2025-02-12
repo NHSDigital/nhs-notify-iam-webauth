@@ -60,7 +60,8 @@
     "react/no-danger": "off",
     "no-param-reassign": "off",
     "react/require-default-props": "off",
-    "unicorn/prefer-node-protocol": "off"
+    "unicorn/prefer-node-protocol": "off",
+    "unicorn/no-null": "off"
   },
   "settings": {
     "import/resolver": {

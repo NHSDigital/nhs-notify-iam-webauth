@@ -10,6 +10,7 @@ let redirectDomain = process.env.NEXT_PUBLIC_REDIRECT_DOMAIN || '';
 let signoutRedirectDomain = process.env.NEXT_PUBLIC_SIGNOUT_REDIRECT_DOMAIN || '';
 let cis2ProviderName = process.env.NEXT_PUBLIC_CIS2_PROVIDER_NAME || '';
 let enableCognitoIdp = process.env.NEXT_PUBLIC_ENABLE_COGNITO_IDP || '';
+let csrfSecret = process.env.CSRF_SECRET || '';
 
 if (inputType === 'sandbox-output') {
   const outputsFileContent = JSON.parse(readFileSync('./sandbox_tf_outputs.json').toString());
@@ -20,7 +21,8 @@ if (inputType === 'sandbox-output') {
   redirectDomain = outputsFileContent.redirect_domain.value;
   signoutRedirectDomain = outputsFileContent.signout_redirect_domain.value;
   cis2ProviderName = outputsFileContent.cis2_provider_name.value;
-  enableCognitoIdp = 'true' // always enable cognito idp if we're using a sandbox backend
+  enableCognitoIdp = 'true' // always enable cognito idp if we're using a sandbox
+  csrfSecret = outputsFileContent.csrf_secret.value
 } else if (inputType === 'env') {
   // do nothing
 } else {
@@ -36,6 +38,7 @@ NEXT_PUBLIC_REDIRECT_DOMAIN=${redirectDomain}
 NEXT_PUBLIC_SIGNOUT_REDIRECT_DOMAIN=${signoutRedirectDomain}
 NEXT_PUBLIC_CIS2_PROVIDER_NAME=${cis2ProviderName}
 NEXT_PUBLIC_ENABLE_COGNITO_IDP=${enableCognitoIdp}
+CSRF_SECRET=${csrfSecret}
 `);
 
 const amplifyOutputs = {

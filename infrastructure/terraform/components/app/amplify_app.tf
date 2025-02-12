@@ -34,5 +34,6 @@ resource "aws_amplify_app" "main" {
     NEXT_PUBLIC_DISABLE_CONTENT    = var.disable_content
     NEXT_PUBLIC_ENABLE_COGNITO_IDP = var.enable_cognito_built_in_idp
     NEXT_PUBLIC_CIS2_PROVIDER_NAME = local.cis2_idp_name
+    CSRF_SECRET                    = aws_ssm_parameter.csrf_secret.value
   }
 }
