@@ -9,7 +9,7 @@ import { getAccessTokenServer } from './amplify-utils';
 export const getCsrfFormValue = async () => {
   const cookieStore = await cookies();
   return cookieStore.get('csrf_token')?.value ?? 'no_token';
-}
+};
 
 export const getSessionId = async () => {
   const accessToken = await getAccessTokenServer();
