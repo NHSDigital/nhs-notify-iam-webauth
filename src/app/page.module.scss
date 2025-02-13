@@ -1,4 +1,4 @@
-@import 'node_modules/nhsuk-frontend/packages/core/settings/colours';
+@use 'node_modules/nhsuk-frontend/packages/core/settings/colours' as nhsuk;
 
 .notify-cognito-sign-in-form {
   [data-amplify-authenticator] {
@@ -7,19 +7,19 @@
       place-self: auto;
 
       .amplify-label {
-        color: $nhsuk-text-color;
+        color: nhsuk.$nhsuk-text-color;
       }
 
       .amplify-button.amplify-button--primary {
-        background-color: $color_nhsuk-blue;
+        background-color: nhsuk.$color_nhsuk-blue;
       }
 
       .amplify-button.amplify-button--link {
-        color: $nhsuk-link-color;
+        color: nhsuk.$nhsuk-link-color;
       }
 
       [data-amplify-router] {
-        border-color: $nhsuk-border-color;
+        border-color: nhsuk.$nhsuk-border-color;
         box-shadow: none;
       }
     }
