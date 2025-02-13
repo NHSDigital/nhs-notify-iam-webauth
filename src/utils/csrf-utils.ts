@@ -6,8 +6,10 @@ import { cookies } from 'next/headers';
 import { getEnvironmentVariable } from './get-environment-variable';
 import { getAccessTokenServer } from './amplify-utils';
 
-export const getCsrfFormValue = async () =>
-  cookies().get('csrf_token')?.value ?? 'no_token';
+export const getCsrfFormValue = async () => {
+  const cookieStore = await cookies();
+  return cookieStore.get('csrf_token')?.value ?? 'no_token';
+}
 
 export const getSessionId = async () => {
   const accessToken = await getAccessTokenServer();
@@ -40,7 +42,8 @@ export const generateCsrf = async () => {
 
   const csrfToken = `${hash}.${salt}`;
 
-  cookies().set('csrf_token', csrfToken, {
+  const cookieStore = await cookies();
+  cookieStore.set('csrf_token', csrfToken, {
     httpOnly: true,
     secure: true,
   });
@@ -66,7 +69,8 @@ export const verifyCsrfToken = async (
 export const verifyCsrfTokenFull = async (formData: FormData) => {
   const secret = getEnvironmentVariable('CSRF_SECRET');
   const sessionId = await getSessionId();
-  const csrfTokenCookie = cookies().get('csrf_token');
+  const cookieStore = await cookies();
+  const csrfTokenCookie = cookieStore.get('csrf_token');
 
   if (!csrfTokenCookie) {
     throw new Error('missing CSRF cookie');
