@@ -7,7 +7,7 @@ module.exports = {
 
   experimental: {
     serverActions: {
-      allowedOrigins: allowedOrigins,
+      allowedOrigins,
     },
   },
 
@@ -20,12 +20,6 @@ module.exports = {
       {
         source: '/',
         destination: basePath,
-        basePath: false,
-        permanent: false,
-      },
-      {
-        source: `${basePath}/redirect/:path*`,
-        destination: '/:path*',
         basePath: false,
         permanent: false,
       },
