@@ -2,6 +2,13 @@
 
 exports[`Inactive page matches snapshot 1`] = `
 <DocumentFragment>
+  <title>
+    You've been signed out - Create and submit templates - NHS Notify
+  </title>
+  <meta
+    content="You've been signed out - Create and submit templates - NHS Notify"
+    name="description"
+  />
   <div
     class="nhsuk-grid-row"
   >
@@ -9,10 +16,10 @@ exports[`Inactive page matches snapshot 1`] = `
       You've been signed out
     </h1>
     <p>
-      You've been signed out because not used this service for 15 minutes
+      You've been signed out because you've not used this service for 15 minutes
     </p>
     <p>
-      Any unsaved changes have been lost
+      Any unsaved changes have been lost.
     </p>
     <p>
       Sign in again to create and submit a template to NHS Notify.

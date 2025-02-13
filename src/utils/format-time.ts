@@ -1,5 +1,3 @@
-'use client';
-
 export const formatTime = (remainingSeconds: number) => {
   if (remainingSeconds <= 30) {
     return `${remainingSeconds} seconds`;
