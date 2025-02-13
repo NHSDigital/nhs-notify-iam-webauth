@@ -21,7 +21,11 @@ describe('Signout', () => {
   });
 
   test('calls signOut when user is authenticated', async () => {
-    const page = render(<SignOut>test</SignOut>);
+    const page = render(
+      <SignOut>
+        <p>signed out</p>
+      </SignOut>
+    );
 
     expect(signOutMock).toHaveBeenCalled();
 
@@ -32,7 +36,11 @@ describe('Signout', () => {
     useAuthenticatorMock.mockReturnValueOnce(
       mockDeep<UseAuthenticator>({ authStatus: 'unauthenticated' })
     );
-    const page = render(<SignOut>test</SignOut>);
+    const page = render(
+      <SignOut>
+        <p>signed out</p>
+      </SignOut>
+    );
 
     expect(signOutMock).not.toHaveBeenCalled();
 

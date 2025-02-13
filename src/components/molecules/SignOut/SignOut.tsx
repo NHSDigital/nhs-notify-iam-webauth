@@ -2,9 +2,10 @@
 
 import { Suspense, useEffect } from 'react';
 import { useAuthenticator } from '@aws-amplify/ui-react';
+import { authenticatorSelector } from '@/src/utils/authenticator-selector';
 
 export const SignOut = ({ children }: { children?: React.ReactNode }) => {
-  const { signOut, authStatus } = useAuthenticator((ctx) => [ctx.authStatus]);
+  const { signOut, authStatus } = useAuthenticator(authenticatorSelector);
 
   useEffect(() => {
     if (authStatus === 'authenticated') {

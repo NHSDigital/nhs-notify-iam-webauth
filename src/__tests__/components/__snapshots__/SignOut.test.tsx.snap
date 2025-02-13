@@ -10,6 +10,8 @@ exports[`Signout calls signOut when user is authenticated 1`] = `
 
 exports[`Signout does not call signOut when user is unauthenticated 1`] = `
 <DocumentFragment>
-  test
+  <p>
+    signed out
+  </p>
 </DocumentFragment>
 `;
