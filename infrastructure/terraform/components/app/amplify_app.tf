@@ -32,6 +32,7 @@ resource "aws_amplify_app" "main" {
     NOTIFY_ENVIRONMENT                   = var.environment
     NOTIFY_DOMAIN_NAME                   = local.root_domain_name
     NEXT_PUBLIC_DISABLE_CONTENT          = var.disable_content
+    NEXT_PUBLIC_ENABLE_COGNITO_IDP       = var.enable_cognito_built_in_idp
     NEXT_PUBLIC_CIS2_PROVIDER_NAME       = local.cis2_idp_name
     NEXT_PUBLIC_TIME_TILL_LOGOUT_SECONDS = 900
   }

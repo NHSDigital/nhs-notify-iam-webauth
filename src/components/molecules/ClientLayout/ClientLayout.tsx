@@ -19,11 +19,11 @@ Amplify.configure(require('@/amplify_outputs.json'), { ssr: true });
 export const ClientLayout = ({ children }: { children: React.ReactNode }) => (
   <html lang='en'>
     <Head>
-      <script src={`${BASE_PATH}/lib/nhsuk-8.1.1.min.js`} defer />
+      <script src={`${BASE_PATH}/lib/nhsuk-9.1.0.min.js`} defer />
       <title>{content.global.mainLayout.title}</title>
       <link
         rel='shortcut icon'
-        href={`${BASE_PATH}/lib/assets/favicons/favicon.icon`}
+        href={`${BASE_PATH}/lib/assets/favicons/favicon.ico`}
         type='image/x-icon'
       />
       <link

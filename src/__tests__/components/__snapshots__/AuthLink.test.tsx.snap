@@ -1,0 +1,52 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AuthLink - authenticated 1`] = `
+<DocumentFragment>
+  <div
+    class="auth-link"
+    data-testid="auth-link"
+  >
+    <a
+      class="auth-link__link"
+      href="/auth/signout"
+      id="sign-out-link"
+    >
+      Sign out
+    </a>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`AuthLink - configuring 1`] = `
+<DocumentFragment>
+  <div
+    class="auth-link"
+    data-testid="auth-link"
+  >
+    <a
+      class="auth-link__link"
+      href="/auth"
+      id="sign-in-link"
+    >
+      Sign in
+    </a>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`AuthLink - unauthenticated 1`] = `
+<DocumentFragment>
+  <div
+    class="auth-link"
+    data-testid="auth-link"
+  >
+    <a
+      class="auth-link__link"
+      href="/auth"
+      id="sign-in-link"
+    >
+      Sign in
+    </a>
+  </div>
+</DocumentFragment>
+`;

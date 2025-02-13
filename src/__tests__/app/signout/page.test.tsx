@@ -10,7 +10,9 @@ jest.mock('../../../components/molecules/SignOut/SignOut', () => ({
 }));
 
 describe('Signout Page', () => {
-  beforeEach(jest.resetAllMocks);
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
 
   test('signs out user and redirects', async () => {
     render(<SignOutPage />);

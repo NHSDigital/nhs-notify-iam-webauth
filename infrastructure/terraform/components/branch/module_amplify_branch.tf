@@ -22,10 +22,11 @@ module "amplify_branch" {
   enable_auto_build = true
 
   environment_variables = {
-    NEXT_PUBLIC_BASE_PATH           = "/auth~${local.normalised_branch_name}"
-    NEXT_PUBLIC_USER_POOL_ID        = local.app.cognito_user_pool["id"]
-    NEXT_PUBLIC_USER_POOL_CLIENT_ID = data.aws_cognito_user_pool_client.client.id
-    NEXT_PUBLIC_COGNITO_DOMAIN      = "${local.app.cognito_user_pool["domain"]}.auth.eu-west-2.amazoncognito.com"
-    NEXT_PUBLIC_REDIRECT_DOMAIN     = local.app.amplify["auth_gateway_name"]
+    NEXT_PUBLIC_BASE_PATH               = "/auth~${local.normalised_branch_name}"
+    NEXT_PUBLIC_USER_POOL_ID            = local.app.cognito_user_pool["id"]
+    NEXT_PUBLIC_USER_POOL_CLIENT_ID     = data.aws_cognito_user_pool_client.client.id
+    NEXT_PUBLIC_COGNITO_DOMAIN          = "${local.app.cognito_user_pool["domain"]}.auth.eu-west-2.amazoncognito.com"
+    NEXT_PUBLIC_REDIRECT_DOMAIN         = local.app.amplify["auth_gateway_name"]
+    NEXT_PUBLIC_SIGNOUT_REDIRECT_DOMAIN = local.app.amplify["auth_signout_redirect_domain"]
   }
 }

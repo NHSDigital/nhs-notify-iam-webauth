@@ -1,10 +1,19 @@
 resource "aws_cognito_user_pool" "main" {
   name = local.csi
 
+  deletion_protection = var.cognito_prevent_deletion ? "ACTIVE" : "INACTIVE"
+
   username_attributes = ["email"]
 
   admin_create_user_config {
     allow_admin_create_user_only = true
+  }
+
+  account_recovery_setting {
+    recovery_mechanism {
+      name     = "admin_only"
+      priority = 1
+    }
   }
 
   schema {
