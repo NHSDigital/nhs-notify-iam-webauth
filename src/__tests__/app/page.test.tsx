@@ -70,7 +70,7 @@ describe('SignInPage', () => {
     render(<SignInPage />);
 
     expect(mockRedirect).toHaveBeenCalledWith(
-      '/redirect/example-redirect',
+      '/signin?redirect=%2Fexample-redirect',
       RedirectType.push
     );
   });
@@ -82,7 +82,10 @@ describe('SignInPage', () => {
 
     render(<SignInPage />);
 
-    expect(mockRedirect).toHaveBeenCalledWith('/home', RedirectType.push);
+    expect(mockRedirect).toHaveBeenCalledWith(
+      '/signin?redirect=%2Fhome',
+      RedirectType.push
+    );
   });
 
   describe('CIS2 login', () => {
