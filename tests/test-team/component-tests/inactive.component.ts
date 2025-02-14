@@ -37,7 +37,7 @@ test.describe('Inactive', () => {
 
     await inactivePage.loadPage({
       redirectPath: '/templates/create-and-submit-templates',
-    })
+    });
 
     await expect(async () => {
       const cookiesPostSignOut = await getCognitoCookies(page);
@@ -47,6 +47,8 @@ test.describe('Inactive', () => {
 
     await inactivePage.clickSignInButton();
 
-    await expect(page).toHaveURL(`${baseURL}/auth?redirect=%2Ftemplates%2Fcreate-and-submit-templates`);
+    await expect(page).toHaveURL(
+      `${baseURL}/auth?redirect=%2Ftemplates%2Fcreate-and-submit-templates`
+    );
   });
 });

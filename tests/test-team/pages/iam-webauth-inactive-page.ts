@@ -2,7 +2,6 @@ import { Locator, Page } from '@playwright/test';
 import { IamWebAuthBasePage } from './iam-webauth-base-page';
 
 export class IamWebAuthInactivePage extends IamWebAuthBasePage {
-
   public readonly signInButton: Locator;
 
   constructor(page: Page) {
@@ -14,9 +13,12 @@ export class IamWebAuthInactivePage extends IamWebAuthBasePage {
     await this.signInButton.click();
   }
 
-  async loadPage({ redirectPath }: { redirectPath: string; }): Promise<void> {
-    await this.page.goto(`/auth/inactive?redirect=${encodeURIComponent(redirectPath)}`, {
-      waitUntil: 'load',
-    });
+  async loadPage({ redirectPath }: { redirectPath: string }): Promise<void> {
+    await this.page.goto(
+      `/auth/inactive?redirect=${encodeURIComponent(redirectPath)}`,
+      {
+        waitUntil: 'load',
+      }
+    );
   }
 }
