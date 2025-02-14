@@ -84,7 +84,7 @@ describe('getCsrfFormValue', () => {
 
 describe('getSessionId', () => {
   test('errors when access token not found', async () => {
-    jest.mocked(getAccessTokenServer).mockResolvedValue();
+    jest.mocked(getAccessTokenServer).mockResolvedValue('');
 
     await expect(() => getSessionId()).rejects.toThrow(
       'Could not get access token'

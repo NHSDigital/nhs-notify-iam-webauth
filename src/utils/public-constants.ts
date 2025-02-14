@@ -6,4 +6,6 @@ export const getConstants: () => Record<string, string> = () => ({
   COGNITO_DOMAIN: process.env.NEXT_PUBLIC_COGNITO_DOMAIN || '',
   REDIRECT_DOMAIN: process.env.NEXT_PUBLIC_REDIRECT_DOMAIN || '',
   CIS2_PROVIDER_NAME: process.env.NEXT_PUBLIC_CIS2_PROVIDER_NAME || '',
+  TIME_TILL_LOGOUT_SECONDS:
+    process.env.NEXT_PUBLIC_TIME_TILL_LOGOUT_SECONDS || '900',
 });

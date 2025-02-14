@@ -1,25 +1,23 @@
 'use client';
 
-import React, { Suspense, useEffect } from 'react';
-import { useAuthenticator } from '@aws-amplify/ui-react';
-import { authenticatorSelector } from '../../utils/authenticator-selector';
-
-const SignOut = () => {
-  const { authStatus, signOut } = useAuthenticator(authenticatorSelector);
-
-  useEffect(() => {
-    if (authStatus === 'authenticated') {
-      signOut();
-    }
-  }, [authStatus, signOut]);
-
-  return <p>{authStatus === 'unauthenticated' ? 'Signed' : 'Signing'} out</p>;
-};
+import React from 'react';
+import { SignOut } from '@/src/components/molecules/SignOut/SignOut';
+import content from '@/src/content/content';
+import { MetaTitle } from '@/src/components/atoms/MetaTitle/MetaTitle';
 
 export default function Page() {
+  const {
+    pages: { signOutPage },
+  } = content;
   return (
-    <Suspense fallback={<p>Loading...</p>}>
-      <SignOut />
-    </Suspense>
+    <>
+      <MetaTitle
+        title={signOutPage.meta.title}
+        description={signOutPage.meta.description}
+      />
+      <SignOut>
+        <p>{signOutPage.content}</p>
+      </SignOut>
+    </>
   );
 }
