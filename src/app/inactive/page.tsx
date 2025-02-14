@@ -32,13 +32,9 @@ export default function InactivePage() {
         description={inactivePage.meta.description}
       />
       <SignOut>
-        <div className='nhsuk-grid-row'>
-          <h1>{inactivePage.pageHeading}</h1>
-          {paragraphs}
-          <Button href={signLinLink}>
-            {headerComponent.links.signIn.text}
-          </Button>
-        </div>
+        <h1>{inactivePage.pageHeading}</h1>
+        {paragraphs}
+        <Button href={signLinLink}>{headerComponent.links.signIn.text}</Button>
       </SignOut>
     </>
   );
