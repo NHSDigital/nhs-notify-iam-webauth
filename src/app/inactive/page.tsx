@@ -34,7 +34,9 @@ export default function InactivePage() {
       <SignOut>
         <h1>{inactivePage.pageHeading}</h1>
         {paragraphs}
-        <Button id="inactive-sign-in" href={signInLink}>{headerComponent.links.signIn.text}</Button>
+        <Button id='inactive-sign-in' href={signInLink}>
+          {headerComponent.links.signIn.text}
+        </Button>
       </SignOut>
     </>
   );

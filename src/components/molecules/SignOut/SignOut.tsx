@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import { authenticatorSelector } from '@/src/utils/authenticator-selector';
 
@@ -13,7 +13,5 @@ export const SignOut = ({ children }: { children?: React.ReactNode }) => {
     }
   }, [authStatus, signOut]);
 
-  return (
-    authStatus === 'authenticated' ? <p>Signing out</p> : children
-  );
+  return authStatus === 'authenticated' ? <p>Signing out</p> : children;
 };
