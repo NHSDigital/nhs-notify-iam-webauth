@@ -2,13 +2,6 @@
 
 exports[`Inactive page matches snapshot 1`] = `
 <DocumentFragment>
-  <title>
-    You've been signed out - Create and submit templates - NHS Notify
-  </title>
-  <meta
-    content="You've been signed out - Create and submit templates - NHS Notify"
-    name="description"
-  />
   <h1>
     You've been signed out
   </h1>
@@ -26,6 +19,7 @@ exports[`Inactive page matches snapshot 1`] = `
     class="nhsuk-button"
     draggable="false"
     href="/auth?redirect=%2Fmy-redirect-path"
+    id="inactive-sign-in"
     role="button"
   >
     Sign in
