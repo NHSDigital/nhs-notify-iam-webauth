@@ -18,6 +18,8 @@ describe('Header component', () => {
   });
 
   it('renders component correctly', async () => {
+    process.env.NEXT_PUBLIC_DISABLE_CONTENT = 'true';
+
     const container = render(<NHSNotifyHeader />);
 
     expect(container.asFragment()).toMatchSnapshot();
