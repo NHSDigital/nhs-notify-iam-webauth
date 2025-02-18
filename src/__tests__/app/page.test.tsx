@@ -75,7 +75,7 @@ describe('SignInPage', () => {
     );
   });
 
-  it('redirects to /home if already signed in and there is no redirect search parameter', () => {
+  it('redirects to /templates/manage-templates if already signed in and there is no redirect search parameter', () => {
     mockUseAuthenticator.mockReturnValueOnce(
       mockDeep<UseAuthenticator>({ authStatus: 'authenticated' })
     );
@@ -83,7 +83,7 @@ describe('SignInPage', () => {
     render(<SignInPage />);
 
     expect(mockRedirect).toHaveBeenCalledWith(
-      '/signin?redirect=%2Fhome',
+      '/signin?redirect=%2Ftemplates%2Fmanage-templates',
       RedirectType.push
     );
   });
@@ -98,7 +98,7 @@ describe('SignInPage', () => {
 
       await user.click(button);
 
-      expect(mockFederatedSignIn).toHaveBeenCalledWith('/home');
+      expect(mockFederatedSignIn).toHaveBeenCalledWith('/templates/manage-templates');
     });
 
     it('sets redirect based on search params when clicking cis2 button', async () => {
