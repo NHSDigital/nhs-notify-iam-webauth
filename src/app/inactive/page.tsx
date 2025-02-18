@@ -15,7 +15,7 @@ export default function InactivePage() {
 
   const searchParams = useSearchParams().toString();
 
-  const signLinLink =
+  const signInLink =
     headerComponent.links.signIn.href +
     (searchParams ? `?${searchParams}` : '');
 
@@ -34,7 +34,7 @@ export default function InactivePage() {
       <SignOut>
         <h1>{inactivePage.pageHeading}</h1>
         {paragraphs}
-        <Button href={signLinLink}>{headerComponent.links.signIn.text}</Button>
+        <Button id="inactive-sign-in" href={signInLink}>{headerComponent.links.signIn.text}</Button>
       </SignOut>
     </>
   );

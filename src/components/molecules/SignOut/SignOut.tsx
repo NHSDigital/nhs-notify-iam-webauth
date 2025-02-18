@@ -13,11 +13,7 @@ export const SignOut = ({ children }: { children?: React.ReactNode }) => {
     }
   }, [authStatus, signOut]);
 
-  const SigningOut = <p>Signing out</p>;
-
   return (
-    <Suspense fallback={SigningOut}>
-      {authStatus === 'authenticated' ? SigningOut : children}
-    </Suspense>
+    authStatus === 'authenticated' ? <p>Signing out</p> : children
   );
 };
