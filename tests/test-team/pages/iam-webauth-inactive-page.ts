@@ -6,7 +6,7 @@ export class IamWebAuthInactivePage extends IamWebAuthBasePage {
 
   constructor(page: Page) {
     super(page);
-    this.signInButton = page.locator('[id="inactive-sign-in"]')
+    this.signInButton = page.locator('[id="inactive-sign-in"]');
   }
 
   async clickSignInButton() {
