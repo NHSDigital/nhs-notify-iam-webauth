@@ -30,4 +30,12 @@ describe('Header component', () => {
 
     expect(screen.queryByTestId('auth-link')).not.toBeInTheDocument();
   });
+
+  it('should render auth link', () => {
+    process.env.NEXT_PUBLIC_DISABLE_CONTENT = 'false';
+
+    render(<NHSNotifyHeader />);
+
+    expect(screen.queryByTestId('auth-link')).toBeInTheDocument();
+  });
 });
