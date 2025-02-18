@@ -3,28 +3,28 @@ import { formatTime } from '@/src/utils/format-time';
 describe('formatTime', () => {
   test.each([
     {
-      remainingTime: 121,
+      remainingTime: 150,
       expected: '3 minutes',
     },
     {
-      remainingTime: 120,
+      remainingTime: 149, // upper bound of 2 minutes
       expected: '2 minutes',
     },
     {
-      remainingTime: 61,
+      remainingTime: 90,
       expected: '2 minutes',
     },
     {
-      remainingTime: 60,
-      expected: '1 minute',
-    },
-    {
-      remainingTime: 31,
+      remainingTime: 89, // upper bound of 1 minute
       expected: '1 minute',
     },
     {
       remainingTime: 30,
-      expected: '30 seconds',
+      expected: '1 minute',
+    },
+    {
+      remainingTime: 29, // upper bound of seconds
+      expected: '29 seconds',
     },
     {
       remainingTime: 1,
