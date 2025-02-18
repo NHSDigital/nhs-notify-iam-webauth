@@ -41,7 +41,9 @@ function SignInPage() {
             {pageContent.federatedSignInSectionHeading}
           </h2>
           <CIS2SignInButton
-            onClick={() => federatedSignIn(redirectPath || '/templates/manage-templates')}
+            onClick={() =>
+              federatedSignIn(redirectPath || '/templates/manage-templates')
+            }
           />
         </div>
         {process.env.NEXT_PUBLIC_ENABLE_COGNITO_IDP === 'true' && (

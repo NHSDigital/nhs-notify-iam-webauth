@@ -98,7 +98,9 @@ describe('SignInPage', () => {
 
       await user.click(button);
 
-      expect(mockFederatedSignIn).toHaveBeenCalledWith('/templates/manage-templates');
+      expect(mockFederatedSignIn).toHaveBeenCalledWith(
+        '/templates/manage-templates'
+      );
     });
 
     it('sets redirect based on search params when clicking cis2 button', async () => {
