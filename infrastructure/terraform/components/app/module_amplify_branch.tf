@@ -1,5 +1,5 @@
 module "amplify_branch" {
-  source            = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/amp_branch?ref=v1.0.0"
+  source            = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/amp_branch?ref=v1.0.8"
   name              = var.branch_name
   display_name      = var.url_prefix
   aws_account_id    = var.aws_account_id
