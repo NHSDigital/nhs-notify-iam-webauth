@@ -17,6 +17,8 @@ data "aws_iam_policy_document" "github_deploy" {
     actions = [
       "apigateway:*",
       "amplify:*",
+      "backup:*",
+      "backup-storage:*",
       "cloudformation:*",
       "cloudfront:*",
       "cognito-identity:*",

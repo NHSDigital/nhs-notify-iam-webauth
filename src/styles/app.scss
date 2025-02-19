@@ -1,6 +1,6 @@
-@import 'node_modules/nhsuk-frontend/packages/nhsuk.scss';
+@use 'nhsuk-frontend/packages/nhsuk.scss' as nhsuk;
 
 .notify-content {
-  background-color: $color_nhsuk-white;
-  border: 1px solid $nhsuk-border-color;
+  background-color: nhsuk.$color_nhsuk-white;
+  border: 1px solid nhsuk.$nhsuk-border-color;
 }
