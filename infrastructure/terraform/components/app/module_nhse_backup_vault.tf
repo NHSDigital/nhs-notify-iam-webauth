@@ -1,6 +1,6 @@
 module "nhse_backup_vault" {
   source = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/aws-backup-source?ref=v1.0.9"
-  count = var.destination_vault_arn != null ? 1:0
+  count  = var.destination_vault_arn != null ? 1 : 0
 
   component                    = var.component
   environment                  = var.environment

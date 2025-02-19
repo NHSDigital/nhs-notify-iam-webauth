@@ -1,6 +1,6 @@
 module "lambda_backup_cognito_id" {
   source = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/lambda?ref=v1.0.8"
-  count = var.destination_vault_arn != null ? 1:0
+  count  = var.destination_vault_arn != null ? 1 : 0
 
   function_name = "backup-cognito-id"
   description   = "A function for backing up Cognito User IDs"
@@ -40,7 +40,7 @@ module "lambda_backup_cognito_id" {
 }
 
 data "aws_iam_policy_document" "lambda_backup_cognito_id" {
-    count = var.destination_vault_arn != null ? 1:0
+  count = var.destination_vault_arn != null ? 1 : 0
   statement {
     sid    = "KMSPermissions"
     effect = "Allow"

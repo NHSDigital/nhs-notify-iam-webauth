@@ -1,6 +1,6 @@
 
 resource "aws_cloudwatch_event_rule" "backup_cognito_id" {
-  count = var.destination_vault_arn != null ? 1:0
+  count = var.destination_vault_arn != null ? 1 : 0
 
   name        = "${local.csi}-backup-cognito-id"
   description = "Rule to catch Cognito user attribute actions"

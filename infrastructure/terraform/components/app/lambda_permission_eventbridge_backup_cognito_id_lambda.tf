@@ -1,5 +1,5 @@
 resource "aws_lambda_permission" "eventbridge_backup_cognito_id_lambda" {
-  count = var.destination_vault_arn != null ? 1:0
+  count = var.destination_vault_arn != null ? 1 : 0
 
   statement_id  = "AllowExecutionFromCloudWatch"
   action        = "lambda:InvokeFunction"
