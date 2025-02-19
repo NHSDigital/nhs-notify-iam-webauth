@@ -27,7 +27,9 @@ exports.handler = async (event) => {
   const userName = event.detail.additionalEventData.sub;
   const bucketName = process.env.S3_BUCKET_NAME;
 
-  if (event.eventName === 'AdminDeleteUser') {
+  const deleteEvents = ['DeleteUser', 'AdminDeleteUser'];
+
+  if (deleteEvents.includes(event.eventName)) {
     console.info(`Deleting backup for user ${userName} from S3`);
     try {
       const s3Params = {
