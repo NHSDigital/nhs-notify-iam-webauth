@@ -17,7 +17,7 @@ describe('Header component', () => {
     process.env = ENV;
   });
 
-  it('renders component correctly', async () => {
+  it('renders component correctly with content disabled flag', async () => {
     process.env.NEXT_PUBLIC_DISABLE_CONTENT = 'true';
 
     const container = render(<NHSNotifyHeader />);
