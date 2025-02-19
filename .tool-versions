@@ -6,6 +6,7 @@ nodejs 20.13.1
 direnv 2.32.1
 gitleaks 8.18.4
 tfsec 1.28.10
+vale 3.6.0
 
 # ==============================================================================
 # The section below is reserved for Docker image versions.
