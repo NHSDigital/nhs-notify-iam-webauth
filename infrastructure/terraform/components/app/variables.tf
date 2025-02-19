@@ -217,9 +217,3 @@ variable "log_level" {
   description = "The log level to be used in lambda functions within the component. Any log with a lower severity than the configured value will not be logged: https://docs.python.org/3/library/logging.html#levels"
   default     = "INFO"
 }
-
-variable "enable_backup" {
-  type        = bool
-  description = "Enable Backups for the DynamoDB table?"
-  default     = true
-}

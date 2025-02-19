@@ -1,5 +1,6 @@
 module "lambda_backup_cognito_id" {
   source = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/lambda?ref=v1.0.8"
+  count = var.destination_vault_arn != null ? 1:0
 
   function_name = "backup-cognito-id"
   description   = "A function for backing up Cognito User IDs"
@@ -15,7 +16,7 @@ module "lambda_backup_cognito_id" {
   kms_key_arn           = module.kms.key_arn
 
   iam_policy_document = {
-    body = data.aws_iam_policy_document.lambda_backup_cognito_id.json
+    body = data.aws_iam_policy_document.lambda_backup_cognito_id[0].json
   }
 
   function_s3_bucket      = local.acct.s3_buckets["lambda_function_artefacts"]["id"]
@@ -34,11 +35,12 @@ module "lambda_backup_cognito_id" {
   enable_lambda_insights   = false
 
   lambda_env_vars = {
-    S3_BUCKET_NAME = module.s3bucket_cognito_backup.bucket
+    S3_BUCKET_NAME = module.s3bucket_cognito_backup[0].bucket
   }
 }
 
 data "aws_iam_policy_document" "lambda_backup_cognito_id" {
+    count = var.destination_vault_arn != null ? 1:0
   statement {
     sid    = "KMSPermissions"
     effect = "Allow"
@@ -77,7 +79,7 @@ data "aws_iam_policy_document" "lambda_backup_cognito_id" {
     ]
 
     resources = [
-      "${module.s3bucket_cognito_backup.arn}/*"
+      "${module.s3bucket_cognito_backup[0].arn}/*"
     ]
   }
 

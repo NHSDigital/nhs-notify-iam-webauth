@@ -1,5 +1,6 @@
 module "s3bucket_cognito_backup" {
   source = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/s3bucket?ref=v1.0.9"
+  count = var.destination_vault_arn != null ? 1:0
 
   name = "cognito-id-backup"
 
@@ -35,7 +36,7 @@ module "s3bucket_cognito_backup" {
   ]
 
   policy_documents = [
-    data.aws_iam_policy_document.s3bucket_cognito_backup.json
+    data.aws_iam_policy_document.s3bucket_cognito_backup[0].json
   ]
 
   public_access = {
@@ -48,11 +49,13 @@ module "s3bucket_cognito_backup" {
 
   default_tags = {
     Name                      = "Cognito identity attribute backup"
-    NHSE-Enable-Dynamo-Backup = var.enable_backup ? "True": "False"
+    NHSE-Enable-Dynamo-Backup = var.destination_vault_arn != null ? "True": "False"
   }
 }
 
 data "aws_iam_policy_document" "s3bucket_cognito_backup" {
+  count = var.destination_vault_arn != null ? 1:0
+
   statement {
     sid    = "DontAllowNonSecureConnection"
     effect = "Deny"
@@ -62,8 +65,8 @@ data "aws_iam_policy_document" "s3bucket_cognito_backup" {
     ]
 
     resources = [
-      module.s3bucket_cognito_backup.arn,
-      "${module.s3bucket_cognito_backup.arn}/*",
+      module.s3bucket_cognito_backup[0].arn,
+      "${module.s3bucket_cognito_backup[0].arn}/*",
     ]
 
     principals {
@@ -93,7 +96,7 @@ data "aws_iam_policy_document" "s3bucket_cognito_backup" {
     ]
 
     resources = [
-      module.s3bucket_cognito_backup.arn,
+      module.s3bucket_cognito_backup[0].arn,
     ]
 
     principals {
@@ -113,7 +116,7 @@ data "aws_iam_policy_document" "s3bucket_cognito_backup" {
     ]
 
     resources = [
-      "${module.s3bucket_cognito_backup.arn}/*",
+      "${module.s3bucket_cognito_backup[0].arn}/*",
     ]
 
     principals {
