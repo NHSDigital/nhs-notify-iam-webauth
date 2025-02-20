@@ -30,7 +30,13 @@ exports.handler = async (event) => {
   const deleteEvents = ['DeleteUser', 'AdminDeleteUser'];
 
   if (deleteEvents.includes(event.eventName)) {
-    console.info(`Deleting backup for user ${userName} from S3`);
+    console.info(
+      JSON.stringify({
+        message: `Deleting backup for user ${userName} from S3`,
+        userName,
+        event: event.eventName,
+      })
+    );
     try {
       const s3Params = {
         Bucket: bucketName,
@@ -38,12 +44,31 @@ exports.handler = async (event) => {
       };
 
       await s3Client.send(new DeleteObjectCommand(s3Params));
-      console.info(`Successfully deleted backup for user ${userName} from S3`);
+      console.info(
+        JSON.stringify({
+          message: `Successfully deleted backup for user ${userName} from S3`,
+          userName,
+          event: event.eventName,
+        })
+      );
     } catch (error) {
-      console.error(`Error deleting backup for user ${userName}:`, error);
+      console.error(
+        JSON.stringify({
+          message: `Error deleting backup for user ${userName}`,
+          userName,
+          event: event.eventName,
+          error: error.message,
+        })
+      );
     }
   } else {
-    console.info(`Backing up user ${userName} to S3`);
+    console.info(
+      JSON.stringify({
+        message: `Backing up user ${userName} to S3`,
+        userName,
+        event: event.eventName,
+      })
+    );
 
     try {
       const user = await cognitoClient.send(
@@ -62,9 +87,22 @@ exports.handler = async (event) => {
       };
 
       await s3Client.send(new PutObjectCommand(s3Params));
-      console.info(`Successfully backed up user ${userName} to S3`);
+      console.info(
+        JSON.stringify({
+          message: `Successfully backed up user ${userName} to S3`,
+          userName,
+          event: event.eventName,
+        })
+      );
     } catch (error) {
-      console.error(`Error backing up user ${userName}:`, error);
+      console.error(
+        JSON.stringify({
+          message: `Error backing up user ${userName}`,
+          userName,
+          event: event.eventName,
+          error: error.message,
+        })
+      );
     }
   }
 };
