@@ -36,6 +36,7 @@ describe('handler', () => {
 
     expect(consoleErrorSpy).toHaveBeenCalledWith(
       JSON.stringify({
+        level: 'error',
         message: 'Error deleting backup for user testUser',
         userName: 'testUser',
         event: 'AdminDeleteUser',
@@ -65,6 +66,7 @@ describe('handler', () => {
 
     expect(consoleErrorSpy).toHaveBeenCalledWith(
       JSON.stringify({
+        level: 'error',
         message: 'Error backing up user testUser',
         userName: 'testUser',
         event: 'CreateUser',
