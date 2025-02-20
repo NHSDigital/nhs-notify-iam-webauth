@@ -16,7 +16,7 @@ const convertUserToCSV = (user) => {
   const headers = user.UserAttributes.map((attr) => attr.Name);
   const attributes = headers.map((header) => {
     const attribute = user.UserAttributes.find((attr) => attr.Name === header);
-    return attribute ? attribute.Value : '';
+    return attribute ? `"${attribute.Value}"` : '""';
   });
 
   return `${headers.join(',')}\n${attributes.join(',')}`;
