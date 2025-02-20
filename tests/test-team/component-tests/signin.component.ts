@@ -46,9 +46,7 @@ test.describe('SignIn', () => {
 
       await signInPage.clickSubmitButton();
 
-      await expect(signInPage.errorMessage).toHaveText(
-        'Incorrect username or password.'
-      );
+      await expect(signInPage.errorMessage).toHaveText('User does not exist.');
     });
 
     test('should not log user in, when password is invalid', async ({

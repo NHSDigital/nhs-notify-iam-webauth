@@ -7,9 +7,11 @@ import { Amplify } from 'aws-amplify';
 import { Authenticator } from '@aws-amplify/ui-react';
 import content from '@/src/content/content';
 import { NHSNotifyContainer } from '@/src/components/layouts/container/container';
-import { BASE_PATH } from '@/src/utils/constants';
+import { getConstants } from '@/src/utils/public-constants';
 import { NHSNotifyHeader } from '../Header/Header';
 import { NHSNotifyFooter } from '../Footer/Footer';
+
+const { BASE_PATH } = getConstants();
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports, unicorn/prefer-module, import/no-unresolved
 Amplify.configure(require('@/amplify_outputs.json'), { ssr: true });
@@ -17,11 +19,11 @@ Amplify.configure(require('@/amplify_outputs.json'), { ssr: true });
 export const ClientLayout = ({ children }: { children: React.ReactNode }) => (
   <html lang='en'>
     <Head>
-      <script src={`${BASE_PATH}/lib/nhsuk-8.1.1.min.js`} defer />
+      <script src={`${BASE_PATH}/lib/nhsuk-9.1.0.min.js`} defer />
       <title>{content.global.mainLayout.title}</title>
       <link
         rel='shortcut icon'
-        href={`${BASE_PATH}/lib/assets/favicons/favicon.icon`}
+        href={`${BASE_PATH}/lib/assets/favicons/favicon.ico`}
         type='image/x-icon'
       />
       <link

@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Inactive page matches snapshot 1`] = `
+<DocumentFragment>
+  <h1>
+    You've been signed out
+  </h1>
+  <p>
+    You've been signed out because you've not used this service for 15 minutes
+  </p>
+  <p>
+    Any unsaved changes have been lost.
+  </p>
+  <p>
+    Sign in again to create and submit a template to NHS Notify.
+  </p>
+  <a
+    aria-disabled="false"
+    class="nhsuk-button"
+    draggable="false"
+    href="/auth?redirect=%2Fmy-redirect-path"
+    id="inactive-sign-in"
+    role="button"
+  >
+    Sign in
+  </a>
+</DocumentFragment>
+`;

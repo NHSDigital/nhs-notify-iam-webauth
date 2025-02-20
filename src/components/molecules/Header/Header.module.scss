@@ -1,13 +1,5 @@
-.header__content {
-  display: flex;
+.header__container {
   align-items: center;
-  justify-content: center;
-
-  a {
-    color: #fff;
-
-    &:visited {
-      color: #fff;
-    }
-  }
+  display: flex;
+  justify-content: space-between;
 }

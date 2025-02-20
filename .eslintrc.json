@@ -8,7 +8,6 @@
     "plugin:jest/recommended",
     "plugin:jsx-a11y/recommended",
     "plugin:prettier/recommended",
-    "plugin:react-hooks/recommended",
     "plugin:react/recommended",
     "plugin:security/recommended-legacy",
     "plugin:sonarjs/recommended-legacy",
@@ -22,7 +21,6 @@
     "jsx-a11y",
     "prettier",
     "react",
-    "react-hooks",
     "security",
     "sonarjs",
     "unicorn"
@@ -62,7 +60,8 @@
     "react/no-danger": "off",
     "no-param-reassign": "off",
     "react/require-default-props": "off",
-    "unicorn/prefer-node-protocol": "off"
+    "unicorn/prefer-node-protocol": "off",
+    "unicorn/no-null": "off"
   },
   "settings": {
     "import/resolver": {

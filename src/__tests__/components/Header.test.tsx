@@ -1,7 +1,9 @@
 import { render, screen } from '@testing-library/react';
 import { NHSNotifyHeader } from '@/src/components/molecules/Header/Header';
 
-jest.mock('@/src/components/molecules/LoginStatus/LoginStatus');
+jest.mock('@/src/components/molecules/AuthLink/AuthLink', () => ({
+  AuthLink: () => <div data-testid='auth-link' />,
+}));
 
 describe('Header component', () => {
   const ENV = process.env;
@@ -21,11 +23,11 @@ describe('Header component', () => {
     expect(container.asFragment()).toMatchSnapshot();
   });
 
-  it('should not render login link', () => {
+  it('should not render auth link', () => {
     process.env.NEXT_PUBLIC_DISABLE_CONTENT = 'true';
 
     render(<NHSNotifyHeader />);
 
-    expect(screen.queryByTestId('login-link')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('auth-link')).not.toBeInTheDocument();
   });
 });

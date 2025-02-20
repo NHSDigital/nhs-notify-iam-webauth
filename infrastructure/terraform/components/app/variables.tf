@@ -81,6 +81,18 @@ variable "cognito_user_pool_additional_callback_urls" {
   default     = []
 }
 
+variable "cognito_user_pool_additional_logout_urls" {
+  type        = list(string)
+  description = "A list of additional logout_urls for the cognito user pool"
+  default     = []
+}
+
+variable "cognito_prevent_deletion" {
+  type        = bool
+  description = "Prevents accidental deletion of the cognito user pool"
+  default     = true
+}
+
 variable "cognito_user_pool_use_environment_specific_gateway_callback_url" {
   type        = bool
   description = "Enable an environment specific web gateway callback URL - for use in environments that are using dynamic domains"
@@ -90,6 +102,12 @@ variable "cognito_user_pool_use_environment_specific_gateway_callback_url" {
 variable "cognito_user_pool_environment_specific_gateway_callback_url_suffix" {
   type        = string
   description = "The suffix for the environment specific web gateway callback URL - should be prefixed with with protocol and environment name"
+  default     = ""
+}
+
+variable "cognito_user_pool_environment_specific_gateway_logout_url_suffix" {
+  type        = string
+  description = "The suffix for the environment specific web gateway logout callback URL - should be prefixed with with protocol and environment name"
   default     = ""
 }
 
@@ -109,6 +127,13 @@ variable "AMPLIFY_BASIC_AUTH_SECRET" {
   # Github only does uppercase env vars
   type        = string
   description = "Secret key/password to use for Amplify Basic Auth - This is entended to be read from CI variables and not commited to any codebase"
+  default     = "unset"
+}
+
+variable "CSRF_SECRET" {
+  # Github only does uppercase env vars
+  type        = string
+  description = "Secure cryptographic key to be used for generating CSRF tokens - This is entended to be read from CI variables and not commited to any codebase"
   default     = "unset"
 }
 

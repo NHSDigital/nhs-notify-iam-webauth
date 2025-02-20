@@ -1,0 +1,147 @@
+name: Call Notify Internal Infrastructure Workflow
+
+on:
+  workflow_call:
+    inputs:
+      jobName:
+        type: string
+        description: The name of the job triggering the remote workflow
+        required: true
+      infraRepoName:
+        type: string
+        description: Repository (this one) in the NHSDigital Github Org to deploy from
+        default: ""
+      releaseVersion:
+        type: string
+        description: The Github release version, commit, or tag.
+        default: main
+      targetWorkflow:
+        type: string
+        description: The name of the github workflow to call.
+        required: true
+      targetEnvironment:
+        type: string
+        description: The Terraform environment to deploy
+        default: main
+      targetComponent:
+        type: string
+        description: The Terraform component to deploy
+        required: true
+      targetAccountGroup:
+        type: string
+        description: The Terraform group to deploy
+        required: true
+      terraformAction:
+        type: string
+        description: The Terraform action to run
+        default: ""
+
+concurrency:
+  group: ${{ inputs.targetEnvironment }}-${{ inputs.targetAccountGroup }}-${{ inputs.targetComponent }}-${{ inputs.terraformAction }}
+
+jobs:
+  trigger:
+    name: ${{ inputs.jobName }}
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Trigger nhs-notify-internal workflow
+        shell: bash
+        run: |
+          DISPATCH_EVENT=$(jq -ncM \
+            --arg infraRepoName "${{ inputs.infraRepoName }}" \
+            --arg releaseVersion ${{ inputs.releaseVersion }} \
+            --arg targetEnvironment ${{ inputs.targetEnvironment }} \
+            --arg targetAccountGroup ${{ inputs.targetAccountGroup }} \
+            --arg targetComponent ${{ inputs.targetComponent }} \
+            --arg terraformAction "${{ inputs.terraformAction }}" \
+            '{
+              "ref": "main",
+              "inputs": (
+                (if $infraRepoName != "" then { "infraRepoName": $infraRepoName } else {} end) +
+                (if $terraformAction != "" then { "terraformAction": $terraformAction } else {} end) +
+                {
+                  "releaseVersion": $releaseVersion,
+                  "targetEnvironment": $targetEnvironment,
+                  "targetAccountGroup": $targetAccountGroup,
+                  "targetComponent": $targetComponent
+                }
+              )
+            }')
+
+          # Trigger The workflow
+          curl -L \
+            --fail \
+            --silent \
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.PR_TRIGGER_PAT }}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/NHSDigital/nhs-notify-internal/actions/workflows/${{ inputs.targetWorkflow }}/dispatches" \
+            -d "${DISPATCH_EVENT}"
+
+          echo "Workflow triggered. Waiting for the workflow to complete.."
+
+          # Poll GitHub API to check the workflow status
+          workflow_run_url=""
+          for i in {1..12}; do
+            workflow_run_url=$(curl -s \
+              -H "Accept: application/vnd.github+json" \
+              -H "Authorization: Bearer ${{ secrets.PR_TRIGGER_PAT }}" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              "https://api.github.com/repos/NHSDigital/nhs-notify-internal/actions/runs?event=workflow_dispatch&status=in_progress" \
+              | jq -r '.workflow_runs[]
+                | select(.name
+                | contains("'${{ inputs.targetEnvironment }}'") and
+                  contains("'${{ inputs.targetAccountGroup }}'") and
+                  contains("'${{ inputs.targetComponent }}'") and
+                  contains("'${{ inputs.terraformAction }}'"))
+                | .url')
+
+            if [[ -n "$workflow_run_url" && "$workflow_run_url" != null ]]; then
+              ui_url=${workflow_run_url/api./}
+              ui_url=${ui_url/\/repos/}
+              echo "Found workflow run url: $ui_url"
+              echo "workflow_run_url=$workflow_run_url" >> $GITHUB_ENV
+              break
+            fi
+
+            echo "Waiting for workflow to start..."
+            sleep 10
+          done
+
+          if [[ -z "$workflow_run_url" || "$workflow_run_url" == null ]]; then
+            echo "Failed to get the workflow run url. Exiting."
+            exit 1
+          fi
+
+          # Wait for workflow completion
+          while true; do
+            sleep 10
+            response=$(curl -s -L \
+              -H "Authorization: Bearer ${{ secrets.PR_TRIGGER_PAT }}" \
+              -H "Accept: application/vnd.github+json" \
+              $workflow_run_url)
+
+            status=$(echo "$response" | jq -r '.status')
+            conclusion=$(echo "$response" | jq -r '.conclusion')
+
+            if [ "$status" == "completed" ]; then
+              if [ "$conclusion" == "success" ]; then
+                echo "Workflow completed successfully."
+                exit 0
+              else
+                echo "Workflow failed with conclusion: $conclusion"
+                exit 1
+              fi
+            fi
+
+            echo "Workflow still running..."
+            sleep 20
+          done
