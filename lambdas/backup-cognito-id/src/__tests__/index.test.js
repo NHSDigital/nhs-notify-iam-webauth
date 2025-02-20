@@ -35,8 +35,12 @@ describe('handler', () => {
     await handler(event);
 
     expect(consoleErrorSpy).toHaveBeenCalledWith(
-      'Error deleting backup for user testUser:',
-      expect.any(Error)
+      JSON.stringify({
+        message: 'Error deleting backup for user testUser',
+        userName: 'testUser',
+        event: 'AdminDeleteUser',
+        error: 'S3 delete error',
+      })
     );
 
     consoleErrorSpy.mockRestore();
@@ -60,8 +64,12 @@ describe('handler', () => {
     await handler(event);
 
     expect(consoleErrorSpy).toHaveBeenCalledWith(
-      'Error backing up user testUser:',
-      expect.any(Error)
+      JSON.stringify({
+        message: 'Error backing up user testUser',
+        userName: 'testUser',
+        event: 'CreateUser',
+        error: 'Cognito get user error',
+      })
     );
 
     consoleErrorSpy.mockRestore();
