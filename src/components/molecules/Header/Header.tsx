@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import concatClassNames from '@/src/utils/concat-class-names';
 import content from '@/src/content/content';
 import { HeaderType } from './header.types';
@@ -19,9 +18,9 @@ export function NHSNotifyHeader({ dataTestId }: HeaderType) {
         )}
       >
         <div className='nhsuk-header__logo'>
-          <Link
+          <a
             className='nhsuk-header__link nhsuk-header__link--service'
-            href='/'
+            href={`${content.components.headerComponent.serviceLink}`}
             aria-label='NHS homepage'
           >
             <svg
@@ -46,7 +45,7 @@ export function NHSNotifyHeader({ dataTestId }: HeaderType) {
             <span className='nhsuk-header__service-name'>
               {content.components.headerComponent.serviceName}
             </span>
-          </Link>
+          </a>
         </div>
         <div className='nhsuk-header__content' id='content-header'>
           <AuthLink />

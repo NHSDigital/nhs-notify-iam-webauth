@@ -25,7 +25,7 @@ function SignInPage() {
     if (authStatus === 'authenticated') {
       redirect(
         path.normalize(
-          `/signin?redirect=${encodeURIComponent(redirectPath ?? '/home')}`
+          `/signin?redirect=${encodeURIComponent(redirectPath ?? '/templates/manage-templates')}`
         ),
         RedirectType.push
       );
@@ -41,7 +41,9 @@ function SignInPage() {
             {pageContent.federatedSignInSectionHeading}
           </h2>
           <CIS2SignInButton
-            onClick={() => federatedSignIn(redirectPath || '/home')}
+            onClick={() =>
+              federatedSignIn(redirectPath || '/templates/manage-templates')
+            }
           />
         </div>
         {process.env.NEXT_PUBLIC_ENABLE_COGNITO_IDP === 'true' && (

@@ -10,6 +10,7 @@ const generateMetaTitle = (title: string) => ({
 
 const headerComponent = {
   serviceName: 'Notify',
+  serviceLink: `/templates/create-and-submit-templates`,
   links: {
     signIn: { text: 'Sign in', href: BASE_PATH },
     signOut: { text: 'Sign out', href: `${BASE_PATH}/signout` },
