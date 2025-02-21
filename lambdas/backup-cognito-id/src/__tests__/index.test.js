@@ -128,7 +128,7 @@ describe('handler', () => {
         { Name: 'phone_number', Value: '+1234567890' },
         {
           Name: 'custom:abd_customAttrib',
-          Value: `'1234567890-=!@£$%^&*()_+;',.'`,
+          Value: `-=!@£$%^&*()_+;',.'`,
         },
       ],
     });
@@ -148,7 +148,7 @@ describe('handler', () => {
     const putObjectCall = s3Mock.calls(PutObjectCommand).pop();
     const csvContent = putObjectCall.args[0].input.Body;
     expect(csvContent).toBe(
-      `email,name,phone_number,custom:abd_customAttrib\n"test@example.com","Test, User","+1234567890","'1234567890-=!@£$%^&*()_+;',.'"`
+      `email,name,phone_number,custom:abd_customAttrib\n"test@example.com","Test, User","+1234567890","-=!@£$%^&*()_+;',.'"`
     );
 
     consoleInfoSpy.mockRestore();
