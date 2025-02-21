@@ -4,8 +4,12 @@ import content from '@/src/content/content';
 import { HeaderType } from './header.types';
 import styles from './Header.module.scss';
 import { AuthLink } from '../AuthLink/AuthLink';
+import { getConstants } from '@/src/utils/public-constants';
+
+const { BASE_PATH } = getConstants();
 
 export function NHSNotifyHeader({ dataTestId }: HeaderType) {
+  console.log('mm:', BASE_PATH);
   return (
     <header
       className='nhsuk-header'
@@ -19,7 +23,7 @@ export function NHSNotifyHeader({ dataTestId }: HeaderType) {
         )}
       >
         <div className='nhsuk-header__logo'>
-          <Link
+          <a
             className='nhsuk-header__link nhsuk-header__link--service'
             href={`${content.components.headerComponent.serviceLink}`}
             aria-label='NHS homepage'
@@ -46,7 +50,7 @@ export function NHSNotifyHeader({ dataTestId }: HeaderType) {
             <span className='nhsuk-header__service-name'>
               {content.components.headerComponent.serviceName}
             </span>
-          </Link>
+          </a>
         </div>
         <div className='nhsuk-header__content' id='content-header'>
           {/* I am currently testing the link wrapper, this will change later when we implement auth as the link will change based on auth state */}
