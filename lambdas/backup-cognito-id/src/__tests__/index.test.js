@@ -161,3 +161,39 @@ describe('handler', () => {
     consoleInfoSpy.mockRestore();
   });
 });
+
+it('should delete user backup from S3 successfully', async () => {
+  const event = {
+    eventName: 'AdminDeleteUser',
+    detail: {
+      requestParameters: { userPoolId: 'testPoolId' },
+      additionalEventData: { sub: 'testUser' },
+    },
+  };
+  process.env.S3_BUCKET_NAME = 'testBucket';
+
+  const consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
+  s3Mock.on(DeleteObjectCommand).resolves({});
+
+  await handler(event);
+
+  expect(consoleInfoSpy).toHaveBeenCalledWith(
+    JSON.stringify({
+      level: 'info',
+      message: 'Deleting backup for user testUser from S3',
+      userName: 'testUser',
+      event: 'AdminDeleteUser',
+    })
+  );
+
+  expect(consoleInfoSpy).toHaveBeenCalledWith(
+    JSON.stringify({
+      level: 'info',
+      message: 'Successfully deleted backup for user testUser from S3',
+      userName: 'testUser',
+      event: 'AdminDeleteUser',
+    })
+  );
+
+  consoleInfoSpy.mockRestore();
+});
