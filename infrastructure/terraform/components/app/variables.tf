@@ -155,12 +155,6 @@ variable "commit_id" {
   default     = "HEAD"
 }
 
-variable "disable_content" {
-  type        = string
-  description = "Value for turning switching disable content true/false"
-  default     = "false"
-}
-
 variable "enable_cis2_idp" {
   type        = bool
   description = "Switch to enable the CIS2 Cognito federation"

@@ -5,6 +5,10 @@ const allowedOrigins = [domain, domain.replace('iam', 'web-gateway')];
 module.exports = {
   basePath,
 
+  sassOptions: {
+    quietDeps: true,
+  },
+
   experimental: {
     serverActions: {
       allowedOrigins,

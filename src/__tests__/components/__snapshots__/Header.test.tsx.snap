@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Header component renders component correctly with content disabled flag 1`] = `
+exports[`Header component renders component correctly 1`] = `
 <DocumentFragment>
   <header
     class="nhsuk-header"
@@ -47,7 +47,11 @@ exports[`Header component renders component correctly with content disabled flag
       <div
         class="nhsuk-header__content"
         id="content-header"
-      />
+      >
+        <div
+          data-testid="auth-link"
+        />
+      </div>
     </div>
   </header>
 </DocumentFragment>

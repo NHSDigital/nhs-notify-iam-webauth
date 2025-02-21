@@ -1,15 +1,10 @@
-import Link from 'next/link';
 import concatClassNames from '@/src/utils/concat-class-names';
 import content from '@/src/content/content';
 import { HeaderType } from './header.types';
 import styles from './Header.module.scss';
 import { AuthLink } from '../AuthLink/AuthLink';
-import { getConstants } from '@/src/utils/public-constants';
-
-const { BASE_PATH } = getConstants();
 
 export function NHSNotifyHeader({ dataTestId }: HeaderType) {
-  console.log('mm:', BASE_PATH);
   return (
     <header
       className='nhsuk-header'
@@ -53,10 +48,7 @@ export function NHSNotifyHeader({ dataTestId }: HeaderType) {
           </a>
         </div>
         <div className='nhsuk-header__content' id='content-header'>
-          {/* I am currently testing the link wrapper, this will change later when we implement auth as the link will change based on auth state */}
-          {process.env.NEXT_PUBLIC_DISABLE_CONTENT === 'true' ? undefined : (
-            <AuthLink />
-          )}
+          <AuthLink />
         </div>
       </div>
     </header>
