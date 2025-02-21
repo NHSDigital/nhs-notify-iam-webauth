@@ -49,10 +49,7 @@ export function NHSNotifyHeader({ dataTestId }: HeaderType) {
           </Link>
         </div>
         <div className='nhsuk-header__content' id='content-header'>
-          {/* I am currently testing the link wrapper, this will change later when we implement auth as the link will change based on auth state */}
-          {process.env.NEXT_PUBLIC_DISABLE_CONTENT === 'true' ? undefined : (
-            <AuthLink />
-          )}
+          <AuthLink />
         </div>
       </div>
     </header>
