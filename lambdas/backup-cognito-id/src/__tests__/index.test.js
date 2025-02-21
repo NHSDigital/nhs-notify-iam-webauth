@@ -123,15 +123,22 @@ describe('handler', () => {
     const consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
     cognitoMock.on(AdminGetUserCommand).resolves({
       UserAttributes: [
-        { Name: 'email', Value: 'test@example.com' },
-        { Name: 'name', Value: 'Test, User' },
-        { Name: 'phone_number', Value: '+1234567890' },
+        { Name: 'SimpleAttribute', Value: 'simple value' },
         {
-          Name: 'custom:abd_customAttrib',
-          Value: `-=!@£$%^&*()_+;',.'`,
+          Name: 'ComplexAttribute1',
+          Value: JSON.stringify({
+            attr1: 'value1',
+            attr2: 123,
+            attr3: { attr31: 'value31 ' },
+          }),
+        },
+        {
+          Name: 'ComplexAttribute2',
+          Value: JSON.stringify(['test1', 'test2']),
         },
       ],
     });
+
     s3Mock.on(PutObjectCommand).resolves({});
 
     await handler(event);
@@ -148,7 +155,7 @@ describe('handler', () => {
     const putObjectCall = s3Mock.calls(PutObjectCommand).pop();
     const csvContent = putObjectCall.args[0].input.Body;
     expect(csvContent).toBe(
-      `email,name,phone_number,custom:abd_customAttrib\n"test@example.com","Test, User","+1234567890","-=!@£$%^&*()_+;',.'"`
+      `SimpleAttribute,ComplexAttribute1,ComplexAttribute2\n"simple value","{""attr1"":""value1"",""attr2"":123,""attr3"":{""attr31"":""value31 ""}}","[""test1"",""test2""]"`
     );
 
     consoleInfoSpy.mockRestore();
