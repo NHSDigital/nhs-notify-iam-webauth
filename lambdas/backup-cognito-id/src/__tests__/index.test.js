@@ -110,7 +110,7 @@ describe('handler', () => {
     consoleInfoSpy.mockRestore();
   });
 
-  it('should correctly encapsulate user attributes containing commas', async () => {
+  it('should correctly encapsulate user attributes containing nested JSON', async () => {
     const event = {
       eventName: 'CreateUser',
       detail: {
