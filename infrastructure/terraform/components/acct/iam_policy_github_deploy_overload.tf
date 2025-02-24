@@ -15,16 +15,17 @@ data "aws_iam_policy_document" "github_deploy" {
     effect = "Allow"
 
     actions = [
-      "apigateway:*",
       "amplify:*",
-      "backup:*",
+      "apigateway:*",
       "backup-storage:*",
+      "backup:*",
       "cloudformation:*",
       "cloudfront:*",
       "cognito-identity:*",
       "cognito-idp:*",
       "distribution:*",
       "secretsmanager:*",
+      "sns:*",
     ]
     resources = ["*"]
   }
