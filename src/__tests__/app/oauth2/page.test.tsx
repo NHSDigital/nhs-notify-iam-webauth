@@ -92,7 +92,7 @@ it('defaults redirect path', async () => {
 
   await waitFor(() =>
     expect(mockedRedirect).toHaveBeenCalledWith(
-      '/signin?redirect=%2Fhome',
+      '/signin?redirect=%2Ftemplates%2Fmanage-templates',
       'replace'
     )
   );
