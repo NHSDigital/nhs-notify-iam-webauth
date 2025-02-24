@@ -4,7 +4,7 @@ data "aws_cognito_user_pool_client" "client" {
 }
 
 module "amplify_branch" {
-  source = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/amp_branch?ref=v1.0.0"
+  source = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/amp_branch?ref=v1.0.8"
 
   name         = local.normalised_branch_name
   display_name = local.normalised_branch_name

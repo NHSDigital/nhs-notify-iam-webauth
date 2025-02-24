@@ -17,6 +17,11 @@ variable "aws_account_id" {
   description = "The AWS Account ID (numeric)"
 }
 
+variable "aws_principal_org_id" {
+  type        = string
+  description = "The AWS Org ID (numeric)"
+}
+
 variable "region" {
   type        = string
   description = "The AWS Region"
@@ -170,4 +175,39 @@ variable "cis2_environment" {
     condition     = contains(["int", "live"], var.cis2_environment)
     error_message = "Allowed values for cis2_environment are \"int\" or \"live\"."
   }
+}
+variable "destination_vault_arn" {
+  type        = string
+  description = "ARN of the backup vault in the destination account, if this environment should be backed up"
+  default     = null
+}
+
+variable "backup_schedule_cron" {
+  type        = string
+  description = "Defines the backup schedule in AWS Cron Expression format"
+  default     = "cron(0 0/6 * * ? *)"
+}
+
+variable "retention_period" {
+  type        = number
+  description = "Backup Vault Retention Period"
+  default     = 14
+}
+
+variable "backup_report_recipient" {
+  type        = string
+  description = "Primary recipient of the Backup reports"
+  default     = ""
+}
+
+variable "force_lambda_code_deploy" {
+  type        = bool
+  description = "If the lambda package in s3 has the same commit id tag as the terraform build branch, the lambda will not update automatically. Set to True if making changes to Lambda code from on the same commit for example during development"
+  default     = false
+}
+
+variable "log_level" {
+  type        = string
+  description = "The log level to be used in lambda functions within the component. Any log with a lower severity than the configured value will not be logged: https://docs.python.org/3/library/logging.html#levels"
+  default     = "INFO"
 }

@@ -17,5 +17,10 @@ output "s3_buckets" {
       bucket = module.s3bucket_backup_reports.bucket
       id     = module.s3bucket_backup_reports.id
     }
+    lambda_function_artefacts = {
+      arn    = module.s3bucket_lambda_artefacts.arn
+      bucket = module.s3bucket_lambda_artefacts.bucket
+      id     = module.s3bucket_lambda_artefacts.id
+    }
   }
 }
