@@ -5,8 +5,7 @@ exports[`CIS2SignInButton renders CIS2SignInButton correctly 1`] = `
   <button
     alt="Log in with my Care Identity"
     aria-disabled="false"
-    class="nhsuk-button"
-    style="width: 374.38px; height: 59px; margin: 0px 0px 0px 0px; background: none; box-shadow: none; padding: 0px;"
+    class="nhsuk-button notify-cis2-button"
     type="submit"
   >
     <svg

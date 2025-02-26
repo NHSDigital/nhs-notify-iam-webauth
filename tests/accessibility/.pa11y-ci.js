@@ -4,7 +4,11 @@ const baseUrl = 'http://localhost:3000/auth';
 
 module.exports = {
   urls: [
-    performCheck({ url: 'http://localhost:3000/auth/some-404', name: '404-test' }),
+    performCheck({ url: baseUrl, name: 'landing-page' }),
+    performCheck({ url: `${baseUrl}/signout`, name: 'signout' }),
+    performCheck({ url: `${baseUrl}/oauth2`, name: 'oauth2' }),
+    performCheck({ url: `${baseUrl}/inactive`, name: 'inactive' }),
+    performCheck({ url: `${baseUrl}/some-404`, name: '404-test' }),
   ],
   defaults: {
     reporters: [
