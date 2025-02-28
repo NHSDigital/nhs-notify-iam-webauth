@@ -8,9 +8,9 @@ data "aws_iam_policy_document" "observability_grafana_role_assume_role_policy" {
     actions = ["sts:AssumeRole"]
     effect  = "Allow"
     principals {
-      type        = "AWS"
+      type = "AWS"
       identifiers = [
-         "arn:aws:iam::${var.observability_account_id}:root"
+        "arn:aws:iam::${var.observability_account_id}:root"
       ]
     }
     condition {
