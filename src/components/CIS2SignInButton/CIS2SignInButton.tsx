@@ -10,16 +10,7 @@ export function CIS2SignInButton({
     <Button
       alt='Log in with my Care Identity'
       onClick={onClick}
-      style={{
-        width: '374.38px',
-        height: '59px',
-        margin: 0,
-        marginBottom: 0,
-        border: 'none',
-        background: 'none',
-        boxShadow: 'none',
-        padding: 0,
-      }}
+      className='notify-cis2-button'
     >
       <svg
         version='1.1'
