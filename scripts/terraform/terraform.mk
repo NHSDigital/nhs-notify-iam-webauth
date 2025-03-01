@@ -4,11 +4,6 @@
 # Custom implementation - implementation of a make target should not exceed 5 lines of effective code.
 # In most cases there should be no need to modify the existing make targets.
 
-# TF_ENV ?= dev
-# STACK ?= ${stack}
-# TERRAFORM_STACK ?= $(or ${STACK}, infrastructure/terraform)
-# dir ?= ${TERRAFORM_STACK}
-
 terraform-init: # Initialise Terraform - optional: terraform_dir|dir=[path to a directory where the command will be executed, relative to the project's top-level directory, default is one of the module variables or the example directory, if not set], terraform_opts|opts=[options to pass to the Terraform init command, default is none/empty] @Development
 	make _terraform cmd="init" \
 		dir=$(or ${terraform_dir}, ${dir}) \
@@ -64,6 +59,8 @@ terraform-sec: # TFSEC check against Terraform files - optional: terraform_dir|d
 	tfsec infrastructure/terraform \
 		--force-all-dirs \
 		--exclude-downloaded-modules \
+		--tfvars-file infrastructure/terraform/etc/global.tfvars \
+		--tfvars-file infrastructure/terraform/etc/env_eu-west-2_main.tfvars \
 		--config-file scripts/config/tfsec.yaml
 
 terraform-docs: # Terraform-docs check against Terraform files - optional: terraform_dir|dir=[path to a directory where the command will be executed, relative to the project's top-level directory, default is one of the module variables or the example directory, if not set], terraform_opts|opts=[options to pass to the Terraform fmt command, default is '-recursive'] @Quality
