@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { CognitoUserHelper, User } from '../helpers/cognito-user-helper';
 import { IamWebAuthSignInPage } from '../pages/iam-webauth-signin-page';
+import { getCookies } from '../helpers/cookies';
 
 test.describe('SignIn', () => {
   let user: User;
@@ -31,14 +32,10 @@ test.describe('SignIn', () => {
       `${baseURL}/templates/create-and-submit-templates`
     );
 
-    const cookies = await page.context().cookies();
+    const cookies = await getCookies(page);
 
-    const csrfTokenCookie = cookies.find(
-      (cookie) => cookie.name === 'csrf_token'
-    );
-
-    expect(csrfTokenCookie?.sameSite).toEqual('strict');
-    expect(csrfTokenCookie?.secure).toEqual(true);
+    expect(cookies.csrf_token?.sameSite).toEqual('Strict');
+    expect(cookies.csrf_token?.secure).toEqual(true);
   });
 
   test.describe('Error handling', () => {
