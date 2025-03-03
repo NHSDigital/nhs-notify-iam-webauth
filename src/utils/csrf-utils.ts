@@ -6,11 +6,6 @@ import { cookies } from 'next/headers';
 import { getEnvironmentVariable } from './get-environment-variable';
 import { getAccessTokenServer } from './amplify-utils';
 
-export const getCsrfFormValue = async () => {
-  const cookieStore = await cookies();
-  return cookieStore.get('csrf_token')?.value ?? 'no_token';
-};
-
 export const getSessionId = async () => {
   const accessToken = await getAccessTokenServer();
 
@@ -41,12 +36,6 @@ export const generateCsrf = async () => {
     .digest('hex');
 
   const csrfToken = `${hash}.${salt}`;
-
-  const cookieStore = await cookies();
-  cookieStore.set('csrf_token', csrfToken, {
-    httpOnly: true,
-    secure: true,
-  });
 
   return csrfToken;
 };

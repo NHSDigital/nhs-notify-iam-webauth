@@ -1,23 +1,24 @@
 import type { Cookie, Page } from '@playwright/test';
 
-type CognitoCookieName =
+type CookieName =
   | 'lastAuthUser'
   | 'accessToken'
   | 'idToken'
   | 'refreshToken'
   | 'signInDetails'
-  | 'clockDrift';
+  | 'clockDrift'
+  | 'csrf_token';
 
-export async function getCognitoCookies(
+export async function getCookies(
   page: Page
-): Promise<Partial<Record<CognitoCookieName, Cookie>>> {
+): Promise<Partial<Record<CookieName, Cookie>>> {
   const cookieList = await page.context().cookies();
 
   const cognitoCookies = cookieList.filter((cookie) =>
     cookie.name.startsWith('CognitoIdentityServiceProvider.')
   );
 
-  const cookies: Partial<Record<CognitoCookieName, Cookie>> = {};
+  const cookies: Partial<Record<CookieName, Cookie>> = {};
 
   const lastAuthUser = cognitoCookies.find((cookie) =>
     cookie.name.endsWith('LastAuthUser')
@@ -64,6 +65,12 @@ export async function getCognitoCookies(
 
   if (clockDrift) {
     cookies.clockDrift = clockDrift;
+  }
+
+  const csrfToken = cookieList.find((cookie) => cookie.name === 'csrf_token');
+
+  if (csrfToken) {
+    cookies.csrf_token = csrfToken;
   }
 
   return cookies;

@@ -17,14 +17,17 @@ test('returns redirect', async () => {
   const cookiesMock = mockDeep<ReadonlyRequestCookies>({
     set: cookieSetMock,
   });
-  jest.mocked(cookies).mockReturnValue(cookiesMock);
+  jest.mocked(cookies).mockResolvedValue(cookiesMock);
 
   const request = mockDeep<Request>({
     url: 'https://test?redirect=redirect-url',
   });
   const response = await GET(request);
 
-  expect(cookieSetMock).toHaveBeenCalledWith('csrf_token', 'csrf');
+  expect(cookieSetMock).toHaveBeenCalledWith('csrf_token', 'csrf', {
+    sameSite: 'strict',
+    secure: true,
+  });
   expect(response.status).toEqual(302);
   expect(response.headers.get('Location')).toEqual('redirect-url');
 });
@@ -36,14 +39,17 @@ test('returns redirect to / if no redirect given', async () => {
   const cookiesMock = mockDeep<ReadonlyRequestCookies>({
     set: cookieSetMock,
   });
-  jest.mocked(cookies).mockReturnValue(cookiesMock);
+  jest.mocked(cookies).mockResolvedValue(cookiesMock);
 
   const request = mockDeep<Request>({
     url: 'https://test',
   });
   const response = await GET(request);
 
-  expect(cookieSetMock).toHaveBeenCalledWith('csrf_token', 'csrf');
+  expect(cookieSetMock).toHaveBeenCalledWith('csrf_token', 'csrf', {
+    sameSite: 'strict',
+    secure: true,
+  });
   expect(response.status).toEqual(302);
   expect(response.headers.get('Location')).toEqual('/');
 });
