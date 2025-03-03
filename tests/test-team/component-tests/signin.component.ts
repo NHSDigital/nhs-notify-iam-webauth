@@ -30,6 +30,15 @@ test.describe('SignIn', () => {
     await expect(page).toHaveURL(
       `${baseURL}/templates/create-and-submit-templates`
     );
+
+    const cookies = await page.context().cookies();
+
+    const csrfTokenCookie = cookies.find(
+      (cookie) => cookie.name === 'csrf_token'
+    );
+
+    expect(csrfTokenCookie?.sameSite).toEqual('strict');
+    expect(csrfTokenCookie?.secure).toEqual(true);
   });
 
   test.describe('Error handling', () => {
