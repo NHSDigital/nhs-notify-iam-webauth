@@ -70,8 +70,3 @@ variable "initial_cli_secrets_provision_override" {
   # Usage like:
   #  ... -a apply -- -var initial_cli_secrets_provision_override={\"github_pat\":\"l0ngstr1ng"}
 }
-
-variable "observability_account_id" {
-  type        = string
-  description = "The Observability Account ID that needs access"
-}
