@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <SignOut>
-      <p>{signOutPage.content}</p>
+      <h1>{signOutPage.content}</h1>
     </SignOut>
   );
 }

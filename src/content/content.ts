@@ -67,10 +67,14 @@ const signOutPage = {
   meta: generateMetaTitle('Signed out'),
 };
 
+const oauth2Redirect = {
+  heading: 'Redirecting, please wait',
+};
+
 const content = {
   global: { mainLayout },
   components: { headerComponent, footer, cognitoSignInComponent },
-  pages: { signInPage, inactivePage, signOutPage },
+  pages: { signInPage, inactivePage, signOutPage, oauth2Redirect },
 };
 
 export default content;

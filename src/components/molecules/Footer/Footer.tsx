@@ -7,9 +7,9 @@ export function NHSNotifyFooter() {
     <footer role='contentinfo' data-testid='page-footer'>
       <div className='nhsuk-footer-container'>
         <div className='nhsuk-width-container'>
-          <h1 className='nhsuk-u-visually-hidden' data-testid='support-links'>
+          <h2 className='nhsuk-u-visually-hidden' data-testid='support-links'>
             {footerContent.supportLinks}
-          </h1>
+          </h2>
           <div className='nhsuk-footer'>
             <ul className='nhsuk-footer__list' data-testid='footer-links'>
               <li className='nhsuk-footer__list-item nhsuk-footer-default__list-item'>
