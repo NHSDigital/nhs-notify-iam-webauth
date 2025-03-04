@@ -25,7 +25,8 @@
       "@/*": [
         "./*"
       ]
-    }
+    },
+    "target": "ES6"
   },
   "include": [
     "next-env.d.ts",
