@@ -1,41 +1,85 @@
-import { render, screen } from '@testing-library/react';
 import { NHSNotifyFooter } from '@/src/components/molecules/Footer/Footer';
+import { render, screen } from '@testing-library/react';
 
-import content from '@/src/content/content';
+type FooterLinkSpec = {
+  testId: string;
+  text: string;
+  href: string;
+};
 
-const footerContent = content.components.footerComponent;
+const expectedFooterLinks: Array<Array<string | FooterLinkSpec>> = [
+  [
+    'acceptable use policy',
+    {
+      testId: 'acceptable-use-policy-statement-link',
+      text: 'Acceptable use policy',
+      href: 'https://digital.nhs.uk/services/nhs-notify/acceptable-use-policy',
+    },
+  ],
+  [
+    'accessibility statement',
+    {
+      testId: 'accessibility-statement-link',
+      text: 'Accessibility statement',
+      href: '/accessibility',
+    },
+  ],
+  [
+    'cookies statement',
+    {
+      testId: 'cookies-statement-link',
+      text: 'Cookies',
+      href: '/cookies',
+    },
+  ],
+  [
+    'privacy statement',
+    {
+      testId: 'privacy-statement-link',
+      text: 'Privacy',
+      href: 'https://digital.nhs.uk/services/nhs-notify/transparency-notice',
+    },
+  ],
+  [
+    'terms and conditions statement',
+    {
+      testId: 'terms-and-conditions-statement-link',
+      text: 'Terms and conditions',
+      href: 'https://digital.nhs.uk/services/nhs-notify/terms-and-conditions',
+    },
+  ],
+];
 
 describe('Footer component', () => {
+  test.each(expectedFooterLinks)('Check %s footer link', (_, spec) => {
+    const linkSpec = spec as FooterLinkSpec;
+
+    render(<NHSNotifyFooter />);
+
+    const link = screen.getByTestId(linkSpec.testId);
+    expect(link).toBeInTheDocument();
+    expect(link.getAttribute('href')).toBe(linkSpec.href);
+    expect(link.textContent).toBe(linkSpec.text);
+  });
+
   it('renders component correctly', () => {
     render(<NHSNotifyFooter />);
 
     expect(screen.getByTestId('page-footer')).toBeInTheDocument();
     expect(screen.getByTestId('support-links')).toBeInTheDocument();
 
-    expect(
-      screen.getByTestId('accessibility-statement-link')
-    ).toBeInTheDocument();
-    expect(screen.getByTestId('accessibility-statement-link')).toHaveAttribute(
-      'href',
-      `${footerContent.links.accessibilityStatement.url}`
-    );
+    const footerListItems = screen
+      .getByTestId('footer-links')
+      .querySelectorAll('li');
+    const footerLinksOrdered = [...footerListItems]
+      .map((footerListItem) => footerListItem.querySelectorAll('a').item(0))
+      .filter((link) => !!link)
+      .map((footerLink) => footerLink.dataset.testid);
 
-    expect(screen.getByTestId('contact-us-link')).toBeInTheDocument();
-    expect(screen.getByTestId('contact-us-link')).toHaveAttribute('href', '#');
-
-    expect(screen.getByTestId('cookies-link')).toBeInTheDocument();
-    expect(screen.getByTestId('cookies-link')).toHaveAttribute('href', '#');
-
-    expect(screen.getByTestId('privacy-policy-link')).toBeInTheDocument();
-    expect(screen.getByTestId('privacy-policy-link')).toHaveAttribute(
-      'href',
-      '#'
-    );
-
-    expect(screen.getByTestId('terms-and-conditions-link')).toBeInTheDocument();
-    expect(screen.getByTestId('terms-and-conditions-link')).toHaveAttribute(
-      'href',
-      '#'
+    expect(footerLinksOrdered).toEqual(
+      expectedFooterLinks.map(
+        (linkSpec) => (linkSpec[1] as FooterLinkSpec).testId
+      )
     );
     expect(
       screen.getByTestId('nhs-england-copyright-text')
