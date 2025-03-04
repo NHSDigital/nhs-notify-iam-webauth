@@ -49,7 +49,7 @@ module "s3bucket_cognito_backup" {
 
   default_tags = {
     Name                      = "Cognito identity attribute backup"
-    NHSE-Enable-Dynamo-Backup = var.destination_vault_arn != null ? "True" : "False"
+    NHSE-Enable-S3-Backup = var.destination_vault_arn != null ? "True" : "False"
   }
 }
 
