@@ -1,7 +1,8 @@
 import { mockDeep } from 'jest-mock-extended';
-import { useAuthenticator, UseAuthenticator } from '@aws-amplify/ui-react';
-import { SignOut } from '@/src/components/molecules/SignOut/SignOut';
 import { render } from '@testing-library/react';
+import { useAuthenticator, UseAuthenticator } from '@aws-amplify/ui-react';
+import JsCookie from 'js-cookie';
+import { SignOut } from '@/src/components/molecules/SignOut/SignOut';
 
 const signOutMock = jest.fn();
 jest.mock('@aws-amplify/ui-react', () => ({
@@ -12,8 +13,10 @@ jest.mock('@aws-amplify/ui-react', () => ({
     })
   ),
 }));
+jest.mock('js-cookie');
 
 const useAuthenticatorMock = jest.mocked(useAuthenticator);
+const cookieMock = jest.mocked(JsCookie);
 
 describe('Signout', () => {
   beforeEach(() => {
@@ -28,6 +31,7 @@ describe('Signout', () => {
     );
 
     expect(signOutMock).toHaveBeenCalled();
+    expect(cookieMock.remove).toHaveBeenCalledWith('csrf_token');
 
     expect(page.asFragment()).toMatchSnapshot();
   });
@@ -43,6 +47,7 @@ describe('Signout', () => {
     );
 
     expect(signOutMock).not.toHaveBeenCalled();
+    expect(cookieMock.remove).not.toHaveBeenCalled();
 
     expect(page.asFragment()).toMatchSnapshot();
   });

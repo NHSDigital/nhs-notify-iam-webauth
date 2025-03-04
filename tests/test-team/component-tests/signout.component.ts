@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { CognitoUserHelper, User } from '../helpers/cognito-user-helper';
 import { IamWebAuthSignInPage } from '../pages/iam-webauth-signin-page';
-import { getCognitoCookies } from '../helpers/cookies';
+import { getCookies } from '../helpers/cookies';
 
 test.describe('SignOut', () => {
   let user: User;
@@ -29,14 +29,14 @@ test.describe('SignOut', () => {
       `${baseURL}/templates/create-and-submit-templates`
     );
 
-    const cookiesPreSignOut = await getCognitoCookies(page);
+    const cookiesPreSignOut = await getCookies(page);
 
-    expect(Object.keys(cookiesPreSignOut)).toHaveLength(6);
+    expect(Object.keys(cookiesPreSignOut)).toHaveLength(7);
 
     await page.goto(`${baseURL}/auth/signout`);
 
     await expect(async () => {
-      const cookiesPostSignOut = await getCognitoCookies(page);
+      const cookiesPostSignOut = await getCookies(page);
 
       expect(Object.keys(cookiesPostSignOut)).toHaveLength(0);
     }).toPass();
