@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { useAuthenticator } from '@aws-amplify/ui-react';
+import JsCookie from 'js-cookie';
 import { authenticatorSelector } from '@/src/utils/authenticator-selector';
 
 export const SignOut = ({ children }: { children?: React.ReactNode }) => {
@@ -10,6 +11,7 @@ export const SignOut = ({ children }: { children?: React.ReactNode }) => {
   useEffect(() => {
     if (authStatus === 'authenticated') {
       signOut();
+      JsCookie.remove('csrf_token');
     }
   }, [authStatus, signOut]);
 

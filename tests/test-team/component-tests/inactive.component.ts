@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { CognitoUserHelper, User } from '../helpers/cognito-user-helper';
 import { IamWebAuthInactivePage } from '../pages/iam-webauth-inactive-page';
-import { getCognitoCookies } from '../helpers/cookies';
+import { getCookies } from '../helpers/cookies';
 import { IamWebAuthSignInPage } from '../pages/iam-webauth-signin-page';
 
 test.describe('Inactive', () => {
@@ -31,16 +31,16 @@ test.describe('Inactive', () => {
       `${baseURL}/templates/create-and-submit-templates`
     );
 
-    const cookiesPreSignOut = await getCognitoCookies(page);
+    const cookiesPreSignOut = await getCookies(page);
 
-    expect(Object.keys(cookiesPreSignOut)).toHaveLength(6);
+    expect(Object.keys(cookiesPreSignOut)).toHaveLength(7);
 
     await inactivePage.loadPage({
       redirectPath: '/templates/create-and-submit-templates',
     });
 
     await expect(async () => {
-      const cookiesPostSignOut = await getCognitoCookies(page);
+      const cookiesPostSignOut = await getCookies(page);
 
       expect(Object.keys(cookiesPostSignOut)).toHaveLength(0);
     }).toPass();
