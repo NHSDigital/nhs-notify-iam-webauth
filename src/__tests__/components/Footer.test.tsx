@@ -75,9 +75,7 @@ describe('Footer component', () => {
       .map((footerLink) => footerLink.dataset.testid);
 
     expect(footerLinksOrdered).toEqual(
-      expectedFooterLinks.map(
-        (linkSpec) => (linkSpec[1]).testId
-      )
+      expectedFooterLinks.map((linkSpec) => linkSpec[1].testId)
     );
     expect(
       screen.getByTestId('nhs-england-copyright-text')
