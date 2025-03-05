@@ -7,7 +7,7 @@ type FooterLinkSpec = {
   href: string;
 };
 
-const expectedFooterLinks: Array<Array<string | FooterLinkSpec>> = [
+const expectedFooterLinks: Array<[string, FooterLinkSpec]> = [
   [
     'acceptable use policy',
     {
@@ -51,9 +51,7 @@ const expectedFooterLinks: Array<Array<string | FooterLinkSpec>> = [
 ];
 
 describe('Footer component', () => {
-  test.each(expectedFooterLinks)('Check %s footer link', (_, spec) => {
-    const linkSpec = spec as FooterLinkSpec;
-
+  test.each(expectedFooterLinks)('Check %s footer link', (_, linkSpec) => {
     render(<NHSNotifyFooter />);
 
     const link = screen.getByTestId(linkSpec.testId);
@@ -78,7 +76,7 @@ describe('Footer component', () => {
 
     expect(footerLinksOrdered).toEqual(
       expectedFooterLinks.map(
-        (linkSpec) => (linkSpec[1] as FooterLinkSpec).testId
+        (linkSpec) => (linkSpec[1]).testId
       )
     );
     expect(
