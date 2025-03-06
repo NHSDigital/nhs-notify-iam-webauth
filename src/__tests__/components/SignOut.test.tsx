@@ -30,7 +30,7 @@ describe('Signout', () => {
       </SignOut>
     );
 
-    expect(signOutMock).toHaveBeenCalled();
+    expect(signOutMock).toHaveBeenCalledWith({ global: true });
     expect(cookieMock.remove).toHaveBeenCalledWith('csrf_token');
 
     expect(page.asFragment()).toMatchSnapshot();
