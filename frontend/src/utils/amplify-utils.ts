@@ -4,7 +4,7 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 import { cookies } from 'next/headers';
 import { createServerRunner } from '@aws-amplify/adapter-nextjs';
-import { fetchAuthSession } from 'aws-amplify/auth/server';
+import { fetchAuthSession } from '@aws-amplify/auth/server';
 
 const config = require('@/amplify_outputs.json');
 

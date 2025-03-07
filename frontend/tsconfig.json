@@ -26,13 +26,14 @@
         "./*"
       ]
     },
-    "target": "ES6"
+    "target": "ES2017"
   },
   "include": [
-    "next-env.d.ts",
+    "frontend/src/next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "../jest.config.ts"
   ],
   "exclude": [
     "node_modules"

@@ -1,10 +1,10 @@
 /**
  * @jest-environment node
  */
-import { fetchAuthSession } from 'aws-amplify/auth/server';
+import { fetchAuthSession } from '@aws-amplify/auth/server';
 import { getAccessTokenServer } from '../../utils/amplify-utils';
 
-jest.mock('aws-amplify/auth/server');
+jest.mock('@aws-amplify/auth/server');
 jest.mock('@aws-amplify/adapter-nextjs/api');
 jest.mock('next/headers', () => ({
   cookies: () => ({

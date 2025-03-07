@@ -10,7 +10,7 @@ export const SignOut = ({ children }: { children?: React.ReactNode }) => {
 
   useEffect(() => {
     if (authStatus === 'authenticated') {
-      signOut();
+      signOut({ global: true });
       JsCookie.remove('csrf_token');
     }
   }, [authStatus, signOut]);
