@@ -13,4 +13,8 @@ resource "aws_cognito_user_pool" "main" {
       priority = 1
     }
   }
+
+  lambda_config {
+    post_authentication = module.cognito_triggers.post_authentication_lambda_function_arn
+  }
 }

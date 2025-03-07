@@ -91,6 +91,7 @@
   "workspaces": [
     ".",
     "lambdas/cis2-api",
+    "lambdas/cognito-triggers",
     "tests/test-team"
   ]
 }
