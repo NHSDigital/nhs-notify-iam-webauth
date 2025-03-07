@@ -5,6 +5,7 @@ applications:
       phases:
         build:
           commands:
+            - cd ..
             - npm ci --cache .npm --prefer-offline
             - npm run generate-outputs env
             - npm run build
