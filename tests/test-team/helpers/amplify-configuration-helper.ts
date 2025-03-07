@@ -1,4 +1,5 @@
-import * as fs from 'node:fs';
+import fs from 'node:fs';
+import path from 'node:path';
 
 type AmplifyOutput = {
   auth: {
@@ -13,7 +14,10 @@ export class AmplifyConfigurationHelper {
 
   constructor() {
     this.configuration = JSON.parse(
-      fs.readFileSync('../../amplify_outputs.json', 'utf8')
+      fs.readFileSync(
+        path.resolve(__dirname, '../../../frontend/amplify_outputs.json'),
+        'utf8'
+      )
     );
   }
 
