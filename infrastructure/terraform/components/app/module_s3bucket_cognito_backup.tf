@@ -39,6 +39,10 @@ module "s3bucket_cognito_backup" {
     data.aws_iam_policy_document.s3bucket_cognito_backup[0].json
   ]
 
+  bucket_logging_target = {
+    bucket = local.acct.s3_buckets["access_logs"]["id"]
+  }
+
   public_access = {
     block_public_acls       = true
     block_public_policy     = true
