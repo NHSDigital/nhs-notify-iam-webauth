@@ -23,5 +23,7 @@ export async function getAccessTokenServer(
     // no-op
   });
 
+  console.log({ session });
+
   return session?.tokens?.accessToken?.toString();
 }
