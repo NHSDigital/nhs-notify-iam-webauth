@@ -5,6 +5,7 @@
 import { cookies } from 'next/headers';
 import { createServerRunner } from '@aws-amplify/adapter-nextjs';
 import { fetchAuthSession } from 'aws-amplify/auth/server';
+import { FetchAuthSessionOptions } from '@aws-amplify/auth';
 
 const config = require('@/amplify_outputs.json');
 
@@ -12,15 +13,15 @@ export const { runWithAmplifyServerContext } = createServerRunner({
   config,
 });
 
-export async function getAccessTokenServer(): Promise<string | undefined> {
-  try {
-    const { tokens } = await runWithAmplifyServerContext({
-      nextServerContext: { cookies },
-      operation: fetchAuthSession,
-    });
-
-    return tokens?.accessToken?.toString();
-  } catch {
+export async function getAccessTokenServer(
+  options: FetchAuthSessionOptions = {}
+): Promise<string | undefined> {
+  const session = await runWithAmplifyServerContext({
+    nextServerContext: { cookies },
+    operation: (ctx) => fetchAuthSession(ctx, options),
+  }).catch(() => {
     // no-op
-  }
+  });
+
+  return session?.tokens?.accessToken?.toString();
 }

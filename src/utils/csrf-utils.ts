@@ -3,6 +3,7 @@
 import { jwtDecode } from 'jwt-decode';
 import { createHmac, randomBytes } from 'node:crypto';
 import { cookies } from 'next/headers';
+import { JWT } from '@aws-amplify/auth';
 import { getEnvironmentVariable } from './get-environment-variable';
 import { getAccessTokenServer } from './amplify-utils';
 
@@ -13,15 +14,15 @@ export const getSessionId = async () => {
     throw new Error('Could not get access token');
   }
 
-  const jwt = jwtDecode(accessToken);
+  const jwt = jwtDecode<JWT['payload']>(accessToken);
 
-  const sessionId = jwt.jti;
+  const sessionId = jwt.origin_jti;
 
   if (!sessionId) {
     throw new Error('Could not get session ID');
   }
 
-  return sessionId;
+  return sessionId.toString();
 };
 
 export const generateCsrf = async () => {

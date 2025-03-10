@@ -27,7 +27,7 @@ class MockHmac {
 
 const mockJwt = sign(
   {
-    jti: 'jti',
+    origin_jti: 'jti',
   },
   'key'
 );
@@ -65,7 +65,7 @@ describe('getSessionId', () => {
   test('errors when session ID not found', async () => {
     const mockEmptyJwt = sign(
       {
-        jti: undefined,
+        origin_jti: undefined,
       },
       'key'
     );
