@@ -4,10 +4,14 @@ resource "aws_iam_role" "lambda_execution_role" {
   assume_role_policy = data.aws_iam_policy_document.lambda_service_trust_policy.json
 }
 
-resource "aws_iam_role_policy" "lambda_execution_policy" {
-  role   = aws_iam_role.lambda_execution_role.name
+resource "aws_iam_policy" "lambda_execution_policy" {
   name   = "${var.function_name}-execution-policy"
   policy = data.aws_iam_policy_document.lambda_execution_policy.json
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_execution" {
+  role       = aws_iam_role.lambda_execution_role.name
+  policy_arn = aws_iam_policy.lambda_execution_policy.arn
 }
 
 data "aws_iam_policy_document" "lambda_service_trust_policy" {
