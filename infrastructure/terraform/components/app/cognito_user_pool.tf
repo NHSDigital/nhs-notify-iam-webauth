@@ -51,8 +51,4 @@ resource "aws_cognito_user_pool" "main" {
       max_length = 2048
     }
   }
-
-  lambda_config {
-    post_authentication = module.cognito_triggers.post_authentication_lambda_function_arn
-  }
 }

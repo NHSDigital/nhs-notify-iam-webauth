@@ -35,14 +35,21 @@
       "error",
       {
         "case": "kebabCase",
-        "ignore": [".tsx"]
+        "ignore": [
+          ".tsx"
+        ]
       }
     ],
     "react/react-in-jsx-scope": "off",
     "react/jsx-filename-extension": "off",
     "react/jsx-props-no-spreading": "off",
     "react/function-component-definition": "off",
-    "react/jsx-no-useless-fragment": ["error", { "allowExpressions": true }],
+    "react/jsx-no-useless-fragment": [
+      "error",
+      {
+        "allowExpressions": true
+      }
+    ],
     "import/prefer-default-export": "off",
     "import/extensions": "off",
     "no-shadow": "off",
@@ -61,7 +68,17 @@
     "no-param-reassign": "off",
     "react/require-default-props": "off",
     "unicorn/prefer-node-protocol": "off",
-    "unicorn/no-null": "off"
+    "unicorn/no-null": "off",
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": [
+          "jest.config.ts",
+          "jest.setup.ts",
+          "**/__tests__/**"
+        ]
+      }
+    ]
   },
   "settings": {
     "import/resolver": {

@@ -19,22 +19,6 @@ module "post_authentication_lambda" {
       source_account = var.aws_account_id
     }
   }
-
-  execution_role_policy_document = data.aws_iam_policy_document.post_authentication_lambda_policy.json
 }
 
-data "aws_iam_policy_document" "post_authentication_lambda_policy" {
-  statement {
-    sid    = "AllowGlobalSignout"
-    effect = "Allow"
-
-    actions = [
-      "cognito-idp:AdminUserGlobalSignOut",
-    ]
-
-    resources = [
-      var.user_pool.arn
-    ]
-  }
-}
 
