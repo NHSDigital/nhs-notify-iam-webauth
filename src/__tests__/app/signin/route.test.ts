@@ -46,7 +46,7 @@ test('returns redirect - sanitizes redirect path', async () => {
   expect(response.headers.get('Location')).toEqual('/redirect-url');
 });
 
-test('returns redirect to / if no redirect given', async () => {
+test('returns redirect to /templates/manage-templates if no redirect given', async () => {
   jest.mocked(getSessionId).mockResolvedValue('session-id');
   jest.mocked(generateSessionCsrfToken).mockResolvedValue('csrf');
   jest.mocked(cookies).mockResolvedValue(mockDeep<ReadonlyRequestCookies>({}));
@@ -55,7 +55,9 @@ test('returns redirect to / if no redirect given', async () => {
   const response = await GET(request);
 
   expect(response.status).toEqual(307);
-  expect(response.headers.get('Location')).toEqual('/');
+  expect(response.headers.get('Location')).toEqual(
+    '/templates/manage-templates'
+  );
 });
 
 test('returns redirect to /auth if no session detected', async () => {
