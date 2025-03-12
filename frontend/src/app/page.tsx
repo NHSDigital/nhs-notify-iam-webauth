@@ -3,6 +3,7 @@
 import React, { Suspense, useEffect } from 'react';
 import { redirect, RedirectType, useSearchParams } from 'next/navigation';
 import { Authenticator, useAuthenticator } from '@aws-amplify/ui-react';
+import JsCookie from 'js-cookie';
 import path from 'path';
 import { federatedSignIn } from '@/src/utils/federated-sign-in';
 import { CIS2SignInButton } from '@/src/components/CIS2SignInButton/CIS2SignInButton';
@@ -22,13 +23,25 @@ function SignInPage() {
   const redirectPath = searchParams.get('redirect');
 
   useEffect(() => {
-    if (authStatus === 'authenticated') {
-      redirect(
-        path.normalize(
-          `/signin?redirect=${encodeURIComponent(redirectPath ?? '/templates/manage-templates')}`
-        ),
-        RedirectType.push
-      );
+    switch (authStatus) {
+      case 'authenticated': {
+        redirect(
+          path.normalize(
+            `/signin?redirect=${encodeURIComponent(redirectPath ?? '/templates/manage-templates')}`
+          ),
+          RedirectType.push
+        );
+        break;
+      }
+
+      case 'unauthenticated': {
+        JsCookie.remove('csrf_token');
+        break;
+      }
+
+      default: {
+        break;
+      }
     }
   }, [authStatus, redirectPath]);
 
