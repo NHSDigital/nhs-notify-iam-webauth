@@ -6,10 +6,14 @@ import { generateSessionCsrfToken } from '@/src/utils/csrf-utils';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const GET = async (request: NextRequest) => {
-  const url = request.nextUrl.clone();
-
   const sessionId = await getSessionId();
   const cookieStore = await cookies();
+
+  let redirectPath =
+    `/${request.nextUrl.searchParams.get('redirect') ?? '/templates/manage-templates'}`.replace(
+      /^\/+/,
+      '/'
+    );
 
   if (sessionId) {
     const csrfToken = await generateSessionCsrfToken(sessionId);
@@ -18,14 +22,21 @@ export const GET = async (request: NextRequest) => {
       sameSite: 'strict',
       secure: true,
     });
-
-    const redirectPath = request.nextUrl.searchParams.get('redirect') ?? '/';
-    url.pathname = redirectPath;
-    url.searchParams.delete('redirect');
   } else {
     cookieStore.delete('csrf_token');
-    url.pathname = '/auth';
+    redirectPath = '/auth';
+
+    const redirectParam = request.nextUrl.searchParams.get('redirect');
+
+    if (redirectParam) {
+      redirectPath += `?redirect=${encodeURIComponent(redirectParam)}`;
+    }
   }
 
-  return NextResponse.redirect(url);
+  return NextResponse.json(null, {
+    status: 307,
+    headers: {
+      Location: redirectPath,
+    },
+  });
 };
