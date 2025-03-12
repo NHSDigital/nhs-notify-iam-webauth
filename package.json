@@ -4,7 +4,9 @@
   "workspaces": [
     "frontend",
     "lambdas/cis2-api",
-    "tests/test-team"
+    "lambdas/cognito-triggers",
+    "tests/test-team",
+    "utils/logger"
   ],
   "scripts": {
     "build": "npm run --workspace frontend build --if-present",

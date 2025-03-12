@@ -2,7 +2,9 @@
   "extends": [
     "../.eslintrc",
     "next",
-    "next/core-web-vitals"
+    "next/core-web-vitals",
+    "plugin:jsx-a11y/recommended",
+    "plugin:react/recommended"
   ],
   "rules": {
     "react/display-name": "off",

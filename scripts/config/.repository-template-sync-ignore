@@ -9,6 +9,12 @@ CHANGELOG.md
 project.code-workspace
 README.md
 VERSION
+.github/CODEOWNERS
+.editorconfig
+.gitleaksignore
+scripts/tests/
+Makefile
+scripts/config/sonar-scanner.properties
 
 # Files and Folders in the template repository to disregard
 .devcontainer/
@@ -16,3 +22,4 @@ VERSION
 */examples/
 docs/
 infrastructure/terraform/components/
+scripts/docker/examples/

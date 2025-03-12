@@ -34,6 +34,10 @@ module "s3bucket_lambda_artefacts" {
     }
   ]
 
+  bucket_logging_target = {
+    bucket = module.s3bucket_access_logs.id
+  }
+
   policy_documents = [
     data.aws_iam_policy_document.s3bucket_lambda_artefacts.json
   ]

@@ -4,9 +4,7 @@
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:jest/recommended",
-    "plugin:jsx-a11y/recommended",
     "plugin:prettier/recommended",
-    "plugin:react/recommended",
     "plugin:security/recommended-legacy",
     "plugin:sonarjs/recommended-legacy",
     "plugin:unicorn/recommended"
