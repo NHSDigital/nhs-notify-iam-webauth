@@ -6,10 +6,10 @@ cd "$(git rev-parse --show-toplevel)"
 
 npm run build
 
-npm run app:start
+npm run app:start -w frontend
 
-npm run app:wait
+npm run app:wait -w frontend
 
 npm run test:accessibility
 
-npm run app:stop
+npm run app:stop -w frontend

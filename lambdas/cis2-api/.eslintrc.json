@@ -1,34 +1,5 @@
 {
   "extends": [
-    "airbnb",
-    "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:jest/recommended",
-    "plugin:jsx-a11y/recommended",
-    "plugin:prettier/recommended",
-    "plugin:security/recommended-legacy",
-    "plugin:sonarjs/recommended-legacy",
-    "plugin:unicorn/recommended"
-  ],
-  "plugins": [
-    "@typescript-eslint",
-    "html",
-    "import",
-    "jest",
-    "jsx-a11y",
-    "prettier",
-    "security",
-    "sonarjs",
-    "unicorn"
-  ],
-  "rules": {
-    "import/extensions": "off",
-    "import/prefer-default-export": "off",
-    "@next/next/no-html-link-for-pages": "off"
-  },
-  "settings": {
-    "import/resolver": {
-      "typescript": {} // this loads <rootdir>/tsconfig.json to eslint
-    }
-  }
+    "../../.eslintrc"
+  ]
 }

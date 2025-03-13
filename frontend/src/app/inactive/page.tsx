@@ -1,6 +1,6 @@
 import React from 'react';
-import content from '@/src/content/content';
 import { Metadata } from 'next';
+import content from '@/src/content/content';
 import Inactive from './Inactive';
 
 const {
