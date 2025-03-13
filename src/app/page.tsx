@@ -23,25 +23,15 @@ function SignInPage() {
   const redirectPath = searchParams.get('redirect');
 
   useEffect(() => {
-    switch (authStatus) {
-      case 'authenticated': {
-        redirect(
-          path.normalize(
-            `/signin?redirect=${encodeURIComponent(redirectPath ?? '/templates/manage-templates')}`
-          ),
-          RedirectType.push
-        );
-        break;
-      }
-
-      case 'unauthenticated': {
-        JsCookie.remove('csrf_token');
-        break;
-      }
-
-      default: {
-        break;
-      }
+    if (authStatus === 'authenticated') {
+      redirect(
+        path.normalize(
+          `/signin?redirect=${encodeURIComponent(redirectPath ?? '/templates/manage-templates')}`
+        ),
+        RedirectType.push
+      );
+    } else if (authStatus === 'unauthenticated') {
+      JsCookie.remove('csrf_token');
     }
   }, [authStatus, redirectPath]);
 
