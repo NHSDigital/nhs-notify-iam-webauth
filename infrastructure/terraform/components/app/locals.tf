@@ -10,7 +10,7 @@ locals {
     : "https://${aws_amplify_app.main.default_domain}/auth/oauth2")
 
   auth_signout_redirect_domain  = coalesce(
-    cognito_user_pool_group_specific_gateway_logout_url,
+    var.cognito_user_pool_group_specific_gateway_logout_url,
     var.cognito_user_pool_use_environment_specific_gateway_callback_url
     ? "https://${var.environment}.${var.cognito_user_pool_environment_specific_gateway_logout_url_suffix}"
     : "https://${aws_amplify_app.main.default_domain}/auth")

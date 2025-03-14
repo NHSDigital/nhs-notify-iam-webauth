@@ -104,7 +104,7 @@ variable "cognito_user_pool_group_specific_gateway_callback_url" {
   default     = null
 }
 
-variable "cognito_user_pool_group_specific_gateway_signout_url" {
+variable "cognito_user_pool_group_specific_gateway_logout_url" {
   type        = string
   description = "Group-specific web gateway callback URL - for environments such as production that do not contain an environment name"
   default     = null
