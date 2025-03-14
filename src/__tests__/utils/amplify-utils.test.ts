@@ -1,8 +1,9 @@
 /**
  * @jest-environment node
  */
+import { sign } from 'jsonwebtoken';
 import { fetchAuthSession } from 'aws-amplify/auth/server';
-import { getAccessTokenServer } from '../../utils/amplify-utils';
+import { getAccessTokenServer, getSessionId } from '../../utils/amplify-utils';
 
 jest.mock('aws-amplify/auth/server');
 jest.mock('@aws-amplify/adapter-nextjs/api');
@@ -19,24 +20,22 @@ const fetchAuthSessionMock = jest.mocked(fetchAuthSession);
 
 describe('amplify-utils', () => {
   test('getAccessTokenServer - should return the auth token', async () => {
-    fetchAuthSessionMock.mockResolvedValue({
+    fetchAuthSessionMock.mockResolvedValueOnce({
       tokens: {
         accessToken: {
-          toString: () => 'mockSub',
-          payload: {
-            sub: 'mockSub',
-          },
+          toString: () => 'mockToken',
+          payload: {},
         },
       },
     });
 
     const result = await getAccessTokenServer();
 
-    expect(result).toEqual('mockSub');
+    expect(result).toEqual('mockToken');
   });
 
   test('getAccessTokenServer - should return undefined when no auth session', async () => {
-    fetchAuthSessionMock.mockResolvedValue({});
+    fetchAuthSessionMock.mockResolvedValueOnce({});
 
     const result = await getAccessTokenServer();
 
@@ -51,5 +50,47 @@ describe('amplify-utils', () => {
     const result = await getAccessTokenServer();
 
     expect(result).toBeUndefined();
+  });
+
+  describe('getSessionId', () => {
+    test('returns void when access token not found', async () => {
+      fetchAuthSessionMock.mockResolvedValueOnce({});
+
+      await expect(getSessionId()).resolves.toBeUndefined();
+    });
+
+    test('errors when session ID not found', async () => {
+      fetchAuthSessionMock.mockResolvedValueOnce({
+        tokens: {
+          accessToken: {
+            toString: () => sign({}, 'key'),
+            payload: {},
+          },
+        },
+      });
+
+      await expect(getSessionId()).resolves.toBeUndefined();
+    });
+
+    test('returns session id', async () => {
+      fetchAuthSessionMock.mockResolvedValueOnce({
+        tokens: {
+          accessToken: {
+            toString: () =>
+              sign(
+                {
+                  origin_jti: 'jti',
+                },
+                'key'
+              ),
+            payload: {},
+          },
+        },
+      });
+
+      const sessionId = await getSessionId();
+
+      expect(sessionId).toEqual('jti');
+    });
   });
 });

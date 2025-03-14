@@ -3,6 +3,7 @@
 import React, { Suspense, useEffect } from 'react';
 import { redirect, RedirectType, useSearchParams } from 'next/navigation';
 import { Authenticator, useAuthenticator } from '@aws-amplify/ui-react';
+import JsCookie from 'js-cookie';
 import path from 'path';
 import { federatedSignIn } from '@/src/utils/federated-sign-in';
 import { CIS2SignInButton } from '@/src/components/CIS2SignInButton/CIS2SignInButton';
@@ -29,6 +30,8 @@ function SignInPage() {
         ),
         RedirectType.push
       );
+    } else if (authStatus === 'unauthenticated') {
+      JsCookie.remove('csrf_token');
     }
   }, [authStatus, redirectPath]);
 

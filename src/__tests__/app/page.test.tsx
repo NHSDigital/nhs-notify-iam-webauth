@@ -1,6 +1,7 @@
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { UseAuthenticator, useAuthenticator } from '@aws-amplify/ui-react';
+import JsCookie from 'js-cookie';
 import { redirect, RedirectType } from 'next/navigation';
 import { mockDeep } from 'jest-mock-extended';
 import { federatedSignIn } from '@/src/utils/federated-sign-in';
@@ -15,6 +16,8 @@ jest.mock('next/navigation', () => ({
   }),
   redirect: jest.fn(),
 }));
+
+jest.mock('js-cookie');
 
 jest.mock('@aws-amplify/ui-react', () => ({
   Authenticator: () => <p>Placeholder Sign-in form</p>,
@@ -45,6 +48,8 @@ describe('SignInPage', () => {
 
     const container = render(<SignInPage />);
 
+    expect(JsCookie.remove).toHaveBeenCalledWith('csrf_token');
+
     expect(container.asFragment()).toMatchSnapshot();
 
     process.env.NEXT_PUBLIC_ENABLE_COGNITO_IDP = originalCognitoIdpSetting;
@@ -73,6 +78,8 @@ describe('SignInPage', () => {
       '/signin?redirect=%2Fexample-redirect',
       RedirectType.push
     );
+
+    expect(JsCookie.remove).not.toHaveBeenCalled();
   });
 
   it('redirects to /templates/manage-templates if already signed in and there is no redirect search parameter', () => {
