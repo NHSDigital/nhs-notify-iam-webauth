@@ -21,7 +21,7 @@ resource "aws_cognito_user_pool_client" "main" {
       "https://${var.environment}.${local.acct.dns_zone["name"]}/auth",
       "https://${aws_amplify_app.main.default_domain}/auth"
     ],
-    var.cognito_user_pool_use_environment_specific_gateway_callback_url && var.cognito_user_pool_environment_specific_gateway_logout_url_suffix ? [
+    var.cognito_user_pool_use_environment_specific_gateway_callback_url ? [
       "https://${var.environment}.${var.cognito_user_pool_environment_specific_gateway_logout_url_suffix}"
     ] : []
   ])
