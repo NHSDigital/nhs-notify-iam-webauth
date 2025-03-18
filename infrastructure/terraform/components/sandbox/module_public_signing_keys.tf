@@ -2,7 +2,7 @@ module "public_signing_keys" {
   source = "../../modules/public-signing-keys"
   providers = {
     aws = aws
-    aws = aws.us-east-1
+    aws.us-east-1 = aws.us-east-1
   }
 
   aws_account_id = var.aws_account_id
