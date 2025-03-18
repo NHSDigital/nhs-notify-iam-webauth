@@ -18,10 +18,6 @@ module "s3bucket_cf_logs" {
 
   object_ownership = "ObjectWriter"
 
-  bucket_logging_target = {
-    bucket = var.s3_access_logs_bucket_id
-  }
-
   lifecycle_rules = [
     {
       prefix  = ""
