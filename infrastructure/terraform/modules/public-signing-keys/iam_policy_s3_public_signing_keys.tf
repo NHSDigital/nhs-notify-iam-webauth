@@ -5,6 +5,7 @@ resource "aws_iam_policy" "public_signing_keys" {
   policy      = data.aws_iam_policy_document.public_signing_keys.json
 }
 
+#tfsec:ignore:aws-iam-no-policy-wildcards Actions resticted to appropriate targets
 data "aws_iam_policy_document" "public_signing_keys" {
   statement {
     sid    = "AllowS3Read"
@@ -16,8 +17,8 @@ data "aws_iam_policy_document" "public_signing_keys" {
     ]
 
     resources = [
-      module.s3bucket_public_keys.arn,
-      "${module.s3bucket_public_keys.arn}/*",
+      module.s3bucket_public_signing_keys.arn,
+      "${module.s3bucket_public_signing_keys.arn}/*",
     ]
   }
 }

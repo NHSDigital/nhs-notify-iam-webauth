@@ -12,6 +12,17 @@ variable "environment" {
   description = "The name of the tfscaffold environment"
 }
 
+variable "component" {
+  type        = string
+  description = "The name of the tfscaffold component"
+}
+
+variable "module" {
+  type        = string
+  description = "The variable encapsulating the name of this module"
+  default     = "psk"
+}
+
 variable "aws_account_id" {
   type        = string
   description = "The AWS Account ID (numeric)"
@@ -30,21 +41,11 @@ variable "region" {
 # a default within its declaration in this file, because the variables
 # purpose is as an identifier unique to this component, rather
 # then to the environment from where all other variables come.
-variable "component" {
-  type        = string
-  description = "The variable encapsulating the name of this component"
-  default     = "app"
-}
 
 variable "default_tags" {
   type        = map(string)
   description = "A map of default tags to apply to all taggable resources within the component"
   default     = {}
-}
-
-variable "csi" {
-  type        = string
-  description = "CSI from the parent component"
 }
 
 variable "enable_github_actions_ip_access" {
@@ -59,13 +60,12 @@ variable "waf_rate_limit_cdn" {
   default     = 20000
 }
 
-variable "acct" {
-  type = object({
-    s3_buckets = object({
-      access_logs = optional(object({
-        id = optional(string)
-      }))
-    })
-  })
-  description = "Simplified account level settings"
+variable "s3_access_logs_bucket_id" {
+  type = string
+  description = "S3 bucket ID for Access Logs"
+}
+
+variable "dns_zone_name" {
+  type = string
+  description = "The base DNS zone name like 'foo.[dev|nonprod|prod].nhsnotify.national.nhs.uk'"
 }
