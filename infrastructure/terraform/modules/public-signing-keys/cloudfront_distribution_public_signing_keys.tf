@@ -33,11 +33,10 @@ resource "aws_cloudfront_distribution" "signing_keys" {
     cloudfront_default_certificate = true
   }
 
-  # TODO
-  #   logging_config {
-  #     bucket          = module.s3bucket_cf_logs.bucket_regional_domain_name
-  #     include_cookies = false
-  #   }
+  logging_config {
+    bucket          = module.s3bucket_cf_logs.bucket_regional_domain_name
+    include_cookies = false
+  }
 
   origin {
     domain_name = module.s3bucket_public_keys.bucket_regional_domain_name

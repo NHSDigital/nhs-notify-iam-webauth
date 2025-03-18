@@ -5,4 +5,5 @@ module "public_signing_keys" {
   region         = var.region
   project        = var.project
   csi            = local.csi
+  acct           = local.acct
 }

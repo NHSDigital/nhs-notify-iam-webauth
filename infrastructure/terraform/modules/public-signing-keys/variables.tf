@@ -58,3 +58,14 @@ variable "waf_rate_limit_cdn" {
   description = "The rate limit is the maximum number of CDN requests from a single IP address that are allowed in a five-minute period"
   default     = 20000
 }
+
+variable "acct" {
+  type = object({
+    s3_buckets = object({
+      access_logs = optional(object({
+        id = optional(string)
+      }))
+    })
+  })
+  description = "Simplified account level settings"
+}

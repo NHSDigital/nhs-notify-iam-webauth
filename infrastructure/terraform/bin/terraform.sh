@@ -539,7 +539,7 @@ fi;
 [ -f "${dynamic_file_path}" ] && tf_var_file_paths+=("${dynamic_file_path}");
 
 # Warn on duplication
-duplicate_variables="$(cat "${tf_var_file_paths[@]}" | sed -n -e 's/\(^[a-zA-Z0-9_\-]\+\)\s*=.*$/\1/p' | sort | uniq -d)";
+duplicate_variables="$([ ${#tf_var_file_paths[@]} -gt 0 ] && cat "${tf_var_file_paths[@]}" | sed -n -e 's/\(^[a-zA-Z0-9_\-]\+\)\s*=.*$/\1/p' | sort | uniq -d)";
 [ -n "${duplicate_variables}" ] \
   && echo -e "
 ###################################################################

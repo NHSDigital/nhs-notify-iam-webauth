@@ -1,3 +1,3 @@
 locals {
-  csi = "${var.csi}-${var.component}"
+  csi  = "${var.csi}-${var.component}"
 }

@@ -1,35 +1,58 @@
-module "s3bucket_public_keys" {
+module "s3bucket_cf_logs" {
   source = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/s3bucket?ref=v1.0.9"
+  providers = {
+    aws = aws.us-east-1
+  }
 
-  name = "public-keys"
+  name = "cf-logs"
 
   aws_account_id = var.aws_account_id
-  region         = var.region
+  region         = "us-east-1"
   project        = var.project
   environment    = var.environment
   component      = var.component
 
-  acl           = "public-read"
+  acl           = "private"
   force_destroy = false
   versioning    = true
 
-  bucket_logging_target = {
-    bucket = var.acct.s3_buckets["access_logs"]["id"]
-  }
+  object_ownership = "ObjectWriter"
 
   lifecycle_rules = [
     {
+      prefix  = ""
       enabled = true
+
+      transition = [
+        {
+          days          = "90"
+          storage_class = "STANDARD_IA"
+        },
+        {
+          days          = "180"
+          storage_class = "GLACIER"
+        }
+      ]
+
+      expiration = {
+        days = "365"
+      }
+
 
       noncurrent_version_transition = [
         {
           noncurrent_days = "30"
           storage_class   = "STANDARD_IA"
+        },
+        {
+          noncurrent_days = "180"
+          storage_class   = "GLACIER"
         }
+
       ]
 
       noncurrent_version_expiration = {
-        noncurrent_days = "90"
+        noncurrent_days = "365"
       }
 
       abort_incomplete_multipart_upload = {
@@ -39,7 +62,7 @@ module "s3bucket_public_keys" {
   ]
 
   policy_documents = [
-    data.aws_iam_policy_document.s3bucket_public_keys.json
+    data.aws_iam_policy_document.s3bucket_cf_logs.json
   ]
 
   public_access = {
@@ -49,13 +72,12 @@ module "s3bucket_public_keys" {
     restrict_public_buckets = true
   }
 
-
   default_tags = {
-    Name = "Public signing keys for federated auth suppliers"
+    Name = "Lambda function artefact bucket"
   }
 }
 
-data "aws_iam_policy_document" "s3bucket_public_keys" {
+data "aws_iam_policy_document" "s3bucket_cf_logs" {
   statement {
     sid    = "DontAllowNonSecureConnection"
     effect = "Deny"
@@ -65,8 +87,8 @@ data "aws_iam_policy_document" "s3bucket_public_keys" {
     ]
 
     resources = [
-      module.s3bucket_public_keys.arn,
-      "${module.s3bucket_public_keys.arn}/*",
+      module.s3bucket_cf_logs.arn,
+      "${module.s3bucket_cf_logs.arn}/*",
     ]
 
     principals {
@@ -88,6 +110,26 @@ data "aws_iam_policy_document" "s3bucket_public_keys" {
   }
 
   statement {
+    effect  = "Allow"
+    actions = ["s3:PutObject"]
+    resources = [
+      "${module.s3bucket_cf_logs.arn}/*",
+    ]
+
+    principals {
+      type        = "Service"
+      identifiers = ["logging.s3.amazonaws.com"]
+    }
+    condition {
+      test     = "StringEquals"
+      variable = "aws:SourceAccount"
+      values = [
+        var.aws_account_id
+      ]
+    }
+  }
+
+  statement {
     sid    = "AllowManagedAccountsToList"
     effect = "Allow"
 
@@ -96,7 +138,7 @@ data "aws_iam_policy_document" "s3bucket_public_keys" {
     ]
 
     resources = [
-      module.s3bucket_public_keys.arn,
+      module.s3bucket_cf_logs.arn,
     ]
 
     principals {
@@ -116,7 +158,7 @@ data "aws_iam_policy_document" "s3bucket_public_keys" {
     ]
 
     resources = [
-      "${module.s3bucket_public_keys.arn}/*",
+      "${module.s3bucket_cf_logs.arn}/*",
     ]
 
     principals {
@@ -125,17 +167,5 @@ data "aws_iam_policy_document" "s3bucket_public_keys" {
         "arn:aws:iam::${var.aws_account_id}:root"
       ]
     }
-  }
-}
-
-resource "aws_s3_bucket_cors_configuration" "public_public_keys" {
-  bucket = module.s3bucket_public_keys.bucket
-
-  cors_rule {
-    allowed_headers = ["Authorization"]
-    allowed_methods = ["GET"]
-    allowed_origins = ["*"]
-    expose_headers  = ["ETag"]
-    max_age_seconds = 300
   }
 }
