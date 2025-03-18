@@ -7,6 +7,6 @@ module "public_signing_keys" {
   project        = var.project
   region         = var.region
 
-  dns_zone_name            = local.acct.dns_zone["name"]
+  dns_zone_id              = local.acct.dns_zone["id"]
   s3_access_logs_bucket_id = local.acct.s3_buckets["access_logs"]["id"]
 }

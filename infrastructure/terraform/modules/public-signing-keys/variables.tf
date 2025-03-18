@@ -65,7 +65,7 @@ variable "s3_access_logs_bucket_id" {
   description = "S3 bucket ID for Access Logs"
 }
 
-variable "dns_zone_name" {
+variable "dns_zone_id" {
   type = string
-  description = "The base DNS zone name like 'foo.[dev|nonprod|prod].nhsnotify.national.nhs.uk'"
+  description = "The base DNS zone ID"
 }
