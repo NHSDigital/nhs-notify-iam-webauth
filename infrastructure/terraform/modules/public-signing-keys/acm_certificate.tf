@@ -1,5 +1,5 @@
 resource "aws_acm_certificate" "main" {
-  provider          = aws.us-east-1
+  provider = aws.us-east-1
 
   domain_name       = local.root_domain_name
   validation_method = "DNS"
