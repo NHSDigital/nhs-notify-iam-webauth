@@ -10,7 +10,6 @@ module "s3bucket_public_signing_keys" {
   component      = var.component
 
   acl           = "public-read"
-  force_destroy = false
   versioning    = true
 
   bucket_logging_target = {
