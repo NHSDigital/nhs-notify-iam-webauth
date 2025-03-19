@@ -1,6 +1,7 @@
 'use client';
 
 import React, { Suspense, useEffect } from 'react';
+import { Amplify } from 'aws-amplify';
 import { redirect, RedirectType, useSearchParams } from 'next/navigation';
 import { Authenticator, useAuthenticator } from '@aws-amplify/ui-react';
 import JsCookie from 'js-cookie';
@@ -10,7 +11,6 @@ import { CIS2SignInButton } from '@/src/components/CIS2SignInButton/CIS2SignInBu
 import content from '@/src/content/content';
 import styles from './page.module.scss';
 import { authenticatorSelector } from '../utils/authenticator-selector';
-import { Amplify } from 'aws-amplify';
 
 function SignInPage() {
   const {
