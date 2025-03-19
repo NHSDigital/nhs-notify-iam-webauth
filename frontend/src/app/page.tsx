@@ -10,11 +10,15 @@ import { CIS2SignInButton } from '@/src/components/CIS2SignInButton/CIS2SignInBu
 import content from '@/src/content/content';
 import styles from './page.module.scss';
 import { authenticatorSelector } from '../utils/authenticator-selector';
+import { Amplify } from 'aws-amplify';
 
 function SignInPage() {
   const {
     pages: { signInPage: pageContent },
   } = content;
+
+  console.log(Amplify.getConfig());
+  console.log(JSON.stringify(Amplify.getConfig()));
 
   const { authStatus } = useAuthenticator(authenticatorSelector);
 
