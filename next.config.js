@@ -7,6 +7,12 @@ module.exports = {
     quietDeps: true,
   },
 
+  experimental: {
+    serverActions: {
+      allowedOrigins: ['*.nhsnotify.national.nhs.uk', 'notify.nhs.uk'],
+    },
+  },
+
   async redirects() {
     /*
      * Doing redirect rewrites will bypass NextJs' base path
