@@ -98,6 +98,18 @@ variable "cognito_prevent_deletion" {
   default     = true
 }
 
+variable "cognito_user_pool_group_specific_gateway_callback_url" {
+  type        = string
+  description = "Group-specific web gateway callback URL - for environments such as production that do not contain an environment name"
+  default     = null
+}
+
+variable "cognito_user_pool_group_specific_gateway_logout_url" {
+  type        = string
+  description = "Group-specific web gateway callback URL - for environments such as production that do not contain an environment name"
+  default     = null
+}
+
 variable "cognito_user_pool_use_environment_specific_gateway_callback_url" {
   type        = bool
   description = "Enable an environment specific web gateway callback URL - for use in environments that are using dynamic domains"
