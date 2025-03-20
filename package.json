@@ -35,7 +35,7 @@
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-security": "^3.0.1",
     "eslint-plugin-sonarjs": "^3.0.2",
-    "eslint-plugin-unicorn": "^55.0.0",
+    "eslint-plugin-unicorn": "^57.0.0",
     "lcov-result-merger": "^5.0.1",
     "pa11y": "^8.0.0",
     "pa11y-ci": "^3.1.0",
