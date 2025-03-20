@@ -1,7 +1,6 @@
 'use client';
 
 import React, { Suspense, useEffect } from 'react';
-import { Amplify } from 'aws-amplify';
 import { redirect, RedirectType, useSearchParams } from 'next/navigation';
 import { Authenticator, useAuthenticator } from '@aws-amplify/ui-react';
 import JsCookie from 'js-cookie';
@@ -16,9 +15,6 @@ function SignInPage() {
   const {
     pages: { signInPage: pageContent },
   } = content;
-
-  console.log(Amplify.getConfig());
-  console.log(JSON.stringify(Amplify.getConfig()));
 
   const { authStatus } = useAuthenticator(authenticatorSelector);
 
