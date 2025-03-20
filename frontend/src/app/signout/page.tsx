@@ -1,7 +1,7 @@
 import React from 'react';
+import { Metadata } from 'next';
 import { SignOut } from '@/src/components/molecules/SignOut/SignOut';
 import content from '@/src/content/content';
-import { Metadata } from 'next';
 
 const {
   pages: { signOutPage },
