@@ -35,7 +35,6 @@ jobs:
                 "targetAccountGroup", $targetAccountGroup,
                 "targetComponent", $targetComponent,
                 "terraformAction", $terraformAction,
-                "overrides", $overrides,
               }
             }')
 
