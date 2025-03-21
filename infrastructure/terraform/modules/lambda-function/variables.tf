@@ -40,3 +40,21 @@ variable "environment_variables" {
   description = "Lambda environment variables"
   default     = {}
 }
+
+variable "resource_policies" {
+  type = map(object({
+    statement_id   = optional(string)
+    action         = string
+    principal      = string
+    source_arn     = optional(string)
+    source_account = optional(string)
+  }))
+  description = ""
+  default     = {}
+}
+
+variable "execution_role_policy_document" {
+  type        = string
+  description = "IAM Policy Document containing additional runtime permissions for the Lambda function beyond the basic execution policy"
+  default     = ""
+}

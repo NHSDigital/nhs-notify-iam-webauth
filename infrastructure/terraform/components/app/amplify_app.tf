@@ -27,6 +27,7 @@ resource "aws_amplify_app" "main" {
   ]
 
   environment_variables = {
+    AMPLIFY_MONOREPO_APP_ROOT            = "frontend"
     HOSTED_LOGIN_DOMAIN                  = local.auth_domain_name
     NOTIFY_GROUP                         = var.group
     NOTIFY_ENVIRONMENT                   = var.environment

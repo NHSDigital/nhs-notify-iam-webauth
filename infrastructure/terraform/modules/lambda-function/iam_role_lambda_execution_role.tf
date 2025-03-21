@@ -34,6 +34,10 @@ data "aws_iam_policy_document" "lambda_service_trust_policy" {
 }
 
 data "aws_iam_policy_document" "lambda_execution_policy" {
+  source_policy_documents = [
+    var.execution_role_policy_document
+  ]
+
   statement {
     sid    = "AllowLogs"
     effect = "Allow"
