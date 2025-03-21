@@ -72,7 +72,7 @@ module "s3bucket_cf_logs" {
   }
 
   default_tags = {
-    Name = "Lambda function artefact bucket"
+    Name = "Cloudfront Logs"
   }
 }
 
