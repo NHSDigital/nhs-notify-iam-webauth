@@ -17,34 +17,29 @@ export function CIS2SignInButton({
         viewBox='0 0 374.38 59'
         xmlns='http://www.w3.org/2000/svg'
       >
-        <defs>
-          <style>
-            {'.cls-1{fill:#003087;}.cls-2{fill:#005eb8;}.cls-3{fill:#fff;}'}
-          </style>
-        </defs>
         <title>CIS2_LogInWith_Original</title>
         <rect
-          className='cls-1'
           y='4'
           width='374.38'
           height='55'
           rx='4.3598'
           strokeWidth='1.044'
+          fill='#003087'
         />
         <rect
-          className='cls-2'
           width='374.38'
           height='55'
           rx='4.3598'
           strokeWidth='1.044'
+          fill='#005eb8'
         />
         <polygon
-          className='cls-2'
           points='18.54 40.46 84.42 40.46 84.42 14.54 18.54 14.54'
+          fill='#005eb8'
         />
         <path
-          className='cls-3'
           d='m85.05 41v-27h-67.05v27zm-40.05-24.39-4.67 21.73h-7.26l-4.57-15h-0.06l-3 15h-5.55l4.67-21.73h7.28l4.48 15.07h0.06l3.07-15.07zm20.77 0-4.57 21.73h-5.85l1.94-9.34h-6.92l-1.94 9.31h-5.85l4.54-21.73h5.88l-1.72 8.31h6.91l1.72-8.31zm16.81 0.59-1.41 4.33a11 11 0 0 0-4.82-1c-2.31 0-4.19 0.34-4.19 2.09 0 3.08 8.48 1.93 8.48 8.53 0 6-5.6 7.56-10.67 7.56a24.58 24.58 0 0 1-6.76-1.12l1.38-4.42a11.37 11.37 0 0 0 5.38 1.25c1.81 0 4.66-0.35 4.66-2.59 0-3.49-8.48-2.18-8.48-8.31 0-5.61 4.94-7.29 9.73-7.29a17.91 17.91 0 0 1 6.7 1z'
+          fill='#fff'
         />
         <g fill='#fff' strokeWidth='.96013'>
           <path d='m102.1 34.121v-13.633h2.7754v11.317h6.9009v2.3159z' />
