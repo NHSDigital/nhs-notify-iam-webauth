@@ -29,7 +29,7 @@ if (inputType === 'sandbox-output') {
   throw new Error('Unexpected input type');
 }
 
-writeFileSync('./.env', `
+writeFileSync('./frontend/.env', `
 # client and server
 NEXT_PUBLIC_USER_POOL_ID=${userPoolId}
 NEXT_PUBLIC_USER_POOL_CLIENT_ID=${userPoolClientId}
@@ -58,4 +58,4 @@ const amplifyOutputs = {
   },
 };
 
-writeFileSync('./amplify_outputs.json', JSON.stringify(amplifyOutputs, undefined, 2));
+writeFileSync('./frontend/amplify_outputs.json', JSON.stringify(amplifyOutputs, undefined, 2));
