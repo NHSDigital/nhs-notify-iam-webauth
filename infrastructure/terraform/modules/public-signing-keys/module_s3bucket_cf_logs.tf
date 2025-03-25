@@ -1,7 +1,7 @@
 module "s3bucket_cf_logs" {
   source = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/s3bucket?ref=v1.0.9"
   providers = {
-    aws.us-east-1 = aws.us-east-1
+    aws = aws.us-east-1
   }
 
   name = "cf-logs"
@@ -72,7 +72,7 @@ module "s3bucket_cf_logs" {
   }
 
   default_tags = {
-    Name = "Lambda function artefact bucket"
+    Name = "Cloudfront Logs"
   }
 }
 
