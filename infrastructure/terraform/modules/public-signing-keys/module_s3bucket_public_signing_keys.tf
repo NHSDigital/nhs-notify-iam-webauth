@@ -11,6 +11,7 @@ module "s3bucket_public_signing_keys" {
 
   acl           = "public-read"
   versioning    = true
+  force_destroy = !var.protect_public_key_bucket
 
   bucket_logging_target = {
     bucket = var.s3_access_logs_bucket_id

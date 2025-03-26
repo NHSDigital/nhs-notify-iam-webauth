@@ -1,4 +1,5 @@
 resource "aws_acm_certificate" "main" {
+  count    = var.deploy_cdn ? 1 : 0
   provider = aws.us-east-1
 
   domain_name       = local.root_domain_name
@@ -10,7 +11,8 @@ resource "aws_acm_certificate" "main" {
 }
 
 resource "aws_acm_certificate_validation" "main" {
-  provider        = aws.us-east-1
+  count    = var.deploy_cdn ? 1 : 0
+  provider = aws.us-east-1
 
-  certificate_arn = aws_acm_certificate.main.arn
+  certificate_arn = aws_acm_certificate.main[0].arn
 }

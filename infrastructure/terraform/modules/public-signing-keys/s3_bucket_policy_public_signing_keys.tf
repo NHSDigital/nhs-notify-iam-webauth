@@ -5,26 +5,31 @@ resource "aws_s3_bucket_policy" "public_signing_keys" {
 
 data "aws_iam_policy_document" "bucket_policy_public_signing_keys" {
   statement {
-    actions = ["s3:GetObject"]
+    actions = ["s3:GetObject", "s3:ListBucket"]
     resources = [
+      module.s3bucket_public_signing_keys.arn,
       "${module.s3bucket_public_signing_keys.arn}/*"
     ]
 
     principals {
       type        = "AWS"
-      identifiers = ["arn:aws:iam::${var.aws_account_id}:root", aws_cloudfront_origin_access_identity.signing_keys.iam_arn]
+      identifiers = ["arn:aws:iam::${var.aws_account_id}:root"]
     }
   }
 
-  statement {
-    actions = ["s3:ListBucket"]
-    resources = [
-      module.s3bucket_public_signing_keys.arn
-    ]
+  dynamic "statement" {
+    for_each = aws_cloudfront_origin_access_identity.signing_keys
+    content {
+      actions = ["s3:GetObject", "s3:ListBucket"]
+      resources = [
+        module.s3bucket_public_signing_keys.arn,
+        "${module.s3bucket_public_signing_keys.arn}/*"
+      ]
 
-    principals {
-      type        = "AWS"
-      identifiers = ["arn:aws:iam::${var.aws_account_id}:root", aws_cloudfront_origin_access_identity.signing_keys.iam_arn]
+      principals {
+        type        = "AWS"
+        identifiers = [statement.value["iam_arn"]]
+      }
     }
   }
 

@@ -1,4 +1,5 @@
 resource "aws_wafv2_web_acl" "public_signing_keys" {
+  count    = var.deploy_cdn ? 1 : 0
   provider = aws.us-east-1
 
   name        = local.csi

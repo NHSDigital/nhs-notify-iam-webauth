@@ -61,11 +61,16 @@ variable "waf_rate_limit_cdn" {
 }
 
 variable "s3_access_logs_bucket_id" {
-  type = string
+  type        = string
   description = "S3 bucket ID for Access Logs"
 }
 
 variable "dns_zone_id" {
-  type = string
+  type        = string
   description = "The base DNS zone ID"
+}
+
+variable "deploy_cdn" {
+  type        = bool
+  description = "Toggle to control whether the CloudFront distribution and associated domain and certificate be deployed which can take some time to deploy and destroy"
 }

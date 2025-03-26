@@ -1,4 +1,5 @@
 module "s3bucket_cf_logs" {
+  count  = var.deploy_cdn ? 1 : 0
   source = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/s3bucket?ref=v1.0.9"
   providers = {
     aws = aws.us-east-1
@@ -12,8 +13,8 @@ module "s3bucket_cf_logs" {
   environment    = var.environment
   component      = var.component
 
-  acl           = "private"
-  versioning    = true
+  acl        = "private"
+  versioning = true
 
   object_ownership = "ObjectWriter"
 
@@ -61,7 +62,7 @@ module "s3bucket_cf_logs" {
   ]
 
   policy_documents = [
-    data.aws_iam_policy_document.s3bucket_cf_logs.json
+    data.aws_iam_policy_document.s3bucket_cf_logs[0].json
   ]
 
   public_access = {
@@ -77,6 +78,7 @@ module "s3bucket_cf_logs" {
 }
 
 data "aws_iam_policy_document" "s3bucket_cf_logs" {
+  count = var.deploy_cdn ? 1 : 0
   statement {
     sid    = "DontAllowNonSecureConnection"
     effect = "Deny"
@@ -86,8 +88,8 @@ data "aws_iam_policy_document" "s3bucket_cf_logs" {
     ]
 
     resources = [
-      module.s3bucket_cf_logs.arn,
-      "${module.s3bucket_cf_logs.arn}/*",
+      module.s3bucket_cf_logs[0].arn,
+      "${module.s3bucket_cf_logs[0].arn}/*",
     ]
 
     principals {
@@ -112,7 +114,7 @@ data "aws_iam_policy_document" "s3bucket_cf_logs" {
     effect  = "Allow"
     actions = ["s3:PutObject"]
     resources = [
-      "${module.s3bucket_cf_logs.arn}/*",
+      "${module.s3bucket_cf_logs[0].arn}/*",
     ]
 
     principals {
@@ -137,7 +139,7 @@ data "aws_iam_policy_document" "s3bucket_cf_logs" {
     ]
 
     resources = [
-      module.s3bucket_cf_logs.arn,
+      module.s3bucket_cf_logs[0].arn,
     ]
 
     principals {
@@ -157,7 +159,7 @@ data "aws_iam_policy_document" "s3bucket_cf_logs" {
     ]
 
     resources = [
-      "${module.s3bucket_cf_logs.arn}/*",
+      "${module.s3bucket_cf_logs[0].arn}/*",
     ]
 
     principals {

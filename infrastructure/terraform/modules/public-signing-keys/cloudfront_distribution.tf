@@ -1,5 +1,6 @@
 
 resource "aws_cloudfront_distribution" "main" {
+  count    = var.deploy_cdn ? 1 : 0
   provider = aws.us-east-1
 
   enabled             = true
@@ -7,7 +8,7 @@ resource "aws_cloudfront_distribution" "main" {
   comment             = "Public Signing Keys (${local.csi})"
   default_root_object = "index.html"
   price_class         = "PriceClass_100" # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-distributionconfig.html#cfn-cloudfront-distribution-distributionconfig-priceclass
-  web_acl_id          = aws_wafv2_web_acl.public_signing_keys.arn
+  web_acl_id          = aws_wafv2_web_acl.public_signing_keys[0].arn
 
   aliases = [local.root_domain_name]
 
@@ -19,13 +20,13 @@ resource "aws_cloudfront_distribution" "main" {
   }
 
   viewer_certificate {
-    acm_certificate_arn      = aws_acm_certificate.main.arn
+    acm_certificate_arn      = aws_acm_certificate.main[0].arn
     minimum_protocol_version = "TLSv1.2_2021" # Supports 1.2 & 1.3 - https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/secure-connections-supported-viewer-protocols-ciphers.html
     ssl_support_method       = "sni-only"
   }
 
   logging_config {
-    bucket          = module.s3bucket_cf_logs.bucket_regional_domain_name
+    bucket          = module.s3bucket_cf_logs[0].bucket_regional_domain_name
     include_cookies = false
   }
 
@@ -33,7 +34,7 @@ resource "aws_cloudfront_distribution" "main" {
     domain_name = module.s3bucket_public_signing_keys.bucket_regional_domain_name
     origin_id   = "${local.csi}-public-keys"
     s3_origin_config {
-      origin_access_identity = aws_cloudfront_origin_access_identity.signing_keys.cloudfront_access_identity_path
+      origin_access_identity = aws_cloudfront_origin_access_identity.signing_keys[0].cloudfront_access_identity_path
     }
   }
 
@@ -66,5 +67,6 @@ resource "aws_cloudfront_distribution" "main" {
 }
 
 resource "aws_cloudfront_origin_access_identity" "signing_keys" {
+  count   = var.deploy_cdn ? 1 : 0
   comment = "Used to access the S3 content for the public signing keys bucket"
 }
