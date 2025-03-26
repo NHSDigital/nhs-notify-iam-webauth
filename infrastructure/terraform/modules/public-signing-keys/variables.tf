@@ -74,3 +74,9 @@ variable "deploy_cdn" {
   type        = bool
   description = "Toggle to control whether the CloudFront distribution and associated domain and certificate be deployed which can take some time to deploy and destroy"
 }
+
+variable "protect_public_key_bucket" {
+  type        = bool
+  description = "Prevent bucket deletion if objects remain in the bucket.  Prevents accidental deletion of the bucket."
+  default     = true
+}
