@@ -20,7 +20,7 @@ function getContentSecurityPolicy(nonce: string) {
     'manifest-src': [`'self'`],
     'object-src': [`'none'`],
     'script-src': [`'self'`, `'nonce-${nonce}'`],
-    'style-src': [`'self'`, `'unsafe-inline'`],
+    'style-src': [`'self'`, `'nonce-${nonce}'`],
     'upgrade-insecure-requests;': [],
   };
 
