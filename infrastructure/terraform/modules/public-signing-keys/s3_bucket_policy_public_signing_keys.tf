@@ -18,7 +18,7 @@ data "aws_iam_policy_document" "bucket_policy_public_signing_keys" {
   }
 
   dynamic "statement" {
-    for_each = aws_cloudfront_origin_access_identity.signing_keys
+    for_each = var.deploy_cdn ? [1]: []
     content {
       actions = ["s3:GetObject", "s3:ListBucket"]
       resources = [
@@ -28,7 +28,7 @@ data "aws_iam_policy_document" "bucket_policy_public_signing_keys" {
 
       principals {
         type        = "AWS"
-        identifiers = [statement.value["iam_arn"]]
+        identifiers = [aws_cloudfront_origin_access_identity.signing_keys[0].iam_arn]
       }
     }
   }
