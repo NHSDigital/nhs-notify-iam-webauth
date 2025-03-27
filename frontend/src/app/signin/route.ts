@@ -10,7 +10,7 @@ export const GET = async (request: NextRequest) => {
   const cookieStore = await cookies();
 
   let redirectPath =
-    `/${request.nextUrl.searchParams.get('redirect') ?? '/templates/manage-templates'}`.replace(
+    `/${request.nextUrl.searchParams.get('redirect') ?? '/templates/message-templates'}`.replace(
       /^\/+/,
       '/'
     );

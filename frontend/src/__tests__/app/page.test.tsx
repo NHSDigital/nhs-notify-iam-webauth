@@ -82,7 +82,7 @@ describe('SignInPage', () => {
     expect(JsCookie.remove).not.toHaveBeenCalled();
   });
 
-  it('redirects to /templates/manage-templates if already signed in and there is no redirect search parameter', () => {
+  it('redirects to /templates/message-templates if already signed in and there is no redirect search parameter', () => {
     mockUseAuthenticator.mockReturnValueOnce(
       mockDeep<UseAuthenticator>({ authStatus: 'authenticated' })
     );
@@ -90,7 +90,7 @@ describe('SignInPage', () => {
     render(<SignInPage />);
 
     expect(mockRedirect).toHaveBeenCalledWith(
-      '/signin?redirect=%2Ftemplates%2Fmanage-templates',
+      '/signin?redirect=%2Ftemplates%2Fmessage-templates',
       RedirectType.push
     );
   });
@@ -106,7 +106,7 @@ describe('SignInPage', () => {
       await user.click(button);
 
       expect(mockFederatedSignIn).toHaveBeenCalledWith(
-        '/templates/manage-templates'
+        '/templates/message-templates'
       );
     });
 

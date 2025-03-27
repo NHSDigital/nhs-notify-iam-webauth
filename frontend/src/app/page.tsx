@@ -26,7 +26,7 @@ function SignInPage() {
     if (authStatus === 'authenticated') {
       redirect(
         path.normalize(
-          `/signin?redirect=${encodeURIComponent(redirectPath ?? '/templates/manage-templates')}`
+          `/signin?redirect=${encodeURIComponent(redirectPath ?? '/templates/message-templates')}`
         ),
         RedirectType.push
       );
@@ -45,7 +45,7 @@ function SignInPage() {
           </h2>
           <CIS2SignInButton
             onClick={() =>
-              federatedSignIn(redirectPath || '/templates/manage-templates')
+              federatedSignIn(redirectPath || '/templates/message-templates')
             }
           />
         </div>
