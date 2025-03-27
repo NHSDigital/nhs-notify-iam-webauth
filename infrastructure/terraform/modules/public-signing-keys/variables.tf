@@ -73,6 +73,7 @@ variable "dns_zone_id" {
 variable "deploy_cdn" {
   type        = bool
   description = "Toggle to control whether the CloudFront distribution and associated domain and certificate be deployed which can take some time to deploy and destroy"
+  default     = true
 }
 
 variable "protect_public_key_bucket" {
