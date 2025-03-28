@@ -1,3 +1,4 @@
+# docker/ghcr.io/gitleaks/gitleaks v8.18.0@sha256:fd2b5cab12b563d2cc538b14631764a1c25577780e3b7dba71657d58da45d9d9 # SEE: https://github.com/gitleaks/gitleaks/pkgs/container/gitleaks
 # This file is for you! Please, updated to the versions agreed by your team.
 
 act 0.2.64
