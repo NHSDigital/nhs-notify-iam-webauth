@@ -40,7 +40,7 @@ describe('middleware function', () => {
       "manifest-src 'self'",
       "object-src 'none'",
       expect.stringMatching(/^script-src 'self' 'nonce-[\dA-Za-z]+'$/),
-      "style-src 'self' 'unsafe-inline'",
+      expect.stringMatching(/^style-src 'self' 'nonce-[\dA-Za-z]+'$/),
       'upgrade-insecure-requests',
       '',
     ]);
@@ -64,7 +64,7 @@ describe('middleware function', () => {
       expect.stringMatching(
         /^script-src 'self' 'nonce-[\dA-Za-z]+' 'unsafe-eval'$/
       ),
-      "style-src 'self' 'unsafe-inline'",
+      expect.stringMatching(/^style-src 'self' 'nonce-[\dA-Za-z]+'$/),
       'upgrade-insecure-requests',
       '',
     ]);
