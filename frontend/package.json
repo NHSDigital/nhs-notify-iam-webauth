@@ -54,7 +54,7 @@
     "jsonwebtoken": "^9.0.2",
     "pm2": "^5.4.3",
     "sass": "^1.85.1",
-    "ts-jest": "^29.2.5",
+    "ts-jest": "^29.3.0",
     "wait-on": "^7.2.0"
   },
   "overrides": {
