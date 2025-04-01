@@ -1,5 +1,5 @@
-resource "aws_ssm_parameter" "test" {
-  name        = "/${local.csi}/test"
+resource "aws_ssm_parameter" "tests" {
+  name        = "/${local.csi}/tests"
   description = "Test SSM Parameter for testing"
   type        = "SecureString"
   value       = "Test"
