@@ -75,3 +75,9 @@ variable "observability_account_id" {
   type        = string
   description = "The Observability Account ID that needs access"
 }
+
+variable "support_sandbox_environments" {
+  type        = bool
+  description = "Does this account support dev sandbox environments?"
+  default     = false
+}
