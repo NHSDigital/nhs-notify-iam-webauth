@@ -81,3 +81,9 @@ variable "support_sandbox_environments" {
   description = "Does this account support dev sandbox environments?"
   default     = false
 }
+
+variable "kms_deletion_window" {
+  type        = string
+  description = "When a kms key is deleted, how long should it wait in the pending deletion state?"
+  default     = "30"
+}
