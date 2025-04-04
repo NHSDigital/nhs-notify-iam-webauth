@@ -29,3 +29,7 @@ output "s3_buckets" {
     }
   }
 }
+
+output "kms_sandbox_arn" {
+  value = var.support_sandbox_environments ? module.kms_sandbox[0].key_arn : null
+}

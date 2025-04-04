@@ -75,3 +75,15 @@ variable "observability_account_id" {
   type        = string
   description = "The Observability Account ID that needs access"
 }
+
+variable "support_sandbox_environments" {
+  type        = bool
+  description = "Does this account support dev sandbox environments?"
+  default     = false
+}
+
+variable "kms_deletion_window" {
+  type        = string
+  description = "When a kms key is deleted, how long should it wait in the pending deletion state?"
+  default     = "30"
+}
