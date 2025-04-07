@@ -45,7 +45,7 @@ function SignInPage() {
           </h2>
           <CIS2SignInButton
             onClick={() =>
-              federatedSignIn(redirectPath || '/templates/message-templates')
+              federatedSignIn(redirectPath ?? '/templates/message-templates')
             }
           />
         </div>
