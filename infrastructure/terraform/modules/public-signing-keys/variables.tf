@@ -103,3 +103,8 @@ variable "kms_key_arn" {
   type        = string
   description = "KMS Key ARN"
 }
+
+variable "function_s3_bucket" {
+  type        = string
+  description = "The bucket to upload Lambda packages to"
+}

@@ -22,7 +22,7 @@ module "lambda_jwks_key_rotation" {
     body = data.aws_iam_policy_document.lambda_jwks_key_rotation.json
   }
 
-  function_s3_bucket       = local.acct.s3_buckets["lambda_function_artefacts"]["id"]
+  function_s3_bucket       = var.function_s3_bucket
   function_code_base_path  = local.aws_lambda_functions_dir_path
   function_code_dir        = "jwks-key-rotation/src"
   function_include_common  = true
@@ -46,7 +46,7 @@ data "aws_iam_policy_document" "lambda_jwks_key_rotation" {
     ]
 
     resources = [
-      module.kms.key_arn,
+      var.kms_key_arn,
     ]
   }
 }
