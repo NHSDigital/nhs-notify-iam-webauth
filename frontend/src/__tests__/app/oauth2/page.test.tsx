@@ -83,7 +83,7 @@ it('defaults redirect path', async () => {
     eventListener({
       payload: {
         event: 'customOAuthState',
-        data: '{"redirectPath":""}',
+        data: '{"redirectPath":null}',
       },
       channel: '',
     });
@@ -92,7 +92,7 @@ it('defaults redirect path', async () => {
 
   await waitFor(() =>
     expect(mockedRedirect).toHaveBeenCalledWith(
-      '/signin?redirect=%2Ftemplates%2Fmanage-templates',
+      '/signin?redirect=%2Ftemplates%2Fmessage-templates',
       'replace'
     )
   );
