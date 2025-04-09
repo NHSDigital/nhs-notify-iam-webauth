@@ -83,7 +83,7 @@ it('defaults redirect path', async () => {
     eventListener({
       payload: {
         event: 'customOAuthState',
-        data: '{"redirectPath":"/templates/message-templates"}',
+        data: '{"redirectPath":undefined}',
       },
       channel: '',
     });
