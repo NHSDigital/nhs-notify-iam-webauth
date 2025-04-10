@@ -41,7 +41,7 @@ data "aws_iam_policy_document" "amplify" {
       "logs:PutLogEvents",
     ]
 
-    #tfsec:ignore:aws-iam-no-policy-wildcards
+    #trivy:ignore:aws-iam-no-policy-wildcards
     resources = [
       "${aws_cloudwatch_log_group.amplify.arn}:*",
       "${aws_cloudwatch_log_group.amplify.arn}:log-stream:*",
@@ -54,7 +54,7 @@ data "aws_iam_policy_document" "amplify" {
       "logs:DescribeLogGroups",
     ]
 
-    #tfsec:ignore:aws-iam-no-policy-wildcards
+    #trivy:ignore:aws-iam-no-policy-wildcards
     resources = [
       "arn:aws:logs:${var.region}:${var.aws_account_id}:*"
     ]
