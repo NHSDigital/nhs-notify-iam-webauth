@@ -12,6 +12,7 @@ module "public_signing_keys" {
   region         = var.region
   group          = var.group
   kms_key_arn    = local.acct.kms_sandbox_arn
+  default_tags   = local.default_tags
 
   dns_zone_id              = local.acct.dns_zone["id"]
   s3_access_logs_bucket_id = local.acct.s3_buckets["access_logs"]["id"]

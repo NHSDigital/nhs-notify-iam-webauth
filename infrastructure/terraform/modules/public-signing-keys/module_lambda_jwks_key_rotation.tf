@@ -23,16 +23,24 @@ module "lambda_jwks_key_rotation" {
   }
 
   function_s3_bucket       = var.function_s3_bucket
-  function_code_base_path  = local.aws_lambda_functions_dir_path
-  function_code_dir        = "jwks-key-rotation/src"
+  function_code_base_path  = local.lambdas_source_code_dir
+  function_code_dir        = "jwks-key-rotation/dist"
   function_include_common  = true
   function_module_name     = "handler"
   runtime                  = "nodejs20.x"
   memory                   = 128
   timeout                  = 5
   log_level                = var.log_level
-  schedule                 = "rate(10 minutes)"
+  schedule                 = "rate(28 days)"
   force_lambda_code_deploy = true
+
+  lambda_env_vars = {
+    "SSM_KEY_DIRECTORY_NAME"    = local.ssm_key_directory_name,
+    "SSM_ASYMMETRIC_KEY_POLICY" = local.ssm_asymmetric_key_policy_name,
+    "KEY_TAGS"                  = join(",", formatlist("%s=%s", keys(var.default_tags), values(var.default_tags))),
+    "REGION"                    = var.region,
+    "ACCOUNT_ID"                = var.aws_account_id
+  }
 }
 
 data "aws_iam_policy_document" "lambda_jwks_key_rotation" {
@@ -41,12 +49,40 @@ data "aws_iam_policy_document" "lambda_jwks_key_rotation" {
     effect = "Allow"
 
     actions = [
-      "kms:Decrypt",
-      "kms:GenerateDataKey",
+      "kms:Create*",
+      "kms:DescribeKey",
+      "kms:Get*",
+      "kms:List*",
+      "kms:Put*",
+      "kms:ScheduleKeyDeletion",
+      "kms:TagResource"
     ]
 
     resources = [
-      var.kms_key_arn,
+      "*"
+    ]
+  }
+
+  statement {
+    sid    = "AllowSSMParametersRead"
+    effect = "Allow"
+    actions = [
+      "ssm:GetParameter"
+    ]
+    resources = [
+      "arn:aws:ssm:${var.region}:${var.aws_account_id}:parameter${local.ssm_asymmetric_key_policy_name}",
+      "arn:aws:ssm:${var.region}:${var.aws_account_id}:parameter${local.ssm_key_directory_name}"
+    ]
+  }
+
+  statement {
+    sid    = "AllowSSMParametersWrite"
+    effect = "Allow"
+    actions = [
+      "ssm:PutParameter"
+    ]
+    resources = [
+      "arn:aws:ssm:${var.region}:${var.aws_account_id}:parameter${local.ssm_key_directory_name}"
     ]
   }
 }

@@ -13,6 +13,7 @@ module "public_signing_keys" {
   group                 = var.group
   log_retention_in_days = var.log_retention_in_days
   kms_key_arn           = module.kms.key_arn
+  default_tags          = local.default_tags
 
   dns_zone_id              = local.acct.dns_zone["id"]
   s3_access_logs_bucket_id = local.acct.s3_buckets["access_logs"]["id"]
