@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { logger } from './logger';
-import { getParameter } from './ssm-util';
+import { getParameter, putParameter } from './aws/ssm-util';
 
 const schemaFor =
   <Output, Input = Output>() =>
@@ -40,4 +40,14 @@ export async function getKeyDirectory(): Promise<SigningKeyDirectory> {
     throw new Error('Failed to parse key directory');
   }
   return parseResult.data;
+}
+
+export async function writeKeyDirectory(
+  keyDirectory: SigningKeyDirectory
+): Promise<void> {
+  logger.info(`Storing key directory with ${keyDirectory.length} keys`);
+  await putParameter(
+    JSON.stringify(keyDirectory),
+    process.env.SSM_KEY_DIRECTORY_NAME
+  );
 }

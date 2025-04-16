@@ -35,11 +35,12 @@ module "lambda_jwks_key_rotation" {
   force_lambda_code_deploy = true
 
   lambda_env_vars = {
-    "SSM_KEY_DIRECTORY_NAME"    = local.ssm_key_directory_name,
-    "SSM_ASYMMETRIC_KEY_POLICY" = local.ssm_asymmetric_key_policy_name,
-    "KEY_TAGS"                  = join(",", formatlist("%s=%s", keys(var.default_tags), values(var.default_tags))),
-    "REGION"                    = var.region,
-    "ACCOUNT_ID"                = var.aws_account_id
+    "SSM_KEY_DIRECTORY_NAME"     = local.ssm_key_directory_name,
+    "SSM_ASYMMETRIC_KEY_POLICY"  = local.ssm_asymmetric_key_policy_name,
+    "KEY_TAGS"                   = join(",", formatlist("%s=%s", keys(var.default_tags), values(var.default_tags))),
+    "REGION"                     = var.region,
+    "ACCOUNT_ID"                 = var.aws_account_id
+    "S3_PUBLIC_KEYS_BUCKET_NAME" = module.s3bucket_public_signing_keys.bucket
   }
 }
 
@@ -84,5 +85,19 @@ data "aws_iam_policy_document" "lambda_jwks_key_rotation" {
     resources = [
       "arn:aws:ssm:${var.region}:${var.aws_account_id}:parameter${local.ssm_key_directory_name}"
     ]
+  }
+
+  statement {
+    sid    = "AllowS3PublicSigningKeysWrite"
+    effect = "Allow"
+
+    actions = [
+      "s3:PutObject",
+      "s3:PutObjectVersion",
+      "s3:PutObjectTagging",
+      "s3:PutObjectVersionTagging",
+    ]
+
+    resources = ["${module.s3bucket_public_signing_keys.arn}/*"]
   }
 }

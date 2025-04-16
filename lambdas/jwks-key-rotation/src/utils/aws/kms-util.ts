@@ -2,8 +2,9 @@ import {
   CreateKeyCommand,
   GetPublicKeyCommand,
   KMSClient,
+  ScheduleKeyDeletionCommand,
 } from '@aws-sdk/client-kms';
-import { logger } from './logger';
+import { logger } from '../logger';
 
 const kmsClient = new KMSClient({
   region: process.env.REGION,
@@ -13,17 +14,21 @@ const kmsClient = new KMSClient({
 
 export async function createKmsKey(input: CreateKeyCommand): Promise<string> {
   const result = await kmsClient.send(input);
+  const keyId = result.KeyMetadata?.KeyId;
 
-  if (!result.KeyMetadata?.KeyId) {
+  if (!keyId) {
     logger.error(result);
     throw new Error('Failed to create key');
   }
-  return result.KeyMetadata?.KeyId;
+
+  logger.info(`Created key ${keyId}`);
+  return keyId;
 }
 
-export async function getKmsPublicKey(keyId: string): Promise<Uint8Array | undefined> {
+export async function getKmsPublicKey(
+  keyId: string
+): Promise<Uint8Array | undefined> {
   const keyArn = `arn:aws:kms:${process.env.REGION}:${process.env.ACCOUNT_ID}:key/${keyId}`;
-  logger.info(keyArn);
 
   const result = await kmsClient.send(
     new GetPublicKeyCommand({
@@ -34,6 +39,15 @@ export async function getKmsPublicKey(keyId: string): Promise<Uint8Array | undef
   if (!result.PublicKey) {
     logger.warn(`PublicKey not found ${keyArn}`);
   }
-  logger.info(result.PublicKey);
   return result.PublicKey;
+}
+
+export async function deleteKey(keyId: string): Promise<void> {
+  logger.info(`Deleting key ${keyId}`);
+  
+  await kmsClient.send(
+    new ScheduleKeyDeletionCommand({
+      KeyId: keyId,
+    })
+  );
 }

@@ -2,12 +2,16 @@ import {
   CreateKeyCommand,
   KeySpec,
   KeyUsageType,
+  KMSInvalidStateException,
+  KMSServiceException,
   NotFoundException,
 } from '@aws-sdk/client-kms';
-import { getKeyTags } from './aws-utils';
-import { createKmsKey, getKmsPublicKey } from './kms-util';
-import { getParameter } from './ssm-util';
+import { getKeyTags } from './aws/tag-util';
+import { createKmsKey, getKmsPublicKey } from './aws/kms-util';
+import { getParameter } from './aws/ssm-util';
 import { logger } from './logger';
+
+const NO_OP_ERRORS = [NotFoundException, KMSInvalidStateException];
 
 async function getKeyPolicy(): Promise<string> {
   const ssmResult = await getParameter(process.env.SSM_ASYMMETRIC_KEY_POLICY);
@@ -40,10 +44,11 @@ export async function getPublicKey(
   keyId: string
 ): Promise<{ keyId: string; publicKey?: Uint8Array }> {
   const publicKey = await getKmsPublicKey(keyId).catch((err) => {
-    if (err instanceof NotFoundException) {
+    if (NO_OP_ERRORS.findIndex((errorType) => err instanceof errorType) > -1) {
       logger.warn(`Key not found: ${keyId}`);
       return undefined;
     }
+
     throw err;
   });
 
