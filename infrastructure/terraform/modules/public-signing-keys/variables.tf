@@ -81,3 +81,30 @@ variable "protect_public_key_bucket" {
   description = "Prevent bucket deletion if objects remain in the bucket.  Prevents accidental deletion of the bucket."
   default     = true
 }
+
+variable "log_level" {
+  type        = string
+  description = "Lambda log level"
+  default     = "INFO"
+}
+
+variable "group" {
+  type        = string
+  description = "The group variables are being inherited from (often synonmous with account short-name)"
+}
+
+variable "log_retention_in_days" {
+  type        = number
+  description = "The retention period in days for the Cloudwatch Logs events to be retained, default of 0 is indefinite"
+  default     = 0
+}
+
+variable "kms_key_arn" {
+  type        = string
+  description = "KMS Key ARN"
+}
+
+variable "function_s3_bucket" {
+  type        = string
+  description = "The bucket to upload Lambda packages to"
+}

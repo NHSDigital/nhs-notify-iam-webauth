@@ -4,11 +4,13 @@
   "workspaces": [
     "frontend",
     "lambdas/cis2-api",
+    "lambdas/jwks-key-rotation",
     "tests/test-team",
     "utils/logger"
   ],
   "scripts": {
     "build": "npm run --workspace frontend build --if-present",
+    "build-lambda": "npm run --workspaces build-lambda --if-present",
     "create-backend-sandbox": "./scripts/create_backend_sandbox.sh",
     "destroy-backend-sandbox": "./scripts/destroy_backend_sandbox.sh",
     "dev": "npm run --workspace frontend dev --if-present",
