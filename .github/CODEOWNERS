@@ -5,8 +5,6 @@
 /.github/                   @NHSDigital/nhs-notify-iam-admins
 *.code-workspace            @NHSDigital/nhs-notify-iam-admins
 /docs/                      @NHSDigital/nhs-notify-iam-webauth
-/docs/testing/              @NHSDigital/nhs-notify-iam-webauth-testers
-/tests/test-team/           @NHSDigital/nhs-notify-iam-webauth-testers
 /infrastructure/terraform/  @NHSDigital/nhs-notify-platform
 
 # Codeowners must be final check
