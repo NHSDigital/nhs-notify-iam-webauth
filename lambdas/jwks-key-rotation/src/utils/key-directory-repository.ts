@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { logger } from './logger';
-import { getParameter, putParameter } from './aws/ssm-util';
+import { logger } from '@/src/utils/logger';
+import { getParameter, putParameter } from '@/src/utils/aws/ssm-util';
 
 const schemaFor =
   <Output, Input = Output>() =>

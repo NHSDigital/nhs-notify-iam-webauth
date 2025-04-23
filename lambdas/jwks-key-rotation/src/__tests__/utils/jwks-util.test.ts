@@ -3,10 +3,11 @@ import { updateJwksFile } from '../../utils/jwks-util';
 import { writeJsonToFile } from '@/src/utils/aws/s3-util';
 
 jest.mock('@/src/utils/aws/s3-util');
+jest.mock('@/src/utils/logger');
 
-const TEST_PUBLIC_KEY_FILE_1 = 'src/__tests__/utils/test-public-key-1.der';
-const TEST_PUBLIC_KEY_FILE_2 = 'src/__tests__/utils/test-public-key-2.der';
-const TEST_JWKS_FILE = 'src/__tests__/utils/test-public-key.jwks';
+const TEST_PUBLIC_KEY_FILE_1 = 'src/__tests__/utils/test-public-key-1.der.bin';
+const TEST_PUBLIC_KEY_FILE_2 = 'src/__tests__/utils/test-public-key-2.der.bin';
+const TEST_JWKS_FILE = 'src/__tests__/utils/test-public-key.jwks.json';
 const MOCK_BUCKET_NAME =
   'nhs-notify-000000000000-eu-west-2-abcd12-sbx-public-keys';
 
@@ -24,7 +25,7 @@ describe('jwks-util', () => {
       const publicKey1 = readFileSync(TEST_PUBLIC_KEY_FILE_1);
       const publicKey2 = readFileSync(TEST_PUBLIC_KEY_FILE_2);
       const expectedJwks = JSON.stringify(
-        JSON.parse(readFileSync(TEST_JWKS_FILE).toString('utf8'))
+        JSON.parse(readFileSync(TEST_JWKS_FILE).toString('utf8').trim())
       );
       process.env.S3_PUBLIC_KEYS_BUCKET_NAME = MOCK_BUCKET_NAME;
 
