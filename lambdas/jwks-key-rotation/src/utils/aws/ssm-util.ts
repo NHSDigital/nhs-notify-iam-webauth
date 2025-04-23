@@ -41,7 +41,7 @@ export async function putParameter(
     new PutParameterCommand({
       Name: name,
       Value: value,
-      Overwrite: true
+      Overwrite: true,
     })
   );
 }

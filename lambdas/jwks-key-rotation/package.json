@@ -2,7 +2,8 @@
   "name": "jwks-key-rotation",
   "main": "handler.ts",
   "scripts": {
-    "lint": "eslint .",
+    "lint": "eslint ./src",
+    "lint:fix": "eslint ./src --fix",
     "test:unit": "jest",
     "build-lambda": "rm -rf dist && npx esbuild --bundle --minify --sourcemap --target=es2020 --platform=node --entry-names=[name] --outdir=dist src/handler.ts"
   },

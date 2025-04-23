@@ -1,6 +1,6 @@
 import { Tag } from '@aws-sdk/client-kms';
 
-const tagsMatcher = /^(([^,^=]+=[^,^=]+),?)*$/;
+const tagsMatcher = /^(\w=\w,?)*$/;
 
 export function getKeyTags(): Array<Tag> {
   const keyTags: string = process.env.KEY_TAGS || '';

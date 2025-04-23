@@ -4,6 +4,8 @@
  */
 
 import type { Config } from 'jest';
+import { pathsToModuleNameMapper } from 'ts-jest';
+import { compilerOptions } from './tsconfig.json';
 
 const config: Config = {
   preset: 'ts-jest',
@@ -30,6 +32,11 @@ const config: Config = {
   },
 
   collectCoverageFrom: ['src/**/*.ts*'],
+
+  // Set the absolute path for imports
+  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
+    prefix: '<rootDir>/',
+  }),
 
   // Use this configuration option to add custom reporters to Jest
   reporters: [

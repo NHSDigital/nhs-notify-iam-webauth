@@ -1,19 +1,18 @@
+/* eslint-disable unicorn/no-array-reduce */
 import type { ScheduledHandler } from 'aws-lambda';
-import { logger } from './utils/logger';
 import {
   getKeyDirectory,
   SigningKeyDirectory,
   writeKeyDirectory,
 } from './utils/key-directory-repository';
-import {
-  generateJwksFormat,
-  generateKey,
-  getPublicKey,
-} from './utils/key-util';
+import { generateKey, getPublicKey } from './utils/key-util';
 import { updateJwksFile } from './utils/jwks-util';
 import { deleteKey } from './utils/aws/kms-util';
 
-const keyLifetimeDays = Number.parseInt(process.env.KEY_LIFETIME_DAYS ?? '28');
+const keyLifetimeDays = Number.parseInt(
+  process.env.KEY_LIFETIME_DAYS ?? '28',
+  10
+);
 const keyLifetimeMillis = keyLifetimeDays * 24 * 60 * 60 * 1000;
 
 function formattedDate(offsetMillis = 0): string {

@@ -3,7 +3,6 @@ import {
   KeySpec,
   KeyUsageType,
   KMSInvalidStateException,
-  KMSServiceException,
   NotFoundException,
 } from '@aws-sdk/client-kms';
 import { getKeyTags } from './aws/tag-util';
@@ -43,13 +42,13 @@ export async function generateKey(): Promise<string> {
 export async function getPublicKey(
   keyId: string
 ): Promise<{ keyId: string; publicKey?: Uint8Array }> {
-  const publicKey = await getKmsPublicKey(keyId).catch((err) => {
-    if (NO_OP_ERRORS.findIndex((errorType) => err instanceof errorType) > -1) {
+  const publicKey = await getKmsPublicKey(keyId).catch((error) => {
+    if (NO_OP_ERRORS.some((errorType) => error instanceof errorType)) {
       logger.warn(`Key not found: ${keyId}`);
-      return undefined;
+      return;
     }
 
-    throw err;
+    throw error;
   });
 
   return { keyId, publicKey };

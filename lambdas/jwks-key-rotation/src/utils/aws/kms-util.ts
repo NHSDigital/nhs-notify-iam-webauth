@@ -44,7 +44,7 @@ export async function getKmsPublicKey(
 
 export async function deleteKey(keyId: string): Promise<void> {
   logger.info(`Deleting key ${keyId}`);
-  
+
   await kmsClient.send(
     new ScheduleKeyDeletionCommand({
       KeyId: keyId,
