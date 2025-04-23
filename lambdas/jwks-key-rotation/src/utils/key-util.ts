@@ -5,10 +5,10 @@ import {
   KMSInvalidStateException,
   NotFoundException,
 } from '@aws-sdk/client-kms';
-import { getKeyTags } from './aws/tag-util';
-import { createKmsKey, getKmsPublicKey } from './aws/kms-util';
-import { getParameter } from './aws/ssm-util';
-import { logger } from './logger';
+import { getKeyTags } from '@/src/utils/aws/tag-util';
+import { createKmsKey, getKmsPublicKey } from '@/src/utils/aws/kms-util';
+import { getParameter } from '@/src/utils/aws/ssm-util';
+import { logger } from '@/src/utils/logger';
 
 const NO_OP_ERRORS = [NotFoundException, KMSInvalidStateException];
 
@@ -45,7 +45,7 @@ export async function getPublicKey(
   const publicKey = await getKmsPublicKey(keyId).catch((error) => {
     if (NO_OP_ERRORS.some((errorType) => error instanceof errorType)) {
       logger.warn(`Key not found: ${keyId}`);
-      return;
+      return undefined;
     }
 
     throw error;

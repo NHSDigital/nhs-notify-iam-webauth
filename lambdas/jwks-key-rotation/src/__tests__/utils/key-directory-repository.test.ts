@@ -13,9 +13,16 @@ const mockKeyDirectory = [
 ];
 
 describe('key-directory-repository', () => {
+  const OLD_ENV = { ...process.env };
+  afterAll(() => {
+    process.env = OLD_ENV;
+  });
+
   describe('getKeyDirectory', () => {
     test('should get key directory from SSM', async () => {
       // arrange
+      const mockKeyDirectorySsm = '/nhs-notify-abcd12-sbx-psk/key_directory';
+      process.env.SSM_KEY_DIRECTORY_NAME = mockKeyDirectorySsm;
       const mockGetParameter = jest.mocked(getParameter);
       mockGetParameter.mockImplementation(() =>
         Promise.resolve({
@@ -31,6 +38,7 @@ describe('key-directory-repository', () => {
 
       // assert
       expect(result).toMatchObject(mockKeyDirectory);
+      expect(mockGetParameter.mock.lastCall?.[0]).toBe(mockKeyDirectorySsm);
     });
 
     test('should handle empty parameter', async () => {
