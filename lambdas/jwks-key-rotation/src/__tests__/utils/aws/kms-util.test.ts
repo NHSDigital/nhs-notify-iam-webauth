@@ -1,4 +1,4 @@
-import { createKmsKey } from '@/src/utils/aws/kms-util';
+import { createKmsKey, getKmsPublicKey } from '@/src/utils/aws/kms-util';
 import {
   CreateKeyCommand,
   KeySpec,
@@ -12,6 +12,11 @@ jest.mock('@aws-sdk/client-kms', () => ({
 }));
 
 describe('kms-util', () => {
+  const OLD_ENV = { ...process.env };
+  afterAll(() => {
+    process.env = OLD_ENV;
+  });
+
   describe('createKmsKey', () => {
     test('should create asymmetric KMS key', async () => {
       // arrange
@@ -62,6 +67,49 @@ describe('kms-util', () => {
       // assert
       expect(error).toBeTruthy();
       expect((error as Error).message).toBe('Failed to create key');
+    });
+  });
+
+  describe('getKmsPublicKey', () => {
+    test('should key public key from KMS', async () => {
+      // arrange
+      process.env.REGION = 'eu-west-2';
+      process.env.ACCOUNT_ID = '000000000000';
+      const testPublicKey = Uint8Array.from([1, 2, 3]);
+
+      const sendSpy = jest.spyOn(KMSClient.prototype, 'send');
+      sendSpy.mockImplementation(() => ({
+        PublicKey: testPublicKey,
+      }));
+
+      // act
+      const result = await getKmsPublicKey('test-key-id');
+
+      // assert
+      expect(result).toBe(testPublicKey);
+      expect(sendSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          input: {
+            KeyId: 'arn:aws:kms:eu-west-2:000000000000:key/test-key-id',
+          },
+        })
+      );
+    });
+
+    test('should handle missing key', async () => {
+      // arrange
+      process.env.REGION = 'eu-west-2';
+      process.env.ACCOUNT_ID = '000000000000';
+      const testPublicKey = Uint8Array.from([1, 2, 3]);
+
+      const sendSpy = jest.spyOn(KMSClient.prototype, 'send');
+      sendSpy.mockImplementation(() => ({}));
+
+      // act
+      const result = await getKmsPublicKey('test-key-id');
+
+      // assert
+      expect(result).toBe(undefined);
     });
   });
 });
