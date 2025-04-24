@@ -1,9 +1,15 @@
-import { createKmsKey, getKmsPublicKey } from '@/src/utils/aws/kms-util';
+import {
+  createKmsKey,
+  deleteKey,
+  getKmsPublicKey,
+} from '@/src/utils/aws/kms-util';
 import {
   CreateKeyCommand,
+  GetPublicKeyCommand,
   KeySpec,
   KeyUsageType,
   KMSClient,
+  ScheduleKeyDeletionCommand,
 } from '@aws-sdk/client-kms';
 
 jest.mock('@/src/utils/logger');
@@ -94,14 +100,11 @@ describe('kms-util', () => {
           },
         })
       );
+      expect(sendSpy).toHaveBeenCalledWith(expect.any(GetPublicKeyCommand));
     });
 
     test('should handle missing key', async () => {
       // arrange
-      process.env.REGION = 'eu-west-2';
-      process.env.ACCOUNT_ID = '000000000000';
-      const testPublicKey = Uint8Array.from([1, 2, 3]);
-
       const sendSpy = jest.spyOn(KMSClient.prototype, 'send');
       sendSpy.mockImplementation(() => ({}));
 
@@ -110,6 +113,25 @@ describe('kms-util', () => {
 
       // assert
       expect(result).toBe(undefined);
+    });
+  });
+
+  describe('deleteKey', () => {
+    test('should schedule KMS key deletion', async () => {
+      // arrange
+      const sendSpy = jest.spyOn(KMSClient.prototype, 'send');
+      sendSpy.mockImplementation(() => ({}));
+
+      // act
+      await deleteKey('test-key-id');
+
+      // assert
+      expect(sendSpy).toHaveBeenCalledWith(
+        expect.objectContaining({ input: { KeyId: 'test-key-id' } })
+      );
+      expect(sendSpy).toHaveBeenCalledWith(
+        expect.any(ScheduleKeyDeletionCommand)
+      );
     });
   });
 });

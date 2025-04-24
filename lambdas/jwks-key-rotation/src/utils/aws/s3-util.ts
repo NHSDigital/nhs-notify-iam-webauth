@@ -3,7 +3,7 @@ import {
   PutObjectCommandOutput,
   S3Client,
 } from '@aws-sdk/client-s3';
-import { logger } from '../logger';
+import { logger } from '@/src/utils/logger';
 
 const s3Client = new S3Client({
   region: process.env.REGION,
