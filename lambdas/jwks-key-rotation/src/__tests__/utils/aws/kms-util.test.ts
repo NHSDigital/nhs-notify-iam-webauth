@@ -21,7 +21,7 @@ describe('kms-util', () => {
       }));
 
       const testCreateKeyCommand = new CreateKeyCommand({
-        Policy: '{\"Statement\":[]}',
+        Policy: '{"Statement":[]}',
         Description: 'Test description',
         KeyUsage: KeyUsageType.SIGN_VERIFY,
         KeySpec: KeySpec.RSA_4096,
@@ -44,8 +44,8 @@ describe('kms-util', () => {
       }));
 
       const testCreateKeyCommand = new CreateKeyCommand({
-        Policy: '{\"Statement\":[]}',
-        Description: 'Test description',
+        Policy: '',
+        Description: '',
         KeyUsage: KeyUsageType.SIGN_VERIFY,
         KeySpec: KeySpec.RSA_4096,
         Tags: [],
