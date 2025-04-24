@@ -1,5 +1,5 @@
 import { readFileSync } from 'node:fs';
-import { updateJwksFile } from '../../utils/jwks-util';
+import { updateJwksFile } from '@/src/utils/jwks-util';
 import { writeJsonToFile } from '@/src/utils/aws/s3-util';
 
 jest.mock('@/src/utils/aws/s3-util');

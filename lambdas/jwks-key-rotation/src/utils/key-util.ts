@@ -45,11 +45,10 @@ export async function getPublicKey(
   const publicKey = await getKmsPublicKey(keyId).catch((error) => {
     if (NO_OP_ERRORS.some((errorType) => error instanceof errorType)) {
       logger.warn(`Key not found: ${keyId}`);
-      return undefined;
+      return;
     }
-
     throw error;
   });
 
-  return { keyId, publicKey };
+  return { keyId, publicKey: publicKey as Uint8Array | undefined };
 }

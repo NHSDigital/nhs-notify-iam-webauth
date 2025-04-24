@@ -73,8 +73,8 @@ describe('key-directory-repository', () => {
       let error;
       try {
         await getKeyDirectory();
-      } catch (err) {
-        error = err;
+      } catch (caughtError) {
+        error = caughtError;
       }
 
       // assert
@@ -84,11 +84,6 @@ describe('key-directory-repository', () => {
   });
 
   describe('writeKeyDirectory', () => {
-    const OLD_ENV = { ...process.env };
-    afterAll(() => {
-      process.env = OLD_ENV;
-    });
-
     test('should store key directory to SSM', async () => {
       // arrange
       const MOCK_KEY_DIRECTORY_SSM = '/nhs-notify-abcd12-sbx-psk/key_directory';

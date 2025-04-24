@@ -38,10 +38,15 @@ describe('key-util', () => {
         { TagKey: 'TEST_2', TagValue: 'v2' },
       ]);
 
+      mockCreateKmsKey.mockImplementation(() =>
+        Promise.resolve('12dfbf31-c65e-4966-9010-3dfde426e8f4')
+      );
+
       // act
       const result = await generateKey();
 
       // assert
+      expect(result).toBe('12dfbf31-c65e-4966-9010-3dfde426e8f4');
       expect(mockGetParameter.mock.lastCall?.[0]).toBe(mockKeyPolicy);
       expect(mockCreateKmsKey).toHaveBeenCalledWith(
         expect.objectContaining({
