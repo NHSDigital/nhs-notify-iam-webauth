@@ -1,17 +1,26 @@
 import { Tag } from '@aws-sdk/client-kms';
 
-const tagsMatcher = /^(\w=\w,?)*$/;
+const commaSeparatedMatcher = /^([\w -=,?])*$/;
+const parameterMatcher = /^([\w -])+=([\w -])+$/;
 
 export function getKeyTags(): Array<Tag> {
-  const keyTags: string = process.env.KEY_TAGS || '';
-  if (!tagsMatcher.test(keyTags)) {
-    throw new Error(`Invalid tags ${keyTags}`);
+  const commaSeparatedKeyTags: string = process.env.KEY_TAGS || '';
+  if (!commaSeparatedMatcher.test(commaSeparatedKeyTags)) {
+    throw new Error(`Invalid tags ${commaSeparatedKeyTags}`);
   }
 
-  return keyTags
+  const parameters = commaSeparatedKeyTags
     .split(',')
-    .filter((keyTag) => !!keyTag)
-    .map((keyTag) => keyTag.split('='))
+    .filter((parameter) => !!parameter);
+
+  if (
+    parameters.findIndex((parameter) => !parameterMatcher.test(parameter)) > -1
+  ) {
+    throw new Error(`Invalid tag parameter ${commaSeparatedKeyTags}`);
+  }
+
+  return parameters
+    .map((parameter) => parameter.split('='))
     .map((keyTag) => ({
       TagKey: keyTag[0],
       TagValue: keyTag[1],

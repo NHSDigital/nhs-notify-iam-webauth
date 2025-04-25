@@ -5,7 +5,7 @@ import {
   PutParameterCommandOutput,
   SSMClient,
 } from '@aws-sdk/client-ssm';
-import { logger } from '../logger';
+import { logger } from '@/src/utils/logger';
 
 const ssmClient = new SSMClient({
   region: process.env.REGION,
@@ -27,17 +27,14 @@ export async function getParameter(
   );
 }
 
-export async function putParameter(
-  value: string,
-  name = ''
-): Promise<PutParameterCommandOutput> {
+export async function putParameter(value: string, name = ''): Promise<void> {
   if (!name) {
     throw new Error('Missing parameter name');
   }
 
   logger.info(`Updating parameter ${name}`);
 
-  return ssmClient.send(
+  ssmClient.send(
     new PutParameterCommand({
       Name: name,
       Value: value,

@@ -4,10 +4,10 @@ import {
   getKeyDirectory,
   SigningKeyDirectory,
   writeKeyDirectory,
-} from './utils/key-directory-repository';
-import { generateKey, getPublicKey } from './utils/key-util';
-import { updateJwksFile } from './utils/jwks-util';
-import { deleteKey } from './utils/aws/kms-util';
+} from '@/src/utils/key-directory-repository';
+import { generateKey, getPublicKey } from '@/src/utils/key-util';
+import { updateJwksFile } from '@/src/utils/jwks-util';
+import { deleteKey } from '@/src/utils/aws/kms-util';
 
 const keyLifetimeDays = Number.parseInt(
   process.env.KEY_LIFETIME_DAYS ?? '28',
