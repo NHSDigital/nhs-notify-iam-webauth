@@ -1,2 +1,7 @@
+echo Running pre.sh
+pwd
+
 npm ci
-(cd ../../../.. && npm run build-lambda)
+
+echo About to build lambdas
+(cd ../../../.. && pwd && ls && npm run build-lambda)
