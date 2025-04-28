@@ -51,15 +51,15 @@ describe('ssm-util', () => {
 
   describe('putParameter', () => {
     test('should update SSM parameter', async () => {
-      //arrange
+      // arrange
       const ssmClientSpy = jest
         .spyOn(SSMClient.prototype, 'send')
         .mockImplementation(() => ({}));
 
-      //act
+      // act
       await putParameter('{"test":123}', 'test_parameter/name');
 
-      //assert
+      // assert
       expect(ssmClientSpy).toHaveBeenCalledWith(
         expect.any(PutParameterCommand)
       );
@@ -75,7 +75,7 @@ describe('ssm-util', () => {
     });
 
     test('should reject missing parmeter name', async () => {
-      //act
+      // act
       let error;
       try {
         await putParameter('{"test":123}');

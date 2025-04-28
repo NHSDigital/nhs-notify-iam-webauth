@@ -2,7 +2,6 @@ import {
   GetParameterCommand,
   GetParameterCommandOutput,
   PutParameterCommand,
-  PutParameterCommandOutput,
   SSMClient,
 } from '@aws-sdk/client-ssm';
 import { logger } from '@/src/utils/logger';

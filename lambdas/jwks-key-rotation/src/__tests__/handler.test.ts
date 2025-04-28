@@ -18,21 +18,11 @@ jest.mock('@/src/utils/key-util');
 jest.mock('@/src/utils/jwks-util');
 jest.mock('@/src/utils/aws/kms-util');
 
-// import type { ScheduledHandler } from 'aws-lambda';
-// import {
-//   getKeyDirectory,
-//   SigningKeyDirectory,
-//   writeKeyDirectory,
-// } from '@/src/utils/key-directory-repository';
-// import { generateKey, getPublicKey } from '@/src/utils/key-util';
-// import { updateJwksFile } from '@/src/utils/jwks-util';
-// import { deleteKey } from '@/src/utils/aws/kms-util';
-
 describe('handler', () => {
   describe('perform key rotation (generate new KMS key, update public jwks file, update key directory and delete old keys)', () => {
     test('should perform key rotation with no existing keys', async () => {
       // arrange
-      const mockEvent = {} as EventBridgeEvent<'Scheduled Event', any>;
+      const mockEvent = {} as EventBridgeEvent<'Scheduled Event', unknown>;
       const mockContext = {} as Context;
       const mockCallback = (() => {}) as Callback;
       const mockKeyDirectory: SigningKeyDirectory = [];
@@ -70,7 +60,7 @@ describe('handler', () => {
 
     test('should perform key rotation with one existing key', async () => {
       // arrange
-      const mockEvent = {} as EventBridgeEvent<'Scheduled Event', any>;
+      const mockEvent = {} as EventBridgeEvent<'Scheduled Event', unknown>;
       const mockContext = {} as Context;
       const mockCallback = (() => {}) as Callback;
       const startOfMonth = new Date();
@@ -126,7 +116,7 @@ describe('handler', () => {
 
     test('should perform key rotation with two existing keys', async () => {
       // arrange
-      const mockEvent = {} as EventBridgeEvent<'Scheduled Event', any>;
+      const mockEvent = {} as EventBridgeEvent<'Scheduled Event', unknown>;
       const mockContext = {} as Context;
       const mockCallback = (() => {}) as Callback;
       const startOfMonth = new Date();
