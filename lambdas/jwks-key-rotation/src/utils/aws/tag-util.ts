@@ -1,7 +1,7 @@
 import { Tag } from '@aws-sdk/client-kms';
 
-// eslint-disable-next-line sonarjs/slow-regex, sonarjs/empty-string-repetition, security/detect-unsafe-regex
-const commaSeparatedMatcher = /^([\w =-]*,?)*$/;
+// eslint-disable-next-line sonarjs/slow-regex, security/detect-unsafe-regex
+const commaSeparatedMatcher = /^(?:[\w =-]+,?)*$/;
 const parameterMatcher = /^([\w -])+=([\w -])+$/;
 
 export function getKeyTags(): Array<Tag> {
