@@ -1,5 +1,4 @@
 echo Running pre.sh
-pwd
 
 if [ "$SUPPRESS_SANDBOX_CI" != "true" ]
     then
@@ -7,4 +6,4 @@ if [ "$SUPPRESS_SANDBOX_CI" != "true" ]
 fi
 
 echo About to build lambdas
-(cd ../../../.. && pwd && ls && npm run build-lambda)
+(cd ../../../.. && npm run build-lambda)
