@@ -66,7 +66,7 @@ describe('key-util', () => {
       );
     });
 
-    test('should propagate miussing key policy error', async () => {
+    test('should propagate missing key policy error', async () => {
       // arrange
       const mockKeyPolicy = '/nhs-notify-abcd12-sbx-psk/asymmetric_key_policy';
       process.env.SSM_ASYMMETRIC_KEY_POLICY = mockKeyPolicy;
