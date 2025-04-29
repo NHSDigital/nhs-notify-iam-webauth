@@ -1,5 +1,5 @@
 module "lambda_jwks_key_rotation" {
-  source = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/lambda?ref=v1.0.9"
+  source = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/lambda?ref=v2.0.2"
 
   providers = {
     aws = aws
@@ -12,7 +12,7 @@ module "lambda_jwks_key_rotation" {
   component      = var.component
   environment    = var.environment
   project        = var.project
-  region         = "eu-west-2"
+  region         = var.region
   group          = var.group
 
   log_retention_in_days = var.log_retention_in_days
