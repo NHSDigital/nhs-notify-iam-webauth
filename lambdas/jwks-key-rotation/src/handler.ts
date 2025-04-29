@@ -25,9 +25,10 @@ function getKeysToDelete(
   if (keyDirectory.length <= 1) {
     return [];
   }
+
   const cutOffDate = formattedDate(-keyLifetimeMillis);
   return keyDirectory.filter(
-    (keyMetadata) => keyMetadata.createdDate <= cutOffDate
+    (keyMetadata) => keyMetadata.createdDate.localeCompare(cutOffDate) < 0
   );
 }
 
