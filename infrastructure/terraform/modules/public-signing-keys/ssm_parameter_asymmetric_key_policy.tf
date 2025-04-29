@@ -3,10 +3,6 @@ resource "aws_ssm_parameter" "asymmetric_key_policy" {
   description = "The IAM policy applied to new asymmetric KMS keys used for CIS2 auth"
   type        = "String"
   value       = data.aws_iam_policy_document.asymmetric_key_policy.minified_json
-
-  lifecycle {
-    ignore_changes = [value]
-  }
 }
 
 data "aws_iam_policy_document" "asymmetric_key_policy" {
