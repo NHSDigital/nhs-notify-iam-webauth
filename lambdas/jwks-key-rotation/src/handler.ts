@@ -1,4 +1,4 @@
-/* eslint-disable unicorn/no-array-reduce */
+/* eslint-disable unicorn/no-array-reduce, unicorn/prefer-at */
 import type { ScheduledHandler } from 'aws-lambda';
 import {
   getKeyDirectory,
@@ -22,13 +22,20 @@ function formattedDate(offsetMillis = 0): string {
 function getKeysToDelete(
   keyDirectory: SigningKeyDirectory
 ): SigningKeyDirectory {
-  if (keyDirectory.length <= 1) {
+  if (keyDirectory.length <= 0) {
     return [];
   }
 
+  keyDirectory.sort((a, b) => a.createdDate.localeCompare(b.createdDate));
+  const latestKey = keyDirectory[keyDirectory.length - 1];
   const cutOffDate = formattedDate(-keyLifetimeMillis);
+  // Delete any keys that are suffiently old whilst ensuring that we retain the latest key.
+  // This is intended to ensure a continued service where public keys may be cached or
+  // logins may be in progress whist the key rotation occurs.
   return keyDirectory.filter(
-    (keyMetadata) => keyMetadata.createdDate.localeCompare(cutOffDate) < 0
+    (keyMetadata) =>
+      keyMetadata.kid !== latestKey.kid &&
+      keyMetadata.createdDate.localeCompare(cutOffDate) < 0
   );
 }
 

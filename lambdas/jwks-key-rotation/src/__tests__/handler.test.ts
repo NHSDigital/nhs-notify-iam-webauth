@@ -126,8 +126,9 @@ describe('handler', () => {
         startOfMonth.getTime() - 25 * 60 * 60 * 1000
       );
       startOfPreviousMonth.setDate(1);
+      const recentKey = new Date(Date.now() - 24 * 60 * 60 * 1000);
       const todayFormatted = new Date().toISOString().split('T')[0];
-      const startOfMonthFormatted = startOfMonth.toISOString().split('T')[0];
+      const recentKeyFormatted = recentKey.toISOString().split('T')[0];
       const startOfPreviousMonthFormatted = startOfPreviousMonth
         .toISOString()
         .split('T')[0];
@@ -138,7 +139,7 @@ describe('handler', () => {
           kid: '00000000-0000-0000-0000-000000000000',
         },
         {
-          createdDate: startOfMonthFormatted,
+          createdDate: recentKeyFormatted,
           kid: '00000000-0000-0000-0000-000000000001',
         },
       ];
@@ -173,7 +174,7 @@ describe('handler', () => {
       ]);
       expect(mockedWriteKeyDirectory).toHaveBeenCalledWith([
         {
-          createdDate: startOfMonthFormatted,
+          createdDate: recentKeyFormatted,
           kid: '00000000-0000-0000-0000-000000000001',
         },
         { createdDate: todayFormatted, kid: 'new-test-key-id' },
@@ -181,6 +182,71 @@ describe('handler', () => {
       expect(deleteKey).toHaveBeenCalledTimes(1);
       expect(deleteKey).toHaveBeenCalledWith(
         '00000000-0000-0000-0000-000000000000'
+      );
+    });
+
+    test('should perform key rotation with three existing keys that are all old', async () => {
+      // arrange
+      const mockEvent = {} as EventBridgeEvent<'Scheduled Event', unknown>;
+      const mockContext = {} as Context;
+      const mockCallback = (() => {}) as Callback;
+      const todayFormatted = new Date().toISOString().split('T')[0];
+      const mockKeyDirectory: SigningKeyDirectory = [
+        {
+          createdDate: '2000-01-01',
+          kid: '00000000-0000-0000-0000-000000000000',
+        },
+        {
+          createdDate: '2000-01-02',
+          kid: '00000000-0000-0000-0000-000000000001',
+        },
+        {
+          createdDate: '2000-01-03',
+          kid: '00000000-0000-0000-0000-000000000002',
+        },
+      ];
+      const mockPublicKey = Uint8Array.from([1, 2, 3]);
+
+      const mockedGetKeyDirectory = jest.mocked(getKeyDirectory);
+      const mockedGenerateKey = jest.mocked(generateKey);
+      const mockedGetPublicKey = jest.mocked(getPublicKey);
+      const mockedWriteKeyDirectory = jest.mocked(writeKeyDirectory);
+
+      mockedGetKeyDirectory.mockImplementation(() =>
+        Promise.resolve(mockKeyDirectory)
+      );
+      mockedGenerateKey.mockImplementation(() =>
+        Promise.resolve('new-test-key-id')
+      );
+      mockedGetPublicKey.mockImplementation((keyId) =>
+        Promise.resolve({ keyId, publicKey: mockPublicKey })
+      );
+
+      // act
+      await handler(mockEvent, mockContext, mockCallback);
+
+      // assert
+      expect(mockedGenerateKey).toHaveBeenCalled();
+      expect(updateJwksFile).toHaveBeenCalledWith([
+        {
+          keyId: '00000000-0000-0000-0000-000000000002',
+          publicKey: mockPublicKey,
+        },
+        { keyId: 'new-test-key-id', publicKey: mockPublicKey },
+      ]);
+      expect(mockedWriteKeyDirectory).toHaveBeenCalledWith([
+        {
+          createdDate: '2000-01-03',
+          kid: '00000000-0000-0000-0000-000000000002',
+        },
+        { createdDate: todayFormatted, kid: 'new-test-key-id' },
+      ]);
+      expect(deleteKey).toHaveBeenCalledTimes(2);
+      expect(deleteKey).toHaveBeenCalledWith(
+        '00000000-0000-0000-0000-000000000000'
+      );
+      expect(deleteKey).toHaveBeenCalledWith(
+        '00000000-0000-0000-0000-000000000001'
       );
     });
   });
