@@ -6,16 +6,16 @@ const { COGNITO_DOMAIN } = getConstants();
 function getContentSecurityPolicy(nonce: string) {
   const contentSecurityPolicyDirective = {
     'base-uri': [`'self'`],
-    'default-src': [`'none'`],
+    // 'default-src': [`'none'`],
     'frame-ancestors': [`'none'`],
     'font-src': [`'self'`, 'https://assets.nhs.uk'],
     'form-action': [`'self'`],
     'frame-src': [`'self'`],
-    'connect-src': [
-      `'self'`,
-      'https://cognito-idp.eu-west-2.amazonaws.com',
-      `https://${COGNITO_DOMAIN}/oauth2/token`,
-    ],
+    // 'connect-src': [
+    //   `'self'`,
+    //   'https://cognito-idp.eu-west-2.amazonaws.com',
+    //   `https://${COGNITO_DOMAIN}/oauth2/token`,
+    // ],
     'img-src': [`'self'`],
     'manifest-src': [`'self'`],
     'object-src': [`'none'`],
