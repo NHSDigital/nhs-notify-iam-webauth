@@ -32,27 +32,6 @@ export default function CIS2CallbackPage(): ReactNode {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    let clearListener: ReturnType<typeof Hub.listen> | null = null;
-
-    (async () => {
-      const redirectQuery = await redirectFromStateQuery(searchParams);
-
-      clearListener = Hub.listen('auth', ({ payload }) => {
-        if (
-          payload.event === 'customOAuthState' ||
-          payload.event === 'signInWithRedirect'
-        ) {
-          setCustomState(redirectQuery);
-        }
-      });
-    })();
-
-    if (clearListener) {
-      return clearListener;
-    }
-  }, [searchParams]);
-
-  useEffect(() => {
     (async () => {
       const redirectQuery = await redirectFromStateQuery(searchParams);
 
