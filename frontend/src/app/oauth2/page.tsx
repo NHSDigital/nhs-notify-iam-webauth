@@ -43,7 +43,7 @@ export default function CIS2CallbackPage(): ReactNode {
     }, POLLING_INTERVAL_MS);
 
     const fallback = setTimeout(() => {
-      if (tick) clearInterval(tick);
+      clearInterval(tick);
       router.replace(destination);
     }, MAX_POLLING_PERIOD_MS);
 
