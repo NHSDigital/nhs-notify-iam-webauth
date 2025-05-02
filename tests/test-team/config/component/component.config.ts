@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { defineConfig, devices } from '@playwright/test';
-import baseConfig from './playwright.config';
+import baseConfig from '../playwright.config';
 
 export default defineConfig({
   ...baseConfig,
@@ -10,7 +10,7 @@ export default defineConfig({
   projects: [
     {
       name: 'component',
-      testMatch: '*.component.ts',
+      testMatch: '*.component.spec.ts',
       use: {
         screenshot: 'only-on-failure',
         baseURL: 'http://localhost:3000',

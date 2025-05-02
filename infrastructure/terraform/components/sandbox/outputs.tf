@@ -39,3 +39,15 @@ output "csrf_secret" {
 
   sensitive = true
 }
+
+output "name_tag" {
+  value = local.default_tags["Name"]
+}
+
+output "group_tag" {
+  value = local.default_tags["Group"]
+}
+
+output "key_directory_ssm_parameter_name" {
+  value = module.public_signing_keys.key_directory_ssm_parameter_name
+}

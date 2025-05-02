@@ -75,6 +75,9 @@ export const handler: ScheduledHandler = async () => {
     kid: keyId,
   });
 
+  TODO - get public key immediately from generated key due to eventual consistency issue
+  https://docs.aws.amazon.com/kms/latest/developerguide/accessing-kms.html#programming-eventual-consistency
+
   // Get the public keys
   const publicKeys = await Promise.all(
     newKeyDirectory.map((keyMetadata) => getPublicKey(keyMetadata.kid))
