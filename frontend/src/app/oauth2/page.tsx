@@ -14,7 +14,7 @@ import content from '@/src/content/content';
 import { LoadingSpinner } from '@/src/components/LoadingSpinner/LoadingSpinner';
 
 const POLLING_INTERVAL_MS = 25;
-const MAX_POLLING_PERIOD_MS = 12_000;
+const MAX_POLL_DURATION_MS = 10_000;
 
 function redirectFromStateQuery(searchParams: ReadonlyURLSearchParams): State {
   const stateQuery = searchParams.get('state');
@@ -34,22 +34,25 @@ export default function CIS2CallbackPage(): ReactNode {
   const destination = `/signin?redirect=${encodeURIComponent(customState.redirectPath)}`;
 
   useEffect(() => {
-    const tick = setInterval(async () => {
+    const startTime = Date.now();
+
+    const timeout: NodeJS.Timeout = setInterval(async () => {
       try {
         await getCurrentUser();
+        clearInterval(timeout);
         router.replace(destination);
         // eslint-disable-next-line no-empty
       } catch {}
+
+      const elapsed = Date.now() - startTime;
+      if (elapsed > MAX_POLL_DURATION_MS) {
+        clearInterval(timeout);
+        router.replace(destination);
+      }
     }, POLLING_INTERVAL_MS);
 
-    const fallback = setTimeout(() => {
-      clearInterval(tick);
-      router.replace(destination);
-    }, MAX_POLLING_PERIOD_MS);
-
     return () => {
-      clearTimeout(fallback);
-      clearInterval(tick);
+      clearInterval(timeout);
     };
   }, [router, destination]);
 
