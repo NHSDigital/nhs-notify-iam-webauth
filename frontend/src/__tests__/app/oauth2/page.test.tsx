@@ -98,18 +98,22 @@ describe('CIS2CallbackPage', () => {
 
     render(<CIS2CallbackPage />);
 
-    for (let i = 0; i <= 240; i += 1) {
-      // eslint-disable-next-line no-await-in-loop
-      await act(async () => {
-        jest.advanceTimersByTime(25);
-      });
-    }
+    await act(async () => {
+      jest.advanceTimersByTime(12_000);
+    });
 
-    expect(getCurrentUser).toHaveBeenCalledTimes(240);
+    expect(getCurrentUser).toHaveBeenCalledTimes(480);
     expect(mockRouter.replace).toHaveBeenCalledTimes(1);
     expect(mockRouter.replace).toHaveBeenCalledWith(
       '/signin?redirect=%2Ftemplates%2Fmy-template'
     );
+
+    await act(async () => {
+      jest.advanceTimersByTime(1000);
+    });
+
+    // polling has been stopped
+    expect(getCurrentUser).toHaveBeenCalledTimes(480);
   });
 
   it('uses default redirect destination if custom state cannot be parsed from URL', async () => {

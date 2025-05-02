@@ -1,7 +1,6 @@
 'use client';
 
 import { type ReactNode, useEffect } from 'react';
-import path from 'path';
 import {
   ReadonlyURLSearchParams,
   useRouter,
@@ -15,7 +14,7 @@ import content from '@/src/content/content';
 import { LoadingSpinner } from '@/src/components/LoadingSpinner/LoadingSpinner';
 
 const POLLING_INTERVAL_MS = 25;
-const MAX_POLL_ATTEMPTS = 240;
+const MAX_POLLING_PERIOD_MS = 12_000;
 
 function redirectFromStateQuery(searchParams: ReadonlyURLSearchParams): State {
   const stateQuery = searchParams.get('state');
@@ -32,34 +31,25 @@ function redirectFromStateQuery(searchParams: ReadonlyURLSearchParams): State {
 export default function CIS2CallbackPage(): ReactNode {
   const router = useRouter();
   const customState = redirectFromStateQuery(useSearchParams());
-  const destination = path.normalize(
-    `/signin?redirect=${encodeURIComponent(customState.redirectPath)}`
-  );
+  const destination = `/signin?redirect=${encodeURIComponent(customState.redirectPath)}`;
 
   useEffect(() => {
-    let timeout: NodeJS.Timeout;
-
-    const pollForUser = async (attempt: number) => {
-      if (attempt >= MAX_POLL_ATTEMPTS) {
-        router.replace(destination);
-        return;
-      }
-
+    const tick = setInterval(async () => {
       try {
         await getCurrentUser();
         router.replace(destination);
-      } catch {
-        timeout = setTimeout(
-          () => pollForUser(attempt + 1),
-          POLLING_INTERVAL_MS
-        );
-      }
-    };
+        // eslint-disable-next-line no-empty
+      } catch {}
+    }, POLLING_INTERVAL_MS);
 
-    pollForUser(0);
+    const fallback = setTimeout(() => {
+      if (tick) clearInterval(tick);
+      router.replace(destination);
+    }, MAX_POLLING_PERIOD_MS);
 
     return () => {
-      if (timeout) clearTimeout(timeout);
+      clearTimeout(fallback);
+      clearInterval(tick);
     };
   }, [router, destination]);
 
