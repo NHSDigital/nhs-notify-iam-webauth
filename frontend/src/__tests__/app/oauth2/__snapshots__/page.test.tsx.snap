@@ -8,11 +8,11 @@ exports[`CIS2CallbackPage should redirect to signin page with custom redirect wh
     <span
       class="nhsuk-loader__spinner"
     />
-    <span
+    <h1
       class="nhsuk-loader__text"
     >
       Redirecting, please wait
-    </span>
+    </h1>
   </div>
 </DocumentFragment>
 `;

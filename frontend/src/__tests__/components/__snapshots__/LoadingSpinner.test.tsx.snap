@@ -8,11 +8,11 @@ exports[`LoadingSpinner component renders component correctly 1`] = `
     <span
       class="nhsuk-loader__spinner"
     />
-    <span
+    <h1
       class="nhsuk-loader__text"
     >
       loading text
-    </span>
+    </h1>
   </div>
 </DocumentFragment>
 `;
