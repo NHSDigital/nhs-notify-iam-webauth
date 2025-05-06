@@ -4,6 +4,7 @@ import {
   ListKeysCommandOutput,
   ListResourceTagsCommand,
   ScheduleKeyDeletionCommand,
+  Tag,
 } from '@aws-sdk/client-kms';
 import { logger } from './logger';
 
@@ -39,14 +40,20 @@ async function listAllKeyIds(): Promise<Array<string>> {
 async function getKeyTags(
   keyId: string
 ): Promise<{ keyId: string; tags: Record<string, string> }> {
-  const response = await kmsClient.send(
-    new ListResourceTagsCommand({
-      KeyId: keyId,
-    })
-  );
-  const tags = response.Tags || [];
+  const tags: Array<Tag> = await kmsClient
+    .send(
+      new ListResourceTagsCommand({
+        KeyId: keyId,
+      })
+    )
+    .then((response) => response.Tags || [])
+    .catch((error) => {
+      if (error['__type'] === 'AccessDeniedException') {
+        return [];
+      }
+      throw error;
+    });
 
-  logger.info(`Got key tags for ${keyId}: ${JSON.stringify(tags)}`);
   const tagMap = tags.reduce(
     (acc, tag) => {
       const key = tag.TagKey || 'unknown';
@@ -74,12 +81,15 @@ export async function deleteAllKeysForTags(
   group: string,
   usage: string
 ): Promise<void> {
+  if (!name.endsWith('-sbx')) {
+    throw new Error(`Should only be deleting keys from a sandbox: ${name}`);
+  }
+  
   logger.info(
     `Looking for keys to delete using tags Name: ${name}, Group: ${group}, Usage: ${usage}`
   );
 
   const allKeyIds = await listAllKeyIds();
-  logger.info(`allKeyIds (${allKeyIds.length}): ${JSON.stringify(allKeyIds)}`);
   const taggedKeys = await Promise.all(
     allKeyIds.map((keyId) => getKeyTags(keyId))
   );
