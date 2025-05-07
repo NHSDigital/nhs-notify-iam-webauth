@@ -1,99 +1,141 @@
-import { act, render, waitFor } from '@testing-library/react';
-import { redirect } from 'next/navigation';
-import { Hub } from 'aws-amplify/utils';
-import OAuth2CallbackPage from '@/src/app/oauth2/page';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { act, render } from '@testing-library/react';
+import { getCurrentUser } from '@aws-amplify/auth';
+import CIS2CallbackPage from '@/src/app/oauth2/page';
 
-jest.mock('aws-amplify/utils', () => ({
-  Hub: {
-    listen: jest.fn(),
-  },
-}));
+const mockRouter = {
+  replace: jest.fn(),
+};
+
+const mockSearchParams = {
+  get: jest.fn(),
+};
 
 jest.mock('next/navigation', () => ({
-  redirect: jest.fn(),
-  RedirectType: { replace: 'replace' },
+  useRouter: () => mockRouter,
+  useSearchParams: () => mockSearchParams,
 }));
 
-const mockedHub = jest.mocked(Hub);
-const mockedRedirect = jest.mocked(redirect);
+jest.mock('@aws-amplify/auth');
 
-function getEventListener() {
-  const lastHubListenCall = mockedHub.listen.mock.lastCall;
-  const eventType = lastHubListenCall?.[0];
-  const eventListener = lastHubListenCall?.[1];
+const mockGetCurrentUser = jest.mocked(getCurrentUser);
 
-  expect(eventType).toBe('auth');
-
-  expect(eventListener).toBeTruthy();
-  return eventListener!;
+function encodeState(input: unknown) {
+  const str = JSON.stringify(input);
+  return Buffer.from(str).toString('hex');
 }
 
-it('listens for oauth state events from amplify hub', async () => {
-  const page = <OAuth2CallbackPage />;
-  const container = render(page);
-
-  const eventListener = getEventListener();
-
-  act(() => {
-    eventListener({
-      payload: {
-        event: 'customOAuthState',
-        data: '{"redirectPath":"/testing"}',
-      },
-      channel: '',
-    });
-    container.rerender(page);
+describe('CIS2CallbackPage', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    jest.useFakeTimers();
   });
 
-  await waitFor(() =>
-    expect(mockedRedirect).toHaveBeenCalledWith(
-      '/signin?redirect=%2Ftesting',
-      'replace'
-    )
-  );
-});
-
-it('ignores other hub events', async () => {
-  const page = <OAuth2CallbackPage />;
-  const container = render(page);
-
-  const eventListener = getEventListener();
-
-  act(() => {
-    eventListener({
-      payload: {
-        event: 'ignoreThis',
-        data: '{"redirectPath":"/testing"}',
-      },
-      channel: '',
-    });
-    container.rerender(page);
+  afterEach(() => {
+    jest.useRealTimers();
   });
 
-  await waitFor(() => expect(mockedRedirect).not.toHaveBeenCalled());
-});
-
-it('defaults redirect path', async () => {
-  const page = <OAuth2CallbackPage />;
-  const container = render(page);
-
-  const eventListener = getEventListener();
-
-  act(() => {
-    eventListener({
-      payload: {
-        event: 'customOAuthState',
-        data: '{"redirectPath":null}',
-      },
-      channel: '',
+  it('should redirect to signin page with custom redirect when user is authenticated, renders loading spinner', async () => {
+    mockGetCurrentUser.mockResolvedValueOnce({
+      userId: 'id',
+      username: 'name',
     });
-    container.rerender(page);
+
+    const customState = `code-${encodeState({ redirectPath: '/templates/my-template' })}`;
+
+    mockSearchParams.get.mockReturnValueOnce(customState);
+
+    const container = render(<CIS2CallbackPage />);
+
+    expect(container.asFragment()).toMatchSnapshot();
+
+    await act(async () => {
+      jest.advanceTimersByTime(25);
+    });
+
+    expect(getCurrentUser).toHaveBeenCalled();
+    expect(mockRouter.replace).toHaveBeenCalledWith(
+      '/signin?redirect=%2Ftemplates%2Fmy-template'
+    );
   });
 
-  await waitFor(() =>
-    expect(mockedRedirect).toHaveBeenCalledWith(
-      '/signin?redirect=%2Ftemplates%2Fmessage-templates',
-      'replace'
-    )
-  );
+  it('polls until user is present in cookies, then redirects', async () => {
+    for (let i = 0; i < 3; i += 1) {
+      mockGetCurrentUser.mockRejectedValueOnce(new Error('Unauthenticated'));
+    }
+
+    mockGetCurrentUser.mockResolvedValueOnce({
+      userId: 'id',
+      username: 'name',
+    });
+
+    const customState = `code-${encodeState({ redirectPath: '/templates/my-template' })}`;
+
+    mockSearchParams.get.mockReturnValueOnce(customState);
+
+    render(<CIS2CallbackPage />);
+
+    for (let i = 0; i < 4; i += 1) {
+      // eslint-disable-next-line no-await-in-loop
+      await act(async () => {
+        jest.advanceTimersByTime(25);
+      });
+    }
+
+    expect(getCurrentUser).toHaveBeenCalledTimes(4);
+    expect(mockRouter.replace).toHaveBeenCalledTimes(1);
+    expect(mockRouter.replace).toHaveBeenCalledWith(
+      '/signin?redirect=%2Ftemplates%2Fmy-template'
+    );
+  });
+
+  it('redirects if polling times out', async () => {
+    mockGetCurrentUser.mockRejectedValue(new Error('Unauthenticated'));
+
+    const customState = `code-${encodeState({ redirectPath: '/templates/my-template' })}`;
+
+    mockSearchParams.get.mockReturnValueOnce(customState);
+
+    render(<CIS2CallbackPage />);
+
+    for (let i = 0; i <= 400; i += 1) {
+      // eslint-disable-next-line no-await-in-loop
+      await act(async () => {
+        jest.advanceTimersByTime(25);
+      });
+    }
+
+    expect(getCurrentUser).toHaveBeenCalledTimes(401);
+    expect(mockRouter.replace).toHaveBeenCalledTimes(1);
+    expect(mockRouter.replace).toHaveBeenCalledWith(
+      '/signin?redirect=%2Ftemplates%2Fmy-template'
+    );
+
+    await act(async () => {
+      jest.advanceTimersByTime(25);
+    });
+
+    // polling has been stopped
+    expect(getCurrentUser).toHaveBeenCalledTimes(401);
+  });
+
+  it('uses default redirect destination if custom state cannot be parsed from URL', async () => {
+    mockGetCurrentUser.mockResolvedValueOnce({
+      userId: 'id',
+      username: 'name',
+    });
+
+    mockSearchParams.get.mockReturnValueOnce(null);
+
+    render(<CIS2CallbackPage />);
+
+    await act(async () => {
+      jest.advanceTimersByTime(25);
+    });
+
+    expect(getCurrentUser).toHaveBeenCalled();
+    expect(mockRouter.replace).toHaveBeenCalledWith(
+      '/signin?redirect=%2Ftemplates%2Fmessage-templates'
+    );
+  });
 });

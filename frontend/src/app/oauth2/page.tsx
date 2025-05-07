@@ -1,33 +1,60 @@
 'use client';
 
-import { type ReactNode, useEffect, useState } from 'react';
-import path from 'path';
-import { redirect, RedirectType } from 'next/navigation';
-import { Hub } from 'aws-amplify/utils';
+import { type ReactNode, useEffect } from 'react';
+import {
+  ReadonlyURLSearchParams,
+  useRouter,
+  useSearchParams,
+} from 'next/navigation';
 // https://docs.amplify.aws/gen1/react/build-a-backend/auth/add-social-provider/#required-for-multi-page-applications-complete-social-sign-in-after-redirect
 import 'aws-amplify/auth/enable-oauth-listener';
+import { getCurrentUser } from '@aws-amplify/auth';
 import type { State } from '@/src/utils/federated-sign-in';
 import content from '@/src/content/content';
+import { LoadingSpinner } from '@/src/components/LoadingSpinner/LoadingSpinner';
+
+const POLLING_INTERVAL_MS = 25;
+const MAX_POLL_DURATION_MS = 10_000;
+
+function redirectFromStateQuery(searchParams: ReadonlyURLSearchParams): State {
+  const stateQuery = searchParams.get('state');
+  const redirectSegment = stateQuery?.split('-')?.[1];
+  const json = Buffer.from(redirectSegment ?? '', 'hex').toString('utf8');
+
+  try {
+    return JSON.parse(json);
+  } catch {
+    return { redirectPath: '/templates/message-templates' };
+  }
+}
 
 export default function CIS2CallbackPage(): ReactNode {
-  const [customState, setCustomState] = useState<State>();
+  const router = useRouter();
+  const customState = redirectFromStateQuery(useSearchParams());
+  const destination = `/signin?redirect=${encodeURIComponent(customState.redirectPath)}`;
 
   useEffect(() => {
-    return Hub.listen('auth', ({ payload }) => {
-      if (payload.event === 'customOAuthState') {
-        setCustomState(JSON.parse(payload.data));
+    const startTime = Date.now();
+
+    const timeout: NodeJS.Timeout = setInterval(async () => {
+      try {
+        await getCurrentUser();
+        clearInterval(timeout);
+        router.replace(destination);
+        // eslint-disable-next-line no-empty
+      } catch {}
+
+      const elapsed = Date.now() - startTime;
+      if (elapsed > MAX_POLL_DURATION_MS) {
+        clearInterval(timeout);
+        router.replace(destination);
       }
-    });
-  }, []);
+    }, POLLING_INTERVAL_MS);
 
-  if (customState) {
-    redirect(
-      path.normalize(
-        `/signin?redirect=${encodeURIComponent(customState.redirectPath ?? '/templates/message-templates')}`
-      ),
-      RedirectType.replace
-    );
-  }
+    return () => {
+      clearInterval(timeout);
+    };
+  }, [router, destination]);
 
-  return <h1>{content.pages.oauth2Redirect.heading}</h1>;
+  return <LoadingSpinner text={content.pages.oauth2Redirect.heading} />;
 }

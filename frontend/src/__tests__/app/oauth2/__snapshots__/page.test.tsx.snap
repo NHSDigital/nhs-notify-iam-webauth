@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CIS2CallbackPage should redirect to signin page with custom redirect when user is authenticated, renders loading spinner 1`] = `
+<DocumentFragment>
+  <div
+    class="nhsuk-loader"
+  >
+    <span
+      class="nhsuk-loader__spinner"
+    />
+    <h1
+      class="nhsuk-loader__text"
+    >
+      Redirecting, please wait
+    </h1>
+  </div>
+</DocumentFragment>
+`;
