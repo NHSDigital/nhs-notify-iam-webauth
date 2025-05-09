@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LoadingSpinner component renders component correctly 1`] = `
+<DocumentFragment>
+  <div
+    class="nhsuk-loader"
+  >
+    <span
+      class="nhsuk-loader__spinner"
+    />
+    <h1
+      class="nhsuk-loader__text"
+    >
+      loading text
+    </h1>
+  </div>
+</DocumentFragment>
+`;
