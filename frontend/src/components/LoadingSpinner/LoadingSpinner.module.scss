@@ -1,0 +1,34 @@
+@use 'nhsuk-frontend/packages/core/settings/colours' as colours;
+
+.nhsuk-loader {
+  position: relative;
+  text-align: center;
+  height: 400px;
+  padding-top: 130px
+}
+
+.nhsuk-loader__spinner {
+  animation: spin 2.5s linear infinite;
+  border: 10px solid colours.$color_nhsuk-grey-4;
+  border-radius: 50%;
+  border-top: 10px solid colours.$color_nhsuk-blue;
+  display: inline-block;
+  height: 120px;
+  margin: auto;
+  width: 120px;
+}
+
+.nhsuk-loader__text {
+  display: block;
+  margin-bottom: 0;
+  font-size: 1.4em;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
