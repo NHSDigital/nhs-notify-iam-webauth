@@ -87,3 +87,9 @@ variable "kms_deletion_window" {
   description = "When a kms key is deleted, how long should it wait in the pending deletion state?"
   default     = "30"
 }
+
+variable "oam_sink_id" {
+  description = "The ID of the Cloudwatch OAM sink in the appropriate observability account."
+  type        = string
+  default     = ""
+}
