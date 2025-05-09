@@ -228,8 +228,3 @@ variable "observability_account_id" {
   type        = string
   description = "The Observability Account ID that needs access"
 }
-
-variable "observability_account_id" {
-  type        = string
-  description = "The Observability Account ID that needs access"
-}
