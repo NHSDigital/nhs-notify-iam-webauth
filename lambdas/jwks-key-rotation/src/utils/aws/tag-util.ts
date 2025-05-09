@@ -21,6 +21,7 @@ export function getKeyTags(): Array<Tag> {
     throw new Error(`Invalid tag parameter ${commaSeparatedKeyTags}`);
   }
 
+<<<<<<< HEAD
   const tags = parameters
   .map((parameter) => parameter.split('='))
   .map((keyTag) => ({
@@ -34,4 +35,12 @@ export function getKeyTags(): Array<Tag> {
   })
 
   return tags;
+=======
+  return parameters
+    .map((parameter) => parameter.split('='))
+    .map((keyTag) => ({
+      TagKey: keyTag[0],
+      TagValue: keyTag[1],
+    }));
+>>>>>>> origin/main
 }
