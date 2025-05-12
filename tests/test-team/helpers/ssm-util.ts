@@ -1,4 +1,5 @@
 import {
+  GetParameterCommand,
   PutParameterCommand,
   SSMClient,
 } from '@aws-sdk/client-ssm';
@@ -10,11 +11,7 @@ const ssmClient = new SSMClient({
   maxAttempts: 10,
 });
 
-export async function putParameter(value: string, name = ''): Promise<void> {
-  if (!name) {
-    throw new Error('Missing parameter name');
-  }
-
+export async function putParameter(value: string, name: string): Promise<void> {
   logger.info(`Updating parameter ${name}`);
 
   ssmClient.send(
@@ -24,4 +21,13 @@ export async function putParameter(value: string, name = ''): Promise<void> {
       Overwrite: true,
     })
   );
+}
+
+export async function getParameter(name: string): Promise<string> {
+  const result = await ssmClient.send(
+    new GetParameterCommand({
+      Name: name,
+    })
+  );
+  return result.Parameter?.Value || '';
 }

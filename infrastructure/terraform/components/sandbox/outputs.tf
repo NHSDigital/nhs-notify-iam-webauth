@@ -51,3 +51,11 @@ output "group_tag" {
 output "key_directory_ssm_parameter_name" {
   value = module.public_signing_keys.key_directory_ssm_parameter_name
 }
+
+output "key_rotation_lambda_name" {
+  value = module.public_signing_keys.key_rotation_lambda_name
+}
+
+output "public_keys_s3_bucket_name" {
+  value = module.public_signing_keys.public_keys_s3_bucket_name
+}

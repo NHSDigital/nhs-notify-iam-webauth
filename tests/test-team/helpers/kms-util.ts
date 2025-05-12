@@ -1,4 +1,5 @@
 import {
+  GetPublicKeyCommand,
   KMSClient,
   ListKeysCommand,
   ListKeysCommandOutput,
@@ -69,11 +70,19 @@ async function getKeyTags(
 async function deleteKey(keyId: string): Promise<void> {
   logger.info(`Deleting key ${keyId}`);
 
-  await kmsClient.send(
-    new ScheduleKeyDeletionCommand({
-      KeyId: keyId,
-    })
-  );
+  await kmsClient
+    .send(
+      new ScheduleKeyDeletionCommand({
+        KeyId: keyId,
+        PendingWindowInDays: 7
+      })
+    )
+    .catch((error) => {
+      if (error['__type'] === 'KMSInvalidStateException') {
+        return;
+      }
+      throw error;
+    });
 }
 
 export async function deleteAllKeysForTags(
@@ -84,7 +93,7 @@ export async function deleteAllKeysForTags(
   if (!name.endsWith('-sbx')) {
     throw new Error(`Should only be deleting keys from a sandbox: ${name}`);
   }
-  
+
   logger.info(
     `Looking for keys to delete using tags Name: ${name}, Group: ${group}, Usage: ${usage}`
   );
@@ -102,4 +111,21 @@ export async function deleteAllKeysForTags(
 
   logger.info(`About to delete ${keysToDelete.length} keys`);
   await Promise.all(keysToDelete.map((keyId) => deleteKey(keyId)));
+}
+
+export async function getKmsPublicKey(
+  keyId: string
+): Promise<Uint8Array | undefined> {
+  const keyArn = `arn:aws:kms:${process.env.REGION}:${process.env.ACCOUNT_ID}:key/${keyId}`;
+
+  const result = await kmsClient.send(
+    new GetPublicKeyCommand({
+      KeyId: keyArn,
+    })
+  );
+
+  if (!result.PublicKey) {
+    logger.warn(`PublicKey not found ${keyArn}`);
+  }
+  return result.PublicKey;
 }
