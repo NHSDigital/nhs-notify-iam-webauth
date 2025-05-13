@@ -24,16 +24,18 @@
 | <a name="input_log_level"></a> [log\_level](#input\_log\_level) | Lambda log level | `string` | `"INFO"` | no |
 | <a name="input_log_retention_in_days"></a> [log\_retention\_in\_days](#input\_log\_retention\_in\_days) | The retention period in days for the Cloudwatch Logs events to be retained, default of 0 is indefinite | `number` | `0` | no |
 | <a name="input_module"></a> [module](#input\_module) | The variable encapsulating the name of this module | `string` | `"psk"` | no |
+| <a name="input_observability_account_id"></a> [observability\_account\_id](#input\_observability\_account\_id) | The Observability Account ID that needs access | `string` | n/a | yes |
 | <a name="input_project"></a> [project](#input\_project) | The name of the tfscaffold project | `string` | n/a | yes |
 | <a name="input_protect_public_key_bucket"></a> [protect\_public\_key\_bucket](#input\_protect\_public\_key\_bucket) | Prevent bucket deletion if objects remain in the bucket.  Prevents accidental deletion of the bucket. | `bool` | `true` | no |
 | <a name="input_region"></a> [region](#input\_region) | The AWS Region | `string` | n/a | yes |
 | <a name="input_s3_access_logs_bucket_id"></a> [s3\_access\_logs\_bucket\_id](#input\_s3\_access\_logs\_bucket\_id) | S3 bucket ID for Access Logs | `string` | n/a | yes |
+| <a name="input_subscription_role_arn"></a> [subscription\_role\_arn](#input\_subscription\_role\_arn) | The cloudwatch subscription role ARN | `string` | n/a | yes |
 | <a name="input_waf_rate_limit_cdn"></a> [waf\_rate\_limit\_cdn](#input\_waf\_rate\_limit\_cdn) | The rate limit is the maximum number of CDN requests from a single IP address that are allowed in a five-minute period | `number` | `20000` | no |
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_lambda_jwks_key_rotation"></a> [lambda\_jwks\_key\_rotation](#module\_lambda\_jwks\_key\_rotation) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/lambda | v2.0.2 |
+| <a name="module_lambda_jwks_key_rotation"></a> [lambda\_jwks\_key\_rotation](#module\_lambda\_jwks\_key\_rotation) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/lambda | feature/CCM-9868_splunk |
 | <a name="module_s3bucket_cf_logs"></a> [s3bucket\_cf\_logs](#module\_s3bucket\_cf\_logs) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/s3bucket | v1.0.9 |
 | <a name="module_s3bucket_public_signing_keys"></a> [s3bucket\_public\_signing\_keys](#module\_s3bucket\_public\_signing\_keys) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/s3bucket | v1.0.9 |
 ## Outputs
