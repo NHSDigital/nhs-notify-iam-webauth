@@ -57,3 +57,19 @@ variable "cis2_url" {
   type        = string
   description = "CSI from the parent component"
 }
+
+variable "filter_pattern" {
+  type        = string
+  description = "Filter pattern to use for the log subscription filter"
+  default     = ""
+}
+
+variable "destination_arn" {
+  type        = string
+  description = "The Observability firehose destination ARN"
+}
+
+variable "subscription_role_arn" {
+  type        = string
+  description = "The cloudwatch subscription role ARN"
+}

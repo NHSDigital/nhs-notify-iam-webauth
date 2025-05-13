@@ -58,3 +58,19 @@ variable "execution_role_policy_document" {
   description = "IAM Policy Document containing additional runtime permissions for the Lambda function beyond the basic execution policy"
   default     = ""
 }
+
+variable "filter_pattern" {
+  type        = string
+  description = "Filter pattern to use for the log subscription filter"
+  default     = ""
+}
+
+variable "destination_arn" {
+  type        = string
+  description = "The Observability firehose destination ARN"
+}
+
+variable "subscription_role_arn" {
+  type        = string
+  description = "The cloudwatch subscription role ARN"
+}
