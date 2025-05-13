@@ -1,5 +1,5 @@
 module "lambda_backup_cognito_id" {
-  source = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/lambda?ref=v1.0.8"
+  source = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/lambda?ref=feature/CCM-9868_splunk"
   count  = var.destination_vault_arn != null ? 1 : 0
 
   function_name = "backup-cognito-id"
@@ -37,6 +37,10 @@ module "lambda_backup_cognito_id" {
   lambda_env_vars = {
     S3_BUCKET_NAME = module.s3bucket_cognito_backup[0].bucket
   }
+
+  send_to_firehose              = true
+  destination_arn               = "arn:aws:logs:${var.region}:${var.observability_account_id}:destination:nhs-notify-main-acct-firehose-logs"
+  log_subscription_log_role_arn = local.acct.log_subscription_role_arn
 }
 
 data "aws_iam_policy_document" "lambda_backup_cognito_id" {

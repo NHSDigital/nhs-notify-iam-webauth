@@ -18,7 +18,7 @@ data "aws_iam_policy_document" "bucket_policy_public_signing_keys" {
   }
 
   dynamic "statement" {
-    for_each = var.deploy_cdn ? [1]: []
+    for_each = var.deploy_cdn ? [1] : []
     content {
       actions = ["s3:GetObject", "s3:ListBucket"]
       resources = [

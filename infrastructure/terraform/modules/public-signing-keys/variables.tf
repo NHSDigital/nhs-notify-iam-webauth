@@ -108,3 +108,13 @@ variable "function_s3_bucket" {
   type        = string
   description = "The bucket to upload Lambda packages to"
 }
+
+variable "observability_account_id" {
+  type        = string
+  description = "The Observability Account ID that needs access"
+}
+
+variable "subscription_role_arn" {
+  type        = string
+  description = "The cloudwatch subscription role ARN"
+}

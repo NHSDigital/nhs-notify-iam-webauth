@@ -18,4 +18,6 @@ module "public_signing_keys" {
   dns_zone_id              = local.acct.dns_zone["id"]
   s3_access_logs_bucket_id = local.acct.s3_buckets["access_logs"]["id"]
   function_s3_bucket       = local.acct.s3_buckets["lambda_function_artefacts"]["id"]
+  observability_account_id = var.observability_account_id
+  subscription_role_arn    = local.acct.log_subscription_role_arn
 }
