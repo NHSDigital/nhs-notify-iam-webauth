@@ -7,10 +7,10 @@ resource "aws_cloudwatch_log_group" "api_gateway_execution" {
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "api_gateway_execution" {
-  count = var.cloudwatch_log_destination_arn != "" ? 1 : 0
+  count = var.log_destination_arn != "" ? 1 : 0
   name            = replace(aws_cloudwatch_log_group.api_gateway_execution.name, "/", "-")
   log_group_name  = aws_cloudwatch_log_group.api_gateway_execution.name
   filter_pattern  = ""
-  destination_arn = var.cloudwatch_log_destination_arn
+  destination_arn = var.log_destination_arn
   role_arn        = var.log_subscription_role_arn
 }

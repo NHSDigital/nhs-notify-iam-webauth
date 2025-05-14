@@ -1,5 +1,5 @@
 module "lambda_backup_cognito_id" {
-  source = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/lambda?ref=feature/CCM-9868_splunk"
+  source = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/lambda?ref=v2.0.4"
   count  = var.destination_vault_arn != null ? 1 : 0
 
   function_name = "backup-cognito-id"

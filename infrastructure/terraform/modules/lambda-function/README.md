@@ -9,7 +9,7 @@ No requirements.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_cloudwatch_log_destination_arn"></a> [cloudwatch\_log\_destination\_arn](#input\_cloudwatch\_log\_destination\_arn) | Destination ARN to use for the log subscription filter | `string` | `""` | no |
+| <a name="input_log_destination_arn"></a> [cloudwatch\_log\_destination\_arn](#input\_cloudwatch\_log\_destination\_arn) | Destination ARN to use for the log subscription filter | `string` | `""` | no |
 | <a name="input_description"></a> [description](#input\_description) | Description of what your Lambda Function does | `string` | n/a | yes |
 | <a name="input_environment_variables"></a> [environment\_variables](#input\_environment\_variables) | Lambda environment variables | `map(string)` | `{}` | no |
 | <a name="input_execution_role_policy_document"></a> [execution\_role\_policy\_document](#input\_execution\_role\_policy\_document) | IAM Policy Document containing additional runtime permissions for the Lambda function beyond the basic execution policy | `string` | `""` | no |

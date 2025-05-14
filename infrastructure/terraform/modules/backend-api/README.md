@@ -11,7 +11,7 @@ No requirements.
 |------|-------------|------|---------|:--------:|
 | <a name="input_aws_account_id"></a> [aws\_account\_id](#input\_aws\_account\_id) | The AWS Account ID (numeric) | `string` | n/a | yes |
 | <a name="input_cis2_url"></a> [cis2\_url](#input\_cis2\_url) | CSI from the parent component | `string` | n/a | yes |
-| <a name="input_cloudwatch_log_destination_arn"></a> [cloudwatch\_log\_destination\_arn](#input\_cloudwatch\_log\_destination\_arn) | Destination ARN to use for the log subscription filter | `string` | `""` | no |
+| <a name="input_log_destination_arn"></a> [cloudwatch\_log\_destination\_arn](#input\_cloudwatch\_log\_destination\_arn) | Destination ARN to use for the log subscription filter | `string` | `""` | no |
 | <a name="input_component"></a> [component](#input\_component) | The variable encapsulating the name of this component | `string` | `"api"` | no |
 | <a name="input_csi"></a> [csi](#input\_csi) | CSI from the parent component | `string` | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | The name of the tfscaffold environment | `string` | n/a | yes |

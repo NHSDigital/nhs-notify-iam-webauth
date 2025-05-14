@@ -1,5 +1,5 @@
 module "lambda_jwks_key_rotation" {
-  source = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/lambda?ref=feature/CCM-9868_splunk"
+  source = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/lambda?ref=v2.0.4"
 
   providers = {
     aws = aws
@@ -44,7 +44,7 @@ module "lambda_jwks_key_rotation" {
   }
 
   send_to_firehose               = var.send_to_firehose
-  cloudwatch_log_destination_arn = var.cloudwatch_log_destination_arn
+  log_destination_arn = var.log_destination_arn
   log_subscription_role_arn      = var.log_subscription_role_arn
 }
 

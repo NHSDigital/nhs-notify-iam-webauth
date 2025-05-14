@@ -115,7 +115,7 @@ variable "send_to_firehose" {
   default     = true
 }
 
-variable "cloudwatch_log_destination_arn" {
+variable "log_destination_arn" {
   type        = string
   description = "Destination ARN to use for the log subscription filter"
   default     = ""

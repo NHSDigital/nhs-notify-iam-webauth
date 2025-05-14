@@ -12,7 +12,7 @@
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_aws_account_id"></a> [aws\_account\_id](#input\_aws\_account\_id) | The AWS Account ID (numeric) | `string` | n/a | yes |
-| <a name="input_cloudwatch_log_destination_arn"></a> [cloudwatch\_log\_destination\_arn](#input\_cloudwatch\_log\_destination\_arn) | Destination ARN to use for the log subscription filter | `string` | `""` | no |
+| <a name="input_log_destination_arn"></a> [cloudwatch\_log\_destination\_arn](#input\_cloudwatch\_log\_destination\_arn) | Destination ARN to use for the log subscription filter | `string` | `""` | no |
 | <a name="input_component"></a> [component](#input\_component) | The name of the tfscaffold component | `string` | n/a | yes |
 | <a name="input_default_tags"></a> [default\_tags](#input\_default\_tags) | A map of default tags to apply to all taggable resources within the component | `map(string)` | `{}` | no |
 | <a name="input_deploy_cdn"></a> [deploy\_cdn](#input\_deploy\_cdn) | Toggle to control whether the CloudFront distribution and associated domain and certificate be deployed which can take some time to deploy and destroy | `bool` | `true` | no |
