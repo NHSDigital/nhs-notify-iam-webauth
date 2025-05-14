@@ -4,6 +4,7 @@ resource "aws_cloudwatch_log_group" "api_gateway_access" {
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "api_gateway_access" {
+  count = var.cloudwatch_log_destination_arn != "" ? 1 : 0
   name            = replace(aws_cloudwatch_log_group.api_gateway_access.name, "/", "-")
   log_group_name  = aws_cloudwatch_log_group.api_gateway_access.name
   filter_pattern  = ""
