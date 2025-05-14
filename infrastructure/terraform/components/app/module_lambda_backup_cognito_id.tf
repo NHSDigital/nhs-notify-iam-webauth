@@ -39,8 +39,8 @@ module "lambda_backup_cognito_id" {
   }
 
   send_to_firehose              = true
-  destination_arn               = "arn:aws:logs:${var.region}:${var.observability_account_id}:destination:nhs-notify-main-acct-firehose-logs"
-  log_subscription_log_role_arn = local.acct.log_subscription_role_arn
+  log_destination_arn               = "arn:aws:logs:${var.region}:${var.observability_account_id}:destination:nhs-notify-main-acct-firehose-logs"
+  log_subscription_role_arn = local.acct.log_subscription_role_arn
 }
 
 data "aws_iam_policy_document" "lambda_backup_cognito_id" {
