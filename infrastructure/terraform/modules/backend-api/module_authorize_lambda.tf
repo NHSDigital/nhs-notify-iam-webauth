@@ -13,6 +13,6 @@ module "authorize_lambda" {
   environment_variables = {
     CIS2_URL = var.cis2_url
   }
-  destination_arn       = var.destination_arn
-  subscription_role_arn = var.subscription_role_arn
+  cloudwatch_log_destination_arn = var.cloudwatch_log_destination_arn
+  log_subscription_role_arn      = var.log_subscription_role_arn
 }

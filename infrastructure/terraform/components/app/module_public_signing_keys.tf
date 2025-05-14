@@ -15,9 +15,9 @@ module "public_signing_keys" {
   kms_key_arn           = module.kms.key_arn
   default_tags          = local.default_tags
 
-  dns_zone_id              = local.acct.dns_zone["id"]
-  s3_access_logs_bucket_id = local.acct.s3_buckets["access_logs"]["id"]
-  function_s3_bucket       = local.acct.s3_buckets["lambda_function_artefacts"]["id"]
-  observability_account_id = var.observability_account_id
-  subscription_role_arn    = local.acct.log_subscription_role_arn
+  dns_zone_id                    = local.acct.dns_zone["id"]
+  s3_access_logs_bucket_id       = local.acct.s3_buckets["access_logs"]["id"]
+  function_s3_bucket             = local.acct.s3_buckets["lambda_function_artefacts"]["id"]
+  cloudwatch_log_destination_arn = "arn:aws:logs:${var.region}:${var.observability_account_id}:destination:nhs-notify-main-acct-firehose-logs"
+  log_subscription_role_arn      = local.acct.log_subscription_role_arn
 }

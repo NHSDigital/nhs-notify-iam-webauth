@@ -10,6 +10,6 @@ resource "aws_cloudwatch_log_subscription_filter" "api_gateway_execution" {
   name            = replace(aws_cloudwatch_log_group.api_gateway_execution.name, "/", "-")
   log_group_name  = aws_cloudwatch_log_group.api_gateway_execution.name
   filter_pattern  = ""
-  destination_arn = var.destination_arn
-  role_arn        = var.subscription_role_arn
+  destination_arn = var.cloudwatch_log_destination_arn
+  role_arn        = var.log_subscription_role_arn
 }

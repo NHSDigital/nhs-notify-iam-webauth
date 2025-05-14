@@ -109,12 +109,14 @@ variable "function_s3_bucket" {
   description = "The bucket to upload Lambda packages to"
 }
 
-variable "observability_account_id" {
+variable "cloudwatch_log_destination_arn" {
   type        = string
-  description = "The Observability Account ID that needs access"
+  description = "Destination ARN to use for the log subscription filter"
+  default     = ""
 }
 
-variable "subscription_role_arn" {
+variable "log_subscription_role_arn" {
   type        = string
-  description = "The cloudwatch subscription role ARN"
+  description = "The ARN of the IAM role to use for the log subscription filter"
+  default     = ""
 }

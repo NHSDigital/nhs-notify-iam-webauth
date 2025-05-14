@@ -43,9 +43,9 @@ module "lambda_jwks_key_rotation" {
     "S3_PUBLIC_KEYS_BUCKET_NAME" = module.s3bucket_public_signing_keys.bucket
   }
 
-  send_to_firehose              = true
-  destination_arn               = "arn:aws:logs:${var.region}:${var.observability_account_id}:destination:nhs-notify-main-acct-firehose-logs"
-  log_subscription_log_role_arn = var.subscription_role_arn
+  send_to_firehose               = true
+  cloudwatch_log_destination_arn = var.cloudwatch_log_destination_arn
+  log_subscription_role_arn      = var.log_subscription_role_arn
 }
 
 data "aws_iam_policy_document" "lambda_jwks_key_rotation" {
