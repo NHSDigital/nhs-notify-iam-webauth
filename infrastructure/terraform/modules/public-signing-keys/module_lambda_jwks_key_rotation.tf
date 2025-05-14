@@ -43,7 +43,7 @@ module "lambda_jwks_key_rotation" {
     "S3_PUBLIC_KEYS_BUCKET_NAME" = module.s3bucket_public_signing_keys.bucket
   }
 
-  send_to_firehose               = true
+  send_to_firehose               = var.send_to_firehose
   cloudwatch_log_destination_arn = var.cloudwatch_log_destination_arn
   log_subscription_role_arn      = var.log_subscription_role_arn
 }
