@@ -108,3 +108,21 @@ variable "function_s3_bucket" {
   type        = string
   description = "The bucket to upload Lambda packages to"
 }
+
+variable "send_to_firehose" {
+  type        = bool
+  description = "Send logs to firehose"
+  default     = true
+}
+
+variable "log_destination_arn" {
+  type        = string
+  description = "Destination ARN to use for the log subscription filter"
+  default     = ""
+}
+
+variable "log_subscription_role_arn" {
+  type        = string
+  description = "The ARN of the IAM role to use for the log subscription filter"
+  default     = ""
+}

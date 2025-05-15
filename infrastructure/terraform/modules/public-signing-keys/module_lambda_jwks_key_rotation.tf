@@ -1,5 +1,5 @@
 module "lambda_jwks_key_rotation" {
-  source = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/lambda?ref=v2.0.2"
+  source = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/lambda?ref=v2.0.4"
 
   providers = {
     aws = aws
@@ -42,6 +42,10 @@ module "lambda_jwks_key_rotation" {
     "ACCOUNT_ID"                 = var.aws_account_id
     "S3_PUBLIC_KEYS_BUCKET_NAME" = module.s3bucket_public_signing_keys.bucket
   }
+
+  send_to_firehose               = var.send_to_firehose
+  log_destination_arn = var.log_destination_arn
+  log_subscription_role_arn      = var.log_subscription_role_arn
 }
 
 data "aws_iam_policy_document" "lambda_jwks_key_rotation" {

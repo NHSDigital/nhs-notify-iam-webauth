@@ -16,4 +16,6 @@ module "token_lambda" {
     MAXIMUM_EXPECTED_AUTH_TIME_DIVERGENCE_SECONDS = "60"
     CIS2_URL                                      = var.cis2_url
   }
+  log_destination_arn = var.log_destination_arn
+  log_subscription_role_arn      = var.log_subscription_role_arn
 }
