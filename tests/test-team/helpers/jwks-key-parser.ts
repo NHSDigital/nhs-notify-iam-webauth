@@ -4,5 +4,5 @@ export async function parseJwksPublicSigningKeys(
   rawJwks: string
 ): Promise<Array<JWK.Key>> {
   const jwks = JSON.parse(rawJwks) as Array<object>;
-  return await Promise.all(jwks.map((jwk) => JWK.asKey(jwk)));
+  return Promise.all(jwks.map((jwk) => JWK.asKey(jwk)));
 }

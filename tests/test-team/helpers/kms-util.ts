@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop, unicorn/no-array-for-each, unicorn/no-array-reduce, dot-notation */
 import {
   GetPublicKeyCommand,
   KMSClient,
@@ -74,7 +75,7 @@ async function deleteKey(keyId: string): Promise<void> {
     .send(
       new ScheduleKeyDeletionCommand({
         KeyId: keyId,
-        PendingWindowInDays: 7
+        PendingWindowInDays: 7,
       })
     )
     .catch((error) => {
@@ -104,9 +105,9 @@ export async function deleteAllKeysForTags(
   );
 
   const keysToDelete = taggedKeys
-    .filter((keyMetadata) => keyMetadata.tags['Name'] === name)
-    .filter((keyMetadata) => keyMetadata.tags['Group'] === group)
-    .filter((keyMetadata) => keyMetadata.tags['Usage'] === usage)
+    .filter((keyMetadata) => keyMetadata.tags.Name === name)
+    .filter((keyMetadata) => keyMetadata.tags.Group === group)
+    .filter((keyMetadata) => keyMetadata.tags.Usage === usage)
     .map((keyMetadata) => keyMetadata.keyId);
 
   logger.info(`About to delete ${keysToDelete.length} keys`);
