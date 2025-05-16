@@ -20,5 +20,5 @@ module "public_signing_keys" {
 
   deploy_cdn                = false
   protect_public_key_bucket = false
-  send_to_firehose         = false
+  send_to_firehose          = false
 }

@@ -1,7 +1,7 @@
 locals {
   csi = "${var.csi}-${var.component}"
 
-  lambdas_source_code_dir = abspath("${path.module}/../../../../lambdas")
+  lambdas_dir = "../../../../lambdas"
 
   openapi_spec = templatefile("${path.module}/spec.tmpl.json", {
     AWS_REGION              = var.region
