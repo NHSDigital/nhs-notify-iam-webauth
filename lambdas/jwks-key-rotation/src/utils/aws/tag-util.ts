@@ -22,16 +22,16 @@ export function getKeyTags(): Array<Tag> {
   }
 
   const tags = parameters
-  .map((parameter) => parameter.split('='))
-  .map((keyTag) => ({
-    TagKey: keyTag[0],
-    TagValue: keyTag[1],
-  }));
+    .map((parameter) => parameter.split('='))
+    .map((keyTag) => ({
+      TagKey: keyTag[0],
+      TagValue: keyTag[1],
+    }));
 
   tags.push({
     TagKey: USAGE_TAG_NAME,
-    TagValue: USAGE_TAG_VALUE
-  })
+    TagValue: USAGE_TAG_VALUE,
+  });
 
   return tags;
 }
