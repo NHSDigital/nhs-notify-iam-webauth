@@ -1,16 +1,15 @@
 # NHS Notify Code Owners
 
-*                         @NHSDigital/nhs-notify-iam-webauth
+*                           @NHSDigital/nhs-notify-iam-webauth
 
-/.github/                 @NHSDigital/nhs-notify-iam-admins
-*.code-workspace          @NHSDigital/nhs-notify-iam-admins
-/docs/                    @NHSDigital/nhs-notify-iam-webauth
-/docs/testing/            @NHSDigital/nhs-notify-iam-webauth-testers
-/tests/test-team/         @NHSDigital/nhs-notify-iam-webauth-testers
+/.github/                   @NHSDigital/nhs-notify-iam-admins
+*.code-workspace            @NHSDigital/nhs-notify-iam-admins
+/docs/                      @NHSDigital/nhs-notify-iam-webauth
+/infrastructure/terraform/  @NHSDigital/nhs-notify-platform
 
 # Codeowners must be final check
-/.github/CODEOWNERS       @NHSDigital/nhs-notify-code-owners
-/CODEOWNERS               @NHSDigital/nhs-notify-code-owners
+/.github/CODEOWNERS         @NHSDigital/nhs-notify-code-owners
+/CODEOWNERS                 @NHSDigital/nhs-notify-code-owners
 
 
 # Each NHS Notify repository should have clear code owners set.
