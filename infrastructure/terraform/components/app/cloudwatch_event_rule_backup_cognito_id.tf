@@ -8,9 +8,7 @@ resource "aws_cloudwatch_event_rule" "backup_cognito_id" {
     "source" : ["aws.cognito-idp"],
     "detail-type" : ["AWS API Call via CloudTrail"],
     "detail" : {
-      "requestParameters" : {
-        "userPoolId" : ["${aws_cognito_user_pool.main.id}"]
-      },
+      "eventSource": ["cognito-idp.amazonaws.com"],
       "eventName" : [
         "AddCustomAttributes",
         "AdminAddUserToGroup",
@@ -24,11 +22,30 @@ resource "aws_cloudwatch_event_rule" "backup_cognito_id" {
         "AdminSetUserSettings",
         "AdminUpdateUserAttributes",
         "DeleteUserAttributes",
-        "OAuth2_Authorize_GET",
         "RespondToAuthChallenge",
         "SetUserSettings",
         "UpdateUserAttributes",
         "VerifyUserAttribute",
+      ]
+    }
+  })
+}
+
+resource "aws_cloudwatch_event_rule" "backup_cognito_id_oauth" {
+  count = var.destination_vault_arn != null ? 1 : 0
+
+  name        = "${local.csi}-backup-cognito-oauth-id"
+  description = "Rule to catch Cognito user OAuth attribute actions"
+  event_pattern = jsonencode({
+    "source" : ["aws.cognito-idp"],
+    "detail-type" : ["AWS Service Event via CloudTrail"],
+    "detail" : {
+      "additionalEventData" : {
+        "userPoolId" : ["${aws_cognito_user_pool.main.id}"]
+      },
+      "eventSource": ["cognito-idp.amazonaws.com"],
+      "eventName" : [
+        "OAuth2_Authorize_GET"
       ]
     }
   })
