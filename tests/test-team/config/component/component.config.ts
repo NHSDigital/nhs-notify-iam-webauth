@@ -27,6 +27,19 @@ export default defineConfig({
       },
     },
   ],
+
+  reporter: [
+    [
+      'html',
+      {
+        outputFolder: path.resolve(
+          __dirname,
+          '../../playwright-report-component-tests'
+        ),
+      },
+    ],
+  ],
+
   /* Run your local dev server before starting the tests */
   webServer: {
     command: 'npm run build && npm run start',

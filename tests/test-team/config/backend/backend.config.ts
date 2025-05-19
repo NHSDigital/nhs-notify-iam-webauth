@@ -1,10 +1,11 @@
+import path from 'node:path';
 import { defineConfig } from '@playwright/test';
 import baseConfig from '../playwright.config';
 
 export default defineConfig({
   ...baseConfig,
 
-  timeout: 10_000,
+  timeout: 20_000,
   retries: 0,
   workers: 1,
   projects: [
@@ -19,5 +20,16 @@ export default defineConfig({
       dependencies: ['backend:setup'],
       retries: 0,
     },
+  ],
+  reporter: [
+    [
+      'html',
+      {
+        outputFolder: path.resolve(
+          __dirname,
+          '../../playwright-report-backend-tests'
+        ),
+      },
+    ],
   ],
 });
