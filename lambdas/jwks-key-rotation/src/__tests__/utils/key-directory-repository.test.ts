@@ -1,15 +1,20 @@
 import {
+  filterKeyDirectoryToActiveKeys,
   getKeyDirectory,
   writeKeyDirectory,
 } from '@/src/utils/key-directory-repository';
 import { getParameter, putParameter } from '@/src/utils/aws/ssm-util';
+import { getKeyState } from '@/src/utils/aws/kms-util';
+import { KeyState } from '@aws-sdk/client-kms';
 
 jest.mock('@/src/utils/aws/ssm-util');
 jest.mock('@/src/utils/logger');
+jest.mock('@/src/utils/aws/kms-util');
 
 const mockKeyDirectory = [
   { createdDate: '2025-04-01', kid: '00000000-0000-0000-0000-000000000000' },
   { createdDate: '2025-05-01', kid: '00000000-0000-0000-0000-000000000001' },
+  { createdDate: '2025-06-01', kid: '00000000-0000-0000-0000-000000000002' },
 ];
 
 describe('key-directory-repository', () => {
@@ -98,6 +103,39 @@ describe('key-directory-repository', () => {
         JSON.stringify(mockKeyDirectory),
         MOCK_KEY_DIRECTORY_SSM
       );
+    });
+  });
+
+  describe('filterKeyDirectoryToActiveKeys', () => {
+    test('should filter key directory to retain only active keys', async () => {
+      // arrange
+      const mockGetKeyState = jest.mocked(getKeyState);
+
+      mockGetKeyState
+        .mockImplementationOnce(() =>
+          Promise.resolve({
+            keyId: mockKeyDirectory[0].kid,
+            keyState: KeyState.Enabled,
+          })
+        )
+        .mockImplementationOnce(() =>
+          Promise.resolve({
+            keyId: mockKeyDirectory[1].kid,
+            keyState: KeyState.PendingDeletion,
+          })
+        )
+        .mockImplementationOnce(() =>
+          Promise.resolve({
+            keyId: mockKeyDirectory[2].kid,
+            keyState: KeyState.Unavailable,
+          })
+        );
+
+      // act
+      const result = await filterKeyDirectoryToActiveKeys(mockKeyDirectory);
+
+      // assert
+      expect(result).toEqual([mockKeyDirectory[0]]);
     });
   });
 });

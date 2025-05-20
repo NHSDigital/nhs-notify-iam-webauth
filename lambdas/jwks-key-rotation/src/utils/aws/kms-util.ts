@@ -60,7 +60,7 @@ export async function getKeyState(
 ): Promise<{ keyId: string; keyState: KeyState }> {
   const keyState = await kmsClient
     .send(new DescribeKeyCommand({ KeyId: keyId }))
-    .then((result) => result.KeyMetadata.KeyState)
+    .then((result) => result.KeyMetadata?.KeyState ?? KeyState.Unavailable)
     .catch((error) => {
       if (KMS_NO_OP_ERRORS.some((errorType) => error instanceof errorType)) {
         logger.warn(`Key not found: ${keyId}`);

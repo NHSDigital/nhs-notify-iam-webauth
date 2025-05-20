@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { logger } from '@/src/utils/logger';
 import { getParameter, putParameter } from '@/src/utils/aws/ssm-util';
-import { getKeyState } from './aws/kms-util';
+import { getKeyState } from '@/src/utils/aws/kms-util';
 import { KeyState } from '@aws-sdk/client-kms';
 
 const schemaFor =

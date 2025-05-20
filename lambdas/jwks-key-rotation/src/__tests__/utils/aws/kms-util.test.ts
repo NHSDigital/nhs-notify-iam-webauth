@@ -1,12 +1,16 @@
 import {
   createKmsKey,
   deleteKey,
+  getKeyState,
   getKmsPublicKey,
 } from '@/src/utils/aws/kms-util';
+import { KMS_NO_OP_ERRORS } from '@/src/utils/constants';
 import {
   CreateKeyCommand,
+  DescribeKeyCommand,
   GetPublicKeyCommand,
   KeySpec,
+  KeyState,
   KeyUsageType,
   KMSClient,
   ScheduleKeyDeletionCommand,
@@ -132,6 +136,106 @@ describe('kms-util', () => {
       expect(sendSpy).toHaveBeenCalledWith(
         expect.any(ScheduleKeyDeletionCommand)
       );
+    });
+  });
+
+  describe('getKeyState', () => {
+    test('should get key state', async () => {
+      // arrange
+      const sendSpy = jest.spyOn(KMSClient.prototype, 'send');
+      sendSpy.mockImplementation(() =>
+        Promise.resolve({
+          KeyMetadata: {
+            KeyState: KeyState.PendingDeletion,
+          },
+        })
+      );
+
+      // act
+      const result = await getKeyState('00000000-0000-0000-0000-000000000000');
+
+      // assert
+      expect(result).toEqual({
+        keyId: '00000000-0000-0000-0000-000000000000',
+        keyState: KeyState.PendingDeletion,
+      });
+      expect(sendSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          input: { KeyId: '00000000-0000-0000-0000-000000000000' },
+        })
+      );
+      expect(sendSpy).toHaveBeenCalledWith(expect.any(DescribeKeyCommand));
+    });
+
+    test('should ignore no-op errors', async () => {
+      // arrange
+      class TestError1 extends Error {}
+
+      (jest.mocked(KMS_NO_OP_ERRORS) as Array<unknown>).push(TestError1);
+
+      const sendSpy = jest.spyOn(KMSClient.prototype, 'send');
+      sendSpy.mockImplementation(() => Promise.reject(new TestError1('TEST')));
+
+      // act
+      const result = await getKeyState('00000000-0000-0000-0000-000000000000');
+
+      // assert
+      expect(result).toEqual({
+        keyId: '00000000-0000-0000-0000-000000000000',
+        keyState: KeyState.Unavailable,
+      });
+    });
+
+    test('should propagate general errors', async () => {
+      // arrange
+      const sendSpy = jest.spyOn(KMSClient.prototype, 'send');
+      sendSpy.mockImplementation(() => Promise.reject(new Error('TEST')));
+
+      // act
+      let caughtError;
+      try {
+        await getKeyState('00000000-0000-0000-0000-000000000000');
+      } catch (error) {
+        caughtError = error;
+      }
+
+      // assert
+      expect(caughtError).toBeTruthy();
+      expect((caughtError as Error).message).toBe('TEST');
+    });
+
+    test('should handle missing state', async () => {
+      // arrange
+      const sendSpy = jest.spyOn(KMSClient.prototype, 'send');
+      sendSpy.mockImplementation(() =>
+        Promise.resolve({
+          KeyMetadata: {},
+        })
+      );
+
+      // act
+      const result = await getKeyState('00000000-0000-0000-0000-000000000000');
+
+      // assert
+      expect(result).toEqual({
+        keyId: '00000000-0000-0000-0000-000000000000',
+        keyState: KeyState.Unavailable,
+      });
+    });
+
+    test('should handle missing metadata', async () => {
+      // arrange
+      const sendSpy = jest.spyOn(KMSClient.prototype, 'send');
+      sendSpy.mockImplementation(() => Promise.resolve({}));
+
+      // act
+      const result = await getKeyState('00000000-0000-0000-0000-000000000000');
+
+      // assert
+      expect(result).toEqual({
+        keyId: '00000000-0000-0000-0000-000000000000',
+        keyState: KeyState.Unavailable,
+      });
     });
   });
 });
