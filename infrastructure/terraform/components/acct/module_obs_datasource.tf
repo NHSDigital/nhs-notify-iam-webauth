@@ -9,6 +9,6 @@ module "obs_datasource" {
   environment    = var.environment
   component      = var.component
 
-  oam_sink_id               = var.oam_sink_id
-  observability_account_id  = var.observability_account_id
+  oam_sink_id              = var.oam_sink_id
+  observability_account_id = var.observability_account_id
 }

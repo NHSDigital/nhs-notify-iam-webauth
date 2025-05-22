@@ -76,6 +76,12 @@ variable "observability_account_id" {
   description = "The Observability Account ID that needs access"
 }
 
+variable "observability_environment" {
+  type        = string
+  description = "The Observability environment to use"
+  default     = "main"
+}
+
 variable "support_sandbox_environments" {
   type        = bool
   description = "Does this account support dev sandbox environments?"
