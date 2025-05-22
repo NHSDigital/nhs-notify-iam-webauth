@@ -38,7 +38,7 @@ on:
       internalRef:
         type: string
         description: Internal repo reference (branch or tag)
-        default: "feature/CCM-9554_key-rotation-tests"
+        default: "main"
 
 concurrency:
   group: ${{ inputs.targetEnvironment }}-${{ inputs.targetAccountGroup }}-${{ inputs.targetComponent }}-${{ inputs.terraformAction }}
