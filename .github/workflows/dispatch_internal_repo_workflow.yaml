@@ -35,6 +35,10 @@ on:
         type: string
         description: The Terraform action to run
         default: ""
+      internalRef:
+        type: string
+        description: Internal repo reference (branch or tag)
+        default: "main"
 
 concurrency:
   group: ${{ inputs.targetEnvironment }}-${{ inputs.targetAccountGroup }}-${{ inputs.targetComponent }}-${{ inputs.terraformAction }}
@@ -62,7 +66,7 @@ jobs:
             --arg targetComponent ${{ inputs.targetComponent }} \
             --arg terraformAction "${{ inputs.terraformAction }}" \
             '{
-              "ref": "main",
+              "ref": "${{ inputs.internalRef }}",
               "inputs": (
                 (if $infraRepoName != "" then { "infraRepoName": $infraRepoName } else {} end) +
                 (if $terraformAction != "" then { "terraformAction": $terraformAction } else {} end) +
