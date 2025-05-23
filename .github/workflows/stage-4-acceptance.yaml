@@ -3,14 +3,13 @@ name: Acceptance stage
 on:
   workflow_call:
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   sandbox-set-up:
     name: Step 1
-
-    permissions:
-      id-token: write
-      contents: read
-
     uses: ./.github/workflows/dispatch_internal_repo_workflow.yaml
     secrets: inherit
     with:
@@ -26,10 +25,6 @@ jobs:
   acceptance-tests:
     name: Step 2
     needs: sandbox-set-up
-
-    permissions:
-      id-token: write
-      contents: read
 
     # Calls out to the nhs-notify-internal repo.
     # The nhs-notify-internal repo will run the tests
@@ -49,10 +44,6 @@ jobs:
     name: Step 3
     needs: acceptance-tests
     if: always()
-
-    permissions:
-      id-token: write
-      contents: read
 
     uses: ./.github/workflows/dispatch_internal_repo_workflow.yaml
     secrets: inherit
