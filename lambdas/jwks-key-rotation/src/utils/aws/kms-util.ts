@@ -1,10 +1,13 @@
 import {
   CreateKeyCommand,
+  DescribeKeyCommand,
   GetPublicKeyCommand,
+  KeyState,
   KMSClient,
   ScheduleKeyDeletionCommand,
 } from '@aws-sdk/client-kms';
 import { logger } from '@/src/utils/logger';
+import { KMS_NO_OP_ERRORS } from '../constants';
 
 const kmsClient = new KMSClient({
   region: process.env.REGION,
@@ -50,4 +53,20 @@ export async function deleteKey(keyId: string): Promise<void> {
       KeyId: keyId,
     })
   );
+}
+
+export async function getKeyState(
+  keyId: string
+): Promise<{ keyId: string; keyState: KeyState }> {
+  const keyState = await kmsClient
+    .send(new DescribeKeyCommand({ KeyId: keyId }))
+    .then((result) => result.KeyMetadata?.KeyState ?? KeyState.Unavailable)
+    .catch((error) => {
+      if (KMS_NO_OP_ERRORS.some((errorType) => error instanceof errorType)) {
+        logger.warn(`Key not found: ${keyId}`);
+        return KeyState.Unavailable;
+      }
+      throw error;
+    });
+  return { keyId, keyState };
 }

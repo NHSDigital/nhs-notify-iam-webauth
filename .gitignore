@@ -59,6 +59,8 @@ next-env.d.ts
 # playwright
 tests/test-team/test-results/
 tests/test-team/playwright-report/
+tests/test-team/playwright-report-component-tests/
+tests/test-team/playwright-report-backend-tests/
 tests/test-team/blob-report/
 tests/test-team/playwright/.cache/
 *.webm
