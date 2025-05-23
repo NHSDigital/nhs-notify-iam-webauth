@@ -22,6 +22,7 @@ describe('tag-util', () => {
         { TagKey: 'Group', TagValue: 'dev' },
         { TagKey: 'Name', TagValue: 'def' },
         { TagKey: 'Project', TagValue: 'NHS Notify' },
+        { TagKey: 'Usage', TagValue: 'CIS2-JWKS-AUTH' },
       ]);
     });
 
@@ -35,6 +36,7 @@ describe('tag-util', () => {
       // assert
       expect(result).toMatchObject([
         { TagKey: 'Component', TagValue: 'abc 123' },
+        { TagKey: 'Usage', TagValue: 'CIS2-JWKS-AUTH' },
       ]);
     });
 
@@ -46,7 +48,9 @@ describe('tag-util', () => {
       const result = getKeyTags();
 
       // assert
-      expect(result).toMatchObject([]);
+      expect(result).toMatchObject([
+        { TagKey: 'Usage', TagValue: 'CIS2-JWKS-AUTH' },
+      ]);
     });
 
     test('should parse empty key tags', () => {
@@ -57,7 +61,9 @@ describe('tag-util', () => {
       const result = getKeyTags();
 
       // assert
-      expect(result).toMatchObject([]);
+      expect(result).toMatchObject([
+        { TagKey: 'Usage', TagValue: 'CIS2-JWKS-AUTH' },
+      ]);
     });
 
     test('should ignore empty tags', () => {
@@ -70,6 +76,7 @@ describe('tag-util', () => {
       // assert
       expect(result).toMatchObject([
         { TagKey: 'Component', TagValue: 'abc 123' },
+        { TagKey: 'Usage', TagValue: 'CIS2-JWKS-AUTH' },
       ]);
     });
 

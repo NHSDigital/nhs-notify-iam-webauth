@@ -1,6 +1,7 @@
 /* eslint-disable unicorn/no-array-reduce, unicorn/prefer-at */
 import type { ScheduledHandler } from 'aws-lambda';
 import {
+  filterKeyDirectoryToActiveKeys,
   getKeyDirectory,
   SigningKeyDirectory,
   writeKeyDirectory,
@@ -55,7 +56,12 @@ function buildPublicKeyMap(
 
 export const handler: ScheduledHandler = async () => {
   // Get the existing key directory
-  const keyDirectory = await getKeyDirectory();
+  const unfilteredKeyDirectory = await getKeyDirectory();
+
+  // Filter any keys that are pending deletion
+  const keyDirectory = await filterKeyDirectoryToActiveKeys(
+    unfilteredKeyDirectory
+  );
 
   // Dertermine which keys we should remove
   const keysToDelete = getKeysToDelete(keyDirectory);

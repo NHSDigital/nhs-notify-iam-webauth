@@ -1,6 +1,8 @@
 import { z } from 'zod';
 import { logger } from '@/src/utils/logger';
 import { getParameter, putParameter } from '@/src/utils/aws/ssm-util';
+import { getKeyState } from '@/src/utils/aws/kms-util';
+import { KeyState } from '@aws-sdk/client-kms';
 
 const schemaFor =
   <Output, Input = Output>() =>
@@ -24,6 +26,12 @@ const $SigningKeyMetaData = schemaFor<SigningKeyMetaData>()(
 const $SigningKeyDirectory = schemaFor<SigningKeyDirectory>()(
   z.array($SigningKeyMetaData)
 );
+
+const activeKeyStates: Set<KeyState> = new Set([
+  KeyState.Enabled,
+  KeyState.Creating,
+  KeyState.Updating,
+]);
 
 export async function getKeyDirectory(): Promise<SigningKeyDirectory> {
   const ssmResult = await getParameter(process.env.SSM_KEY_DIRECTORY_NAME);
@@ -50,4 +58,20 @@ export async function writeKeyDirectory(
     JSON.stringify(keyDirectory),
     process.env.SSM_KEY_DIRECTORY_NAME
   );
+}
+
+export async function filterKeyDirectoryToActiveKeys(
+  keyDirectory: SigningKeyDirectory
+): Promise<SigningKeyDirectory> {
+  const results = await Promise.all(
+    keyDirectory.map((keyMetadata) =>
+      getKeyState(keyMetadata.kid).then((result) => ({
+        ...keyMetadata,
+        keyState: result.keyState,
+      }))
+    )
+  );
+  return results
+    .filter((entry) => activeKeyStates.has(entry.keyState))
+    .map((result) => ({ kid: result.kid, createdDate: result.createdDate }));
 }
