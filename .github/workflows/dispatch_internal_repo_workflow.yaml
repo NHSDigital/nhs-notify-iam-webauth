@@ -36,6 +36,10 @@ on:
         description: The Terraform action to run
         default: ""
 
+permissions:
+  id-token: write
+  contents: read
+
 concurrency:
   group: ${{ inputs.targetEnvironment }}-${{ inputs.targetAccountGroup }}-${{ inputs.targetComponent }}-${{ inputs.terraformAction }}
 
@@ -43,10 +47,6 @@ jobs:
   trigger:
     name: ${{ inputs.jobName }}
     runs-on: ubuntu-latest
-
-    permissions:
-      id-token: write
-      contents: read
 
     steps:
       - uses: actions/checkout@v4

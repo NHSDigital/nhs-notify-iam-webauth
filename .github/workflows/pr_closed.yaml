@@ -7,6 +7,10 @@ on:
     branches:
       - main
 
+permissions:
+  id-token: write
+  contents: read
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: false
@@ -35,10 +39,6 @@ jobs:
     needs: check-merge-or-workflow-dispatch
     name: Deploy changes to main in dev AWS account
     if: needs.check-merge-or-workflow-dispatch.outputs.deploy == 'true'
-
-    permissions:
-      id-token: write
-      contents: read
 
     strategy:
       max-parallel: 1

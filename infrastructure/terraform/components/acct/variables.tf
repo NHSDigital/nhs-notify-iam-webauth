@@ -99,3 +99,9 @@ variable "oam_sink_id" {
   type        = string
   default     = ""
 }
+
+variable "kms_deletion_window_test" {
+  type        = string
+  description = "When a kms key is deleted, how long should it wait in the pending deletion state?"
+  default     = "30"
+}
