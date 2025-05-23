@@ -50,7 +50,7 @@ describe('CIS2CallbackPage', () => {
     expect(container.asFragment()).toMatchSnapshot();
 
     await act(async () => {
-      jest.advanceTimersByTime(25);
+      jest.advanceTimersByTime(500);
     });
 
     expect(getCurrentUser).toHaveBeenCalled();
@@ -78,7 +78,7 @@ describe('CIS2CallbackPage', () => {
     for (let i = 0; i < 4; i += 1) {
       // eslint-disable-next-line no-await-in-loop
       await act(async () => {
-        jest.advanceTimersByTime(25);
+        jest.advanceTimersByTime(500);
       });
     }
 
@@ -101,7 +101,7 @@ describe('CIS2CallbackPage', () => {
     for (let i = 0; i <= 400; i += 1) {
       // eslint-disable-next-line no-await-in-loop
       await act(async () => {
-        jest.advanceTimersByTime(25);
+        jest.advanceTimersByTime(500);
       });
     }
 
@@ -130,7 +130,7 @@ describe('CIS2CallbackPage', () => {
     render(<CIS2CallbackPage />);
 
     await act(async () => {
-      jest.advanceTimersByTime(25);
+      jest.advanceTimersByTime(500);
     });
 
     expect(getCurrentUser).toHaveBeenCalled();
