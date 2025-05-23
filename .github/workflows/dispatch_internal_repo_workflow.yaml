@@ -38,7 +38,7 @@ on:
       internalRef:
         type: string
         description: Internal repo reference (branch or tag)
-        default: "main"
+        default: "feature/CCM-9554_optional-backend-tests"
 
 concurrency:
   group: ${{ inputs.targetEnvironment }}-${{ inputs.targetAccountGroup }}-${{ inputs.targetComponent }}-${{ inputs.terraformAction }}
