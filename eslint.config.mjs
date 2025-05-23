@@ -101,6 +101,16 @@ export default defineConfig([
         },
       ],
       'unicorn/no-null': 0,
+      'unicorn/import-style': [
+        2,
+        {
+          styles: {
+            path: {
+              named: true,
+            },
+          },
+        },
+      ],
     },
   },
 
