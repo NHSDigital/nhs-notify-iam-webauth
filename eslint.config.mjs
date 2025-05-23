@@ -182,7 +182,7 @@ export default defineConfig([
       'sort-imports': [
         2,
         {
-          // allowSeparatedGroups: true,
+          ignoreDeclarationSort: true,
         },
       ],
     },
