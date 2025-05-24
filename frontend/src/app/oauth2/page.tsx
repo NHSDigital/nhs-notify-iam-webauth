@@ -13,8 +13,8 @@ import type { State } from '@/src/utils/federated-sign-in';
 import content from '@/src/content/content';
 import { LoadingSpinner } from '@/src/components/LoadingSpinner/LoadingSpinner';
 
-const POLLING_INTERVAL_MS = 25;
-const MAX_POLL_DURATION_MS = 10_000;
+const POLLING_INTERVAL_MS = 500;
+const MAX_POLL_DURATION_MS = 20_000;
 
 function redirectFromStateQuery(searchParams: ReadonlyURLSearchParams): State {
   const stateQuery = searchParams.get('state');
