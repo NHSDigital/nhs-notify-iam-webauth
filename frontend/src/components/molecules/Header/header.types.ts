@@ -1,4 +1,4 @@
-export type HeaderType = {
+export interface HeaderType {
   className?: string;
   dataTestId?: string;
-};
+}

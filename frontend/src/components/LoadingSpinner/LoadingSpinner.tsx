@@ -1,6 +1,6 @@
 import styles from './LoadingSpinner.module.scss';
 
-export function LoadingSpinner({ text }: { text: string }) {
+export function LoadingSpinner({ text }: Readonly<{ text: string }>) {
   return (
     <div className={styles['nhsuk-loader']}>
       <span className={styles['nhsuk-loader__spinner']} />

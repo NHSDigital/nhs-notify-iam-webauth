@@ -3,9 +3,9 @@ import { Button } from 'nhsuk-react-components';
 
 export function CIS2SignInButton({
   onClick,
-}: {
+}: Readonly<{
   onClick: MouseEventHandler<HTMLButtonElement>;
-}) {
+}>) {
   return (
     <Button
       alt='Log in with my Care Identity'

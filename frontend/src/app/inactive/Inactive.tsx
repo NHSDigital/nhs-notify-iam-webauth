@@ -2,14 +2,14 @@
 
 import React from 'react';
 import { Button } from 'nhsuk-react-components';
-import { SignOut } from '@/src/components/molecules/SignOut/SignOut';
 import { useSearchParams } from 'next/navigation';
+import { SignOut } from '@/src/components/molecules/SignOut/SignOut';
 import content from '@/src/content/content';
 
 export default function Inactive() {
   const {
-    pages: { inactivePage },
     components: { headerComponent },
+    pages: { inactivePage },
   } = content;
 
   const searchParams = useSearchParams().toString();

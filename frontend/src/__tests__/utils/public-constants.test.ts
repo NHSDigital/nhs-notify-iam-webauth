@@ -1,10 +1,10 @@
 import { getConstants } from '@/src/utils/public-constants';
 
-type TestCase = {
+interface TestCase {
   name: string;
   env: string;
   defaultValue: string;
-};
+}
 
 const testCases: TestCase[] = [
   { name: 'BASE_PATH', env: 'NEXT_PUBLIC_BASE_PATH', defaultValue: '/auth' },

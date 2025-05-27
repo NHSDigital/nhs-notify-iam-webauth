@@ -1,6 +1,6 @@
 import { mockDeep } from 'jest-mock-extended';
 import { render } from '@testing-library/react';
-import { useAuthenticator, UseAuthenticator } from '@aws-amplify/ui-react';
+import { UseAuthenticator, useAuthenticator } from '@aws-amplify/ui-react';
 import { signOut } from '@aws-amplify/auth';
 import JsCookie from 'js-cookie';
 import { SignOut } from '@/src/components/molecules/SignOut/SignOut';

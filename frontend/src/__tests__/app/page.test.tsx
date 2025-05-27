@@ -2,7 +2,7 @@ import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { UseAuthenticator, useAuthenticator } from '@aws-amplify/ui-react';
 import JsCookie from 'js-cookie';
-import { redirect, RedirectType } from 'next/navigation';
+import { RedirectType, redirect } from 'next/navigation';
 import { mockDeep } from 'jest-mock-extended';
 import { federatedSignIn } from '@/src/utils/federated-sign-in';
 import SignInPage from '@/src/app/page';

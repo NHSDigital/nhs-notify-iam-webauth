@@ -4,7 +4,7 @@ import { HeaderType } from './header.types';
 import styles from './Header.module.scss';
 import { AuthLink } from '../AuthLink/AuthLink';
 
-export function NHSNotifyHeader({ dataTestId }: HeaderType) {
+export function NHSNotifyHeader({ dataTestId }: Readonly<HeaderType>) {
   return (
     <header
       className='nhsuk-header'
@@ -20,7 +20,7 @@ export function NHSNotifyHeader({ dataTestId }: HeaderType) {
         <div className='nhsuk-header__logo'>
           <a
             className='nhsuk-header__link nhsuk-header__link--service'
-            href={`${content.components.headerComponent.serviceLink}`}
+            href={content.components.headerComponent.serviceLink}
             aria-label='NHS homepage'
           >
             <svg

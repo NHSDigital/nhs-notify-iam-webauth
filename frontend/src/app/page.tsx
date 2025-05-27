@@ -1,10 +1,10 @@
 'use client';
 
 import React, { Suspense, useEffect } from 'react';
-import { redirect, RedirectType, useSearchParams } from 'next/navigation';
+import { RedirectType, redirect, useSearchParams } from 'next/navigation';
 import { Authenticator, useAuthenticator } from '@aws-amplify/ui-react';
 import JsCookie from 'js-cookie';
-import path from 'path';
+import path from 'node:path';
 import { federatedSignIn } from '@/src/utils/federated-sign-in';
 import { CIS2SignInButton } from '@/src/components/CIS2SignInButton/CIS2SignInButton';
 import content from '@/src/content/content';

@@ -1,7 +1,7 @@
 import { formatTime } from '../utils/format-time';
 import { getConstants } from '../utils/public-constants';
 
-const { TIME_TILL_LOGOUT_SECONDS, BASE_PATH } = getConstants();
+const { BASE_PATH, TIME_TILL_LOGOUT_SECONDS } = getConstants();
 
 const generateMetaTitle = (title: string) => ({
   title: `${title} - Create and submit templates - NHS Notify`,

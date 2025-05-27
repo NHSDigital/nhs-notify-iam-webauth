@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { act, render } from '@testing-library/react';
 import { getCurrentUser } from '@aws-amplify/auth';
 import CIS2CallbackPage from '@/src/app/oauth2/page';

@@ -32,7 +32,7 @@ describe('formatTime', () => {
     },
   ])(
     'should return $expected for $remainingTime seconds',
-    ({ remainingTime, expected }) => {
+    ({ expected, remainingTime }) => {
       expect(formatTime(remainingTime)).toBe(expected);
     }
   );
