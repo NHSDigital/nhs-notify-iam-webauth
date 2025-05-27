@@ -19,9 +19,11 @@
 | <a name="input_group"></a> [group](#input\_group) | The group variables are being inherited from (often synonmous with account short-name) | `string` | n/a | yes |
 | <a name="input_initial_cli_secrets_provision_override"></a> [initial\_cli\_secrets\_provision\_override](#input\_initial\_cli\_secrets\_provision\_override) | A map of default value to intialise SSM secret values with. Only useful for initial setup of the account due to lifecycle rules. | `map(string)` | `{}` | no |
 | <a name="input_kms_deletion_window"></a> [kms\_deletion\_window](#input\_kms\_deletion\_window) | When a kms key is deleted, how long should it wait in the pending deletion state? | `string` | `"30"` | no |
+| <a name="input_kms_deletion_window_test"></a> [kms\_deletion\_window\_test](#input\_kms\_deletion\_window\_test) | When a kms key is deleted, how long should it wait in the pending deletion state? | `string` | `"30"` | no |
 | <a name="input_log_retention_in_days"></a> [log\_retention\_in\_days](#input\_log\_retention\_in\_days) | The retention period in days for the Cloudwatch Logs events to be retained, default of 0 is indefinite | `number` | `0` | no |
 | <a name="input_oam_sink_id"></a> [oam\_sink\_id](#input\_oam\_sink\_id) | The ID of the Cloudwatch OAM sink in the appropriate observability account. | `string` | `""` | no |
 | <a name="input_observability_account_id"></a> [observability\_account\_id](#input\_observability\_account\_id) | The Observability Account ID that needs access | `string` | n/a | yes |
+| <a name="input_observability_environment"></a> [observability\_environment](#input\_observability\_environment) | The Observability environment to use | `string` | `"main"` | no |
 | <a name="input_project"></a> [project](#input\_project) | The name of the tfscaffold project | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | The AWS Region | `string` | n/a | yes |
 | <a name="input_root_domain_name"></a> [root\_domain\_name](#input\_root\_domain\_name) | The service's root DNS root nameespace, like nonprod.nhsnotify.national.nhs.uk | `string` | `"nonprod.nhsnotify.national.nhs.uk"` | no |
