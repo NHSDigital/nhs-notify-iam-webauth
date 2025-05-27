@@ -1,11 +1,11 @@
 import { z } from 'zod';
-import { logger } from '@/src/utils/logger';
-import { getParameter, putParameter } from '@/src/utils/aws/ssm-util';
+import { logger } from '@/utils/logger';
+import { getParameter, putParameter } from '@/utils/aws/ssm-util';
 
 const schemaFor =
   <Output, Input = Output>() =>
-  <S extends z.ZodType<Output, z.ZodTypeDef, Input>>(schema: S) =>
-    schema;
+    <S extends z.ZodType<Output, z.ZodTypeDef, Input>>(schema: S) =>
+      schema;
 
 export type SigningKeyMetaData = {
   kid: string;

@@ -1,14 +1,14 @@
-import { getParameter } from '@/src/utils/aws/ssm-util';
-import { generateKey, getPublicKey } from '@/src/utils/key-util';
-import { getKeyTags } from '@/src/utils/aws/tag-util';
-import { createKmsKey, getKmsPublicKey } from '@/src/utils/aws/kms-util';
-import { KMS_NO_OP_ERRORS } from '@/src/utils/constants';
+import { getParameter } from '@/utils/aws/ssm-util';
+import { generateKey, getPublicKey } from '@/utils/key-util';
+import { getKeyTags } from '@/utils/aws/tag-util';
+import { createKmsKey, getKmsPublicKey } from '@/utils/aws/kms-util';
+import { KMS_NO_OP_ERRORS } from '@/utils/constants';
 
-jest.mock('@/src/utils/logger');
-jest.mock('@/src/utils/aws/ssm-util');
-jest.mock('@/src/utils/aws/tag-util');
-jest.mock('@/src/utils/aws/kms-util');
-jest.mock('@/src/utils/constants');
+jest.mock('@/utils/logger');
+jest.mock('@/utils/aws/ssm-util');
+jest.mock('@/utils/aws/tag-util');
+jest.mock('@/utils/aws/kms-util');
+jest.mock('@/utils/constants');
 
 describe('key-util', () => {
   const OLD_ENV = { ...process.env };
@@ -122,7 +122,7 @@ describe('key-util', () => {
       // arrange
       const mockGetKmsPublicKey = jest.mocked(getKmsPublicKey);
 
-      class TestError1 extends Error {}
+      class TestError1 extends Error { }
 
       (jest.mocked(KMS_NO_OP_ERRORS) as Array<unknown>).push(TestError1);
 

@@ -1,9 +1,9 @@
 import { readFileSync } from 'node:fs';
-import { updateJwksFile } from '@/src/utils/jwks-util';
-import { writeJsonToFile } from '@/src/utils/aws/s3-util';
+import { updateJwksFile } from '@/utils/jwks-util';
+import { writeJsonToFile } from '@/utils/aws/s3-util';
 
-jest.mock('@/src/utils/aws/s3-util');
-jest.mock('@/src/utils/logger');
+jest.mock('@/utils/aws/s3-util');
+jest.mock('@/utils/logger');
 
 const TEST_PUBLIC_KEY_FILE_1 = 'src/__tests__/utils/test-public-key-1.der.bin';
 const TEST_PUBLIC_KEY_FILE_2 = 'src/__tests__/utils/test-public-key-2.der.bin';

@@ -1,10 +1,10 @@
-import concatClassNames from '@/src/utils/concat-class-names';
-import content from '@/src/content/content';
-import { HeaderType } from './header.types';
-import styles from './Header.module.scss';
-import { AuthLink } from '../AuthLink/AuthLink';
+import concatClassNames from '@/utils/concat-class-names';
+import content from '@/content/content';
+import { HeaderType } from '@/components/molecules/Header/header.types';
+import styles from '@/components/molecules/Header/Header.module.scss';
+import AuthLink from '@/components/molecules/AuthLink/AuthLink';
 
-export function NHSNotifyHeader({ dataTestId }: Readonly<HeaderType>) {
+export default function NHSNotifyHeader({ dataTestId }: Readonly<HeaderType>) {
   return (
     <header
       className='nhsuk-header'

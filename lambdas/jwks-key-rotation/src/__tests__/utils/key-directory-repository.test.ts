@@ -1,11 +1,11 @@
 import {
   getKeyDirectory,
   writeKeyDirectory,
-} from '@/src/utils/key-directory-repository';
-import { getParameter, putParameter } from '@/src/utils/aws/ssm-util';
+} from '@/utils/key-directory-repository';
+import { getParameter, putParameter } from '@/utils/aws/ssm-util';
 
-jest.mock('@/src/utils/aws/ssm-util');
-jest.mock('@/src/utils/logger');
+jest.mock('@/utils/aws/ssm-util');
+jest.mock('@/utils/logger');
 
 const mockKeyDirectory = [
   { createdDate: '2025-04-01', kid: '00000000-0000-0000-0000-000000000000' },

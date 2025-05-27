@@ -3,8 +3,8 @@
 import React from 'react';
 import { Button } from 'nhsuk-react-components';
 import { useSearchParams } from 'next/navigation';
-import { SignOut } from '@/src/components/molecules/SignOut/SignOut';
-import content from '@/src/content/content';
+import SignOut from '@/components/molecules/SignOut/SignOut';
+import content from '@/content/content';
 
 export default function Inactive() {
   const {

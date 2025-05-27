@@ -1,9 +1,9 @@
 import { CreateKeyCommand, KeySpec, KeyUsageType } from '@aws-sdk/client-kms';
-import { getKeyTags } from '@/src/utils/aws/tag-util';
-import { createKmsKey, getKmsPublicKey } from '@/src/utils/aws/kms-util';
-import { getParameter } from '@/src/utils/aws/ssm-util';
-import { logger } from '@/src/utils/logger';
-import { KMS_NO_OP_ERRORS } from '@/src/utils/constants';
+import { getKeyTags } from '@/utils/aws/tag-util';
+import { createKmsKey, getKmsPublicKey } from '@/utils/aws/kms-util';
+import { getParameter } from '@/utils/aws/ssm-util';
+import { logger } from '@/utils/logger';
+import { KMS_NO_OP_ERRORS } from '@/utils/constants';
 
 async function getKeyPolicy(): Promise<string> {
   const ssmResult = await getParameter(process.env.SSM_ASYMMETRIC_KEY_POLICY);

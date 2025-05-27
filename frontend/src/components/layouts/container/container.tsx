@@ -1,4 +1,4 @@
-export function NHSNotifyContainer({
+export default function NHSNotifyContainer({
   children,
 }: Readonly<{
   children: React.ReactNode;

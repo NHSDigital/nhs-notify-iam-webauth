@@ -1,7 +1,7 @@
 import { createPublicKey } from 'node:crypto';
 import { JWK } from 'node-jose';
-import { writeJsonToFile } from '@/src/utils/aws/s3-util';
-import { logger } from '@/src/utils/logger';
+import { writeJsonToFile } from '@/utils/aws/s3-util';
+import { logger } from '@/utils/logger';
 
 const ALGORITHM_RSA_512 = 'RS512';
 const KEY_USE_SIGNING = 'sig';

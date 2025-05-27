@@ -4,7 +4,7 @@ import {
   PutParameterCommand,
   SSMClient,
 } from '@aws-sdk/client-ssm';
-import { logger } from '@/src/utils/logger';
+import { logger } from '@/utils/logger';
 
 const ssmClient = new SSMClient({
   region: process.env.REGION,

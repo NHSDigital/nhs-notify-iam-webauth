@@ -4,7 +4,7 @@ import {
   KMSClient,
   ScheduleKeyDeletionCommand,
 } from '@aws-sdk/client-kms';
-import { logger } from '@/src/utils/logger';
+import { logger } from '@/utils/logger';
 
 const kmsClient = new KMSClient({
   region: process.env.REGION,

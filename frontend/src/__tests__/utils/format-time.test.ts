@@ -1,4 +1,4 @@
-import { formatTime } from '@/src/utils/format-time';
+import { formatTime } from '@/utils/format-time';
 
 describe('formatTime', () => {
   test.each([

@@ -1,4 +1,4 @@
-import { logger } from '../../utils/logger';
+import { logger } from '@/utils/logger';
 
 test('logger - should produce a logger', () => {
   expect(logger.info).toBeTruthy();

@@ -1,5 +1,5 @@
-import { formatTime } from '../utils/format-time';
-import { getConstants } from '../utils/public-constants';
+import { formatTime } from '@/utils/format-time';
+import { getConstants } from '@/utils/public-constants';
 
 const { BASE_PATH, TIME_TILL_LOGOUT_SECONDS } = getConstants();
 

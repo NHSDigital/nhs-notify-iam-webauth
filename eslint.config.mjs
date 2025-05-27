@@ -3,6 +3,7 @@ import jest from 'eslint-plugin-jest';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
 import prettierRecommended from 'eslint-plugin-prettier/recommended';
 import * as eslintImportResolverTypescript from 'eslint-import-resolver-typescript';
+import noRelativeImportPaths from 'eslint-plugin-no-relative-import-paths';
 import react from 'eslint-plugin-react';
 import security from 'eslint-plugin-security';
 import sonarjs from 'eslint-plugin-sonarjs';
@@ -187,6 +188,7 @@ export default defineConfig([
     },
   },
 
+  // imports
   {
     rules: {
       'sort-imports': [
@@ -195,6 +197,21 @@ export default defineConfig([
           ignoreDeclarationSort: true,
         },
       ],
+      'import-x/extensions': 0,
+    },
+  },
+  {
+    files: ['**/utils/**'],
+    rules: {
+      'import-x/prefer-default-export': 0,
+    },
+  },
+  {
+    plugins: {
+      'no-relative-import-paths': noRelativeImportPaths,
+    },
+    rules: {
+      'no-relative-import-paths/no-relative-import-paths': 2,
     },
   },
 ]);

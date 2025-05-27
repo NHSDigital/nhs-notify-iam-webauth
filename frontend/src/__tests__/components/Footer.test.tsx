@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { NHSNotifyFooter } from '@/src/components/molecules/Footer/Footer';
+import NHSNotifyFooter from '@/components/molecules/Footer/Footer';
 
 interface FooterLinkSpec {
   testId: string;

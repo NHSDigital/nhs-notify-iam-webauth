@@ -1,8 +1,8 @@
-import content from '@/src/content/content';
+import content from '@/content/content';
 
 const footerContent = content.components.footer;
 
-export function NHSNotifyFooter() {
+export default function NHSNotifyFooter() {
   return (
     <footer role='contentinfo' data-testid='page-footer'>
       <div className='nhsuk-footer-container'>

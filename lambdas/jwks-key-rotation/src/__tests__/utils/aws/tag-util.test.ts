@@ -1,4 +1,4 @@
-import { getKeyTags } from '@/src/utils/aws/tag-util';
+import { getKeyTags } from '@/utils/aws/tag-util';
 
 describe('tag-util', () => {
   const OLD_ENV = { ...process.env };

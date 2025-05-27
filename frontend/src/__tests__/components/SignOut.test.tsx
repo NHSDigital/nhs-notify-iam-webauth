@@ -3,7 +3,7 @@ import { render } from '@testing-library/react';
 import { UseAuthenticator, useAuthenticator } from '@aws-amplify/ui-react';
 import { signOut } from '@aws-amplify/auth';
 import JsCookie from 'js-cookie';
-import { SignOut } from '@/src/components/molecules/SignOut/SignOut';
+import SignOut from '@/components/molecules/SignOut/SignOut';
 
 jest.mock('@aws-amplify/ui-react', () => ({
   useAuthenticator: jest.fn(() =>

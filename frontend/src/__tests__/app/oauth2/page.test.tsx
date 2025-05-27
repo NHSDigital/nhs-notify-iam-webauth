@@ -1,6 +1,6 @@
 import { act, render } from '@testing-library/react';
 import { getCurrentUser } from '@aws-amplify/auth';
-import CIS2CallbackPage from '@/src/app/oauth2/page';
+import CIS2CallbackPage from '@/app/oauth2/page';
 
 const mockRouter = {
   replace: jest.fn(),

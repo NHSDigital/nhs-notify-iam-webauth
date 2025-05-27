@@ -1,4 +1,4 @@
-import { getParameter, putParameter } from '@/src/utils/aws/ssm-util';
+import { getParameter, putParameter } from '@/utils/aws/ssm-util';
 import {
   GetParameterCommand,
   PutParameterCommand,
@@ -8,7 +8,7 @@ import {
 jest.mock('@aws-sdk/client-ssm', () => ({
   ...jest.requireActual('@aws-sdk/client-ssm'),
 }));
-jest.mock('@/src/utils/logger');
+jest.mock('@/utils/logger');
 
 describe('ssm-util', () => {
   describe('getParameter', () => {

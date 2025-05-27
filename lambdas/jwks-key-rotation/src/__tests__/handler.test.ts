@@ -1,22 +1,22 @@
-import { handler } from '@/src/handler';
+import { handler } from '@/handler';
 import { Context, EventBridgeEvent, Callback } from 'aws-lambda';
 import {
   getKeyDirectory,
   SigningKeyDirectory,
   writeKeyDirectory,
-} from '@/src/utils/key-directory-repository';
-import { generateKey, getPublicKey } from '@/src/utils/key-util';
-import { updateJwksFile } from '@/src/utils/jwks-util';
-import { deleteKey } from '@/src/utils/aws/kms-util';
+} from '@/utils/key-directory-repository';
+import { generateKey, getPublicKey } from '@/utils/key-util';
+import { updateJwksFile } from '@/utils/jwks-util';
+import { deleteKey } from '@/utils/aws/kms-util';
 
-jest.mock('@/src/utils/key-directory-repository', () => ({
-  ...jest.requireActual('@/src/utils/key-directory-repository'),
+jest.mock('@/utils/key-directory-repository', () => ({
+  ...jest.requireActual('@/utils/key-directory-repository'),
   getKeyDirectory: jest.fn(),
   writeKeyDirectory: jest.fn(),
 }));
-jest.mock('@/src/utils/key-util');
-jest.mock('@/src/utils/jwks-util');
-jest.mock('@/src/utils/aws/kms-util');
+jest.mock('@/utils/key-util');
+jest.mock('@/utils/jwks-util');
+jest.mock('@/utils/aws/kms-util');
 
 describe('handler', () => {
   describe('perform key rotation (generate new KMS key, update public jwks file, update key directory and delete old keys)', () => {
@@ -24,7 +24,7 @@ describe('handler', () => {
       // arrange
       const mockEvent = {} as EventBridgeEvent<'Scheduled Event', unknown>;
       const mockContext = {} as Context;
-      const mockCallback = (() => {}) as Callback;
+      const mockCallback = (() => { }) as Callback;
       const mockKeyDirectory: SigningKeyDirectory = [];
       const mockPublicKey = Uint8Array.from([1, 2, 3]);
       const todayFormatted = new Date().toISOString().split('T')[0];
@@ -62,7 +62,7 @@ describe('handler', () => {
       // arrange
       const mockEvent = {} as EventBridgeEvent<'Scheduled Event', unknown>;
       const mockContext = {} as Context;
-      const mockCallback = (() => {}) as Callback;
+      const mockCallback = (() => { }) as Callback;
       const startOfMonth = new Date();
       startOfMonth.setDate(1);
 
@@ -118,7 +118,7 @@ describe('handler', () => {
       // arrange
       const mockEvent = {} as EventBridgeEvent<'Scheduled Event', unknown>;
       const mockContext = {} as Context;
-      const mockCallback = (() => {}) as Callback;
+      const mockCallback = (() => { }) as Callback;
       const startOfMonth = new Date();
       startOfMonth.setDate(1);
 
@@ -189,7 +189,7 @@ describe('handler', () => {
       // arrange
       const mockEvent = {} as EventBridgeEvent<'Scheduled Event', unknown>;
       const mockContext = {} as Context;
-      const mockCallback = (() => {}) as Callback;
+      const mockCallback = (() => { }) as Callback;
       const todayFormatted = new Date().toISOString().split('T')[0];
       const mockKeyDirectory: SigningKeyDirectory = [
         {

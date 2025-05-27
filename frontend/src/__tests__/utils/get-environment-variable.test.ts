@@ -1,4 +1,4 @@
-import { getEnvironmentVariable } from '../../utils/get-environment-variable';
+import { getEnvironmentVariable } from '@/utils/get-environment-variable';
 
 test('throws on missing environment variable', () => {
   delete process.env.TEST_VAR;
