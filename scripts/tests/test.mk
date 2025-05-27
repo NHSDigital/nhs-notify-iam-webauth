@@ -48,6 +48,9 @@ test-security: # Run your security tests from scripts/test/security @Testing
 test-ui: # Run your UI tests from scripts/test/ui @Testing
 	make _test name="ui"
 
+test-backend: # Run your backend tests from scripts/test/backend @Testing
+	make _test name="backend"
+
 test-ui-performance: # Run UI render tests from scripts/test/ui-performance @Testing
 	make _test name="ui-performance"
 
@@ -59,6 +62,7 @@ test: # Run all the test tasks @Testing
 		test-contract \
 		test-security \
 		test-ui \
+		test-backend \
 		test-ui-performance \
 		test-integration \
 		test-accessibility \
@@ -87,5 +91,6 @@ ${VERBOSE}.SILENT: \
 	test-response-time \
 	test-security \
 	test-ui \
+	test-backend \
 	test-ui-performance \
 	test-unit \
