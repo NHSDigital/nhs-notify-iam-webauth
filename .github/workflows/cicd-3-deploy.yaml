@@ -8,6 +8,10 @@ on:
         required: true
         default: "latest"
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   metadata:
     name: "Set CI/CD metadata"
