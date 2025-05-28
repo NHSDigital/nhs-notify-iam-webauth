@@ -4,7 +4,7 @@ import amplifyOutputs from '@/amplify_outputs.json';
 
 export type State = {
   redirectPath: string;
-};;
+};
 
 export function federatedSignIn(redirectPath: string) {
   const providers = amplifyOutputs.auth?.oauth?.identity_providers || [];

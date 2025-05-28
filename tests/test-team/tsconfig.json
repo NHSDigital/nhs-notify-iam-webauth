@@ -5,7 +5,8 @@
     "baseUrl": ".",
     "paths": {
       "helpers/*": ["./helpers/*"],
-      "pages/*": ["./pages/*"]
+      "pages/*": ["./pages/*"],
+      "config/*": ["./config/*"]
     }
   }
 }

@@ -24,7 +24,7 @@ describe('handler', () => {
       // arrange
       const mockEvent = {} as EventBridgeEvent<'Scheduled Event', unknown>;
       const mockContext = {} as Context;
-      const mockCallback = (() => { }) as Callback;
+      const mockCallback = (() => {}) as Callback;
       const mockKeyDirectory: SigningKeyDirectory = [];
       const mockPublicKey = Uint8Array.from([1, 2, 3]);
       const todayFormatted = new Date().toISOString().split('T')[0];
@@ -62,7 +62,7 @@ describe('handler', () => {
       // arrange
       const mockEvent = {} as EventBridgeEvent<'Scheduled Event', unknown>;
       const mockContext = {} as Context;
-      const mockCallback = (() => { }) as Callback;
+      const mockCallback = (() => {}) as Callback;
       const startOfMonth = new Date();
       startOfMonth.setDate(1);
 
@@ -118,7 +118,7 @@ describe('handler', () => {
       // arrange
       const mockEvent = {} as EventBridgeEvent<'Scheduled Event', unknown>;
       const mockContext = {} as Context;
-      const mockCallback = (() => { }) as Callback;
+      const mockCallback = (() => {}) as Callback;
       const startOfMonth = new Date();
       startOfMonth.setDate(1);
 
@@ -189,7 +189,7 @@ describe('handler', () => {
       // arrange
       const mockEvent = {} as EventBridgeEvent<'Scheduled Event', unknown>;
       const mockContext = {} as Context;
-      const mockCallback = (() => { }) as Callback;
+      const mockCallback = (() => {}) as Callback;
       const todayFormatted = new Date().toISOString().split('T')[0];
       const mockKeyDirectory: SigningKeyDirectory = [
         {

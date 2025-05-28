@@ -14,6 +14,7 @@
     "@playwright/test": "^1.51.1",
     "@tsconfig/node20": "^20.1.5",
     "@types/uuid": "^10.0.0",
-    "generate-password": "^1.7.1"
+    "generate-password": "^1.7.1",
+    "uuid": "^11.1.0"
   }
 }
