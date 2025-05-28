@@ -1,22 +1,22 @@
-import { handler } from '@/handler';
-import { Context, EventBridgeEvent, Callback } from 'aws-lambda';
+import { Callback, Context, EventBridgeEvent } from 'aws-lambda';
+import { handler } from '@/src/handler';
 import {
-  getKeyDirectory,
   SigningKeyDirectory,
+  getKeyDirectory,
   writeKeyDirectory,
-} from '@/utils/key-directory-repository';
-import { generateKey, getPublicKey } from '@/utils/key-util';
-import { updateJwksFile } from '@/utils/jwks-util';
-import { deleteKey } from '@/utils/aws/kms-util';
+} from '@/src/utils/key-directory-repository';
+import { generateKey, getPublicKey } from '@/src/utils/key-util';
+import { updateJwksFile } from '@/src/utils/jwks-util';
+import { deleteKey } from '@/src/utils/aws/kms-util';
 
-jest.mock('@/utils/key-directory-repository', () => ({
-  ...jest.requireActual('@/utils/key-directory-repository'),
+jest.mock('@/src/utils/key-directory-repository', () => ({
+  ...jest.requireActual('@/src/utils/key-directory-repository'),
   getKeyDirectory: jest.fn(),
   writeKeyDirectory: jest.fn(),
 }));
-jest.mock('@/utils/key-util');
-jest.mock('@/utils/jwks-util');
-jest.mock('@/utils/aws/kms-util');
+jest.mock('@/src/utils/key-util');
+jest.mock('@/src/utils/jwks-util');
+jest.mock('@/src/utils/aws/kms-util');
 
 describe('handler', () => {
   describe('perform key rotation (generate new KMS key, update public jwks file, update key directory and delete old keys)', () => {

@@ -1,11 +1,11 @@
 import { render, screen } from '@testing-library/react';
 import NHSNotifyFooter from '@/components/molecules/Footer/Footer';
 
-interface FooterLinkSpec {
+type FooterLinkSpec = {
   testId: string;
   text: string;
   href: string;
-}
+};
 
 const expectedFooterLinks: [string, FooterLinkSpec][] = [
   [

@@ -1,8 +1,8 @@
-import type { APIGatewayProxyEvent, Context, Callback } from 'aws-lambda';
+import type { APIGatewayProxyEvent, Callback, Context } from 'aws-lambda';
 import { mockDeep } from 'jest-mock-extended';
 import { sign } from 'jsonwebtoken';
 import axios from 'axios';
-import { handler, validateStatus, type Cis2IdToken } from '../token-handler';
+import { type Cis2IdToken, handler, validateStatus } from '@/src/token-handler';
 
 const OLD_ENV = { ...process.env };
 
@@ -185,7 +185,7 @@ test('403 with invalid auth_time', async () => {
 });
 
 test('passes with valid user attributes', async () => {
-  const { axiosResponse, axiosPostMock, response } = await setup({
+  const { axiosPostMock, axiosResponse, response } = await setup({
     id_assurance_level: 3,
     authentication_assurance_level: 2,
     auth_time: new Date('2022-01-01 09:00').getTime() / 1000,

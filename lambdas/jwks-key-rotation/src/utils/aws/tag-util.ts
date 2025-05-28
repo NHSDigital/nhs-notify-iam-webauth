@@ -4,7 +4,7 @@ import { Tag } from '@aws-sdk/client-kms';
 const commaSeparatedMatcher = /^(?:[\w =-]+,?)*$/;
 const parameterMatcher = /^([\w -])+=([\w -])+$/;
 
-export function getKeyTags(): Array<Tag> {
+export function getKeyTags(): Tag[] {
   const commaSeparatedKeyTags: string = process.env.KEY_TAGS || '';
   if (!commaSeparatedMatcher.test(commaSeparatedKeyTags)) {
     throw new Error(`Invalid tags ${commaSeparatedKeyTags}`);

@@ -1,4 +1,4 @@
-import { extractStringRecord } from '@/utils/extract-string-record';
+import { extractStringRecord } from '@/src/utils/extract-string-record';
 
 test('converts object to string record', () => {
   const input = {

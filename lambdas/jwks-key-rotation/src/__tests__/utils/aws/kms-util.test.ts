@@ -1,18 +1,18 @@
 import {
+  CreateKeyCommand,
+  GetPublicKeyCommand,
+  KMSClient,
+  KeySpec,
+  KeyUsageType,
+  ScheduleKeyDeletionCommand,
+} from '@aws-sdk/client-kms';
+import {
   createKmsKey,
   deleteKey,
   getKmsPublicKey,
-} from '@/utils/aws/kms-util';
-import {
-  CreateKeyCommand,
-  GetPublicKeyCommand,
-  KeySpec,
-  KeyUsageType,
-  KMSClient,
-  ScheduleKeyDeletionCommand,
-} from '@aws-sdk/client-kms';
+} from '@/src/utils/aws/kms-util';
 
-jest.mock('@/utils/logger');
+jest.mock('@/src/utils/logger');
 jest.mock('@aws-sdk/client-kms', () => ({
   ...jest.requireActual('@aws-sdk/client-kms'),
 }));

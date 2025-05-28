@@ -1,7 +1,7 @@
 import { createPublicKey } from 'node:crypto';
 import { JWK } from 'node-jose';
-import { writeJsonToFile } from '@/utils/aws/s3-util';
-import { logger } from '@/utils/logger';
+import { writeJsonToFile } from '@/src/utils/aws/s3-util';
+import { logger } from '@/src/utils/logger';
 
 const ALGORITHM_RSA_512 = 'RS512';
 const KEY_USE_SIGNING = 'sig';
@@ -36,7 +36,7 @@ async function generateJwksFormat(
 }
 
 export async function updateJwksFile(
-  publicKeys: Array<{ keyId: string; publicKey: Uint8Array }>
+  publicKeys: { keyId: string; publicKey: Uint8Array }[]
 ): Promise<void> {
   const publicKeysArray = await Promise.all(
     publicKeys.map((keyMetadata) =>

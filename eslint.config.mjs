@@ -45,15 +45,9 @@ export default defineConfig([
   // tseslint.configs.recommendedTypeChecked,
   tseslint.configs.strictTypeChecked,
   tseslint.configs.stylisticTypeChecked,
+  airbnbConfigs.base.typescript,
+  airbnbPlugins.typescriptEslint,
 
-  // {
-  //   languageOptions: {
-  //     parserOptions: {
-  //       projectService: true,
-  //       tsconfigRootDir: import.meta.dirname,
-  //     },
-  //   },
-  // },
 
   // {
   //   files: ['**/*.ts', '**/*.tsx'],
@@ -68,10 +62,18 @@ export default defineConfig([
 
   {
     settings: {
-      'import-x/resolver': {
-        name: 'tsResolver',
-        resolver: eslintImportResolverTypescript,
+      'import-x/resolver-next': [
+        eslintImportResolverTypescript.createTypeScriptImportResolver({
+          project: [
+            'tests/test-team/tsconfig.json',
+            'frontend/tsconfig.json',
+            'utils/logger/tsconfig.json',
+          ],
+          alias: {
+            '@': ['/frontend/src'],
       },
+        }),
+      ],
     },
   },
 
@@ -84,10 +86,9 @@ export default defineConfig([
           varsIgnorePattern: '^_',
         },
       ],
+      '@typescript-eslint/consistent-type-definitions': [0],
     },
   },
-  airbnbConfigs.base.typescript,
-  airbnbPlugins.typescriptEslint,
 
   // unicorn
   unicorn.configs['recommended'],

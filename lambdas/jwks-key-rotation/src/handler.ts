@@ -1,13 +1,13 @@
-/* eslint-disable unicorn/no-array-reduce, unicorn/prefer-at */
+/* eslint-disable import-x/prefer-default-export */
 import type { ScheduledHandler } from 'aws-lambda';
 import {
-  getKeyDirectory,
   SigningKeyDirectory,
+  getKeyDirectory,
   writeKeyDirectory,
-} from '@/utils/key-directory-repository';
-import { generateKey, getPublicKey } from '@/utils/key-util';
-import { updateJwksFile } from '@/utils/jwks-util';
-import { deleteKey } from '@/utils/aws/kms-util';
+} from '@/src/utils/key-directory-repository';
+import { generateKey, getPublicKey } from '@/src/utils/key-util';
+import { updateJwksFile } from '@/src/utils/jwks-util';
+import { deleteKey } from '@/src/utils/aws/kms-util';
 
 const keyLifetimeDays = Number.parseInt(
   process.env.KEY_LIFETIME_DAYS ?? '28',
@@ -27,6 +27,7 @@ function getKeysToDelete(
   }
 
   keyDirectory.sort((a, b) => a.createdDate.localeCompare(b.createdDate));
+  // eslint-disable-next-line unicorn/prefer-at
   const latestKey = keyDirectory[keyDirectory.length - 1];
   const cutOffDate = formattedDate(-keyLifetimeMillis);
   // Delete any keys that are suffiently old whilst ensuring that we retain the latest key.
@@ -39,8 +40,9 @@ function getKeysToDelete(
   );
 }
 
+/* eslint-disable unicorn/no-array-reduce */
 function buildPublicKeyMap(
-  publicKeys: Array<{ keyId: string; publicKey?: Uint8Array }>
+  publicKeys: { keyId: string; publicKey?: Uint8Array }[]
 ) {
   return publicKeys
     .filter((publicKeyMetadata) => !!publicKeyMetadata.publicKey)
@@ -52,6 +54,7 @@ function buildPublicKeyMap(
       {} as Record<string, Uint8Array>
     );
 }
+/* eslint-enable unicorn/no-array-reduce */
 
 export const handler: ScheduledHandler = async () => {
   // Get the existing key directory
@@ -87,7 +90,7 @@ export const handler: ScheduledHandler = async () => {
   );
 
   // Generate new public key file
-  const publicKeysArray: Array<{ keyId: string; publicKey: Uint8Array }> =
+  const publicKeysArray: { keyId: string; publicKey: Uint8Array }[] =
     newKeyDirectory.map((keyMetadata) => ({
       keyId: keyMetadata.kid,
       publicKey: validPublicKeyMap[keyMetadata.kid],
