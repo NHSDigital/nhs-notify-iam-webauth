@@ -1,3 +1,5 @@
+/* eslint-disable no-console, @typescript-eslint/no-require-imports */
+
 const {
   CognitoIdentityProviderClient,
   AdminGetUserCommand,
@@ -23,9 +25,13 @@ const convertUserToCSV = (user) => {
 };
 
 exports.handler = async (event) => {
-  const { userPoolId } = event.detail.requestParameters;
-  const userName = event.detail.additionalEventData.sub;
+  if (process.env.AUDIT_EVENTS) {
+    console.log(event);
+  }
+
+  const userPoolId = process.env.COGNITO_POOL_ID;
   const bucketName = process.env.S3_BUCKET_NAME;
+  const userName = event.detail.additionalEventData.sub;
 
   const deleteEvents = ['DeleteUser', 'AdminDeleteUser'];
 
