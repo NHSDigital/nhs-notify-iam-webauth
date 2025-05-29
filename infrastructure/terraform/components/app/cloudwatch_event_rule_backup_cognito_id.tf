@@ -8,9 +8,7 @@ resource "aws_cloudwatch_event_rule" "backup_cognito_id" {
     "source" : ["aws.cognito-idp"],
     "detail-type" : ["AWS API Call via CloudTrail"],
     "detail" : {
-      "requestParameters" : {
-        "userPoolId" : ["${aws_cognito_user_pool.main.id}"]
-      },
+      "eventSource": ["cognito-idp.amazonaws.com"],
       "eventName" : [
         "AddCustomAttributes",
         "AdminAddUserToGroup",
@@ -24,7 +22,7 @@ resource "aws_cloudwatch_event_rule" "backup_cognito_id" {
         "AdminSetUserSettings",
         "AdminUpdateUserAttributes",
         "DeleteUserAttributes",
-        "OAuth2_Authorize_GET",
+        "InitiateAuth",
         "RespondToAuthChallenge",
         "SetUserSettings",
         "UpdateUserAttributes",

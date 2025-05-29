@@ -36,6 +36,11 @@
 | <a name="output_cognito_user_pool_id"></a> [cognito\_user\_pool\_id](#output\_cognito\_user\_pool\_id) | n/a |
 | <a name="output_csrf_secret"></a> [csrf\_secret](#output\_csrf\_secret) | n/a |
 | <a name="output_deployment"></a> [deployment](#output\_deployment) | Deployment details used for post-deployment scripts |
+| <a name="output_group_tag"></a> [group\_tag](#output\_group\_tag) | n/a |
+| <a name="output_key_directory_ssm_parameter_name"></a> [key\_directory\_ssm\_parameter\_name](#output\_key\_directory\_ssm\_parameter\_name) | n/a |
+| <a name="output_key_rotation_lambda_name"></a> [key\_rotation\_lambda\_name](#output\_key\_rotation\_lambda\_name) | n/a |
+| <a name="output_name_tag"></a> [name\_tag](#output\_name\_tag) | n/a |
+| <a name="output_public_keys_s3_bucket_name"></a> [public\_keys\_s3\_bucket\_name](#output\_public\_keys\_s3\_bucket\_name) | n/a |
 | <a name="output_redirect_domain"></a> [redirect\_domain](#output\_redirect\_domain) | n/a |
 | <a name="output_signout_redirect_domain"></a> [signout\_redirect\_domain](#output\_signout\_redirect\_domain) | n/a |
 <!-- vale on -->

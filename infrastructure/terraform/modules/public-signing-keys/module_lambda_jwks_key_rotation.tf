@@ -43,9 +43,9 @@ module "lambda_jwks_key_rotation" {
     "S3_PUBLIC_KEYS_BUCKET_NAME" = module.s3bucket_public_signing_keys.bucket
   }
 
-  send_to_firehose               = var.send_to_firehose
-  log_destination_arn = var.log_destination_arn
-  log_subscription_role_arn      = var.log_subscription_role_arn
+  send_to_firehose          = var.send_to_firehose
+  log_destination_arn       = var.log_destination_arn
+  log_subscription_role_arn = var.log_subscription_role_arn
 }
 
 data "aws_iam_policy_document" "lambda_jwks_key_rotation" {

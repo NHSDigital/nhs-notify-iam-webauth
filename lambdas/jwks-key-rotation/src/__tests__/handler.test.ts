@@ -2,6 +2,7 @@ import { Callback, Context, EventBridgeEvent } from 'aws-lambda';
 import { handler } from '@/src/handler';
 import {
   SigningKeyDirectory,
+  filterKeyDirectoryToActiveKeys,
   getKeyDirectory,
   writeKeyDirectory,
 } from '@/src/utils/key-directory-repository';
@@ -12,6 +13,7 @@ import { deleteKey } from '@/src/utils/aws/kms-util';
 jest.mock('@/src/utils/key-directory-repository', () => ({
   ...jest.requireActual('@/src/utils/key-directory-repository'),
   getKeyDirectory: jest.fn(),
+  filterKeyDirectoryToActiveKeys: jest.fn(),
   writeKeyDirectory: jest.fn(),
 }));
 jest.mock('@/src/utils/key-util');
@@ -30,11 +32,17 @@ describe('handler', () => {
       const todayFormatted = new Date().toISOString().split('T')[0];
 
       const mockedGetKeyDirectory = jest.mocked(getKeyDirectory);
+      const mockedFilterKeyDirectoryToActiveKeys = jest.mocked(
+        filterKeyDirectoryToActiveKeys
+      );
       const mockedGenerateKey = jest.mocked(generateKey);
       const mockedGetPublicKey = jest.mocked(getPublicKey);
       const mockedWriteKeyDirectory = jest.mocked(writeKeyDirectory);
 
       mockedGetKeyDirectory.mockImplementation(() =>
+        Promise.resolve(mockKeyDirectory)
+      );
+      mockedFilterKeyDirectoryToActiveKeys.mockImplementation(() =>
         Promise.resolve(mockKeyDirectory)
       );
       mockedGenerateKey.mockImplementation(() =>
@@ -48,6 +56,9 @@ describe('handler', () => {
       await handler(mockEvent, mockContext, mockCallback);
 
       // assert
+      expect(mockedFilterKeyDirectoryToActiveKeys).toHaveBeenCalledWith(
+        mockKeyDirectory
+      );
       expect(mockedGenerateKey).toHaveBeenCalled();
       expect(updateJwksFile).toHaveBeenCalledWith([
         { keyId: 'new-test-key-id', publicKey: mockPublicKey },
@@ -78,11 +89,17 @@ describe('handler', () => {
       const mockPublicKey = Uint8Array.from([1, 2, 3]);
 
       const mockedGetKeyDirectory = jest.mocked(getKeyDirectory);
+      const mockedFilterKeyDirectoryToActiveKeys = jest.mocked(
+        filterKeyDirectoryToActiveKeys
+      );
       const mockedGenerateKey = jest.mocked(generateKey);
       const mockedGetPublicKey = jest.mocked(getPublicKey);
       const mockedWriteKeyDirectory = jest.mocked(writeKeyDirectory);
 
       mockedGetKeyDirectory.mockImplementation(() =>
+        Promise.resolve(mockKeyDirectory)
+      );
+      mockedFilterKeyDirectoryToActiveKeys.mockImplementation(() =>
         Promise.resolve(mockKeyDirectory)
       );
       mockedGenerateKey.mockImplementation(() =>
@@ -96,6 +113,9 @@ describe('handler', () => {
       await handler(mockEvent, mockContext, mockCallback);
 
       // assert
+      expect(mockedFilterKeyDirectoryToActiveKeys).toHaveBeenCalledWith(
+        mockKeyDirectory
+      );
       expect(mockedGenerateKey).toHaveBeenCalled();
       expect(updateJwksFile).toHaveBeenCalledWith([
         {
@@ -146,11 +166,17 @@ describe('handler', () => {
       const mockPublicKey = Uint8Array.from([1, 2, 3]);
 
       const mockedGetKeyDirectory = jest.mocked(getKeyDirectory);
+      const mockedFilterKeyDirectoryToActiveKeys = jest.mocked(
+        filterKeyDirectoryToActiveKeys
+      );
       const mockedGenerateKey = jest.mocked(generateKey);
       const mockedGetPublicKey = jest.mocked(getPublicKey);
       const mockedWriteKeyDirectory = jest.mocked(writeKeyDirectory);
 
       mockedGetKeyDirectory.mockImplementation(() =>
+        Promise.resolve(mockKeyDirectory)
+      );
+      mockedFilterKeyDirectoryToActiveKeys.mockImplementation(() =>
         Promise.resolve(mockKeyDirectory)
       );
       mockedGenerateKey.mockImplementation(() =>
@@ -164,6 +190,9 @@ describe('handler', () => {
       await handler(mockEvent, mockContext, mockCallback);
 
       // assert
+      expect(mockedFilterKeyDirectoryToActiveKeys).toHaveBeenCalledWith(
+        mockKeyDirectory
+      );
       expect(mockedGenerateKey).toHaveBeenCalled();
       expect(updateJwksFile).toHaveBeenCalledWith([
         {
@@ -208,11 +237,17 @@ describe('handler', () => {
       const mockPublicKey = Uint8Array.from([1, 2, 3]);
 
       const mockedGetKeyDirectory = jest.mocked(getKeyDirectory);
+      const mockedFilterKeyDirectoryToActiveKeys = jest.mocked(
+        filterKeyDirectoryToActiveKeys
+      );
       const mockedGenerateKey = jest.mocked(generateKey);
       const mockedGetPublicKey = jest.mocked(getPublicKey);
       const mockedWriteKeyDirectory = jest.mocked(writeKeyDirectory);
 
       mockedGetKeyDirectory.mockImplementation(() =>
+        Promise.resolve(mockKeyDirectory)
+      );
+      mockedFilterKeyDirectoryToActiveKeys.mockImplementation(() =>
         Promise.resolve(mockKeyDirectory)
       );
       mockedGenerateKey.mockImplementation(() =>
@@ -226,6 +261,9 @@ describe('handler', () => {
       await handler(mockEvent, mockContext, mockCallback);
 
       // assert
+      expect(mockedFilterKeyDirectoryToActiveKeys).toHaveBeenCalledWith(
+        mockKeyDirectory
+      );
       expect(mockedGenerateKey).toHaveBeenCalled();
       expect(updateJwksFile).toHaveBeenCalledWith([
         {

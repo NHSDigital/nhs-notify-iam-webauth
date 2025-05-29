@@ -9,11 +9,11 @@ module "kms_sandbox" {
   project        = var.project
   region         = var.region
 
-  name            = "sandbox"
-  deletion_window = var.kms_deletion_window
-  alias           = "alias/${local.csi}-sandbox"
+  name                 = "sandbox"
+  deletion_window      = var.kms_deletion_window
+  alias                = "alias/${local.csi}-sandbox"
   key_policy_documents = [data.aws_iam_policy_document.kms_sandbox.json]
-  iam_delegation  = true
+  iam_delegation       = true
 }
 
 data "aws_iam_policy_document" "kms_sandbox" {
