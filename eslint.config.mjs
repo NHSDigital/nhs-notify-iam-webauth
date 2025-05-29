@@ -2,6 +2,7 @@
 import jest from 'eslint-plugin-jest';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
 import prettierRecommended from 'eslint-plugin-prettier/recommended';
+import { importX } from 'eslint-plugin-import-x';
 import * as eslintImportResolverTypescript from 'eslint-import-resolver-typescript';
 import noRelativeImportPaths from 'eslint-plugin-no-relative-import-paths';
 import react from 'eslint-plugin-react';
@@ -35,19 +36,36 @@ const compat = new FlatCompat({
 export default defineConfig([
   globalIgnores(['**/*/coverage/*', '**/.build', '**/node_modules', '**/dist']),
 
+  //imports
+  importX.flatConfigs.recommended,
+  { rules: { ...airbnbPlugins.importX.rules } },
+
   // js
   js.configs.recommended,
   airbnbPlugins.stylistic,
-  airbnbPlugins.importX,
   airbnbConfigs.base.recommended,
 
   // ts
-  // tseslint.configs.recommendedTypeChecked,
   tseslint.configs.strictTypeChecked,
   tseslint.configs.stylisticTypeChecked,
   airbnbConfigs.base.typescript,
   airbnbPlugins.typescriptEslint,
 
+  {
+    languageOptions: {
+      parserOptions: {
+        // project: [
+        //   'tests/test-team/tsconfig.json',
+        //   'frontend/tsconfig.json',
+        //   'utils/logger/tsconfig.json',
+        //   'lambdas/cis2-api/tsconfig.json',
+        //   'lambdas/jwks-key-rotation/tsconfig.json',
+        // ],
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+  },
 
   // {
   //   files: ['**/*.ts', '**/*.tsx'],
@@ -56,6 +74,15 @@ export default defineConfig([
   //     parserOptions: {
   //       projectService: true,
   //       tsconfigRootDir: import.meta.dirname,
+  //     },
+  //   },
+  // },
+
+  // {
+  //   settings: {
+  //     'import-x/resolver': {
+  //       name: 'tsResolver',
+  //       resolver: eslintImportResolverTypescript,
   //     },
   //   },
   // },
@@ -71,7 +98,7 @@ export default defineConfig([
           ],
           alias: {
             '@': ['/frontend/src'],
-      },
+          },
         }),
       ],
     },
@@ -199,6 +226,28 @@ export default defineConfig([
         },
       ],
       'import-x/extensions': 0,
+      // 'import-x/no-extraneous-dependencies': [
+      //   2,
+      //   {
+      //     devDependencies: [
+      //       'tests/test-team/**',
+      //       '**/__tests__/**',
+      //       '**/*.test.tsx',
+      //       '**/*.test.ts',
+      //     ],
+      //   },
+      // ],
+    },
+  },
+  {
+    files: ['tests/test-team/**'],
+    rules: {
+      'import-x/no-extraneous-dependencies': [
+        2,
+        {
+          devDependencies: true,
+        },
+      ],
     },
   },
   {
