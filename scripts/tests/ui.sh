@@ -4,7 +4,7 @@ set -euo pipefail
 
 cd "$(git rev-parse --show-toplevel)"
 
-npx playwright install --with-deps > /dev/null
+npx playwright install --with-deps
 
 cd tests/test-team
 
