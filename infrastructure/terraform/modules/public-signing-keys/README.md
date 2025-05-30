@@ -41,7 +41,11 @@
 | <a name="module_s3bucket_public_signing_keys"></a> [s3bucket\_public\_signing\_keys](#module\_s3bucket\_public\_signing\_keys) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/s3bucket | v1.0.9 |
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_key_directory_ssm_parameter_name"></a> [key\_directory\_ssm\_parameter\_name](#output\_key\_directory\_ssm\_parameter\_name) | n/a |
+| <a name="output_key_rotation_lambda_name"></a> [key\_rotation\_lambda\_name](#output\_key\_rotation\_lambda\_name) | n/a |
+| <a name="output_public_keys_s3_bucket_name"></a> [public\_keys\_s3\_bucket\_name](#output\_public\_keys\_s3\_bucket\_name) | n/a |
 <!-- vale on -->
 <!-- markdownlint-enable -->
 <!-- END_TF_DOCS -->
