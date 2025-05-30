@@ -25,6 +25,9 @@ afterAll(() => {
   process.env = OLD_ENV;
 });
 
+const mockEventBody =
+  'grant_type=test_grant&client_id=test&redirect_uri=https%3A%2F%2Ftest.nhs.uk%2Foauth2%2Fidpresponse';
+
 const setup = async (jwtPayload: Cis2IdToken) => {
   const jwt = sign(jwtPayload, 'test');
 
@@ -33,7 +36,7 @@ const setup = async (jwtPayload: Cis2IdToken) => {
   };
 
   const event = mockDeep<APIGatewayProxyEvent>({
-    body: 'event-body',
+    body: mockEventBody,
   });
 
   const axiosPostMock = jest.mocked(axios).post.mockResolvedValue({
@@ -57,7 +60,7 @@ test('fails with lambda misconfiguration', async () => {
   process.env.EXPECTED_AUTHENTICATION_ASSURANCE_LEVEL = '';
 
   const event = mockDeep<APIGatewayProxyEvent>({
-    body: 'event-body',
+    body: mockEventBody,
   });
 
   await expect(() =>
@@ -69,7 +72,7 @@ test('fails with lambda misconfiguration 2', async () => {
   process.env.EXPECTED_ID_ASSURANCE_LEVEL = '';
 
   const event = mockDeep<APIGatewayProxyEvent>({
-    body: 'event-body',
+    body: mockEventBody,
   });
 
   await expect(() =>
@@ -98,7 +101,7 @@ test('returns without running checks if CIS2 returns non-200 response', async ()
   const axiosResponse = 'Bad request';
 
   const event = mockDeep<APIGatewayProxyEvent>({
-    body: 'event-body',
+    body: mockEventBody,
   });
 
   const axiosPostMock = jest.mocked(axios).post.mockResolvedValue({
@@ -117,7 +120,7 @@ test('returns without running checks if CIS2 returns non-200 response', async ()
 
   expect(axiosPostMock).toHaveBeenCalledWith(
     'cis2-url/access_token',
-    'event-body',
+    mockEventBody,
     expect.anything()
   );
 
@@ -139,7 +142,7 @@ test('403 with invalid id_assurance_level', async () => {
 
   expect(axiosPostMock).toHaveBeenCalledWith(
     'cis2-url/access_token',
-    'event-body',
+    mockEventBody,
     expect.anything()
   );
   expect(response).toEqual({
@@ -157,7 +160,7 @@ test('403 with invalid authentication_assurance_level', async () => {
 
   expect(axiosPostMock).toHaveBeenCalledWith(
     'cis2-url/access_token',
-    'event-body',
+    mockEventBody,
     expect.anything()
   );
   expect(response).toEqual({
@@ -175,7 +178,7 @@ test('403 with invalid auth_time', async () => {
 
   expect(axiosPostMock).toHaveBeenCalledWith(
     'cis2-url/access_token',
-    'event-body',
+    mockEventBody,
     expect.anything()
   );
   expect(response).toEqual({
@@ -193,7 +196,7 @@ test('passes with valid user attributes', async () => {
 
   expect(axiosPostMock).toHaveBeenCalledWith(
     'cis2-url/access_token',
-    'event-body',
+    mockEventBody,
     expect.anything()
   );
   expect(response).toEqual({
