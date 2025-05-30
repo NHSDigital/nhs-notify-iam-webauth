@@ -1,4 +1,4 @@
-/* eslint-disable no-await-in-loop, no-plusplus, unicorn/consistent-function-scoping */
+/* eslint-disable no-await-in-loop, no-plusplus, unicorn/consistent-function-scoping, no-restricted-syntax */
 
 export function sleep(millis: number) {
   return new Promise<void>((resolve) => {
@@ -27,16 +27,16 @@ export async function poll(
 }
 
 export async function batchPromises<T>(
-  asyncFunctions: Array<() => Promise<T>>,
+  asyncFunctions: (() => Promise<T>)[],
   batchSize: number
-): Promise<Array<T>> {
+): Promise<T[]> {
   const batches = [];
 
   for (let i = 0; i < asyncFunctions.length; i += batchSize) {
     const batch = asyncFunctions.slice(i, i + batchSize);
 
     const batchExecutor = async () => {
-      const results: Array<T> = [];
+      const results: T[] = [];
       for (const job of batch) {
         const result = await job();
         results.push(result);

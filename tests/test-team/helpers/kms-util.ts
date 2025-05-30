@@ -1,9 +1,9 @@
-/* eslint-disable no-await-in-loop, unicorn/no-array-for-each, unicorn/no-array-reduce, dot-notation */
+/* eslint-disable no-await-in-loop, unicorn/no-array-for-each, no-underscore-dangle */
 import {
   DescribeKeyCommand,
   GetPublicKeyCommand,
-  KeyState,
   KMSClient,
+  KeyState,
   ListKeysCommand,
   ListKeysCommandOutput,
   ListResourceTagsCommand,
@@ -32,10 +32,10 @@ async function getKeyState(
   return { keyId, state: keyDetails?.KeyMetadata?.KeyState };
 }
 
-async function listAllEnabledKeyIds(): Promise<Array<string>> {
+async function listAllEnabledKeyIds(): Promise<string[]> {
   let truncated = false;
   let marker;
-  const allKeyIds: Array<string> = [];
+  const allKeyIds: string[] = [];
   do {
     const keysBatch: ListKeysCommandOutput = await kmsClient.send(
       new ListKeysCommand({
@@ -65,7 +65,7 @@ async function listAllEnabledKeyIds(): Promise<Array<string>> {
 async function getKeyTags(
   keyId: string
 ): Promise<{ keyId: string; tags: Record<string, string> }> {
-  const tags: Array<Tag> = await kmsClient
+  const tags: Tag[] = await kmsClient
     .send(
       new ListResourceTagsCommand({
         KeyId: keyId,
@@ -73,21 +73,16 @@ async function getKeyTags(
     )
     .then((response) => response.Tags || [])
     .catch((error) => {
-      if (error['__type'] === 'AccessDeniedException') {
+      if (error.__type === 'AccessDeniedException') {
         return [];
       }
       throw error;
     });
 
-  const tagMap = tags.reduce(
-    (acc, tag) => {
-      const key = tag.TagKey || 'unknown';
-      const value = tag.TagValue || '';
-      acc[key] = value;
-      return acc;
-    },
-    {} as Record<string, string>
+  const tagMap: Record<string, string> = Object.fromEntries(
+    tags.map(({ TagKey, TagValue }) => [TagKey ?? 'unknown', TagValue ?? ''])
   );
+
   return { keyId, tags: tagMap };
 }
 
@@ -102,7 +97,7 @@ async function deleteKey(keyId: string): Promise<void> {
       })
     )
     .catch((error) => {
-      if (error['__type'] === 'KMSInvalidStateException') {
+      if (error.__type === 'KMSInvalidStateException') {
         return;
       }
       throw error;

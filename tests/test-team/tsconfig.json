@@ -1,6 +1,7 @@
 {
   "extends": "@tsconfig/node20/tsconfig.json",
-  "include": ["**/*.ts"],
+  "include": ["**/*.ts", "*.json", "jest.config.ts"],
+  "exclude": ["test-results/*", "playwright-report/*"],
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {

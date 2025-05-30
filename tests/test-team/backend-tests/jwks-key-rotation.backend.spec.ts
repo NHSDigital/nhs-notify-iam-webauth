@@ -1,4 +1,4 @@
-/* eslint-disable no-await-in-loop, no-plusplus */
+/* eslint-disable no-await-in-loop, no-plusplus, no-restricted-syntax */
 import { expect, test } from '@playwright/test';
 import { deleteAllKeysForTags, getKmsPublicKey } from '../helpers/kms-util';
 import { getParameter, putParameter } from '../helpers/ssm-util';
@@ -15,6 +15,51 @@ const keyDirectorySsmParameterName =
   process.env.KEY_DIRECTORY_SSM_PARAMETER_NAME || 'unknown';
 const usageTag = 'CIS2-JWKS-AUTH';
 
+const runGenerateKeyTest = async (keyCount: number) => {
+  // arrange
+  const today = new Date().toISOString().split('T')[0];
+
+  // act
+  // Invoke the key rotation lambda
+  for (let i = 0; i < keyCount; i++) {
+    await invokeLambda(keyRotationLambdaName);
+  }
+
+  // assert
+  const jwksFileResponse = await readFile('jwks', publicKeysS3BucketName);
+  const jwksFileBody = (await jwksFileResponse.Body?.transformToString()) || '';
+  const jwksPublicKeys = await parseJwksPublicSigningKeys(jwksFileBody);
+  const jwksKeyIds = jwksPublicKeys.map((publicKey) => publicKey.kid);
+
+  const keyDirectoryContent = await getParameter(keyDirectorySsmParameterName);
+  const keyDirectory = JSON.parse(keyDirectoryContent) as {
+    kid: string;
+    createdDate: string;
+  }[];
+
+  // Verify the contents of the JWKS public keys file in S3
+  expect(jwksFileResponse.ContentType).toEqual('application/json');
+  expect(jwksPublicKeys.length).toBe(keyCount);
+
+  for (const publicKey of jwksPublicKeys) {
+    expect(publicKey.use).toBe('sig');
+    expect(publicKey.alg).toBe('RS512');
+  }
+
+  // Verify the contents of the key directory
+  expect(keyDirectory.length).toEqual(jwksPublicKeys.length);
+  for (const keyEntry of keyDirectory) {
+    expect(jwksKeyIds.filter((keyId) => keyEntry.kid === keyId).length).toBe(1);
+    expect(keyEntry.createdDate).toBe(today);
+  }
+
+  // Verify the existance of the keys in KMS
+  const kmsPublicKeys = await Promise.all(
+    jwksKeyIds.map((keyId) => getKmsPublicKey(keyId))
+  );
+  expect(kmsPublicKeys.length).toEqual(jwksPublicKeys.length);
+};
+
 test.describe('jwks-key-rotation', () => {
   test.beforeEach(async () => {
     // Delete any existing KMS key rotation keys for the environment
@@ -28,58 +73,13 @@ test.describe('jwks-key-rotation', () => {
     await deleteAllKeysForTags(nameTag, groupTag, usageTag);
   });
 
-  for (const { keyCount, description } of [
-    { keyCount: 1, description: 'first' },
-    { keyCount: 2, description: 'second' },
-  ])
-    test(`should generate ${description} key`, async () => {
-      // arrange
-      const today = new Date().toISOString().split('T')[0];
+  test('should generate first key', async () => {
+    await runGenerateKeyTest(1);
+  });
 
-      // act
-      // Invoke the key rotation lambda
-      for (let i = 0; i < keyCount; i++) {
-        await invokeLambda(keyRotationLambdaName);
-      }
-
-      // assert
-      const jwksFileResponse = await readFile('jwks', publicKeysS3BucketName);
-      const jwksFileBody =
-        (await jwksFileResponse.Body?.transformToString()) || '';
-      const jwksPublicKeys = await parseJwksPublicSigningKeys(jwksFileBody);
-      const jwksKeyIds = jwksPublicKeys.map((publicKey) => publicKey.kid);
-
-      const keyDirectoryContent = await getParameter(
-        keyDirectorySsmParameterName
-      );
-      const keyDirectory = JSON.parse(keyDirectoryContent) as Array<{
-        kid: string;
-        createdDate: string;
-      }>;
-
-      // Verify the contents of the JWKS public keys file in S3
-      expect(jwksFileResponse.ContentType).toEqual('application/json');
-      expect(jwksPublicKeys.length).toBe(keyCount);
-      for (const publicKey of jwksPublicKeys) {
-        expect(publicKey.use).toBe('sig');
-        expect(publicKey.alg).toBe('RS512');
-      }
-
-      // Verify the contents of the key directory
-      expect(keyDirectory.length).toEqual(jwksPublicKeys.length);
-      for (const keyEntry of keyDirectory) {
-        expect(
-          jwksKeyIds.filter((keyId) => keyEntry.kid === keyId).length
-        ).toBe(1);
-        expect(keyEntry.createdDate).toBe(today);
-      }
-
-      // Verify the existance of the keys in KMS
-      const kmsPublicKeys = await Promise.all(
-        jwksKeyIds.map((keyId) => getKmsPublicKey(keyId))
-      );
-      expect(kmsPublicKeys.length).toEqual(jwksPublicKeys.length);
-    });
+  test('should generate second key', async () => {
+    await runGenerateKeyTest(2);
+  });
 
   test('should trim out expired keys', async () => {
     // arrange

@@ -72,9 +72,9 @@ const config: Config = {
   ],
 
   // Set the absolute path for imports
-  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
+  moduleNameMapper: { '@amplify_outputs': '<rootDir>/jestamplify_outputs.json', ...pathsToModuleNameMapper(compilerOptions.paths, {
     prefix: '<rootDir>/',
-  }),
+  }) },
 
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
 };

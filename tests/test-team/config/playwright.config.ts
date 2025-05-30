@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/prefer-module */
 import path from 'node:path';
 import { defineConfig } from '@playwright/test';
 

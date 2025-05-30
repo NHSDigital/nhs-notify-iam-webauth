@@ -1,4 +1,3 @@
-/* eslint-disable import-x/prefer-default-export */
 import type { ScheduledHandler } from 'aws-lambda';
 import {
   SigningKeyDirectory,

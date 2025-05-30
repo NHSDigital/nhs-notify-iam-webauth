@@ -33,6 +33,7 @@ export default defineConfig({
       'html',
       {
         outputFolder: path.resolve(
+          // eslint-disable-next-line unicorn/prefer-module
           __dirname,
           '../../playwright-report-component-tests'
         ),
@@ -43,6 +44,7 @@ export default defineConfig({
   /* Run your local dev server before starting the tests */
   webServer: {
     command: 'npm run build && npm run start',
+    // eslint-disable-next-line unicorn/prefer-module
     cwd: path.resolve(__dirname, '../../..'),
     url: 'http://localhost:3000/auth',
     reuseExistingServer: !process.env.CI,

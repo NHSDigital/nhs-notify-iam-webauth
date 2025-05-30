@@ -4,7 +4,8 @@ import React, { Suspense, useEffect } from 'react';
 import { RedirectType, redirect, useSearchParams } from 'next/navigation';
 import { Authenticator, useAuthenticator } from '@aws-amplify/ui-react';
 import JsCookie from 'js-cookie';
-import path from 'node:path';
+// this is not node:path, this is an npm module
+import path from 'path'; // eslint-disable-line unicorn/prefer-node-protocol
 import { authenticatorSelector } from '@/utils/authenticator-selector';
 import { federatedSignIn } from '@/utils/federated-sign-in';
 import CIS2SignInButton from '@/components/CIS2SignInButton/CIS2SignInButton';

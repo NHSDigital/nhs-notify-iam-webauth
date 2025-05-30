@@ -15,6 +15,7 @@ export class AmplifyConfigurationHelper {
   constructor() {
     this.configuration = JSON.parse(
       fs.readFileSync(
+        // eslint-disable-next-line unicorn/prefer-module
         path.resolve(__dirname, '../../../frontend/amplify_outputs.json'),
         'utf8'
       )

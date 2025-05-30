@@ -1,4 +1,3 @@
-/* eslint-disable import-x/prefer-default-export */
 import type { APIGatewayProxyHandler } from 'aws-lambda';
 import { extractStringRecord } from '@/src/utils/extract-string-record';
 

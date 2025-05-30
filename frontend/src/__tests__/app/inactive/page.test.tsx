@@ -3,7 +3,8 @@ import { ReadonlyURLSearchParams, useSearchParams } from 'next/navigation';
 import InactivePage from '@/app/inactive/page';
 
 jest.mock('@/components/molecules/SignOut/SignOut', () => ({
-  SignOut: ({ children }: { children: React.ReactNode }) => children,
+  __esModule: true,
+  default: ({ children }: { children: React.ReactNode }) => children,
 }));
 
 jest.mock('next/navigation', () => ({

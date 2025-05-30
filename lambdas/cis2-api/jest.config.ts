@@ -4,9 +4,16 @@
  */
 
 import type { Config } from 'jest';
+import { pathsToModuleNameMapper } from 'ts-jest';
+import { compilerOptions } from './tsconfig.json';
 
 const config: Config = {
   preset: 'ts-jest',
+
+  // Set the absolute path for imports
+  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
+    prefix: '<rootDir>/',
+  }),
 
   // Automatically clear mock calls, instances, contexts and results before every test
   clearMocks: true,
