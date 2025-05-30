@@ -3,6 +3,7 @@
   "include": [
     "src/*",
     "src/**/*",
-    "../backend-config/src/backend-config.ts"
+    "*.json",
+    "jest.config.ts"
   ]
 }

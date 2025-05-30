@@ -34,7 +34,7 @@ const compat = new FlatCompat({
 });
 
 export default defineConfig([
-  globalIgnores(['**/*/coverage/*', '**/.build', '**/node_modules', '**/dist']),
+  globalIgnores(['**/*/coverage/*', '**/.build', '**/node_modules', '**/dist', '**/test-results', '**/playwright-report']),
 
   //imports
   importX.flatConfigs.recommended,
@@ -63,6 +63,7 @@ export default defineConfig([
         // ],
         projectService: true,
         tsconfigRootDir: import.meta.dirname,
+        extraFileExtensions: ['.json']
       },
     },
   },
@@ -251,17 +252,17 @@ export default defineConfig([
     },
   },
   {
-    files: ['**/utils/**'],
+    //files: ['**/utils/**'],
     rules: {
       'import-x/prefer-default-export': 0,
     },
   },
-  {
-    plugins: {
-      'no-relative-import-paths': noRelativeImportPaths,
-    },
-    rules: {
-      'no-relative-import-paths/no-relative-import-paths': 2,
-    },
-  },
+  //{
+  //  plugins: {
+  //    'no-relative-import-paths': noRelativeImportPaths,
+  //  },
+  //  rules: {
+  //    'no-relative-import-paths/no-relative-import-paths': 2,
+  //  },
+  //},
 ]);

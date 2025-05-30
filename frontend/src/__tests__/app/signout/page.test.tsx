@@ -2,7 +2,8 @@ import { render, screen, waitFor } from '@testing-library/react';
 import SignOutPage from '@/app/signout/page';
 
 jest.mock('@/components/molecules/SignOut/SignOut', () => ({
-  SignOut: ({ children }: { children: React.ReactNode }) => children,
+  __esModule: true,
+  default: ({ children }: { children: React.ReactNode }) => children,
 }));
 
 describe('Signout Page', () => {

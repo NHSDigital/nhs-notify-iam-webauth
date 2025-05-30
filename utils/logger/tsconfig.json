@@ -1,9 +1,10 @@
 {
   "extends": "@tsconfig/node20/tsconfig.json",
-  "include": ["src/*", "src/**/*"],
+  "include": ["src/*", "src/**/*", "*.json", "jest.config.ts"],
   "compilerOptions": {
     "paths": {
       "@/*": ["./*"]
-    }
+    },
+    "resolveJsonModule": true
   }
 }

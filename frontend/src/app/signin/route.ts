@@ -1,4 +1,3 @@
-/* eslint-disable import-x/prefer-default-export */
 'use server';
 
 import { cookies } from 'next/headers';

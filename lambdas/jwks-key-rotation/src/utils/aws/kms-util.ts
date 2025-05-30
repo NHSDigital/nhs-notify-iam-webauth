@@ -2,8 +2,8 @@ import {
   CreateKeyCommand,
   DescribeKeyCommand,
   GetPublicKeyCommand,
-  KeyState,
   KMSClient,
+  KeyState,
   ScheduleKeyDeletionCommand,
 } from '@aws-sdk/client-kms';
 import { logger } from '@/src/utils/logger';

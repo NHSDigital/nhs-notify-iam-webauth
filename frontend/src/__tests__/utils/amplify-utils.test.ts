@@ -12,7 +12,7 @@ jest.mock('next/headers', () => ({
     getAll: jest.fn(),
   }),
 }));
-jest.mock('@/amplify_outputs.json', () => ({
+jest.mock('@amplify_outputs', () => ({
   name: 'mockConfig',
 }));
 

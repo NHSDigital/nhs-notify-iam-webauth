@@ -4,8 +4,8 @@ import { fetchAuthSession } from 'aws-amplify/auth/server';
 import { FetchAuthSessionOptions, JWT } from '@aws-amplify/auth';
 import { jwtDecode } from 'jwt-decode';
 
-// eslint-disable-next-line @typescript-eslint/no-require-imports, import-x/no-unresolved, unicorn/prefer-module
-const config = require('@/amplify_outputs.json');
+// eslint-disable-next-line @typescript-eslint/no-require-imports, unicorn/prefer-module, import-x/no-unresolved
+const config = require('@amplify_outputs');
 
 export const { runWithAmplifyServerContext } = createServerRunner({
   config,

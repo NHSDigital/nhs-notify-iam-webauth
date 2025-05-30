@@ -1,6 +1,7 @@
 import { signInWithRedirect } from '@aws-amplify/auth';
-// eslint-disable-next-line import-x/no-unresolved
-import amplifyOutputs from '@/amplify_outputs.json';
+
+// eslint-disable-next-line @typescript-eslint/no-require-imports, unicorn/prefer-module, import-x/no-unresolved
+const amplifyOutputs = require('@amplify_outputs');
 
 export type State = {
   redirectPath: string;

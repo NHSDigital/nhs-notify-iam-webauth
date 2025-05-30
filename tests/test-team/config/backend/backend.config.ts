@@ -26,6 +26,7 @@ export default defineConfig({
       'html',
       {
         outputFolder: path.resolve(
+          // eslint-disable-next-line unicorn/prefer-module
           __dirname,
           '../../playwright-report-backend-tests'
         ),

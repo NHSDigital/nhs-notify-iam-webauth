@@ -7,8 +7,8 @@ import NHSNotifyContainer from '@/components/layouts/container/container';
 import NHSNotifyHeader from '@/components/molecules/Header/Header';
 import NHSNotifyFooter from '@/components/molecules/Footer/Footer';
 
-// eslint-disable-next-line import-x/no-unresolved
-import amplifyConfig from '@/amplify_outputs.json';
+// eslint-disable-next-line @typescript-eslint/no-require-imports, unicorn/prefer-module, import-x/no-unresolved, import-x/no-unresolved
+const amplifyConfig = require('@amplify_outputs');
 
 Amplify.configure(amplifyConfig, { ssr: true });
 
