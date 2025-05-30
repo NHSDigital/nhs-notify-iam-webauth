@@ -26,6 +26,8 @@ module "token_lambda" {
     EXPECTED_AUTHENTICATION_ASSURANCE_LEVEL       = "2"
     MAXIMUM_EXPECTED_AUTH_TIME_DIVERGENCE_SECONDS = "60"
     CIS2_URL                                      = var.cis2_url
+    CIS2_AUTH_MODE                                = var.cis2_auth_mode
+    SSM_KEY_DIRECTORY_NAME                        = var.ssm_key_directory_name
   }
 
   function_s3_bucket      = var.function_s3_bucket
