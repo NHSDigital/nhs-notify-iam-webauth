@@ -1,8 +1,8 @@
 import { render } from '@testing-library/react';
 import { ReadonlyURLSearchParams, useSearchParams } from 'next/navigation';
-import InactivePage from '../../../app/inactive/page';
+import InactivePage from '@/app/inactive/page';
 
-jest.mock('../../../components/molecules/SignOut/SignOut', () => ({
+jest.mock('@/components/molecules/SignOut/SignOut', () => ({
   SignOut: ({ children }: { children: React.ReactNode }) => children,
 }));
 

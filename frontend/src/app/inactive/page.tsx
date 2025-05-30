@@ -1,7 +1,7 @@
 import React from 'react';
 import { Metadata } from 'next';
-import content from '@/src/content/content';
-import Inactive from './Inactive';
+import content from '@/content/content';
+import Inactive from '@/app/inactive/Inactive';
 
 const {
   pages: {

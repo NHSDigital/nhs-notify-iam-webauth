@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { NHSNotifyFooter } from '@/src/components/molecules/Footer/Footer';
+import NHSNotifyFooter from '@/components/molecules/Footer/Footer';
 
 type FooterLinkSpec = {
   testId: string;
@@ -7,7 +7,7 @@ type FooterLinkSpec = {
   href: string;
 };
 
-const expectedFooterLinks: Array<[string, FooterLinkSpec]> = [
+const expectedFooterLinks: [string, FooterLinkSpec][] = [
   [
     'acceptable use policy',
     {

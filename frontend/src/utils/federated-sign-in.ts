@@ -1,5 +1,5 @@
 import { signInWithRedirect } from '@aws-amplify/auth';
-// eslint-disable-next-line import/no-unresolved
+// eslint-disable-next-line import-x/no-unresolved
 import amplifyOutputs from '@/amplify_outputs.json';
 
 export type State = {

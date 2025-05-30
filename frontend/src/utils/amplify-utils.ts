@@ -1,13 +1,10 @@
-/* eslint-disable import/no-unresolved,@typescript-eslint/no-require-imports */
-/* eslint-disable unicorn/prefer-module */
-/* eslint-disable @typescript-eslint/no-var-requires */
-/* eslint-disable @typescript-eslint/no-require-imports */
 import { cookies } from 'next/headers';
 import { createServerRunner } from '@aws-amplify/adapter-nextjs';
 import { fetchAuthSession } from 'aws-amplify/auth/server';
 import { FetchAuthSessionOptions, JWT } from '@aws-amplify/auth';
 import { jwtDecode } from 'jwt-decode';
 
+// eslint-disable-next-line @typescript-eslint/no-require-imports, import-x/no-unresolved, unicorn/prefer-module
 const config = require('@/amplify_outputs.json');
 
 export const { runWithAmplifyServerContext } = createServerRunner({
@@ -27,11 +24,11 @@ export async function getAccessTokenServer(
   return session?.tokens?.accessToken?.toString();
 }
 
-export const getSessionId = async () => {
+export const getSessionId = async (): Promise<string | undefined> => {
   const accessToken = await getAccessTokenServer();
 
   if (!accessToken) {
-    return;
+    return undefined;
   }
 
   const jwt = jwtDecode<JWT['payload']>(accessToken);
@@ -39,7 +36,7 @@ export const getSessionId = async () => {
   const sessionId = jwt.origin_jti;
 
   if (!sessionId) {
-    return;
+    return undefined;
   }
 
   return sessionId.toString();

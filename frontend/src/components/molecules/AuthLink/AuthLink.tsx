@@ -2,11 +2,11 @@
 
 import React from 'react';
 import { useAuthenticator } from '@aws-amplify/ui-react';
-import content from '@/src/content/content';
-import styles from './AuthLink.module.scss';
-import { authenticatorSelector } from '../../../utils/authenticator-selector';
+import content from '@/content/content';
+import styles from '@/components/molecules/AuthLink/AuthLink.module.scss';
+import { authenticatorSelector } from '@/utils/authenticator-selector';
 
-export const AuthLink = () => {
+export default function AuthLink() {
   const { authStatus } = useAuthenticator(authenticatorSelector);
 
   let id = 'sign-in-link';
@@ -23,4 +23,4 @@ export const AuthLink = () => {
       </a>
     </div>
   );
-};
+}

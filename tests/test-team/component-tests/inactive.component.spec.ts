@@ -1,8 +1,8 @@
-import { test, expect } from '@playwright/test';
-import { CognitoUserHelper, User } from '../helpers/cognito-user-helper';
-import { IamWebAuthInactivePage } from '../pages/iam-webauth-inactive-page';
-import { getCookies } from '../helpers/cookies';
-import { IamWebAuthSignInPage } from '../pages/iam-webauth-signin-page';
+import { expect, test } from '@playwright/test';
+import { CognitoUserHelper, User } from 'helpers/cognito-user-helper';
+import { IamWebAuthInactivePage } from 'pages/iam-webauth-inactive-page';
+import { getCookies } from 'helpers/cookies';
+import { IamWebAuthSignInPage } from 'pages/iam-webauth-signin-page';
 
 test.describe('Inactive', () => {
   let user: User;
@@ -17,7 +17,7 @@ test.describe('Inactive', () => {
     await cognitoHelper.deleteUser(user.userId);
   });
 
-  test('should sign user out', async ({ page, baseURL }) => {
+  test('should sign user out', async ({ baseURL, page }) => {
     const inactivePage = new IamWebAuthInactivePage(page);
     const signInPage = new IamWebAuthSignInPage(page);
 

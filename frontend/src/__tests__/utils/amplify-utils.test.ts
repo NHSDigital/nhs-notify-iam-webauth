@@ -3,7 +3,7 @@
  */
 import { sign } from 'jsonwebtoken';
 import { fetchAuthSession } from 'aws-amplify/auth/server';
-import { getAccessTokenServer, getSessionId } from '../../utils/amplify-utils';
+import { getAccessTokenServer, getSessionId } from '@/utils/amplify-utils';
 
 jest.mock('aws-amplify/auth/server');
 jest.mock('@aws-amplify/adapter-nextjs/api');

@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import SignOutPage from '../../../app/signout/page';
+import SignOutPage from '@/app/signout/page';
 
-jest.mock('../../../components/molecules/SignOut/SignOut', () => ({
+jest.mock('@/components/molecules/SignOut/SignOut', () => ({
   SignOut: ({ children }: { children: React.ReactNode }) => children,
 }));
 

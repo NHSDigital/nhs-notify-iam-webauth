@@ -1,3 +1,4 @@
+/* eslint-disable security/detect-object-injection */
 export const getEnvironmentVariable = (name: string) => {
   const secret = process.env[name];
 

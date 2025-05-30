@@ -1,7 +1,7 @@
-import { test, expect } from '@playwright/test';
-import { CognitoUserHelper, User } from '../helpers/cognito-user-helper';
-import { IamWebAuthSignInPage } from '../pages/iam-webauth-signin-page';
-import { getCookies } from '../helpers/cookies';
+import { expect, test } from '@playwright/test';
+import { CognitoUserHelper, User } from 'helpers/cognito-user-helper';
+import { IamWebAuthSignInPage } from 'pages/iam-webauth-signin-page';
+import { getCookies } from 'helpers/cookies';
 
 test.describe('SignIn', () => {
   let user: User;
@@ -17,8 +17,8 @@ test.describe('SignIn', () => {
   });
 
   test('should sign user in, then redirect user to redirect path', async ({
-    page,
     baseURL,
+    page,
   }) => {
     const signInPage = new IamWebAuthSignInPage(page);
 
