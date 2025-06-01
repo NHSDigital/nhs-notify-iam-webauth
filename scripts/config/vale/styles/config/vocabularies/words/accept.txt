@@ -2,6 +2,7 @@
 Bitwarden
 bot
 Cognito
+Git[Hh]ub
 Cognito
 config
 Cyber
