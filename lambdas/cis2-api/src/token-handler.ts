@@ -68,6 +68,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     const jwt = await generateJwt(keyId, clientId);
     accessTokenBody.set('client_assertion_type', 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer');
     accessTokenBody.set('client_assertion', jwt);
+    accessTokenBody.delete('client_secret');
   }
 
   console.log(`Sending to ${tokenUrl}, payload ${accessTokenBody.toString()}`);
@@ -78,7 +79,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
       validateStatus,
     }
   );
-  console.log(`Got response ${JSON.stringify(cis2Response)}`);
+  console.log(`Got response ${JSON.stringify({ status: cis2Response.status, headers: cis2Response.headers, data: cis2Response.data })}`);
 
   const { status, headers, data } = cis2Response;
 
