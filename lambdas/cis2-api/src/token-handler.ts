@@ -70,6 +70,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     accessTokenBody.set('client_assertion', jwt);
   }
 
+  console.log(`Sending to ${tokenUrl}, payload ${accessTokenBody.toString()}`);
   const cis2Response = await axios.post<Cis2TokenResponse>(
     tokenUrl,
     accessTokenBody.toString(),
@@ -77,6 +78,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
       validateStatus,
     }
   );
+  console.log(`Got response ${JSON.stringify(cis2Response)}`);
 
   const { status, headers, data } = cis2Response;
 
