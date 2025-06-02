@@ -37,4 +37,21 @@ module "token_lambda" {
   send_to_firehose          = true
   log_destination_arn       = var.log_destination_arn
   log_subscription_role_arn = var.log_subscription_role_arn
+
+  iam_policy_document = {
+    body = data.aws_iam_policy_document.token_lambda.json
+  }
+}
+
+data "aws_iam_policy_document" "token_lambda" {
+  statement {
+    sid    = "AllowSSMParametersRead"
+    effect = "Allow"
+    actions = [
+      "ssm:GetParameter"
+    ]
+    resources = [
+      "arn:aws:ssm:${var.region}:${var.aws_account_id}:parameter${var.ssm_key_directory_name}"
+    ]
+  }
 }
