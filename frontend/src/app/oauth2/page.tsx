@@ -42,7 +42,7 @@ export default function CIS2CallbackPage(): ReactNode {
         await getCurrentUser();
         clearInterval(timeout);
         router.replace(destination);
-       // eslint-disable-next-line no-empty
+        // eslint-disable-next-line no-empty
       } catch {}
 
       const elapsed = Date.now() - startTime;
