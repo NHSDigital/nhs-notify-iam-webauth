@@ -1,4 +1,3 @@
-/* eslint-disable no-await-in-loop, no-plusplus */
 import { expect, test } from '@playwright/test';
 import { deleteAllKeysForTags, getKmsPublicKey } from 'helpers/kms-util';
 import { getParameter, putParameter } from 'helpers/ssm-util';

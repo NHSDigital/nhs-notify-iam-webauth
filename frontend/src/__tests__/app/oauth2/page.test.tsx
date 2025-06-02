@@ -75,7 +75,6 @@ describe('CIS2CallbackPage', () => {
     render(<CIS2CallbackPage />);
 
     for (let i = 0; i < 4; i += 1) {
-      // eslint-disable-next-line no-await-in-loop
       await act(async () => {
         jest.advanceTimersByTime(500);
       });
@@ -98,7 +97,6 @@ describe('CIS2CallbackPage', () => {
     render(<CIS2CallbackPage />);
 
     for (let i = 0; i <= 60; i += 1) {
-      // eslint-disable-next-line no-await-in-loop
       await act(async () => {
         jest.advanceTimersByTime(500);
       });

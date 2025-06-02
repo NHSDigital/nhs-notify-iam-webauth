@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 import jest from 'eslint-plugin-jest';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
 import prettierRecommended from 'eslint-plugin-prettier/recommended';
@@ -15,7 +14,6 @@ import js from '@eslint/js';
 import html from 'eslint-plugin-html';
 import tseslint from 'typescript-eslint';
 import sortDestructureKeys from 'eslint-plugin-sort-destructure-keys';
-// import tseslintPlugin from '@typescript-eslint/eslint-plugin';
 import {
   configs as airbnbConfigs,
   plugins as airbnbPlugins,
@@ -34,7 +32,14 @@ const compat = new FlatCompat({
 });
 
 export default defineConfig([
-  globalIgnores(['**/*/coverage/*', '**/.build', '**/node_modules', '**/dist', '**/test-results', '**/playwright-report']),
+  globalIgnores([
+    '**/*/coverage/*',
+    '**/.build',
+    '**/node_modules',
+    '**/dist',
+    '**/test-results',
+    '**/playwright-report'
+  ]),
 
   //imports
   importX.flatConfigs.recommended,
@@ -114,7 +119,6 @@ export default defineConfig([
         },
       ],
       '@typescript-eslint/consistent-type-definitions': [0],
-      'no-restricted-syntax': 0
     },
   },
 
@@ -152,12 +156,6 @@ export default defineConfig([
   airbnbPlugins.react,
   airbnbPlugins.reactHooks,
   airbnbPlugins.reactA11y,
-
-  {
-    rules: {
-      'no-underscore-dangle': 0
-    }
-  },
 
   // jest
   jest.configs['flat/recommended'],
@@ -234,17 +232,6 @@ export default defineConfig([
         },
       ],
       'import-x/extensions': 0,
-      // 'import-x/no-extraneous-dependencies': [
-      //   2,
-      //   {
-      //     devDependencies: [
-      //       'tests/test-team/**',
-      //       '**/__tests__/**',
-      //       '**/*.test.tsx',
-      //       '**/*.test.ts',
-      //     ],
-      //   },
-      // ],
     },
   },
   {
@@ -272,4 +259,14 @@ export default defineConfig([
       'no-relative-import-paths/no-relative-import-paths': 2,
     },
   },
+
+  // misc rule overrides
+  {
+    rules: {
+      'no-restricted-syntax': 0,
+      'no-underscore-dangle': 0,
+      'no-await-in-loop': 0,
+      'no-plusplus': [2, { "allowForLoopAfterthoughts": true }]
+    }
+  }
 ]);
