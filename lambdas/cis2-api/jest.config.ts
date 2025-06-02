@@ -2,7 +2,6 @@
  * For a detailed explanation regarding each configuration property, visit:
  * https://jestjs.io/docs/configuration
  */
-
 import type { Config } from 'jest';
 
 const config: Config = {
@@ -48,6 +47,11 @@ const config: Config = {
   testEnvironment: 'node',
 
   testPathIgnorePatterns: ['/node_modules/', '/tests/'],
+
+  // Set the path for imports
+  moduleNameMapper: {
+    '^@/(.*)': '<rootDir>/$1',
+  },
 };
 
 export default config;
