@@ -54,4 +54,15 @@ data "aws_iam_policy_document" "token_lambda" {
       "arn:aws:ssm:${var.region}:${var.aws_account_id}:parameter${var.ssm_key_directory_name}"
     ]
   }
+
+  statement {
+    sid    = "AllowKmsSign"
+    effect = "Allow"
+    actions = [
+      "kms:Sign"
+    ]
+    resources = [
+      "arn:aws:kms:${var.region}:${var.aws_account_id}:key/*"
+    ]
+  }
 }
