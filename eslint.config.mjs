@@ -34,7 +34,7 @@ const compat = new FlatCompat({
 });
 
 export default defineConfig([
-  globalIgnores(['**/*/coverage/*', '**/.build', '**/node_modules', '**/dist']),
+  globalIgnores(['**/*/coverage/*', '**/.build', '**/node_modules', '**/dist', '**/test-results', '**/playwright-report']),
 
   //imports
   importX.flatConfigs.recommended,
@@ -114,6 +114,7 @@ export default defineConfig([
         },
       ],
       '@typescript-eslint/consistent-type-definitions': [0],
+      'no-restricted-syntax': 0
     },
   },
 
@@ -130,6 +131,7 @@ export default defineConfig([
         },
       ],
       'unicorn/no-null': 0,
+      'unicorn/prefer-module': 0,
       'unicorn/import-style': [
         2,
         {
@@ -150,6 +152,12 @@ export default defineConfig([
   airbnbPlugins.react,
   airbnbPlugins.reactHooks,
   airbnbPlugins.reactA11y,
+
+  {
+    rules: {
+      'no-underscore-dangle': 0
+    }
+  },
 
   // jest
   jest.configs['flat/recommended'],
@@ -251,7 +259,7 @@ export default defineConfig([
     },
   },
   {
-    files: ['**/utils/**'],
+    files: ['**/utils/**', 'tests/test-team/**'],
     rules: {
       'import-x/prefer-default-export': 0,
     },

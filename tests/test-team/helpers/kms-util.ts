@@ -1,17 +1,17 @@
-/* eslint-disable no-await-in-loop, unicorn/no-array-for-each, unicorn/no-array-reduce, dot-notation */
+/* eslint-disable no-await-in-loop */
 import {
   DescribeKeyCommand,
   GetPublicKeyCommand,
-  KeyState,
   KMSClient,
+  KeyState,
   ListKeysCommand,
   ListKeysCommandOutput,
   ListResourceTagsCommand,
   ScheduleKeyDeletionCommand,
   Tag,
 } from '@aws-sdk/client-kms';
-import { logger } from './logger';
-import { batchPromises, poll, sleep } from './async-util';
+import { logger } from 'helpers/logger';
+import { batchPromises, poll, sleep } from 'helpers/async-util';
 
 const kmsClient = new KMSClient({
   region: process.env.REGION,
@@ -32,10 +32,10 @@ async function getKeyState(
   return { keyId, state: keyDetails?.KeyMetadata?.KeyState };
 }
 
-async function listAllEnabledKeyIds(): Promise<Array<string>> {
+async function listAllEnabledKeyIds(): Promise<string[]> {
   let truncated = false;
   let marker;
-  const allKeyIds: Array<string> = [];
+  const allKeyIds: string[] = [];
   do {
     const keysBatch: ListKeysCommandOutput = await kmsClient.send(
       new ListKeysCommand({
@@ -47,9 +47,9 @@ async function listAllEnabledKeyIds(): Promise<Array<string>> {
     truncated = keysBatch.Truncated || false;
     marker = keysBatch.NextMarker;
 
-    keysBatch.Keys?.map((key) => key.KeyId || '')
-      .filter((keyId) => !!keyId)
-      .forEach((keyId) => allKeyIds.push(keyId));
+    for (const key of keysBatch.Keys || []) {
+      if (key.KeyId) allKeyIds.push(key.KeyId);
+    }
   } while (truncated);
 
   const keyStates = await batchPromises(
@@ -65,7 +65,7 @@ async function listAllEnabledKeyIds(): Promise<Array<string>> {
 async function getKeyTags(
   keyId: string
 ): Promise<{ keyId: string; tags: Record<string, string> }> {
-  const tags: Array<Tag> = await kmsClient
+  const tags: Tag[] = await kmsClient
     .send(
       new ListResourceTagsCommand({
         KeyId: keyId,
@@ -73,21 +73,21 @@ async function getKeyTags(
     )
     .then((response) => response.Tags || [])
     .catch((error) => {
-      if (error['__type'] === 'AccessDeniedException') {
+      if (error.__type === 'AccessDeniedException') {
         return [];
       }
       throw error;
     });
 
-  const tagMap = tags.reduce(
-    (acc, tag) => {
-      const key = tag.TagKey || 'unknown';
-      const value = tag.TagValue || '';
-      acc[key] = value;
-      return acc;
-    },
-    {} as Record<string, string>
-  );
+  const tagMap: Record<string, string> = {};
+
+  for (const tag of tags) {
+    const key = tag.TagKey || 'unknown';
+    const value = tag.TagValue || '';
+    // eslint-disable-next-line security/detect-object-injection
+    tagMap[key] = value;
+  }
+
   return { keyId, tags: tagMap };
 }
 
@@ -102,7 +102,7 @@ async function deleteKey(keyId: string): Promise<void> {
       })
     )
     .catch((error) => {
-      if (error['__type'] === 'KMSInvalidStateException') {
+      if (error.__type === 'KMSInvalidStateException') {
         return;
       }
       throw error;

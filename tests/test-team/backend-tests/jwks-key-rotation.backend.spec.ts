@@ -1,10 +1,10 @@
 /* eslint-disable no-await-in-loop, no-plusplus */
 import { expect, test } from '@playwright/test';
-import { deleteAllKeysForTags, getKmsPublicKey } from '../helpers/kms-util';
-import { getParameter, putParameter } from '../helpers/ssm-util';
-import { invokeLambda } from '../helpers/lambda-util';
-import { readFile } from '../helpers/s3-util';
-import { parseJwksPublicSigningKeys } from '../helpers/jwks-key-parser';
+import { deleteAllKeysForTags, getKmsPublicKey } from 'helpers/kms-util';
+import { getParameter, putParameter } from 'helpers/ssm-util';
+import { invokeLambda } from 'helpers/lambda-util';
+import { readFile } from 'helpers/s3-util';
+import { parseJwksPublicSigningKeys } from 'helpers/jwks-key-parser';
 
 const nameTag = process.env.NAME_TAG || 'unknown';
 const groupTag = process.env.GROUP_TAG || 'unknown';
@@ -28,7 +28,7 @@ test.describe('jwks-key-rotation', () => {
     await deleteAllKeysForTags(nameTag, groupTag, usageTag);
   });
 
-  for (const { keyCount, description } of [
+  for (const { description, keyCount } of [
     { keyCount: 1, description: 'first' },
     { keyCount: 2, description: 'second' },
   ])
@@ -52,10 +52,10 @@ test.describe('jwks-key-rotation', () => {
       const keyDirectoryContent = await getParameter(
         keyDirectorySsmParameterName
       );
-      const keyDirectory = JSON.parse(keyDirectoryContent) as Array<{
+      const keyDirectory = JSON.parse(keyDirectoryContent) as {
         kid: string;
         createdDate: string;
-      }>;
+      }[];
 
       // Verify the contents of the JWKS public keys file in S3
       expect(jwksFileResponse.ContentType).toEqual('application/json');

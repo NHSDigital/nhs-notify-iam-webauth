@@ -1,5 +1,4 @@
-/* eslint-disable no-await-in-loop, no-plusplus, unicorn/consistent-function-scoping */
-
+/* eslint-disable no-await-in-loop */
 export function sleep(millis: number) {
   return new Promise<void>((resolve) => {
     setTimeout(resolve, millis);
@@ -18,7 +17,7 @@ export async function poll(
     if (!success) {
       await sleep(500);
     }
-    attemptNumber++;
+    attemptNumber += 1;
   }
 
   if (!success) {
@@ -27,27 +26,17 @@ export async function poll(
 }
 
 export async function batchPromises<T>(
-  asyncFunctions: Array<() => Promise<T>>,
+  asyncFunctions: (() => Promise<T>)[],
   batchSize: number
-): Promise<Array<T>> {
-  const batches = [];
+): Promise<T[]> {
+  const batches: (() => Promise<T[]>)[] = [];
 
   for (let i = 0; i < asyncFunctions.length; i += batchSize) {
     const batch = asyncFunctions.slice(i, i + batchSize);
 
-    const batchExecutor = async () => {
-      const results: Array<T> = [];
-      for (const job of batch) {
-        const result = await job();
-        results.push(result);
-      }
-      return results;
-    };
-    batches.push(batchExecutor);
+    batches.push(() => Promise.all(batch.map((asyncFunc) => asyncFunc())));
   }
 
-  const results = await Promise.all(
-    batches.map((batchExecutor) => batchExecutor())
-  );
+  const results = await Promise.all(batches.map((batchExec) => batchExec()));
   return results.flat();
 }
