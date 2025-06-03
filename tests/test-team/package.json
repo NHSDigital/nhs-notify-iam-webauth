@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "lint": "NODE_OPTIONS='--disable-warning=ExperimentalWarning' eslint .",
-    "lint:fix": "NODE_OPTIONS='--disable-warning=ExperimentalWarning' eslint . --fix",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "test:local-ui": "playwright test --project component -c config/component/component.config.ts",
     "test:backend": "playwright test --project backend -c config/backend/backend.config.ts",
     "test:story": "echo 'Not implemented'",
