@@ -38,7 +38,7 @@ export default defineConfig([
     '**/node_modules',
     '**/dist',
     '**/test-results',
-    '**/playwright-report'
+    '**/playwright-report',
   ]),
 
   //imports
@@ -57,53 +57,32 @@ export default defineConfig([
   airbnbPlugins.typescriptEslint,
 
   {
+    ignores: ['**/*.json'],
     languageOptions: {
       parserOptions: {
-        // project: [
-        //   'tests/test-team/tsconfig.json',
-        //   'frontend/tsconfig.json',
-        //   'utils/logger/tsconfig.json',
-        //   'lambdas/cis2-api/tsconfig.json',
-        //   'lambdas/jwks-key-rotation/tsconfig.json',
-        // ],
         projectService: true,
         tsconfigRootDir: import.meta.dirname,
       },
     },
   },
 
-  // {
-  //   files: ['**/*.ts', '**/*.tsx'],
-  //   extends: [tseslint.configs.recommendedTypeChecked],
-  //   languageOptions: {
-  //     parserOptions: {
-  //       projectService: true,
-  //       tsconfigRootDir: import.meta.dirname,
-  //     },
-  //   },
-  // },
-
-  // {
-  //   settings: {
-  //     'import-x/resolver': {
-  //       name: 'tsResolver',
-  //       resolver: eslintImportResolverTypescript,
-  //     },
-  //   },
-  // },
+  {
+    files: ['**/*.json'],
+    extends: [tseslint.configs.disableTypeChecked],
+  },
 
   {
     settings: {
       'import-x/resolver-next': [
         eslintImportResolverTypescript.createTypeScriptImportResolver({
           project: [
-            'tests/test-team/tsconfig.json',
             'frontend/tsconfig.json',
+            'lambdas/cis2-api/tsconfig.json',
+            'lambdas/jwks-key-rotation/tsconfig.json',
+            'tests/test-team/tsconfig.json',
             'utils/logger/tsconfig.json',
+            'utils/backend-config/tsconfig.json',
           ],
-          alias: {
-            '@': ['/frontend/src'],
-          },
         }),
       ],
     },
