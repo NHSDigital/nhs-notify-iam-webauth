@@ -66,7 +66,10 @@ export const handler: APIGatewayProxyHandler = async (event) => {
 
     const keyId = await getKmsSigningKeyId();
     const jwt = await generateJwt(keyId, clientId);
-    accessTokenBody.set('client_assertion_type', 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer');
+    accessTokenBody.set(
+      'client_assertion_type',
+      'urn:ietf:params:oauth:client-assertion-type:jwt-bearer'
+    );
     accessTokenBody.set('client_assertion', jwt);
     accessTokenBody.delete('client_secret');
   }

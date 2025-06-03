@@ -11,13 +11,13 @@ describe('kms-util', () => {
       // arrange
       const mockSignature = 'mock-signature';
       const mockResponse = {
-        Signature: Buffer.from(mockSignature, 'utf-8'),
+        Signature: Buffer.from(mockSignature, 'utf8'),
       };
       const kmsClientSpy = jest
         .spyOn(KMSClient.prototype, 'send')
         .mockImplementation(() => mockResponse);
       const testMessage = 'test payload';
-      const expectedMessageBytes = Buffer.from(testMessage, 'utf-8');
+      const expectedMessageBytes = Buffer.from(testMessage, 'utf8');
 
       // act
       const result = await getPayloadSignature('test-key-id', testMessage);

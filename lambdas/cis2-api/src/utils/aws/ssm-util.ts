@@ -1,7 +1,4 @@
-import {
-  GetParameterCommand,
-  SSMClient,
-} from '@aws-sdk/client-ssm';
+import { GetParameterCommand, SSMClient } from '@aws-sdk/client-ssm';
 
 const ssmClient = new SSMClient({
   region: process.env.REGION,

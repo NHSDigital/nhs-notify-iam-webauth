@@ -5,6 +5,7 @@
   "scripts": {
     "build-lambda": "rm -rf dist && npx esbuild --bundle --minify --sourcemap --target=es2020 --platform=node --loader:.node=file --entry-names=[name] --outdir=dist src/token-handler.ts src/authorize-handler.ts",
     "lint": "eslint ./src",
+    "lint:fix": "eslint ./src --fix",
     "test:unit": "jest",
     "typecheck": "tsc --noEmit"
   },
@@ -25,6 +26,7 @@
     "axios": "^1.8.4",
     "date-fns": "^4.1.0",
     "jwt-decode": "^4.0.0",
-    "winston": "^3.17.0"
+    "winston": "^3.17.0",
+    "zod": "^3.24.2"
   }
 }

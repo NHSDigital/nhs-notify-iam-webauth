@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/prefer-at */
 import { z } from 'zod';
 import { logger } from '@/src/utils/logger';
 import { getParameter } from '@/src/utils/aws/ssm-util';

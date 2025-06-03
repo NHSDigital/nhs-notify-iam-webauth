@@ -277,7 +277,7 @@ test('should reject missing client id when using jwks', async () => {
   jest
     .mocked(getKmsSigningKeyId)
     .mockImplementation(() => Promise.resolve('test-key-id'));
-  const mockedGenerateJwt = jest
+  jest
     .mocked(generateJwt)
     .mockImplementation(() => Promise.resolve('mock.jwt.test'));
 

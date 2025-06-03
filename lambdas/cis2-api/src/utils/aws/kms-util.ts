@@ -1,7 +1,4 @@
-import {
-  KMSClient,
-  SignCommand,
-} from '@aws-sdk/client-kms';
+import { KMSClient, SignCommand } from '@aws-sdk/client-kms';
 
 const kmsClient = new KMSClient({
   region: process.env.REGION,
@@ -18,9 +15,9 @@ export async function getPayloadSignature(
   const result = await kmsClient.send(
     new SignCommand({
       KeyId: keyId,
-      Message: Buffer.from(unsignedMessage, 'utf-8'),
+      Message: Buffer.from(unsignedMessage, 'utf8'),
       SigningAlgorithm: SIGNING_ALGORITHM,
     })
   );
-  return Buffer.from(result.Signature!!).toString('base64url');
+  return Buffer.from(result.Signature!).toString('base64url');
 }

@@ -1,4 +1,4 @@
-import { randomUUID } from 'crypto';
+import { randomUUID } from 'node:crypto';
 import { getPayloadSignature } from '@/src/utils/aws/kms-util';
 
 const SIGNING_ALGORITHM = 'RS512';
@@ -22,10 +22,10 @@ export async function generateJwt(keyId: string, clientId: string) {
     exp: expirySeconds,
   };
 
-  const headerEncoded = Buffer.from(JSON.stringify(header), 'utf-8').toString(
+  const headerEncoded = Buffer.from(JSON.stringify(header), 'utf8').toString(
     'base64url'
   );
-  const bodyEncoded = Buffer.from(JSON.stringify(body), 'utf-8').toString(
+  const bodyEncoded = Buffer.from(JSON.stringify(body), 'utf8').toString(
     'base64url'
   );
 

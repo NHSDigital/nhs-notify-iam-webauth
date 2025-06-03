@@ -242,7 +242,9 @@ describe('key-directory-repository', () => {
 
       // assert
       expect(caughtError).toBeTruthy();
-      expect((caughtError as Error).message).toBe('Failed to parse key directory');
+      expect((caughtError as Error).message).toBe(
+        'Failed to parse key directory'
+      );
     });
   });
 });
