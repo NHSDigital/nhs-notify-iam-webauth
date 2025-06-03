@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build-lambda": "rm -rf dist && npx esbuild --bundle --minify --sourcemap --target=es2020 --platform=node --loader:.node=file --entry-names=[name] --outdir=dist src/token-handler.ts src/authorize-handler.ts",
-    "lint": "eslint .",
+    "lint": "NODE_OPTIONS='--disable-warning=ExperimentalWarning' eslint .",
     "test:unit": "jest",
     "typecheck": "tsc --noEmit"
   },

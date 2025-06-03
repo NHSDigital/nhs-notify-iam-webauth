@@ -3,8 +3,8 @@
   "main": "handler.ts",
   "scripts": {
     "build-lambda": "rm -rf dist && npx esbuild --bundle --minify --sourcemap --target=es2020 --platform=node --entry-names=[name] --outdir=dist src/handler.ts",
-    "lint": "eslint ./src",
-    "lint:fix": "eslint ./src --fix",
+    "lint": "NODE_OPTIONS='--disable-warning=ExperimentalWarning' eslint ./src",
+    "lint:fix": "NODE_OPTIONS='--disable-warning=ExperimentalWarning' eslint ./src --fix",
     "test:unit": "jest",
     "typecheck": "tsc --noEmit"
   },
