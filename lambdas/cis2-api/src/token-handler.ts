@@ -2,10 +2,10 @@ import type { APIGatewayProxyHandler } from 'aws-lambda';
 import { jwtDecode } from 'jwt-decode';
 import { differenceInSeconds } from 'date-fns/differenceInSeconds';
 import axios from 'axios';
-import { logger } from './utils/logger';
-import { extractStringRecord } from './utils/extract-string-record';
-import { getKmsSigningKeyId } from './utils/key-directory-repository';
-import { generateJwt } from './utils/jwt-generator';
+import { logger } from '@/src/utils/logger';
+import { extractStringRecord } from '@/src/utils/extract-string-record';
+import { getKmsSigningKeyId } from '@/src/utils/key-directory-repository';
+import { generateJwt } from '@/src/utils/jwt-generator';
 
 const getEnvironmentVariables = () => {
   if (
@@ -71,7 +71,6 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     accessTokenBody.delete('client_secret');
   }
 
-  console.log(`Sending to ${tokenUrl}, payload ${accessTokenBody.toString()}`);
   const cis2Response = await axios.post<Cis2TokenResponse>(
     tokenUrl,
     accessTokenBody.toString(),
@@ -79,7 +78,6 @@ export const handler: APIGatewayProxyHandler = async (event) => {
       validateStatus,
     }
   );
-  console.log(`Got response ${JSON.stringify({ status: cis2Response.status, headers: cis2Response.headers, data: cis2Response.data })}`);
 
   const { status, headers, data } = cis2Response;
 

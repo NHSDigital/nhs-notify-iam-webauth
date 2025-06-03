@@ -1,11 +1,12 @@
-import { getPayloadSignature } from './aws/kms-util';
+import { randomUUID } from 'crypto';
+import { getPayloadSignature } from '@/src/utils/aws/kms-util';
 
 const SIGNING_ALGORITHM = 'RS512';
 
 export async function generateJwt(keyId: string, clientId: string) {
-  const jwtId = crypto.randomUUID();
-  const now = Math.floor(Date.now() / 1000);
-  const expiry = now + 5 * 60;
+  const jwtId = randomUUID();
+  const nowSeconds = Math.floor(Date.now() / 1000);
+  const expirySeconds = nowSeconds + 5 * 60;
 
   const header = {
     alg: SIGNING_ALGORITHM,
@@ -17,8 +18,8 @@ export async function generateJwt(keyId: string, clientId: string) {
     sub: clientId,
     aud: `${process.env.CIS2_URL}/access_token`,
     jti: jwtId,
-    iat: now,
-    exp: expiry,
+    iat: nowSeconds,
+    exp: expirySeconds,
   };
 
   const headerEncoded = Buffer.from(JSON.stringify(header), 'utf-8').toString(
@@ -31,8 +32,5 @@ export async function generateJwt(keyId: string, clientId: string) {
   const unsignedMessage = `${headerEncoded}.${bodyEncoded}`;
 
   const signature = await getPayloadSignature(keyId, unsignedMessage);
-  const jwt = `${unsignedMessage}.${signature}`;
-
-  console.log(jwt);
-  return jwt;
+  return `${unsignedMessage}.${signature}`;
 }

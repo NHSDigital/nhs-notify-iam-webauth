@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { logger } from './logger';
-import { getParameter } from './aws/ssm-util';
+import { logger } from '@/src/utils/logger';
+import { getParameter } from '@/src/utils/aws/ssm-util';
 
 const schemaFor =
   <Output, Input = Output>() =>
@@ -25,7 +25,7 @@ const $SigningKeyDirectory = schemaFor<SigningKeyDirectory>()(
   z.array($SigningKeyMetaData)
 );
 
-const keyLifetimeMillis = 24 * 60 * 60 * 1000;
+const keyCoolingOffPeriodMillis = 24 * 60 * 60 * 1000;
 
 function formattedDate(offsetMillis = 0): string {
   return new Date(Date.now() + offsetMillis).toISOString().split('T')[0];
@@ -53,20 +53,24 @@ export async function getKmsSigningKeyId(): Promise<string> {
   if (keyDirectory.length <= 0) {
     throw new Error('Empty key directory');
   }
-  
+
   // Pick the only key.
   if (keyDirectory.length === 1) {
     return keyDirectory[0].kid;
   }
 
   // Pick the latest key that is older than 24 hours.
-  const sortedKeyDirectory = keyDirectory.sort((a, b) => `${a.createdDate}_${a.kid}`.localeCompare(`${b.createdDate}_${b.kid}`));
-  const cutOffDate = formattedDate(-keyLifetimeMillis);
-  const activeDeprecatedKeys = sortedKeyDirectory.filter(entry => entry.createdDate.localeCompare(cutOffDate) > 0)
-  if (activeDeprecatedKeys.length > 0) {
-    return activeDeprecatedKeys[activeDeprecatedKeys.length - 1].kid;
+  const sortedKeyDirectory = keyDirectory.sort((a, b) =>
+    `${a.createdDate}_${a.kid}`.localeCompare(`${b.createdDate}_${b.kid}`)
+  );
+  const cutOffDate = formattedDate(-keyCoolingOffPeriodMillis);
+  const activeKeys = sortedKeyDirectory.filter(
+    (entry) => entry.createdDate.localeCompare(cutOffDate) <= 0
+  );
+  if (activeKeys.length > 0) {
+    return activeKeys[activeKeys.length - 1].kid;
   }
-  
-  // There are no keys older than 24 hours so just pick the latest.
-  return sortedKeyDirectory[sortedKeyDirectory.length - 1].kid;
+
+  // There are no keys older than 24 hours so just pick the first.
+  return sortedKeyDirectory[0].kid;
 }
