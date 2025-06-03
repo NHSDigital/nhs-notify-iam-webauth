@@ -4,6 +4,7 @@ import React, { Suspense, useEffect } from 'react';
 import { RedirectType, redirect, useSearchParams } from 'next/navigation';
 import { Authenticator, useAuthenticator } from '@aws-amplify/ui-react';
 import JsCookie from 'js-cookie';
+// this is not node:path, this is an npm module
 // eslint-disable-next-line unicorn/prefer-node-protocol
 import path from 'path';
 import { authenticatorSelector } from '@/utils/authenticator-selector';
