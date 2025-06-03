@@ -27,7 +27,7 @@ async function getKeyState(
         KeyId: keyId,
       })
     )
-    .catch(() => { });
+    .catch(() => {});
   return { keyId, state: keyDetails?.KeyMetadata?.KeyState };
 }
 
