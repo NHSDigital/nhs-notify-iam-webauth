@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
-import { CognitoUserHelper, User } from 'helpers/cognito-user-helper';
-import { IamWebAuthSignInPage } from 'pages/iam-webauth-signin-page';
-import { getCookies } from 'helpers/cookies';
+import { CognitoUserHelper, User } from '@helpers/cognito-user-helper';
+import { IamWebAuthSignInPage } from '@pages/iam-webauth-signin-page';
+import { getCookies } from '@helpers/cookies';
 
 test.describe('SignOut', () => {
   let user: User;

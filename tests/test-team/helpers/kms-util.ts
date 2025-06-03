@@ -9,8 +9,8 @@ import {
   ScheduleKeyDeletionCommand,
   Tag,
 } from '@aws-sdk/client-kms';
-import { logger } from 'helpers/logger';
-import { batchPromises, poll, sleep } from 'helpers/async-util';
+import { logger } from '@helpers/logger';
+import { batchPromises, poll, sleep } from '@helpers/async-util';
 
 const kmsClient = new KMSClient({
   region: process.env.REGION,
@@ -27,7 +27,7 @@ async function getKeyState(
         KeyId: keyId,
       })
     )
-    .catch(() => {});
+    .catch(() => { });
   return { keyId, state: keyDetails?.KeyMetadata?.KeyState };
 }
 

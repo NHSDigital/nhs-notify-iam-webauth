@@ -1,7 +1,7 @@
 import { FullConfig } from '@playwright/test';
 import generate from 'generate-password';
 import { v4 as uuidv4 } from 'uuid';
-import { AmplifyConfigurationHelper } from 'helpers/amplify-configuration-helper';
+import { AmplifyConfigurationHelper } from '@helpers/amplify-configuration-helper';
 
 async function globalSetup(config: FullConfig) {
   const configHelper = new AmplifyConfigurationHelper();

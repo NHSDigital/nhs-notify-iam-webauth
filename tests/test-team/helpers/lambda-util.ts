@@ -1,5 +1,5 @@
 import { InvokeCommand, LambdaClient } from '@aws-sdk/client-lambda';
-import { logger } from 'helpers/logger';
+import { logger } from '@helpers/logger';
 
 const lambdaClient = new LambdaClient({
   region: process.env.REGION,

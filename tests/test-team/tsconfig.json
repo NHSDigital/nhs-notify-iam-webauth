@@ -4,9 +4,9 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "helpers/*": ["./helpers/*"],
-      "pages/*": ["./pages/*"],
-      "config/*": ["./config/*"]
+      "@helpers/*": ["./helpers/*"],
+      "@pages/*": ["./pages/*"],
+      "@config/*": ["./config/*"]
     }
   }
 }

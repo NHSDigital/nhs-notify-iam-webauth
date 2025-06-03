@@ -1,8 +1,8 @@
 import { expect, test } from '@playwright/test';
-import { CognitoUserHelper, User } from 'helpers/cognito-user-helper';
-import { IamWebAuthInactivePage } from 'pages/iam-webauth-inactive-page';
-import { getCookies } from 'helpers/cookies';
-import { IamWebAuthSignInPage } from 'pages/iam-webauth-signin-page';
+import { CognitoUserHelper, User } from '@helpers/cognito-user-helper';
+import { IamWebAuthInactivePage } from '@pages/iam-webauth-inactive-page';
+import { getCookies } from '@helpers/cookies';
+import { IamWebAuthSignInPage } from '@pages/iam-webauth-signin-page';
 
 test.describe('Inactive', () => {
   let user: User;

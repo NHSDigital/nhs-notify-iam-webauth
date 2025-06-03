@@ -1,9 +1,9 @@
 import { expect, test } from '@playwright/test';
-import { deleteAllKeysForTags, getKmsPublicKey } from 'helpers/kms-util';
-import { getParameter, putParameter } from 'helpers/ssm-util';
-import { invokeLambda } from 'helpers/lambda-util';
-import { readFile } from 'helpers/s3-util';
-import { parseJwksPublicSigningKeys } from 'helpers/jwks-key-parser';
+import { deleteAllKeysForTags, getKmsPublicKey } from '@helpers/kms-util';
+import { getParameter, putParameter } from '@helpers/ssm-util';
+import { invokeLambda } from '@helpers/lambda-util';
+import { readFile } from '@helpers/s3-util';
+import { parseJwksPublicSigningKeys } from '@helpers/jwks-key-parser';
 
 const nameTag = process.env.NAME_TAG || 'unknown';
 const groupTag = process.env.GROUP_TAG || 'unknown';

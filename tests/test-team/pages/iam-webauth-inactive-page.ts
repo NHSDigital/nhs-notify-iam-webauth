@@ -1,5 +1,5 @@
 import { Locator, Page } from '@playwright/test';
-import { IamWebAuthBasePage } from 'pages/iam-webauth-base-page';
+import { IamWebAuthBasePage } from '@pages/iam-webauth-base-page';
 
 export class IamWebAuthInactivePage extends IamWebAuthBasePage {
   public readonly signInButton: Locator;

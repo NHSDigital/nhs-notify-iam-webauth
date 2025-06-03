@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { defineConfig } from '@playwright/test';
-import baseConfig from 'config/playwright.config';
+import baseConfig from '@config/playwright.config';
 
 export default defineConfig({
   ...baseConfig,
