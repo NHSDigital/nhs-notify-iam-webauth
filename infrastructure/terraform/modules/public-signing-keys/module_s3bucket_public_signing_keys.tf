@@ -39,7 +39,7 @@ module "s3bucket_public_signing_keys" {
   ]
 
   policy_documents = [
-    data.aws_iam_policy_document.s3bucket_public_keys.json
+    data.aws_iam_policy_document.bucket_policy_public_signing_keys.json
   ]
 
   public_access = {
@@ -52,79 +52,6 @@ module "s3bucket_public_signing_keys" {
 
   default_tags = {
     Name = "Public signing keys for federated auth suppliers"
-  }
-}
-
-data "aws_iam_policy_document" "s3bucket_public_keys" {
-  statement {
-    sid    = "DontAllowNonSecureConnection"
-    effect = "Deny"
-
-    actions = [
-      "s3:*",
-    ]
-
-    resources = [
-      module.s3bucket_public_signing_keys.arn,
-      "${module.s3bucket_public_signing_keys.arn}/*",
-    ]
-
-    principals {
-      type = "AWS"
-
-      identifiers = [
-        "*",
-      ]
-    }
-
-    condition {
-      test     = "Bool"
-      variable = "aws:SecureTransport"
-
-      values = [
-        "false",
-      ]
-    }
-  }
-
-  statement {
-    sid    = "AllowManagedAccountsToList"
-    effect = "Allow"
-
-    actions = [
-      "s3:ListBucket",
-    ]
-
-    resources = [
-      module.s3bucket_public_signing_keys.arn,
-    ]
-
-    principals {
-      type = "AWS"
-      identifiers = [
-        "arn:aws:iam::${var.aws_account_id}:root"
-      ]
-    }
-  }
-
-  statement {
-    sid    = "AllowManagedAccountsToGet"
-    effect = "Allow"
-
-    actions = [
-      "s3:GetObject",
-    ]
-
-    resources = [
-      "${module.s3bucket_public_signing_keys.arn}/*",
-    ]
-
-    principals {
-      type = "AWS"
-      identifiers = [
-        "arn:aws:iam::${var.aws_account_id}:root"
-      ]
-    }
   }
 }
 

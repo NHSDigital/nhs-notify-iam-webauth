@@ -36,10 +36,11 @@ module "lambda_backup_cognito_id" {
 
   lambda_env_vars = {
     S3_BUCKET_NAME = module.s3bucket_cognito_backup[0].bucket
+    COGNITO_POOL_ID = aws_cognito_user_pool.main.id
   }
 
-  send_to_firehose              = true
-  log_destination_arn               = "arn:aws:logs:${var.region}:${var.observability_account_id}:destination:nhs-notify-main-acct-firehose-logs"
+  send_to_firehose          = true
+  log_destination_arn       = "arn:aws:logs:${var.region}:${var.observability_account_id}:destination:nhs-notify-main-acct-firehose-logs"
   log_subscription_role_arn = local.acct.log_subscription_role_arn
 }
 

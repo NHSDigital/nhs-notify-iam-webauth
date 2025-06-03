@@ -6,6 +6,7 @@
     "lambdas/cis2-api",
     "lambdas/jwks-key-rotation",
     "tests/test-team",
+    "utils/backend-config",
     "utils/logger"
   ],
   "scripts": {
