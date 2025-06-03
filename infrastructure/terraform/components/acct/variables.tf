@@ -70,3 +70,38 @@ variable "initial_cli_secrets_provision_override" {
   # Usage like:
   #  ... -a apply -- -var initial_cli_secrets_provision_override={\"github_pat\":\"l0ngstr1ng"}
 }
+
+variable "observability_account_id" {
+  type        = string
+  description = "The Observability Account ID that needs access"
+}
+
+variable "observability_environment" {
+  type        = string
+  description = "The Observability environment to use"
+  default     = "main"
+}
+
+variable "support_sandbox_environments" {
+  type        = bool
+  description = "Does this account support dev sandbox environments?"
+  default     = false
+}
+
+variable "kms_deletion_window" {
+  type        = string
+  description = "When a kms key is deleted, how long should it wait in the pending deletion state?"
+  default     = "30"
+}
+
+variable "oam_sink_id" {
+  description = "The ID of the Cloudwatch OAM sink in the appropriate observability account."
+  type        = string
+  default     = ""
+}
+
+variable "kms_deletion_window_test" {
+  type        = string
+  description = "When a kms key is deleted, how long should it wait in the pending deletion state?"
+  default     = "30"
+}

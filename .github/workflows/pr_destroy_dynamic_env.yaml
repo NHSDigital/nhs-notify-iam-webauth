@@ -8,6 +8,10 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: false
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   create-dynamic-environment:
     name: Destroy Dynamic Environment
@@ -35,7 +39,7 @@ jobs:
                 "targetAccountGroup", $targetAccountGroup,
                 "targetComponent", $targetComponent,
                 "terraformAction", $terraformAction,
-                "overrides", $overrides,
+                "overrides", ''
               }
             }')
 

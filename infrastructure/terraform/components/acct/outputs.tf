@@ -12,6 +12,11 @@ output "github_pat_ssm_param_name" {
 
 output "s3_buckets" {
   value = {
+    access_logs = {
+      arn    = module.s3bucket_access_logs.arn
+      bucket = module.s3bucket_access_logs.bucket
+      id     = module.s3bucket_access_logs.id
+    }
     backup_reports = {
       arn    = module.s3bucket_backup_reports.arn
       bucket = module.s3bucket_backup_reports.bucket
@@ -23,4 +28,12 @@ output "s3_buckets" {
       id     = module.s3bucket_lambda_artefacts.id
     }
   }
+}
+
+output "kms_sandbox_arn" {
+  value = var.support_sandbox_environments ? module.kms_sandbox[0].key_arn : null
+}
+
+output "log_subscription_role_arn" {
+  value = module.obs_datasource.log_subscription_role_arn
 }

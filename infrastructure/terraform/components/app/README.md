@@ -6,8 +6,9 @@
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.9.0 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.9.2 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 5.50 |
+| <a name="requirement_github"></a> [github](#requirement\_github) | ~> 6.0 |
 ## Inputs
 
 | Name | Description | Type | Default | Required |
@@ -25,6 +26,8 @@
 | <a name="input_cognito_user_pool_additional_logout_urls"></a> [cognito\_user\_pool\_additional\_logout\_urls](#input\_cognito\_user\_pool\_additional\_logout\_urls) | A list of additional logout\_urls for the cognito user pool | `list(string)` | `[]` | no |
 | <a name="input_cognito_user_pool_environment_specific_gateway_callback_url_suffix"></a> [cognito\_user\_pool\_environment\_specific\_gateway\_callback\_url\_suffix](#input\_cognito\_user\_pool\_environment\_specific\_gateway\_callback\_url\_suffix) | The suffix for the environment specific web gateway callback URL - should be prefixed with with protocol and environment name | `string` | `""` | no |
 | <a name="input_cognito_user_pool_environment_specific_gateway_logout_url_suffix"></a> [cognito\_user\_pool\_environment\_specific\_gateway\_logout\_url\_suffix](#input\_cognito\_user\_pool\_environment\_specific\_gateway\_logout\_url\_suffix) | The suffix for the environment specific web gateway logout callback URL - should be prefixed with with protocol and environment name | `string` | `""` | no |
+| <a name="input_cognito_user_pool_group_specific_gateway_callback_url"></a> [cognito\_user\_pool\_group\_specific\_gateway\_callback\_url](#input\_cognito\_user\_pool\_group\_specific\_gateway\_callback\_url) | Group-specific web gateway callback URL - for environments such as production that do not contain an environment name | `string` | `null` | no |
+| <a name="input_cognito_user_pool_group_specific_gateway_logout_url"></a> [cognito\_user\_pool\_group\_specific\_gateway\_logout\_url](#input\_cognito\_user\_pool\_group\_specific\_gateway\_logout\_url) | Group-specific web gateway callback URL - for environments such as production that do not contain an environment name | `string` | `null` | no |
 | <a name="input_cognito_user_pool_use_environment_specific_gateway_callback_url"></a> [cognito\_user\_pool\_use\_environment\_specific\_gateway\_callback\_url](#input\_cognito\_user\_pool\_use\_environment\_specific\_gateway\_callback\_url) | Enable an environment specific web gateway callback URL - for use in environments that are using dynamic domains | `bool` | `false` | no |
 | <a name="input_commit_id"></a> [commit\_id](#input\_commit\_id) | The commit to deploy. Must be in the tree for branch\_name | `string` | `"HEAD"` | no |
 | <a name="input_component"></a> [component](#input\_component) | The variable encapsulating the name of this component | `string` | `"app"` | no |
@@ -40,6 +43,7 @@
 | <a name="input_kms_deletion_window"></a> [kms\_deletion\_window](#input\_kms\_deletion\_window) | When a kms key is deleted, how long should it wait in the pending deletion state? | `string` | `"30"` | no |
 | <a name="input_log_level"></a> [log\_level](#input\_log\_level) | The log level to be used in lambda functions within the component. Any log with a lower severity than the configured value will not be logged: https://docs.python.org/3/library/logging.html#levels | `string` | `"INFO"` | no |
 | <a name="input_log_retention_in_days"></a> [log\_retention\_in\_days](#input\_log\_retention\_in\_days) | The retention period in days for the Cloudwatch Logs events to be retained, default of 0 is indefinite | `number` | `0` | no |
+| <a name="input_observability_account_id"></a> [observability\_account\_id](#input\_observability\_account\_id) | The Observability Account ID that needs access | `string` | n/a | yes |
 | <a name="input_parent_acct_environment"></a> [parent\_acct\_environment](#input\_parent\_acct\_environment) | Name of the environment responsible for the acct resources used, affects things like DNS zone. Useful for named dev environments | `string` | `"main"` | no |
 | <a name="input_project"></a> [project](#input\_project) | The name of the tfscaffold project | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | The AWS Region | `string` | n/a | yes |
@@ -52,8 +56,9 @@
 | <a name="module_amplify_branch"></a> [amplify\_branch](#module\_amplify\_branch) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/amp_branch | v1.0.8 |
 | <a name="module_backend_api"></a> [backend\_api](#module\_backend\_api) | ../../modules/backend-api | n/a |
 | <a name="module_kms"></a> [kms](#module\_kms) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/kms | v1.0.8 |
-| <a name="module_lambda_backup_cognito_id"></a> [lambda\_backup\_cognito\_id](#module\_lambda\_backup\_cognito\_id) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/lambda | v1.0.8 |
+| <a name="module_lambda_backup_cognito_id"></a> [lambda\_backup\_cognito\_id](#module\_lambda\_backup\_cognito\_id) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/lambda | v2.0.4 |
 | <a name="module_nhse_backup_vault"></a> [nhse\_backup\_vault](#module\_nhse\_backup\_vault) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/aws-backup-source | v1.0.9 |
+| <a name="module_public_signing_keys"></a> [public\_signing\_keys](#module\_public\_signing\_keys) | ../../modules/public-signing-keys | n/a |
 | <a name="module_s3bucket_cognito_backup"></a> [s3bucket\_cognito\_backup](#module\_s3bucket\_cognito\_backup) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/s3bucket | v1.0.9 |
 ## Outputs
 

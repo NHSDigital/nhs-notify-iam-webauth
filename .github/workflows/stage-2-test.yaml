@@ -32,6 +32,10 @@ on:
         required: true
         type: string
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   test-unit:
     name: "Unit tests"
@@ -58,7 +62,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: code-coverage-report
-          path: ".reports/unit/coverage/lcov.info"
+          path: ".reports/lcov.info"
         if: always()
   test-lint:
     name: "Linting"
@@ -95,9 +99,6 @@ jobs:
     name: "Perform static analysis"
     needs: [test-unit]
     runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      contents: read
     timeout-minutes: 5
     steps:
       - name: "Checkout code"

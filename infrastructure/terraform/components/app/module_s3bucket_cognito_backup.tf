@@ -39,6 +39,10 @@ module "s3bucket_cognito_backup" {
     data.aws_iam_policy_document.s3bucket_cognito_backup[0].json
   ]
 
+  bucket_logging_target = {
+    bucket = local.acct.s3_buckets["access_logs"]["id"]
+  }
+
   public_access = {
     block_public_acls       = true
     block_public_policy     = true
@@ -48,8 +52,8 @@ module "s3bucket_cognito_backup" {
 
 
   default_tags = {
-    Name                      = "Cognito identity attribute backup"
-    NHSE-Enable-Dynamo-Backup = var.destination_vault_arn != null ? "True" : "False"
+    Name                  = "Cognito identity attribute backup"
+    NHSE-Enable-S3-Backup = var.destination_vault_arn != null ? "True" : "False"
   }
 }
 

@@ -13,7 +13,7 @@ COMPONENT="sandbox"
 AWS_ACCOUNT_ID="$(aws sts get-caller-identity --query Account --output text)"
 AWS_REGION="eu-west-2"
 PROJECT="nhs-notify"
-GROUP="nhs-notify-template-management-dev"
+GROUP="nhs-notify-iam-dev"
 
 root_dir=$(git rev-parse --show-toplevel)
 terraform_dir=$root_dir/infrastructure/terraform

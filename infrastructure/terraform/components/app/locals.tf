@@ -2,8 +2,19 @@ locals {
   root_domain_name              = "${var.environment}.${local.acct.dns_zone["name"]}"
   aws_lambda_functions_dir_path = "../../../../lambdas"
   auth_domain_name              = "auth.${local.root_domain_name}"
-  auth_gateway_name             = var.cognito_user_pool_use_environment_specific_gateway_callback_url ? "https://${var.environment}.${var.cognito_user_pool_environment_specific_gateway_callback_url_suffix}" : "https://${aws_amplify_app.main.default_domain}/auth/oauth2"
-  auth_signout_redirect_domain  = var.cognito_user_pool_use_environment_specific_gateway_callback_url ? "https://${var.environment}.${var.cognito_user_pool_environment_specific_gateway_logout_url_suffix}" : "https://${aws_amplify_app.main.default_domain}/auth"
+
+  auth_gateway_name = coalesce(
+    var.cognito_user_pool_group_specific_gateway_callback_url,
+    var.cognito_user_pool_use_environment_specific_gateway_callback_url
+    ? "https://${var.environment}.${var.cognito_user_pool_environment_specific_gateway_callback_url_suffix}"
+  : "https://${aws_amplify_app.main.default_domain}/auth/oauth2")
+
+  auth_signout_redirect_domain = coalesce(
+    var.cognito_user_pool_group_specific_gateway_logout_url,
+    var.cognito_user_pool_use_environment_specific_gateway_callback_url
+    ? "https://${var.environment}.${var.cognito_user_pool_environment_specific_gateway_logout_url_suffix}"
+  : "https://${aws_amplify_app.main.default_domain}/auth")
+
   cis2_issuer_urls = {
     int : "https://am.nhsint.auth-ptl.cis2.spineservices.nhs.uk:443/openam/oauth2/realms/root/realms/NHSIdentity/realms/Healthcare"
     live : "https://am.nhsidentity.spineservices.nhs.uk:443/openam/oauth2/realms/root/realms/NHSIdentity/realms/Healthcare"
