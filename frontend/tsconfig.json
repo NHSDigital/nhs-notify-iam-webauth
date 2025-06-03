@@ -19,6 +19,7 @@
       }
     ],
     "paths": {
+      "@amplify_outputs": ["./amplify_outputs.json"],
       "@/*": ["./src/*"]
     },
     "target": "ES6"

@@ -8,7 +8,7 @@ import NHSNotifyHeader from '@/components/molecules/Header/Header';
 import NHSNotifyFooter from '@/components/molecules/Footer/Footer';
 
 // eslint-disable-next-line import-x/no-unresolved
-import amplifyConfig from '@/amplify_outputs.json';
+import amplifyConfig from '@amplify_outputs';
 
 Amplify.configure(amplifyConfig, { ssr: true });
 

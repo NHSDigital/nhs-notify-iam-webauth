@@ -71,6 +71,7 @@ const config: Config = {
 
   // Set the path for imports
   moduleNameMapper: {
+    '^@amplify_outputs': '<rootDir>/jestamplify_outputs.json',
     '^@/(.*)': '<rootDir>/src/$1',
   },
 

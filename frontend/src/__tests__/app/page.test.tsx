@@ -26,13 +26,16 @@ jest.mock('@aws-amplify/ui-react', () => ({
   ),
 }));
 
-jest.mock('@/components/CIS2SignInButton/CIS2SignInButton', () => ({
-  CIS2SignInButton: ({ onClick }: { onClick: () => void }) => (
-    <button type='button' data-testid='mock-cis2-button' onClick={onClick}>
-      Mock CIS2 Sign In Button
-    </button>
-  ),
-}));
+jest.mock('@/components/CIS2SignInButton/CIS2SignInButton', () => {
+  // eslint-disable-next-line react/display-name, func-names
+  return function ({ onClick }: { onClick: () => void }) {
+    return (
+      <button type='button' data-testid='mock-cis2-button' onClick={onClick}>
+        Mock CIS2 Sign In Button
+      </button>
+    );
+  };
+});
 
 jest.mock('@/utils/federated-sign-in');
 

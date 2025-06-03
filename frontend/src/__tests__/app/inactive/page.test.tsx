@@ -2,9 +2,9 @@ import { render } from '@testing-library/react';
 import { ReadonlyURLSearchParams, useSearchParams } from 'next/navigation';
 import InactivePage from '@/app/inactive/page';
 
-jest.mock('@/components/molecules/SignOut/SignOut', () => ({
-  SignOut: ({ children }: { children: React.ReactNode }) => children,
-}));
+jest.mock('@/components/molecules/SignOut/SignOut', () => {
+  return ({ children }: { children: React.ReactNode }) => children;
+});
 
 jest.mock('next/navigation', () => ({
   // Note: We have to requireActual because we need the concrete implementation of ReadonlyURLSearchParams

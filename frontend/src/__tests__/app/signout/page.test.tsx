@@ -1,9 +1,9 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import SignOutPage from '@/app/signout/page';
 
-jest.mock('@/components/molecules/SignOut/SignOut', () => ({
-  SignOut: ({ children }: { children: React.ReactNode }) => children,
-}));
+jest.mock('@/components/molecules/SignOut/SignOut', () => {
+  return ({ children }: { children: React.ReactNode }) => children;
+});
 
 describe('Signout Page', () => {
   beforeEach(() => {
