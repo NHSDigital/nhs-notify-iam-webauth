@@ -97,7 +97,7 @@ export default defineConfig([
           varsIgnorePattern: '^_',
         },
       ],
-      '@typescript-eslint/consistent-type-definitions': [0],
+      '@typescript-eslint/consistent-type-definitions': 0,
     },
   },
 
