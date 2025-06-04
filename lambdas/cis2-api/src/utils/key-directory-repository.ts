@@ -26,7 +26,7 @@ const $SigningKeyDirectory = schemaFor<SigningKeyDirectory>()(
   z.array($SigningKeyMetaData)
 );
 
-// Ignore any very new keys to allow public key caches to expire 
+// Ignore any very new keys to allow public key caches to expire
 const keyCoolingOffPeriodMillis = 24 * 60 * 60 * 1000;
 
 function formattedDate(offsetMillis = 0): string {
