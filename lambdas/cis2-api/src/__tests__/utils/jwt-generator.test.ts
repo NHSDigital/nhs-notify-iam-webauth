@@ -38,8 +38,6 @@ describe('jwt-generator', () => {
       const result = await generateJwt('test-key-id', 'test-client-id');
 
       // assert
-      console.log(`result ${result}`);
-      console.log(`expectedJwt ${expectedJwt}`);
       expect(result).toBe(expectedJwt);
     });
   });
