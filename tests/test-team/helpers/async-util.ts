@@ -33,8 +33,9 @@ export async function batchPromises<T>(
   for (let i = 0; i < asyncFunctions.length; i += batchSize) {
     const batch = asyncFunctions.slice(i, i + batchSize);
 
+    // eslint-disable-next-line unicorn/consistent-function-scoping
     const batchExecutor = async () => {
-      const results: Array<T> = [];
+      const results: T[] = [];
       for (const job of batch) {
         const result = await job();
         results.push(result);
