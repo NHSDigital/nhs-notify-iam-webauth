@@ -65,6 +65,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     }
 
     const keyId = await getKmsSigningKeyId();
+    logger.info(`Generating JWT using KMS Key ${keyId}`);
     const jwt = await generateJwt(keyId, clientId);
     accessTokenBody.set(
       'client_assertion_type',

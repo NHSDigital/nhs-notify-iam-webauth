@@ -18,7 +18,7 @@ describe('jwt-generator', () => {
 
     beforeAll(() => {
       jest.useFakeTimers();
-      jest.setSystemTime(new Date('2025-06-03 09:00:00'));
+      jest.setSystemTime(new Date('2025-06-03 09:00:00.000Z'));
       jest.resetAllMocks();
     });
 
@@ -38,6 +38,8 @@ describe('jwt-generator', () => {
       const result = await generateJwt('test-key-id', 'test-client-id');
 
       // assert
+      console.log(`result ${result}`);
+      console.log(`expectedJwt ${expectedJwt}`);
       expect(result).toBe(expectedJwt);
     });
   });
