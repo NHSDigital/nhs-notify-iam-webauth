@@ -28,14 +28,24 @@ export async function batchPromises<T>(
   asyncFunctions: (() => Promise<T>)[],
   batchSize: number
 ): Promise<T[]> {
-  const batches: (() => Promise<T[]>)[] = [];
+  const batches = [];
 
   for (let i = 0; i < asyncFunctions.length; i += batchSize) {
     const batch = asyncFunctions.slice(i, i + batchSize);
 
-    batches.push(() => Promise.all(batch.map((asyncFunc) => asyncFunc())));
+    const batchExecutor = async () => {
+      const results: Array<T> = [];
+      for (const job of batch) {
+        const result = await job();
+        results.push(result);
+      }
+      return results;
+    };
+    batches.push(batchExecutor);
   }
 
-  const results = await Promise.all(batches.map((batchExec) => batchExec()));
+  const results = await Promise.all(
+    batches.map((batchExecutor) => batchExecutor())
+  );
   return results.flat();
 }
