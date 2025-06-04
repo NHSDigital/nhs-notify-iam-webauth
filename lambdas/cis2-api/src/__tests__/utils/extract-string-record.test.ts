@@ -2,6 +2,7 @@ import { extractStringRecord } from '@/src/utils/extract-string-record';
 
 describe('extract-string-record', () => {
   test('converts object to string record', () => {
+    // arrange
     const input = {
       key1: 'value',
       key2: undefined,
@@ -19,6 +20,10 @@ describe('extract-string-record', () => {
       key7: 'true',
     };
 
-    expect(extractStringRecord(input)).toEqual(expectedOutput);
+    // act
+    const result = extractStringRecord(input);
+
+    // assert
+    expect(result).toEqual(expectedOutput);
   });
 });

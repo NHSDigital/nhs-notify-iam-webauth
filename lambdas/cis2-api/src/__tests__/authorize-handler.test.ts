@@ -2,69 +2,75 @@ import type { APIGatewayProxyEvent, Context, Callback } from 'aws-lambda';
 import { mockDeep } from 'jest-mock-extended';
 import { handler } from '@/src/authorize-handler';
 
-const OLD_ENV = { ...process.env };
+jest.mock('@/src/utils/extract-string-record', () => ({
+  extractStringRecord: (input: Record<string, string>) => ({ ... input }),
+}));
 
-beforeEach(() => {
-  process.env.CIS2_URL = 'cis2-url';
-});
+describe('authorize-handler', () => {
+  const OLD_ENV = { ...process.env };
 
-afterAll(() => {
-  process.env = OLD_ENV;
-});
-
-test('adds query parameters and returns 302', async () => {
-  const event = mockDeep<APIGatewayProxyEvent>({
-    queryStringParameters: {
-      query: 'query-value',
-    },
-    headers: {
-      header: 'header-value',
-    },
+  beforeEach(() => {
+    process.env.CIS2_URL = 'cis2-url';
   });
 
-  const response = await handler(
-    event,
-    mockDeep<Context>(),
-    mockDeep<Callback>()
-  );
-
-  expect(response).toEqual({
-    statusCode: 302,
-    headers: {
-      header: 'header-value',
-      Location:
-        'cis2-url/authorize?query=query-value&prompt=login&acr_values=AAL2_OR_AAL3_ANY',
-    },
-    body: JSON.stringify({
-      message:
-        'Redirecting to cis2-url/authorize?query=query-value&prompt=login&acr_values=AAL2_OR_AAL3_ANY',
-    }),
-  });
-});
-
-test('adds query parameters and returns 302 when request has no query parameters', async () => {
-  const event = mockDeep<APIGatewayProxyEvent>({
-    queryStringParameters: undefined,
-    headers: {
-      header: 'header-value',
-    },
+  afterAll(() => {
+    process.env = OLD_ENV;
   });
 
-  const response = await handler(
-    event,
-    mockDeep<Context>(),
-    mockDeep<Callback>()
-  );
+  test('adds query parameters and returns 302', async () => {
+    const event = mockDeep<APIGatewayProxyEvent>({
+      queryStringParameters: {
+        query: 'query-value',
+      },
+      headers: {
+        header: 'header-value',
+      },
+    });
 
-  expect(response).toEqual({
-    statusCode: 302,
-    headers: {
-      header: 'header-value',
-      Location: 'cis2-url/authorize?prompt=login&acr_values=AAL2_OR_AAL3_ANY',
-    },
-    body: JSON.stringify({
-      message:
-        'Redirecting to cis2-url/authorize?prompt=login&acr_values=AAL2_OR_AAL3_ANY',
-    }),
+    const response = await handler(
+      event,
+      mockDeep<Context>(),
+      mockDeep<Callback>()
+    );
+
+    expect(response).toEqual({
+      statusCode: 302,
+      headers: {
+        header: 'header-value',
+        Location:
+          'cis2-url/authorize?query=query-value&prompt=login&acr_values=AAL2_OR_AAL3_ANY',
+      },
+      body: JSON.stringify({
+        message:
+          'Redirecting to cis2-url/authorize?query=query-value&prompt=login&acr_values=AAL2_OR_AAL3_ANY',
+      }),
+    });
+  });
+
+  test('adds query parameters and returns 302 when request has no query parameters', async () => {
+    const event = mockDeep<APIGatewayProxyEvent>({
+      queryStringParameters: undefined,
+      headers: {
+        header: 'header-value',
+      },
+    });
+
+    const response = await handler(
+      event,
+      mockDeep<Context>(),
+      mockDeep<Callback>()
+    );
+
+    expect(response).toEqual({
+      statusCode: 302,
+      headers: {
+        header: 'header-value',
+        Location: 'cis2-url/authorize?prompt=login&acr_values=AAL2_OR_AAL3_ANY',
+      },
+      body: JSON.stringify({
+        message:
+          'Redirecting to cis2-url/authorize?prompt=login&acr_values=AAL2_OR_AAL3_ANY',
+      }),
+    });
   });
 });
