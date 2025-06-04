@@ -124,7 +124,7 @@ describe('key-util', () => {
 
       class TestError1 extends Error {}
 
-      (jest.mocked(KMS_NO_OP_ERRORS) as Array<unknown>).push(TestError1);
+      (jest.mocked(KMS_NO_OP_ERRORS) as unknown[]).push(TestError1);
 
       mockGetKmsPublicKey.mockImplementation(() =>
         Promise.reject(new TestError1('TEST'))

@@ -2,8 +2,8 @@ import type { APIGatewayProxyHandler } from 'aws-lambda';
 import { jwtDecode } from 'jwt-decode';
 import { differenceInSeconds } from 'date-fns/differenceInSeconds';
 import axios from 'axios';
-import { logger } from './utils/logger';
-import { extractStringRecord } from './utils/extract-string-record';
+import { logger } from '@/src/utils/logger';
+import { extractStringRecord } from '@/src/utils/extract-string-record';
 
 const getEnvironmentVariables = () => {
   if (
@@ -41,8 +41,8 @@ export const validateStatus = () => true;
 
 export const handler: APIGatewayProxyHandler = async (event) => {
   const {
-    expectedIdAssuranceLevel,
     expectedAuthenticationAssuranceLevel,
+    expectedIdAssuranceLevel,
     maximumExpectedAuthTimeDivergenceSeconds,
   } = getEnvironmentVariables();
 
@@ -63,7 +63,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     }
   );
 
-  const { status, headers, data } = cis2Response;
+  const { data, headers, status } = cis2Response;
 
   const apiGatewayResponse = {
     statusCode: status,
@@ -90,9 +90,9 @@ export const handler: APIGatewayProxyHandler = async (event) => {
   });
 
   const {
-    id_assurance_level: idAssuranceLevel,
-    authentication_assurance_level: authenticationAssuranceLevel,
     auth_time: authTime,
+    authentication_assurance_level: authenticationAssuranceLevel,
+    id_assurance_level: idAssuranceLevel,
   } = idToken;
 
   if (idAssuranceLevel < Number.parseInt(expectedIdAssuranceLevel, 10)) {

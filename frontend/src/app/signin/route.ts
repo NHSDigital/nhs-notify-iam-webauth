@@ -1,9 +1,10 @@
+/* eslint-disable import-x/prefer-default-export */
 'use server';
 
 import { cookies } from 'next/headers';
-import { getSessionId } from '@/src/utils/amplify-utils';
-import { generateSessionCsrfToken } from '@/src/utils/csrf-utils';
 import { NextRequest, NextResponse } from 'next/server';
+import { getSessionId } from '@/utils/amplify-utils';
+import { generateSessionCsrfToken } from '@/utils/csrf-utils';
 
 export const GET = async (request: NextRequest) => {
   const sessionId = await getSessionId();

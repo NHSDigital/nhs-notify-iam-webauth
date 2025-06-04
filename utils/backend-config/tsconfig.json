@@ -1,6 +1,7 @@
 {
   "extends": "@tsconfig/node20/tsconfig.json",
   "include": [
+    "**/*.ts",
     "src/*",
     "src/**/*",
     "../backend-config/src/backend-config.ts"

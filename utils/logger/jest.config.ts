@@ -50,6 +50,11 @@ const config: Config = {
   testEnvironment: 'node',
 
   testPathIgnorePatterns: ['/node_modules/'],
+
+  // Set the path for imports
+  moduleNameMapper: {
+    '^@/(.*)': '<rootDir>/$1',
+  },
 };
 
 export default config;

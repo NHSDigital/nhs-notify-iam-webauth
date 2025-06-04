@@ -8,8 +8,8 @@ import {
   generateSessionCsrfToken,
   verifyCsrfToken,
   verifyFormCsrfToken,
-} from '../../utils/csrf-utils';
-import { getSessionId } from '../../utils/amplify-utils';
+} from '@/utils/csrf-utils';
+import { getSessionId } from '@/utils/amplify-utils';
 
 const mockHmac = {
   update: jest.fn().mockReturnThis(),
@@ -21,7 +21,7 @@ jest.mock('node:crypto', () => ({
   createHmac: () => mockHmac,
   randomBytes: () => 'salt',
 }));
-jest.mock('../../utils/amplify-utils');
+jest.mock('@/utils/amplify-utils');
 jest.mock('@nhs-notify-iam-webauth/utils-logger');
 
 const OLD_ENV = { ...process.env };

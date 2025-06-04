@@ -1,5 +1,6 @@
+/* eslint-disable import-x/prefer-default-export */
 import type { APIGatewayProxyHandler } from 'aws-lambda';
-import { extractStringRecord } from './utils/extract-string-record';
+import { extractStringRecord } from '@/src/utils/extract-string-record';
 
 export const handler: APIGatewayProxyHandler = async (event) => {
   const originalUrl = `${process.env.CIS2_URL}/authorize`;

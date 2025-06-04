@@ -1,9 +1,9 @@
+import { Callback, Context, EventBridgeEvent } from 'aws-lambda';
 import { handler } from '@/src/handler';
-import { Context, EventBridgeEvent, Callback } from 'aws-lambda';
 import {
+  SigningKeyDirectory,
   filterKeyDirectoryToActiveKeys,
   getKeyDirectory,
-  SigningKeyDirectory,
   writeKeyDirectory,
 } from '@/src/utils/key-directory-repository';
 import { generateKey, getPublicKey } from '@/src/utils/key-util';

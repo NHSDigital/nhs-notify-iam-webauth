@@ -5,12 +5,12 @@ import { mockDeep } from 'jest-mock-extended';
 import { cookies } from 'next/headers';
 import { NextRequest } from 'next/server';
 import { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
-import { GET } from '../../../app/signin/route';
-import { getSessionId } from '../../../utils/amplify-utils';
-import { generateSessionCsrfToken } from '../../../utils/csrf-utils';
+import { GET } from '@/app/signin/route';
+import { getSessionId } from '@/utils/amplify-utils';
+import { generateSessionCsrfToken } from '@/utils/csrf-utils';
 
-jest.mock('../../../utils/amplify-utils');
-jest.mock('../../../utils/csrf-utils');
+jest.mock('@/utils/amplify-utils');
+jest.mock('@/utils/csrf-utils');
 jest.mock('next/headers');
 
 test('returns redirect', async () => {

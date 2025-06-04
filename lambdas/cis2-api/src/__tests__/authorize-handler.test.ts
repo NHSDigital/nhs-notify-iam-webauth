@@ -1,6 +1,6 @@
-import type { APIGatewayProxyEvent, Context, Callback } from 'aws-lambda';
+import type { APIGatewayProxyEvent, Callback, Context } from 'aws-lambda';
 import { mockDeep } from 'jest-mock-extended';
-import { handler } from '../authorize-handler';
+import { handler } from '@/src/authorize-handler';
 
 const OLD_ENV = { ...process.env };
 
