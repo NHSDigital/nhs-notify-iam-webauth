@@ -3,7 +3,7 @@ import { mockDeep } from 'jest-mock-extended';
 import { handler } from '@/src/authorize-handler';
 
 jest.mock('@/src/utils/extract-string-record', () => ({
-  extractStringRecord: (input: Record<string, string>) => ({ ... input }),
+  extractStringRecord: (input: Record<string, string>) => ({ ...input }),
 }));
 
 describe('authorize-handler', () => {
