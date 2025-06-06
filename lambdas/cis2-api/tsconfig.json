@@ -3,4 +3,13 @@
   "include": [
     "**/*.ts"
   ],
+  "compilerOptions": {
+    "paths": {
+      "@/*": [
+        "./*"
+      ]
+    },
+    "resolveJsonModule": true,
+    "isolatedModules": true
+  }
 }

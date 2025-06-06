@@ -44,7 +44,7 @@ export async function updateJwksFile(
     )
   );
 
-  const jwksFileContents = JSON.stringify(publicKeysArray);
+  const jwksFileContents = JSON.stringify({ keys: publicKeysArray });
   logger.info(
     `Generated JWKS file content with ${publicKeysArray.length} public keys`
   );
