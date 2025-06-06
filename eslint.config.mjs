@@ -38,7 +38,7 @@ export default defineConfig([
     '**/node_modules',
     '**/dist',
     '**/test-results',
-    '**/playwright-report',
+    '**/playwright-report*',
   ]),
 
   //imports
@@ -77,11 +77,9 @@ export default defineConfig([
         eslintImportResolverTypescript.createTypeScriptImportResolver({
           project: [
             'frontend/tsconfig.json',
-            'lambdas/cis2-api/tsconfig.json',
-            'lambdas/jwks-key-rotation/tsconfig.json',
+            'lambdas/*/tsconfig.json',
             'tests/test-team/tsconfig.json',
-            'utils/logger/tsconfig.json',
-            'utils/backend-config/tsconfig.json',
+            'utils/*/tsconfig.json',
           ],
         }),
       ],
