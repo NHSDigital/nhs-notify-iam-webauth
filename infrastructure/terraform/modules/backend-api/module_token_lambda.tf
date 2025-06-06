@@ -64,5 +64,12 @@ data "aws_iam_policy_document" "token_lambda" {
     resources = [
       "arn:aws:kms:${var.region}:${var.aws_account_id}:key/*"
     ]
+    condition {
+      test     = "StringEquals"
+      variable = "aws:ResourceTag/Usage"
+      values = [
+        "CIS2-JWKS-AUTH"
+      ]
+    }
   }
 }
