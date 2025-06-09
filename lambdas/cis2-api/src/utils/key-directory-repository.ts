@@ -5,15 +5,15 @@ import { getParameter } from '@/src/utils/aws/ssm-util';
 
 const schemaFor =
   <Output, Input = Output>() =>
-  <S extends z.ZodType<Output, z.ZodTypeDef, Input>>(schema: S) =>
-    schema;
+    <S extends z.ZodType<Output, z.ZodTypeDef, Input>>(schema: S) =>
+      schema;
 
 export type SigningKeyMetaData = {
   kid: string;
   createdDate: string;
 };
 
-export type SigningKeyDirectory = Array<SigningKeyMetaData>;
+export type SigningKeyDirectory = SigningKeyMetaData[];
 
 const $SigningKeyMetaData = schemaFor<SigningKeyMetaData>()(
   z.object({
@@ -62,7 +62,7 @@ export async function getKmsSigningKeyId(): Promise<string> {
   }
 
   // Pick the latest key that is older than 24 hours.
-  const sortedKeyDirectory = keyDirectory.sort((a, b) =>
+  const sortedKeyDirectory = keyDirectory.toSorted((a, b) =>
     `${a.createdDate}_${a.kid}`.localeCompare(`${b.createdDate}_${b.kid}`)
   );
   const cutOffDate = formattedDate(-keyCoolingOffPeriodMillis);
