@@ -5,8 +5,8 @@ import { getParameter } from '@/src/utils/aws/ssm-util';
 
 const schemaFor =
   <Output, Input = Output>() =>
-    <S extends z.ZodType<Output, z.ZodTypeDef, Input>>(schema: S) =>
-      schema;
+  <S extends z.ZodType<Output, z.ZodTypeDef, Input>>(schema: S) =>
+    schema;
 
 export type SigningKeyMetaData = {
   kid: string;
