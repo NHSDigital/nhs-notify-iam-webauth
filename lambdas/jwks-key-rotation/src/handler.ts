@@ -31,7 +31,7 @@ function getKeysToDelete(
   // eslint-disable-next-line unicorn/prefer-at
   const latestKey = keyDirectory[keyDirectory.length - 1];
   const cutOffDate = formattedDate(-keyLifetimeMillis);
-  // Delete any keys that are suffiently old whilst ensuring that we retain the latest key.
+  // Delete any keys that are sufficiently old whilst ensuring that we retain the latest key.
   // This is intended to ensure a continued service where public keys may be cached or
   // logins may be in progress whist the key rotation occurs.
   return keyDirectory.filter(
