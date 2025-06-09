@@ -4,6 +4,8 @@ import { differenceInSeconds } from 'date-fns/differenceInSeconds';
 import axios from 'axios';
 import { logger } from '@/src/utils/logger';
 import { extractStringRecord } from '@/src/utils/extract-string-record';
+import { getKmsSigningKeyId } from '@/src/utils/key-directory-repository';
+import { generateJwt } from '@/src/utils/jwt-generator';
 
 const getEnvironmentVariables = () => {
   if (
@@ -55,9 +57,27 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     };
   }
 
+  const accessTokenBody = new URLSearchParams(event.body);
+  if (process.env.CIS2_AUTH_MODE === 'jwks') {
+    const clientId = accessTokenBody.get('client_id');
+    if (!clientId) {
+      throw new Error('Missing client_id');
+    }
+
+    const keyId = await getKmsSigningKeyId();
+    logger.info(`Generating JWT using KMS Key ${keyId}`);
+    const jwt = await generateJwt(keyId, clientId);
+    accessTokenBody.set(
+      'client_assertion_type',
+      'urn:ietf:params:oauth:client-assertion-type:jwt-bearer'
+    );
+    accessTokenBody.set('client_assertion', jwt);
+    accessTokenBody.delete('client_secret');
+  }
+
   const cis2Response = await axios.post<Cis2TokenResponse>(
     tokenUrl,
-    event.body,
+    accessTokenBody.toString(),
     {
       validateStatus,
     }
