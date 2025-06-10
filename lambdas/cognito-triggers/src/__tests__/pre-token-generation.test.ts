@@ -1,0 +1,257 @@
+import { GetParameterCommand, SSMClient } from '@aws-sdk/client-ssm';
+import { mockClient } from 'aws-sdk-client-mock';
+import 'aws-sdk-client-mock-jest';
+import {
+  PreTokenGenerationLambda,
+  type PreTokenGenerationV2Event,
+} from '../pre-token-generation';
+
+jest.mock('@nhs-notify-iam-webauth/utils-logger', () => ({
+  logger: {
+    child: jest.fn().mockReturnThis(),
+    error: jest.fn(),
+  },
+}));
+
+beforeAll(() => {
+  process.env.CLIENT_CONFIG_PARAMETER_PATH_PREFIX =
+    '/nhs-notify-unit-tests/clients';
+});
+
+beforeEach(() => {
+  ssmMock.reset();
+});
+
+afterAll(() => {
+  delete process.env.CLIENT_CONFIG_PARAMETER_PATH_PREFIX;
+});
+
+const ssmMock = mockClient(SSMClient);
+
+describe('when user has no client group', () => {
+  const eventNoGroup = (): PreTokenGenerationV2Event => ({
+    callerContext: {
+      awsSdkVersion: 'aws-sdk-unknown-unknown',
+      clientId: '1633rn1feb68eltvtqkugqlml',
+    },
+    region: 'eu-west-2',
+    request: {
+      groupConfiguration: {
+        groupsToOverride: [],
+        iamRolesToOverride: [],
+      },
+      scopes: ['aws.cognito.signin.user.admin'],
+      userAttributes: {
+        'cognito:user_status': 'CONFIRMED',
+        email: 'example@example.com',
+        email_verified: 'True',
+        sub: '76c25234-b041-70f2-8ba4-caf538363b35',
+      },
+    },
+    response: {
+      claimsAndScopeOverrideDetails: null,
+    },
+    triggerSource: 'TokenGeneration_Authentication',
+    userName: '76c25234-b041-70f2-8ba4-caf538363b35',
+    userPoolId: 'eu-west-2_W8aROHYoW',
+    version: '2',
+  });
+
+  test('does not add any claims', async () => {
+    const result = await new PreTokenGenerationLambda().handler(eventNoGroup());
+
+    expect(result.response.claimsAndScopeOverrideDetails).toBe(null);
+  });
+});
+
+describe('when user has client group', () => {
+  const eventWithGroup = (): PreTokenGenerationV2Event => ({
+    callerContext: {
+      awsSdkVersion: 'aws-sdk-unknown-unknown',
+      clientId: '1633rn1feb68eltvtqkugqlml',
+    },
+    region: 'eu-west-2',
+    request: {
+      groupConfiguration: {
+        groupsToOverride: ['client:f58d4b65-870c-42c0-8bb6-2941c5be2bec'],
+        iamRolesToOverride: [],
+      },
+      scopes: ['aws.cognito.signin.user.admin'],
+      userAttributes: {
+        'cognito:user_status': 'CONFIRMED',
+        email: 'example@example.com',
+        email_verified: 'True',
+        sub: '76c25234-b041-70f2-8ba4-caf538363b35',
+      },
+    },
+    response: {
+      claimsAndScopeOverrideDetails: null,
+    },
+    triggerSource: 'TokenGeneration_Authentication',
+    userName: '76c25234-b041-70f2-8ba4-caf538363b35',
+    userPoolId: 'eu-west-2_W8aROHYoW',
+    version: '2',
+  });
+
+  test('adds nhs-notify:client-id claim from group in event, handles ssm errors', async () => {
+    ssmMock
+      .on(GetParameterCommand, {
+        Name: '/nhs-notify-unit-tests/clients/f58d4b65-870c-42c0-8bb6-2941c5be2bec',
+      })
+      .rejectsOnce(new Error('SSM Error'));
+
+    const result = await new PreTokenGenerationLambda().handler(
+      eventWithGroup()
+    );
+
+    expect(result.response.claimsAndScopeOverrideDetails).toEqual({
+      idTokenGeneration: {
+        claimsToAddOrOverride: {
+          'nhs-notify:client-id': 'f58d4b65-870c-42c0-8bb6-2941c5be2bec',
+        },
+      },
+    });
+  });
+
+  test('handles empty get parameter response from ssm', async () => {
+    ssmMock
+      .on(GetParameterCommand, {
+        Name: '/nhs-notify-unit-tests/clients/f58d4b65-870c-42c0-8bb6-2941c5be2bec',
+      })
+      .resolvesOnce({});
+
+    const result = await new PreTokenGenerationLambda().handler(
+      eventWithGroup()
+    );
+
+    expect(result.response.claimsAndScopeOverrideDetails).toEqual({
+      idTokenGeneration: {
+        claimsToAddOrOverride: {
+          'nhs-notify:client-id': 'f58d4b65-870c-42c0-8bb6-2941c5be2bec',
+        },
+      },
+    });
+  });
+
+  test('adds nhs-notify:client-name and nhs-notify:campaign-id claims from ssm response', async () => {
+    ssmMock
+      .on(GetParameterCommand, {
+        Name: '/nhs-notify-unit-tests/clients/f58d4b65-870c-42c0-8bb6-2941c5be2bec',
+      })
+      .resolvesOnce({
+        Parameter: {
+          Value: JSON.stringify({
+            name: 'test-client',
+            campaignId: 'e1a3c78f-b5cc-4256-9926-a295bbef4b19',
+          }),
+        },
+      });
+
+    const result = await new PreTokenGenerationLambda().handler(
+      eventWithGroup()
+    );
+
+    expect(result.response.claimsAndScopeOverrideDetails).toEqual({
+      idTokenGeneration: {
+        claimsToAddOrOverride: {
+          'nhs-notify:client-id': 'f58d4b65-870c-42c0-8bb6-2941c5be2bec',
+          'nhs-notify:campaign-id': 'e1a3c78f-b5cc-4256-9926-a295bbef4b19',
+          'nhs-notify:client-name': 'test-client',
+        },
+      },
+    });
+  });
+
+  test('handles missing client-name in ssm response', async () => {
+    ssmMock
+      .on(GetParameterCommand, {
+        Name: '/nhs-notify-unit-tests/clients/f58d4b65-870c-42c0-8bb6-2941c5be2bec',
+      })
+      .resolvesOnce({
+        Parameter: {
+          Value: JSON.stringify({
+            campaignId: 'e1a3c78f-b5cc-4256-9926-a295bbef4b19',
+          }),
+        },
+      });
+
+    const result = await new PreTokenGenerationLambda().handler(
+      eventWithGroup()
+    );
+
+    expect(result.response.claimsAndScopeOverrideDetails).toEqual({
+      idTokenGeneration: {
+        claimsToAddOrOverride: {
+          'nhs-notify:client-id': 'f58d4b65-870c-42c0-8bb6-2941c5be2bec',
+          'nhs-notify:campaign-id': 'e1a3c78f-b5cc-4256-9926-a295bbef4b19',
+        },
+      },
+    });
+  });
+
+  test('handles missing campaign-id in ssm response', async () => {
+    ssmMock
+      .on(GetParameterCommand, {
+        Name: '/nhs-notify-unit-tests/clients/f58d4b65-870c-42c0-8bb6-2941c5be2bec',
+      })
+      .resolvesOnce({
+        Parameter: {
+          Value: JSON.stringify({
+            name: 'test-client',
+          }),
+        },
+      });
+
+    const result = await new PreTokenGenerationLambda().handler(
+      eventWithGroup()
+    );
+
+    expect(result.response.claimsAndScopeOverrideDetails).toEqual({
+      idTokenGeneration: {
+        claimsToAddOrOverride: {
+          'nhs-notify:client-id': 'f58d4b65-870c-42c0-8bb6-2941c5be2bec',
+          'nhs-notify:client-name': 'test-client',
+        },
+      },
+    });
+  });
+
+  test('caches client response from ssm', async () => {
+    ssmMock
+      .on(GetParameterCommand, {
+        Name: '/nhs-notify-unit-tests/clients/f58d4b65-870c-42c0-8bb6-2941c5be2bec',
+      })
+      .resolvesOnce({
+        Parameter: {
+          Value: JSON.stringify({
+            campaignId: 'e1a3c78f-b5cc-4256-9926-a295bbef4b19',
+            name: 'test-client',
+          }),
+        },
+      });
+
+    const lambda = new PreTokenGenerationLambda();
+
+    const result = await lambda.handler(eventWithGroup());
+
+    expect(result.response.claimsAndScopeOverrideDetails).toEqual({
+      idTokenGeneration: {
+        claimsToAddOrOverride: {
+          'nhs-notify:client-id': 'f58d4b65-870c-42c0-8bb6-2941c5be2bec',
+          'nhs-notify:campaign-id': 'e1a3c78f-b5cc-4256-9926-a295bbef4b19',
+          'nhs-notify:client-name': 'test-client',
+        },
+      },
+    });
+
+    expect(ssmMock).toHaveReceivedCommandTimes(GetParameterCommand, 1);
+
+    const result2 = await lambda.handler(eventWithGroup());
+
+    // subsequent invocations for the same client should not hit ssm again
+    expect(ssmMock).toHaveReceivedCommandTimes(GetParameterCommand, 1);
+
+    // but give the same result
+    expect(result2).toEqual(result);
+  });
+});

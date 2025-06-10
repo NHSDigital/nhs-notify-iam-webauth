@@ -10,6 +10,8 @@ export type BackendConfig = {
   publicKeysS3BucketName: string;
   region: string;
   accountId: string;
+  kmsKeyId: string;
+  clientConfigParameterPathPrefix: string;
 };
 
 export const BackendConfigHelper = {
@@ -25,6 +27,9 @@ export const BackendConfigHelper = {
       publicKeysS3BucketName: outputs.public_keys_s3_bucket_name.value,
       region: outputs.deployment.value.aws_region,
       accountId: outputs.deployment.value.aws_account_id,
+      kmsKeyId: outputs.kms_key_id.value,
+      clientConfigParameterPathPrefix:
+        outputs.client_config_parameter_path_prefix.value,
     };
   },
 
@@ -37,5 +42,8 @@ export const BackendConfigHelper = {
     process.env.PUBLIC_KEYS_S3_BUCKET_NAME = config.publicKeysS3BucketName;
     process.env.ACCOUNT_ID = config.accountId;
     process.env.REGION = config.region;
+    process.env.KMS_KEY_ID = config.kmsKeyId;
+    process.env.CLIENT_CONFIG_PARAMETER_PATH_PREFIX =
+      config.clientConfigParameterPathPrefix;
   },
 };

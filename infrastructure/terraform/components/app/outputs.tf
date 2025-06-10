@@ -34,3 +34,8 @@ output "deployment" {
     commit_id      = var.commit_id
   }
 }
+
+output "kms_key_id" {
+  description = "KMS Key Id used to encrypt application data"
+  value       = module.kms.key_id
+}
