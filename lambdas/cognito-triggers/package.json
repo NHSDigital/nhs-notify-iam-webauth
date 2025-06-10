@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "build-lambda": "rm -rf dist && esbuild --bundle --minify --sourcemap --target=es2020 --platform=node --loader:.node=file --entry-names=[name] --outdir=dist src/pre-token-generation.ts",
-    "lint": "eslint .",
+    "lint": "eslint ./src",
+    "lint:fix": "eslint ./src --fix",
     "test:unit": "jest",
     "typecheck": "tsc --noEmit"
   },

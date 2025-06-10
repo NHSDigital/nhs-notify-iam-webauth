@@ -30,8 +30,8 @@ export class PreTokenGenerationLambda {
   private ssm = new SSMClient();
 
   handler = async (event: PreTokenGenerationV2Event) => {
-    let clientId: string | void = '';
-    let clientConfig: ClientConfig | void;
+    let clientId = '';
+    let clientConfig: ClientConfig | null = null;
 
     const groups = event.request.groupConfiguration.groupsToOverride;
 
@@ -40,29 +40,27 @@ export class PreTokenGenerationLambda {
 
       if (clientGroup) {
         clientId = clientGroup.replace(/^client:/, '');
-
-        if (clientId) {
-          PreTokenGenerationLambda.setIdTokenClaims(event, {
-            'nhs-notify:client-id': clientId,
-          });
-
-          clientConfig = await this.getClientConfig(clientId);
-
-          if (clientConfig) {
-            if (clientConfig.campaignId) {
-              PreTokenGenerationLambda.setIdTokenClaims(event, {
-                'nhs-notify:campaign-id': clientConfig.campaignId,
-              });
-            }
-
-            if (clientConfig.name) {
-              PreTokenGenerationLambda.setIdTokenClaims(event, {
-                'nhs-notify:client-name': clientConfig.name,
-              });
-            }
-          }
-        }
       }
+    }
+
+    if (clientId) {
+      PreTokenGenerationLambda.setIdTokenClaims(event, {
+        'nhs-notify:client-id': clientId,
+      });
+
+      clientConfig = await this.getClientConfig(clientId);
+    }
+
+    if (clientConfig?.campaignId) {
+      PreTokenGenerationLambda.setIdTokenClaims(event, {
+        'nhs-notify:campaign-id': clientConfig.campaignId,
+      });
+    }
+
+    if (clientConfig?.name) {
+      PreTokenGenerationLambda.setIdTokenClaims(event, {
+        'nhs-notify:client-name': clientConfig.name,
+      });
     }
 
     return event;
@@ -70,12 +68,12 @@ export class PreTokenGenerationLambda {
 
   private async getClientConfig(
     clientId: string
-  ): Promise<ClientConfig | void> {
-    let config: ClientConfig | void;
+  ): Promise<ClientConfig | null> {
+    let config: ClientConfig | null = null;
 
-    config = this.clientConfigCache.get(clientId);
+    const cached = this.clientConfigCache.get(clientId);
 
-    if (config) return config;
+    if (cached) return cached;
 
     try {
       const getParameterResponse = await this.ssm.send(
@@ -105,7 +103,7 @@ export class PreTokenGenerationLambda {
     event: PreTokenGenerationV2Event,
     claim: Record<string, string>
   ) {
-    let idTokenGeneration =
+    const idTokenGeneration =
       event.response.claimsAndScopeOverrideDetails?.idTokenGeneration || {};
 
     event.response.claimsAndScopeOverrideDetails = {
@@ -121,4 +119,4 @@ export class PreTokenGenerationLambda {
   }
 }
 
-export const handler = new PreTokenGenerationLambda().handler;
+export const { handler } = new PreTokenGenerationLambda();

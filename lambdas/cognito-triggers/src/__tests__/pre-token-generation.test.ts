@@ -13,6 +13,8 @@ jest.mock('@nhs-notify-iam-webauth/utils-logger', () => ({
   },
 }));
 
+const ssmMock = mockClient(SSMClient);
+
 beforeAll(() => {
   process.env.CLIENT_CONFIG_PARAMETER_PATH_PREFIX =
     '/nhs-notify-unit-tests/clients';
@@ -26,37 +28,35 @@ afterAll(() => {
   delete process.env.CLIENT_CONFIG_PARAMETER_PATH_PREFIX;
 });
 
-const ssmMock = mockClient(SSMClient);
+const eventNoGroup = (): PreTokenGenerationV2Event => ({
+  callerContext: {
+    awsSdkVersion: 'aws-sdk-unknown-unknown',
+    clientId: '1633rn1feb68eltvtqkugqlml',
+  },
+  region: 'eu-west-2',
+  request: {
+    groupConfiguration: {
+      groupsToOverride: [],
+      iamRolesToOverride: [],
+    },
+    scopes: ['aws.cognito.signin.user.admin'],
+    userAttributes: {
+      'cognito:user_status': 'CONFIRMED',
+      email: 'example@example.com',
+      email_verified: 'True',
+      sub: '76c25234-b041-70f2-8ba4-caf538363b35',
+    },
+  },
+  response: {
+    claimsAndScopeOverrideDetails: null,
+  },
+  triggerSource: 'TokenGeneration_Authentication',
+  userName: '76c25234-b041-70f2-8ba4-caf538363b35',
+  userPoolId: 'eu-west-2_W8aROHYoW',
+  version: '2',
+});
 
 describe('when user has no client group', () => {
-  const eventNoGroup = (): PreTokenGenerationV2Event => ({
-    callerContext: {
-      awsSdkVersion: 'aws-sdk-unknown-unknown',
-      clientId: '1633rn1feb68eltvtqkugqlml',
-    },
-    region: 'eu-west-2',
-    request: {
-      groupConfiguration: {
-        groupsToOverride: [],
-        iamRolesToOverride: [],
-      },
-      scopes: ['aws.cognito.signin.user.admin'],
-      userAttributes: {
-        'cognito:user_status': 'CONFIRMED',
-        email: 'example@example.com',
-        email_verified: 'True',
-        sub: '76c25234-b041-70f2-8ba4-caf538363b35',
-      },
-    },
-    response: {
-      claimsAndScopeOverrideDetails: null,
-    },
-    triggerSource: 'TokenGeneration_Authentication',
-    userName: '76c25234-b041-70f2-8ba4-caf538363b35',
-    userPoolId: 'eu-west-2_W8aROHYoW',
-    version: '2',
-  });
-
   test('does not add any claims', async () => {
     const result = await new PreTokenGenerationLambda().handler(eventNoGroup());
 
@@ -64,35 +64,35 @@ describe('when user has no client group', () => {
   });
 });
 
-describe('when user has client group', () => {
-  const eventWithGroup = (): PreTokenGenerationV2Event => ({
-    callerContext: {
-      awsSdkVersion: 'aws-sdk-unknown-unknown',
-      clientId: '1633rn1feb68eltvtqkugqlml',
+const eventWithGroup = (): PreTokenGenerationV2Event => ({
+  callerContext: {
+    awsSdkVersion: 'aws-sdk-unknown-unknown',
+    clientId: '1633rn1feb68eltvtqkugqlml',
+  },
+  region: 'eu-west-2',
+  request: {
+    groupConfiguration: {
+      groupsToOverride: ['client:f58d4b65-870c-42c0-8bb6-2941c5be2bec'],
+      iamRolesToOverride: [],
     },
-    region: 'eu-west-2',
-    request: {
-      groupConfiguration: {
-        groupsToOverride: ['client:f58d4b65-870c-42c0-8bb6-2941c5be2bec'],
-        iamRolesToOverride: [],
-      },
-      scopes: ['aws.cognito.signin.user.admin'],
-      userAttributes: {
-        'cognito:user_status': 'CONFIRMED',
-        email: 'example@example.com',
-        email_verified: 'True',
-        sub: '76c25234-b041-70f2-8ba4-caf538363b35',
-      },
+    scopes: ['aws.cognito.signin.user.admin'],
+    userAttributes: {
+      'cognito:user_status': 'CONFIRMED',
+      email: 'example@example.com',
+      email_verified: 'True',
+      sub: '76c25234-b041-70f2-8ba4-caf538363b35',
     },
-    response: {
-      claimsAndScopeOverrideDetails: null,
-    },
-    triggerSource: 'TokenGeneration_Authentication',
-    userName: '76c25234-b041-70f2-8ba4-caf538363b35',
-    userPoolId: 'eu-west-2_W8aROHYoW',
-    version: '2',
-  });
+  },
+  response: {
+    claimsAndScopeOverrideDetails: null,
+  },
+  triggerSource: 'TokenGeneration_Authentication',
+  userName: '76c25234-b041-70f2-8ba4-caf538363b35',
+  userPoolId: 'eu-west-2_W8aROHYoW',
+  version: '2',
+});
 
+describe('when user has client group', () => {
   test('adds nhs-notify:client-id claim from group in event, handles ssm errors', async () => {
     ssmMock
       .on(GetParameterCommand, {

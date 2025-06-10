@@ -48,43 +48,47 @@ test.describe('SignIn', () => {
   const cognitoHelper = new CognitoUserHelper();
 
   test.beforeAll(async () => {
-    for (const [scenario, { clientId, clientConfig }] of Object.entries(
-      scenarios
-    )) {
-      const user = await cognitoHelper.createUser(
-        `playwright-signIn__${scenario}`
-      );
-      users[scenario as Scenario] = user;
+    await Promise.all(
+      Object.entries(scenarios).map(
+        async ([scenario, { clientId, clientConfig }]) => {
+          const user = await cognitoHelper.createUser(
+            `playwright-signIn__${scenario}`
+          );
+          users[scenario as Scenario] = user;
 
-      if (clientId) {
-        await cognitoHelper.createClientGroup(clientId);
-        await cognitoHelper.addUserToClientGroup(user.userId, clientId);
+          if (clientId) {
+            await cognitoHelper.createClientGroup(clientId);
+            await cognitoHelper.addUserToClientGroup(user.userId, clientId);
 
-        if (clientConfig) {
-          await cognitoHelper.configureClient(clientId, clientConfig);
+            if (clientConfig) {
+              await cognitoHelper.configureClient(clientId, clientConfig);
+            }
+          }
         }
-      }
-    }
+      )
+    );
   });
 
   test.afterAll(async () => {
-    for (const [scenario, { clientId, clientConfig }] of Object.entries(
-      scenarios
-    )) {
-      if (clientId) {
-        await cognitoHelper.deleteClientGroup(clientId);
+    await Promise.all(
+      Object.entries(scenarios).map(
+        async ([scenario, { clientId, clientConfig }]) => {
+          if (clientId) {
+            await cognitoHelper.deleteClientGroup(clientId);
 
-        if (clientConfig) {
-          await cognitoHelper.deleteClientConfig(clientId);
+            if (clientConfig) {
+              await cognitoHelper.deleteClientConfig(clientId);
+            }
+          }
+
+          const user = users[scenario as Scenario];
+
+          if (user) {
+            await cognitoHelper.deleteUser(user.userId);
+          }
         }
-      }
-
-      const user = users[scenario as Scenario];
-
-      if (user) {
-        await cognitoHelper.deleteUser(user.userId);
-      }
-    }
+      )
+    );
   });
 
   test.describe('when user is not assigned to a client', () => {

@@ -1,5 +1,5 @@
 import { handler } from '@/src/handler';
-import { Context, EventBridgeEvent, Callback } from 'aws-lambda';
+import type { Context, EventBridgeEvent, Callback } from 'aws-lambda';
 import {
   filterKeyDirectoryToActiveKeys,
   getKeyDirectory,
