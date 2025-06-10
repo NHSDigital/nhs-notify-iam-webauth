@@ -105,6 +105,11 @@ describe('when user has client group', () => {
     );
 
     expect(result.response.claimsAndScopeOverrideDetails).toEqual({
+      accessTokenGeneration: {
+        claimsToAddOrOverride: {
+          'nhs-notify:client-id': 'f58d4b65-870c-42c0-8bb6-2941c5be2bec',
+        },
+      },
       idTokenGeneration: {
         claimsToAddOrOverride: {
           'nhs-notify:client-id': 'f58d4b65-870c-42c0-8bb6-2941c5be2bec',
@@ -125,6 +130,11 @@ describe('when user has client group', () => {
     );
 
     expect(result.response.claimsAndScopeOverrideDetails).toEqual({
+      accessTokenGeneration: {
+        claimsToAddOrOverride: {
+          'nhs-notify:client-id': 'f58d4b65-870c-42c0-8bb6-2941c5be2bec',
+        },
+      },
       idTokenGeneration: {
         claimsToAddOrOverride: {
           'nhs-notify:client-id': 'f58d4b65-870c-42c0-8bb6-2941c5be2bec',
@@ -152,6 +162,12 @@ describe('when user has client group', () => {
     );
 
     expect(result.response.claimsAndScopeOverrideDetails).toEqual({
+      accessTokenGeneration: {
+        claimsToAddOrOverride: {
+          'nhs-notify:client-id': 'f58d4b65-870c-42c0-8bb6-2941c5be2bec',
+          'nhs-notify:campaign-id': 'e1a3c78f-b5cc-4256-9926-a295bbef4b19',
+        },
+      },
       idTokenGeneration: {
         claimsToAddOrOverride: {
           'nhs-notify:client-id': 'f58d4b65-870c-42c0-8bb6-2941c5be2bec',
@@ -180,6 +196,12 @@ describe('when user has client group', () => {
     );
 
     expect(result.response.claimsAndScopeOverrideDetails).toEqual({
+      accessTokenGeneration: {
+        claimsToAddOrOverride: {
+          'nhs-notify:client-id': 'f58d4b65-870c-42c0-8bb6-2941c5be2bec',
+          'nhs-notify:campaign-id': 'e1a3c78f-b5cc-4256-9926-a295bbef4b19',
+        },
+      },
       idTokenGeneration: {
         claimsToAddOrOverride: {
           'nhs-notify:client-id': 'f58d4b65-870c-42c0-8bb6-2941c5be2bec',
@@ -207,6 +229,11 @@ describe('when user has client group', () => {
     );
 
     expect(result.response.claimsAndScopeOverrideDetails).toEqual({
+      accessTokenGeneration: {
+        claimsToAddOrOverride: {
+          'nhs-notify:client-id': 'f58d4b65-870c-42c0-8bb6-2941c5be2bec',
+        },
+      },
       idTokenGeneration: {
         claimsToAddOrOverride: {
           'nhs-notify:client-id': 'f58d4b65-870c-42c0-8bb6-2941c5be2bec',
@@ -235,6 +262,12 @@ describe('when user has client group', () => {
     const result = await lambda.handler(eventWithGroup());
 
     expect(result.response.claimsAndScopeOverrideDetails).toEqual({
+      accessTokenGeneration: {
+        claimsToAddOrOverride: {
+          'nhs-notify:client-id': 'f58d4b65-870c-42c0-8bb6-2941c5be2bec',
+          'nhs-notify:campaign-id': 'e1a3c78f-b5cc-4256-9926-a295bbef4b19',
+        },
+      },
       idTokenGeneration: {
         claimsToAddOrOverride: {
           'nhs-notify:client-id': 'f58d4b65-870c-42c0-8bb6-2941c5be2bec',

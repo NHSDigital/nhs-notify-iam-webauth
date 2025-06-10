@@ -44,6 +44,10 @@ export class PreTokenGenerationLambda {
     }
 
     if (clientId) {
+      PreTokenGenerationLambda.setAccessTokenClaims(event, {
+        'nhs-notify:client-id': clientId,
+      });
+
       PreTokenGenerationLambda.setIdTokenClaims(event, {
         'nhs-notify:client-id': clientId,
       });
@@ -52,6 +56,10 @@ export class PreTokenGenerationLambda {
     }
 
     if (clientConfig?.campaignId) {
+      PreTokenGenerationLambda.setAccessTokenClaims(event, {
+        'nhs-notify:campaign-id': clientConfig.campaignId,
+      });
+
       PreTokenGenerationLambda.setIdTokenClaims(event, {
         'nhs-notify:campaign-id': clientConfig.campaignId,
       });
@@ -112,6 +120,25 @@ export class PreTokenGenerationLambda {
         ...idTokenGeneration,
         claimsToAddOrOverride: {
           ...idTokenGeneration.claimsToAddOrOverride,
+          ...claim,
+        },
+      },
+    };
+  }
+
+  private static setAccessTokenClaims(
+    event: PreTokenGenerationV2Event,
+    claim: Record<string, string>
+  ) {
+    const accessTokenGeneration =
+      event.response.claimsAndScopeOverrideDetails?.accessTokenGeneration || {};
+
+    event.response.claimsAndScopeOverrideDetails = {
+      ...event.response.claimsAndScopeOverrideDetails,
+      accessTokenGeneration: {
+        ...accessTokenGeneration,
+        claimsToAddOrOverride: {
+          ...accessTokenGeneration.claimsToAddOrOverride,
           ...claim,
         },
       },

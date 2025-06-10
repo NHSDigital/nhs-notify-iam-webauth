@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { test, expect } from '@playwright/test';
-import { jwtDecode } from 'jwt-decode';
+import { jwtDecode, type JwtPayload } from 'jwt-decode';
 import { CognitoUserHelper, User } from '../helpers/cognito-user-helper';
 import { IamWebAuthSignInPage } from '../pages/iam-webauth-signin-page';
 import { getCookies } from '../helpers/cookies';
@@ -37,9 +37,14 @@ const scenarios: Record<
   },
 };
 
-type CustomIdTokenClaims = {
+type CustomIdTokenClaims = JwtPayload & {
   'nhs-notify:client-id': string;
   'nhs-notify:client-name': string;
+  'nhs-notify:campaign-id': string;
+};
+
+type CustomAccessTokenClaims = JwtPayload & {
+  'nhs-notify:client-id': string;
   'nhs-notify:campaign-id': string;
 };
 
@@ -92,7 +97,7 @@ test.describe('SignIn', () => {
   });
 
   test.describe('when user is not assigned to a client', () => {
-    test('should sign user in (no custom claims in id token) then redirect user to redirect path', async ({
+    test('should sign user in with no custom claims in tokens then redirect user to redirect path', async ({
       page,
       baseURL,
     }) => {
@@ -120,11 +125,18 @@ test.describe('SignIn', () => {
       expect(idToken['nhs-notify:client-id']).toBeUndefined();
       expect(idToken['nhs-notify:client-name']).toBeUndefined();
       expect(idToken['nhs-notify:campaign-id']).toBeUndefined();
+
+      const accessToken = jwtDecode<CustomAccessTokenClaims>(
+        cookies.accessToken?.value as string
+      );
+
+      expect(accessToken['nhs-notify:client-id']).toBeUndefined();
+      expect(accessToken['nhs-notify:campaign-id']).toBeUndefined();
     });
   });
 
   test.describe('when user is assigned to an unconfigured client', () => {
-    test('should sign user in (only clientId in id token) then redirect user to redirect path', async ({
+    test('should sign user in with only clientId in tokens then redirect user to redirect path', async ({
       page,
       baseURL,
     }) => {
@@ -156,11 +168,20 @@ test.describe('SignIn', () => {
       );
       expect(idToken['nhs-notify:client-name']).toBeUndefined();
       expect(idToken['nhs-notify:campaign-id']).toBeUndefined();
+
+      const accessToken = jwtDecode<CustomAccessTokenClaims>(
+        cookies.accessToken?.value as string
+      );
+
+      expect(accessToken['nhs-notify:client-id']).toBe(
+        scenarios['client-not-configured'].clientId
+      );
+      expect(accessToken['nhs-notify:campaign-id']).toBeUndefined();
     });
   });
 
   test.describe('when user is assigned to a fully configured client', () => {
-    test('should sign user in (clientId, name and campaignId in id token) then redirect user to redirect path', async ({
+    test('should sign user in with clientId, name and campaignId in tokens then redirect user to redirect path', async ({
       page,
       baseURL,
     }) => {
@@ -183,11 +204,11 @@ test.describe('SignIn', () => {
       expect(cookies.csrf_token?.sameSite).toEqual('Strict');
       expect(cookies.csrf_token?.secure).toEqual(true);
 
+      const scenario = scenarios['client-fully-configured'];
+
       const idToken = jwtDecode<CustomIdTokenClaims>(
         cookies.idToken?.value as string
       );
-
-      const scenario = scenarios['client-fully-configured'];
 
       expect(idToken['nhs-notify:client-id']).not.toBeUndefined();
       expect(idToken['nhs-notify:client-id']).toBe(scenario.clientId);
@@ -199,11 +220,22 @@ test.describe('SignIn', () => {
       expect(idToken['nhs-notify:campaign-id']).toBe(
         scenario.clientConfig?.campaignId
       );
+
+      const accessToken = jwtDecode<CustomAccessTokenClaims>(
+        cookies.accessToken?.value as string
+      );
+
+      expect(accessToken['nhs-notify:client-id']).not.toBeUndefined();
+      expect(accessToken['nhs-notify:client-id']).toBe(scenario.clientId);
+      expect(accessToken['nhs-notify:campaign-id']).not.toBeUndefined();
+      expect(accessToken['nhs-notify:campaign-id']).toBe(
+        scenario.clientConfig?.campaignId
+      );
     });
   });
 
   test.describe('when user is assigned to a configured client with no campaignId', () => {
-    test('should sign user in (no campaignId in id token) then redirect user to redirect path', async ({
+    test('should sign user in with no campaignId in tokens then redirect user to redirect path', async ({
       page,
       baseURL,
     }) => {
@@ -226,11 +258,11 @@ test.describe('SignIn', () => {
       expect(cookies.csrf_token?.sameSite).toEqual('Strict');
       expect(cookies.csrf_token?.secure).toEqual(true);
 
+      const scenario = scenarios['client-no-campaign-id'];
+
       const idToken = jwtDecode<CustomIdTokenClaims>(
         cookies.idToken?.value as string
       );
-
-      const scenario = scenarios['client-no-campaign-id'];
 
       expect(idToken['nhs-notify:client-id']).not.toBeUndefined();
       expect(idToken['nhs-notify:client-id']).toBe(scenario.clientId);
@@ -239,6 +271,14 @@ test.describe('SignIn', () => {
         scenario.clientConfig?.name
       );
       expect(idToken['nhs-notify:campaign-id']).toBeUndefined();
+
+      const accessToken = jwtDecode<CustomAccessTokenClaims>(
+        cookies.accessToken?.value as string
+      );
+
+      expect(accessToken['nhs-notify:client-id']).not.toBeUndefined();
+      expect(accessToken['nhs-notify:client-id']).toBe(scenario.clientId);
+      expect(accessToken['nhs-notify:campaign-id']).toBeUndefined();
     });
   });
 
@@ -275,6 +315,17 @@ test.describe('SignIn', () => {
       expect(idToken['nhs-notify:client-name']).toBeUndefined();
       expect(idToken['nhs-notify:campaign-id']).not.toBeUndefined();
       expect(idToken['nhs-notify:campaign-id']).toBe(
+        scenario.clientConfig?.campaignId
+      );
+
+      const accessToken = jwtDecode<CustomAccessTokenClaims>(
+        cookies.accessToken?.value as string
+      );
+
+      expect(accessToken['nhs-notify:client-id']).not.toBeUndefined();
+      expect(accessToken['nhs-notify:client-id']).toBe(scenario.clientId);
+      expect(accessToken['nhs-notify:campaign-id']).not.toBeUndefined();
+      expect(accessToken['nhs-notify:campaign-id']).toBe(
         scenario.clientConfig?.campaignId
       );
     });
