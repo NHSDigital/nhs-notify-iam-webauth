@@ -20,6 +20,7 @@
 | <a name="input_backup_report_recipient"></a> [backup\_report\_recipient](#input\_backup\_report\_recipient) | Primary recipient of the Backup reports | `string` | `""` | no |
 | <a name="input_backup_schedule_cron"></a> [backup\_schedule\_cron](#input\_backup\_schedule\_cron) | Defines the backup schedule in AWS Cron Expression format | `string` | `"cron(0 0/6 * * ? *)"` | no |
 | <a name="input_branch_name"></a> [branch\_name](#input\_branch\_name) | The branch name to deploy | `string` | `"main"` | no |
+| <a name="input_cis2_auth_mode"></a> [cis2\_auth\_mode](#input\_cis2\_auth\_mode) | The authentication mode used between NHS Notify and CIS2 | `string` | `"client_secret"` | no |
 | <a name="input_cis2_environment"></a> [cis2\_environment](#input\_cis2\_environment) | Name of the CIS2 environment, e.g. mock, int, live. See: https://digital.nhs.uk/services/care-identity-service/applications-and-services/cis2-authentication/guidance-for-developers/detailed-guidance/registration | `string` | `""` | no |
 | <a name="input_cognito_prevent_deletion"></a> [cognito\_prevent\_deletion](#input\_cognito\_prevent\_deletion) | Prevents accidental deletion of the cognito user pool | `bool` | `true` | no |
 | <a name="input_cognito_user_pool_additional_callback_urls"></a> [cognito\_user\_pool\_additional\_callback\_urls](#input\_cognito\_user\_pool\_additional\_callback\_urls) | A list of additional callback\_urls for the cognito user pool | `list(string)` | `[]` | no |
@@ -55,6 +56,7 @@
 |------|--------|---------|
 | <a name="module_amplify_branch"></a> [amplify\_branch](#module\_amplify\_branch) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/amp_branch | v1.0.8 |
 | <a name="module_backend_api"></a> [backend\_api](#module\_backend\_api) | ../../modules/backend-api | n/a |
+| <a name="module_cognito_triggers"></a> [cognito\_triggers](#module\_cognito\_triggers) | ../../modules/cognito-triggers | n/a |
 | <a name="module_kms"></a> [kms](#module\_kms) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/kms | v1.0.8 |
 | <a name="module_lambda_backup_cognito_id"></a> [lambda\_backup\_cognito\_id](#module\_lambda\_backup\_cognito\_id) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/lambda | v2.0.4 |
 | <a name="module_nhse_backup_vault"></a> [nhse\_backup\_vault](#module\_nhse\_backup\_vault) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/aws-backup-source | v1.0.9 |
@@ -68,6 +70,7 @@
 | <a name="output_cognito_user_pool"></a> [cognito\_user\_pool](#output\_cognito\_user\_pool) | n/a |
 | <a name="output_cognito_user_pool_client"></a> [cognito\_user\_pool\_client](#output\_cognito\_user\_pool\_client) | n/a |
 | <a name="output_deployment"></a> [deployment](#output\_deployment) | Deployment details used for post-deployment scripts |
+| <a name="output_kms_key_id"></a> [kms\_key\_id](#output\_kms\_key\_id) | KMS Key Id used to encrypt application data |
 <!-- vale on -->
 <!-- markdownlint-enable -->
 <!-- END_TF_DOCS -->

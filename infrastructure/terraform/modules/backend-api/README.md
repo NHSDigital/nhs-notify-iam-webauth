@@ -10,6 +10,7 @@ No requirements.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_aws_account_id"></a> [aws\_account\_id](#input\_aws\_account\_id) | The AWS Account ID (numeric) | `string` | n/a | yes |
+| <a name="input_cis2_auth_mode"></a> [cis2\_auth\_mode](#input\_cis2\_auth\_mode) | The authentication mode used between NHS Notify and CIS2 | `string` | n/a | yes |
 | <a name="input_cis2_url"></a> [cis2\_url](#input\_cis2\_url) | CSI from the parent component | `string` | n/a | yes |
 | <a name="input_component"></a> [component](#input\_component) | The variable encapsulating the name of this component | `string` | `"api"` | no |
 | <a name="input_csi"></a> [csi](#input\_csi) | CSI from the parent component | `string` | n/a | yes |
@@ -23,6 +24,7 @@ No requirements.
 | <a name="input_log_subscription_role_arn"></a> [log\_subscription\_role\_arn](#input\_log\_subscription\_role\_arn) | The ARN of the IAM role to use for the log subscription filter | `string` | `""` | no |
 | <a name="input_project"></a> [project](#input\_project) | The name of the tfscaffold project | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | The AWS Region | `string` | n/a | yes |
+| <a name="input_ssm_key_directory_name"></a> [ssm\_key\_directory\_name](#input\_ssm\_key\_directory\_name) | An array of KMS signing keys in rotation used for CIS2 authentication | `string` | n/a | yes |
 ## Modules
 
 | Name | Source | Version |
