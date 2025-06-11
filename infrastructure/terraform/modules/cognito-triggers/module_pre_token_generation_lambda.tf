@@ -22,7 +22,7 @@ module "pre_token_generation_lambda" {
   timeout = 3
   runtime = "nodejs20.x"
   lambda_env_vars = {
-    CLIENT_CONFIG_PARAMETER_PATH_PREFIX = var.client_config_parameter_path_prefix
+    CLIENT_CONFIG_PARAMETER_PATH_PREFIX = local.client_config_parameter_path_prefix
   }
 
   # logs
@@ -48,7 +48,7 @@ data "aws_iam_policy_document" "pre_token_generation_lambda" {
     sid       = "AllowGetClientParameters"
     effect    = "Allow"
     actions   = ["ssm:GetParameter"]
-    resources = ["arn:aws:ssm:${var.region}:${var.aws_account_id}:parameter${var.client_config_parameter_path_prefix}*"]
+    resources = ["arn:aws:ssm:${var.region}:${var.aws_account_id}:parameter${local.client_config_parameter_path_prefix}*"]
   }
 
   statement {
@@ -60,7 +60,7 @@ data "aws_iam_policy_document" "pre_token_generation_lambda" {
     condition {
       test     = "StringLike"
       variable = "kms:EncryptionContext:PARAMETER_ARN"
-      values   = ["arn:aws:ssm:${var.region}:${var.aws_account_id}:parameter${var.client_config_parameter_path_prefix}*"]
+      values   = ["arn:aws:ssm:${var.region}:${var.aws_account_id}:parameter${local.client_config_parameter_path_prefix}*"]
     }
   }
 }

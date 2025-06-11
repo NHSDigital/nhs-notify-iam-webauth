@@ -8,9 +8,8 @@ module "cognito_triggers" {
   region         = var.region
   group          = var.group
 
-  client_config_parameter_path_prefix = local.client_config_parameter_path_prefix
-  function_s3_bucket                  = local.acct.s3_buckets["lambda_function_artefacts"]["id"]
-  kms_key_arn                         = local.acct.sandbox_kms_key.arn
-  log_retention_in_days               = var.log_retention_in_days
-  user_pool_id                        = aws_cognito_user_pool.main.id
+  function_s3_bucket    = local.acct.s3_buckets["lambda_function_artefacts"]["id"]
+  kms_key_arn           = local.acct.sandbox_kms_key.arn
+  log_retention_in_days = var.log_retention_in_days
+  user_pool_id          = aws_cognito_user_pool.main.id
 }

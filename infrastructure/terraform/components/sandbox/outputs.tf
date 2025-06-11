@@ -66,5 +66,5 @@ output "kms_key_id" {
 }
 
 output "client_config_parameter_path_prefix" {
-  value = local.client_config_parameter_path_prefix
+  value = module.cognito_triggers.client_config_parameter_path_prefix
 }

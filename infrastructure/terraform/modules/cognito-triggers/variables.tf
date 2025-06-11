@@ -62,8 +62,3 @@ variable "user_pool_id" {
   type        = string
   description = "ID of the Cognito user pool the triggers should be applied to"
 }
-
-variable "client_config_parameter_path_prefix" {
-  type        = string
-  description = "Path prefix of SSM parameters where client configs are stored. The prefix will have the client id appended to it to form a complete parameter path."
-}
