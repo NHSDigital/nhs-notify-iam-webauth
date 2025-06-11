@@ -1,5 +1,5 @@
 module "pre_token_generation_lambda" {
-  source = "../../../../../nhs-notify-shared-modules/infrastructure/modules/lambda"
+  source = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/lambda?ref=v2.0.11"
 
   project        = var.project
   environment    = var.environment
