@@ -11,7 +11,7 @@ jest.mock('@aws-amplify/auth', () => ({
 }));
 
 const signInWithRedirectMock = jest.mocked(signInWithRedirect);
-// eslint-disable-next-line @typescript-eslint/no-require-imports
+// eslint-disable-next-line @typescript-eslint/no-require-imports, import-x/no-unresolved
 const mockedAmplifyOutputs = jest.mocked(require('@amplify_outputs'));
 
 describe('federated-sign-in', () => {
