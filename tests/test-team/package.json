@@ -5,7 +5,7 @@
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "test:local-ui": "playwright test --project component -c config/component/component.config.ts",
+    "test:local-ui": "DEBUG=pw:webserver playwright test --project component -c config/component/component.config.ts",
     "test:backend": "playwright test --project backend -c config/backend/backend.config.ts",
     "test:story": "echo 'Not implemented'",
     "test:unit": "echo 'unit tests not required'",

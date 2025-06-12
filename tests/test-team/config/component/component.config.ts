@@ -42,10 +42,12 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
+    timeout: 2 * 60 * 1000, // 2 minutes
     command: 'npm run build && npm run start',
     cwd: path.resolve(__dirname, '../../..'),
     url: 'http://localhost:3000/auth',
     reuseExistingServer: !process.env.CI,
     stdout: 'pipe',
+    stderr: 'pipe',
   },
 });
