@@ -48,6 +48,5 @@ export default defineConfig({
     url: 'http://localhost:3000/auth',
     reuseExistingServer: !process.env.CI,
     stdout: 'pipe',
-    stderr: 'pipe',
   },
 });
