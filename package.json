@@ -22,6 +22,7 @@
     "test:unit": "npm run --workspaces test:unit --if-present",
     "test:coverage": "npm run --workspaces test:coverage --if-present",
     "test:accessibility": "pa11y-ci -c ./tests/accessibility/.pa11y-ci.js",
+    "test:ui": "npm run build && npm -w tests/test-team run test:local-ui",
     "typecheck": "npm run --workspaces typecheck --if-present"
   },
   "devDependencies": {
