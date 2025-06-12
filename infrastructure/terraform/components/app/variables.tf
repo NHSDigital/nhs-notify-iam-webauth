@@ -209,7 +209,7 @@ variable "destination_vault_arn" {
 variable "backup_schedule_cron" {
   type        = string
   description = "Defines the backup schedule in AWS Cron Expression format"
-  default     = "cron(0 0/6 * * ? *)"
+  default     = "cron(0 2 * * ? *)"
 }
 
 variable "retention_period" {
