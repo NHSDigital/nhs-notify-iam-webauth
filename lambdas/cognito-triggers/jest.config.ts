@@ -48,6 +48,10 @@ const config: Config = {
   testEnvironment: 'node',
 
   testPathIgnorePatterns: ['/node_modules/', '/tests/'],
+
+  moduleNameMapper: {
+    '^@/(.*)': '<rootDir>/$1',
+  },
 };
 
 export default config;

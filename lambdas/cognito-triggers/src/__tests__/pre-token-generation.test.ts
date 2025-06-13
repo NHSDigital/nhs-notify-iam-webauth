@@ -143,7 +143,7 @@ describe('when user has client group', () => {
     });
   });
 
-  test('adds nhs-notify:client-name and nhs-notify:campaign-id claims from ssm response', async () => {
+  test('adds nhs-notify:client-name claim from ssm response', async () => {
     ssmMock
       .on(GetParameterCommand, {
         Name: '/nhs-notify-unit-tests/clients/f58d4b65-870c-42c0-8bb6-2941c5be2bec',
@@ -152,7 +152,6 @@ describe('when user has client group', () => {
         Parameter: {
           Value: JSON.stringify({
             name: 'test-client',
-            campaignId: 'e1a3c78f-b5cc-4256-9926-a295bbef4b19',
           }),
         },
       });
@@ -165,13 +164,11 @@ describe('when user has client group', () => {
       accessTokenGeneration: {
         claimsToAddOrOverride: {
           'nhs-notify:client-id': 'f58d4b65-870c-42c0-8bb6-2941c5be2bec',
-          'nhs-notify:campaign-id': 'e1a3c78f-b5cc-4256-9926-a295bbef4b19',
         },
       },
       idTokenGeneration: {
         claimsToAddOrOverride: {
           'nhs-notify:client-id': 'f58d4b65-870c-42c0-8bb6-2941c5be2bec',
-          'nhs-notify:campaign-id': 'e1a3c78f-b5cc-4256-9926-a295bbef4b19',
           'nhs-notify:client-name': 'test-client',
         },
       },
@@ -185,42 +182,7 @@ describe('when user has client group', () => {
       })
       .resolvesOnce({
         Parameter: {
-          Value: JSON.stringify({
-            campaignId: 'e1a3c78f-b5cc-4256-9926-a295bbef4b19',
-          }),
-        },
-      });
-
-    const result = await new PreTokenGenerationLambda().handler(
-      eventWithGroup()
-    );
-
-    expect(result.response.claimsAndScopeOverrideDetails).toEqual({
-      accessTokenGeneration: {
-        claimsToAddOrOverride: {
-          'nhs-notify:client-id': 'f58d4b65-870c-42c0-8bb6-2941c5be2bec',
-          'nhs-notify:campaign-id': 'e1a3c78f-b5cc-4256-9926-a295bbef4b19',
-        },
-      },
-      idTokenGeneration: {
-        claimsToAddOrOverride: {
-          'nhs-notify:client-id': 'f58d4b65-870c-42c0-8bb6-2941c5be2bec',
-          'nhs-notify:campaign-id': 'e1a3c78f-b5cc-4256-9926-a295bbef4b19',
-        },
-      },
-    });
-  });
-
-  test('handles missing campaign-id in ssm response', async () => {
-    ssmMock
-      .on(GetParameterCommand, {
-        Name: '/nhs-notify-unit-tests/clients/f58d4b65-870c-42c0-8bb6-2941c5be2bec',
-      })
-      .resolvesOnce({
-        Parameter: {
-          Value: JSON.stringify({
-            name: 'test-client',
-          }),
+          Value: JSON.stringify({}),
         },
       });
 
@@ -237,7 +199,6 @@ describe('when user has client group', () => {
       idTokenGeneration: {
         claimsToAddOrOverride: {
           'nhs-notify:client-id': 'f58d4b65-870c-42c0-8bb6-2941c5be2bec',
-          'nhs-notify:client-name': 'test-client',
         },
       },
     });
@@ -251,7 +212,6 @@ describe('when user has client group', () => {
       .resolvesOnce({
         Parameter: {
           Value: JSON.stringify({
-            campaignId: 'e1a3c78f-b5cc-4256-9926-a295bbef4b19',
             name: 'test-client',
           }),
         },
@@ -265,13 +225,11 @@ describe('when user has client group', () => {
       accessTokenGeneration: {
         claimsToAddOrOverride: {
           'nhs-notify:client-id': 'f58d4b65-870c-42c0-8bb6-2941c5be2bec',
-          'nhs-notify:campaign-id': 'e1a3c78f-b5cc-4256-9926-a295bbef4b19',
         },
       },
       idTokenGeneration: {
         claimsToAddOrOverride: {
           'nhs-notify:client-id': 'f58d4b65-870c-42c0-8bb6-2941c5be2bec',
-          'nhs-notify:campaign-id': 'e1a3c78f-b5cc-4256-9926-a295bbef4b19',
           'nhs-notify:client-name': 'test-client',
         },
       },

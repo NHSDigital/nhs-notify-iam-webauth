@@ -22,7 +22,6 @@ export type PreTokenGenerationV2Event = Omit<
 };
 
 export type ClientConfig = {
-  campaignId?: string;
   name?: string;
 };
 
@@ -47,29 +46,19 @@ export class PreTokenGenerationLambda {
     }
 
     if (clientId) {
-      response = PreTokenGenerationLambda.setAccessTokenClaims(event, {
+      response = PreTokenGenerationLambda.setTokenClaims(event, 'accessToken', {
         'nhs-notify:client-id': clientId,
       });
 
-      response = PreTokenGenerationLambda.setIdTokenClaims(event, {
+      response = PreTokenGenerationLambda.setTokenClaims(event, 'idToken', {
         'nhs-notify:client-id': clientId,
       });
 
       clientConfig = await this.getClientConfig(clientId);
     }
 
-    if (clientConfig?.campaignId) {
-      response = PreTokenGenerationLambda.setAccessTokenClaims(event, {
-        'nhs-notify:campaign-id': clientConfig.campaignId,
-      });
-
-      response = PreTokenGenerationLambda.setIdTokenClaims(event, {
-        'nhs-notify:campaign-id': clientConfig.campaignId,
-      });
-    }
-
     if (clientConfig?.name) {
-      response = PreTokenGenerationLambda.setIdTokenClaims(event, {
+      response = PreTokenGenerationLambda.setTokenClaims(event, 'idToken', {
         'nhs-notify:client-name': clientConfig.name,
       });
     }
@@ -100,7 +89,7 @@ export class PreTokenGenerationLambda {
     } catch (error) {
       logger
         .child({ clientId })
-        .error('Unable to retrieve campaign id from SSM', error);
+        .error('Unable to retrieve client config from SSM', error);
     }
 
     if (config) {
@@ -110,44 +99,25 @@ export class PreTokenGenerationLambda {
     return config;
   }
 
-  private static setIdTokenClaims(
+  private static setTokenClaims(
     event: PreTokenGenerationV2Event,
+    token: 'accessToken' | 'idToken',
     claim: Record<string, string>
   ): PreTokenGenerationV2Event {
     const e = { ...event };
 
-    const idTokenGeneration =
-      e.response.claimsAndScopeOverrideDetails?.idTokenGeneration || {};
+    const key =
+      token === 'accessToken' ? 'accessTokenGeneration' : 'idTokenGeneration';
+
+    const tokenGeneration =
+      e.response.claimsAndScopeOverrideDetails?.[key] || {}; // eslint-disable-line security/detect-object-injection
 
     e.response.claimsAndScopeOverrideDetails = {
       ...e.response.claimsAndScopeOverrideDetails,
-      idTokenGeneration: {
-        ...idTokenGeneration,
+      [key]: {
+        ...tokenGeneration,
         claimsToAddOrOverride: {
-          ...idTokenGeneration.claimsToAddOrOverride,
-          ...claim,
-        },
-      },
-    };
-
-    return e;
-  }
-
-  private static setAccessTokenClaims(
-    event: PreTokenGenerationV2Event,
-    claim: Record<string, string>
-  ): PreTokenGenerationV2Event {
-    const e = { ...event };
-
-    const accessTokenGeneration =
-      e.response.claimsAndScopeOverrideDetails?.accessTokenGeneration || {};
-
-    e.response.claimsAndScopeOverrideDetails = {
-      ...e.response.claimsAndScopeOverrideDetails,
-      accessTokenGeneration: {
-        ...accessTokenGeneration,
-        claimsToAddOrOverride: {
-          ...accessTokenGeneration.claimsToAddOrOverride,
+          ...tokenGeneration.claimsToAddOrOverride,
           ...claim,
         },
       },
