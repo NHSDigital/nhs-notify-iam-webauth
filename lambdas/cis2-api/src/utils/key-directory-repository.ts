@@ -13,7 +13,7 @@ export type SigningKeyMetaData = {
   createdDate: string;
 };
 
-export type SigningKeyDirectory = Array<SigningKeyMetaData>;
+export type SigningKeyDirectory = SigningKeyMetaData[];
 
 const $SigningKeyMetaData = schemaFor<SigningKeyMetaData>()(
   z.object({
@@ -62,7 +62,7 @@ export async function getKmsSigningKeyId(): Promise<string> {
   }
 
   // Pick the latest key that is older than 24 hours.
-  const sortedKeyDirectory = keyDirectory.sort((a, b) =>
+  const sortedKeyDirectory = keyDirectory.toSorted((a, b) =>
     `${a.createdDate}_${a.kid}`.localeCompare(`${b.createdDate}_${b.kid}`)
   );
   const cutOffDate = formattedDate(-keyCoolingOffPeriodMillis);

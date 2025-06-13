@@ -1,8 +1,8 @@
 import { getParameter } from '@/src/utils/aws/ssm-util';
 import {
-  getKmsSigningKeyId,
   SigningKeyDirectory,
   SigningKeyMetaData,
+  getKmsSigningKeyId,
 } from '@/src/utils/key-directory-repository';
 
 jest.mock('@/src/utils/aws/ssm-util');

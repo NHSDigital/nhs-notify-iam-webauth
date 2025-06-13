@@ -1,5 +1,5 @@
-import { writeJsonToFile } from '@/src/utils/aws/s3-util';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { writeJsonToFile } from '@/src/utils/aws/s3-util';
 
 jest.mock('@aws-sdk/client-s3', () => ({
   ...jest.requireActual('@aws-sdk/client-s3'),

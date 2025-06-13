@@ -1,17 +1,19 @@
 'use client';
 
 import React, { Suspense, useEffect } from 'react';
-import { redirect, RedirectType, useSearchParams } from 'next/navigation';
+import { RedirectType, redirect, useSearchParams } from 'next/navigation';
 import { Authenticator, useAuthenticator } from '@aws-amplify/ui-react';
 import JsCookie from 'js-cookie';
+// this is not node:path, this is an npm module
+// eslint-disable-next-line unicorn/prefer-node-protocol
 import path from 'path';
-import { federatedSignIn } from '@/src/utils/federated-sign-in';
-import { CIS2SignInButton } from '@/src/components/CIS2SignInButton/CIS2SignInButton';
-import content from '@/src/content/content';
-import styles from './page.module.scss';
-import { authenticatorSelector } from '../utils/authenticator-selector';
+import { authenticatorSelector } from '@/utils/authenticator-selector';
+import { federatedSignIn } from '@/utils/federated-sign-in';
+import CIS2SignInButton from '@/components/CIS2SignInButton/CIS2SignInButton';
+import content from '@/content/content';
+import styles from '@/app/page.module.scss';
 
-function SignInPage() {
+function SignIn() {
   const {
     pages: { signInPage: pageContent },
   } = content;
@@ -67,10 +69,10 @@ function SignInPage() {
   );
 }
 
-export default function Page() {
+export default function SignInPage() {
   return (
     <Suspense>
-      <SignInPage />
+      <SignIn />
     </Suspense>
   );
 }

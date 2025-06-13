@@ -4,7 +4,7 @@ import 'aws-sdk-client-mock-jest';
 import {
   PreTokenGenerationLambda,
   type PreTokenGenerationV2Event,
-} from '../pre-token-generation';
+} from '@/src/pre-token-generation';
 
 jest.mock('@nhs-notify-iam-webauth/utils-logger', () => ({
   logger: {

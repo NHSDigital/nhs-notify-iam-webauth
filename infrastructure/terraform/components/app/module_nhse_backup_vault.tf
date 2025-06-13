@@ -1,10 +1,11 @@
 module "nhse_backup_vault" {
-  source = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/aws-backup-source?ref=v1.0.9"
+  source = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/aws-backup-source?ref=v2.0.12"
   count  = var.destination_vault_arn != null ? 1 : 0
 
-  component                    = var.component
-  environment                  = var.environment
-  project                      = var.project
+  component   = var.component
+  environment = var.environment
+  project     = var.project
+
   backup_copy_vault_account_id = data.aws_arn.destination_vault_arn[0].account
   backup_copy_vault_arn        = data.aws_arn.destination_vault_arn[0].arn
 

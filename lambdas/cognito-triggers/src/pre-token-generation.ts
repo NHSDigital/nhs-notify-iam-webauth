@@ -1,3 +1,5 @@
+/* eslint-disable sonarjs/no-dead-store */
+
 import type { PreTokenGenerationV2TriggerEvent } from 'aws-lambda';
 import { GetParameterCommand, SSMClient } from '@aws-sdk/client-ssm';
 import { logger } from '@nhs-notify-iam-webauth/utils-logger';
@@ -30,6 +32,7 @@ export class PreTokenGenerationLambda {
   private ssm = new SSMClient();
 
   handler = async (event: PreTokenGenerationV2Event) => {
+    let response = { ...event };
     let clientId = '';
     let clientConfig: ClientConfig | null = null;
 
@@ -44,11 +47,11 @@ export class PreTokenGenerationLambda {
     }
 
     if (clientId) {
-      PreTokenGenerationLambda.setAccessTokenClaims(event, {
+      response = PreTokenGenerationLambda.setAccessTokenClaims(event, {
         'nhs-notify:client-id': clientId,
       });
 
-      PreTokenGenerationLambda.setIdTokenClaims(event, {
+      response = PreTokenGenerationLambda.setIdTokenClaims(event, {
         'nhs-notify:client-id': clientId,
       });
 
@@ -56,22 +59,22 @@ export class PreTokenGenerationLambda {
     }
 
     if (clientConfig?.campaignId) {
-      PreTokenGenerationLambda.setAccessTokenClaims(event, {
+      response = PreTokenGenerationLambda.setAccessTokenClaims(event, {
         'nhs-notify:campaign-id': clientConfig.campaignId,
       });
 
-      PreTokenGenerationLambda.setIdTokenClaims(event, {
+      response = PreTokenGenerationLambda.setIdTokenClaims(event, {
         'nhs-notify:campaign-id': clientConfig.campaignId,
       });
     }
 
     if (clientConfig?.name) {
-      PreTokenGenerationLambda.setIdTokenClaims(event, {
+      response = PreTokenGenerationLambda.setIdTokenClaims(event, {
         'nhs-notify:client-name': clientConfig.name,
       });
     }
 
-    return event;
+    return response;
   };
 
   private async getClientConfig(
@@ -110,12 +113,14 @@ export class PreTokenGenerationLambda {
   private static setIdTokenClaims(
     event: PreTokenGenerationV2Event,
     claim: Record<string, string>
-  ) {
-    const idTokenGeneration =
-      event.response.claimsAndScopeOverrideDetails?.idTokenGeneration || {};
+  ): PreTokenGenerationV2Event {
+    const e = { ...event };
 
-    event.response.claimsAndScopeOverrideDetails = {
-      ...event.response.claimsAndScopeOverrideDetails,
+    const idTokenGeneration =
+      e.response.claimsAndScopeOverrideDetails?.idTokenGeneration || {};
+
+    e.response.claimsAndScopeOverrideDetails = {
+      ...e.response.claimsAndScopeOverrideDetails,
       idTokenGeneration: {
         ...idTokenGeneration,
         claimsToAddOrOverride: {
@@ -124,17 +129,21 @@ export class PreTokenGenerationLambda {
         },
       },
     };
+
+    return e;
   }
 
   private static setAccessTokenClaims(
     event: PreTokenGenerationV2Event,
     claim: Record<string, string>
-  ) {
-    const accessTokenGeneration =
-      event.response.claimsAndScopeOverrideDetails?.accessTokenGeneration || {};
+  ): PreTokenGenerationV2Event {
+    const e = { ...event };
 
-    event.response.claimsAndScopeOverrideDetails = {
-      ...event.response.claimsAndScopeOverrideDetails,
+    const accessTokenGeneration =
+      e.response.claimsAndScopeOverrideDetails?.accessTokenGeneration || {};
+
+    e.response.claimsAndScopeOverrideDetails = {
+      ...e.response.claimsAndScopeOverrideDetails,
       accessTokenGeneration: {
         ...accessTokenGeneration,
         claimsToAddOrOverride: {
@@ -143,6 +152,8 @@ export class PreTokenGenerationLambda {
         },
       },
     };
+
+    return e;
   }
 }
 

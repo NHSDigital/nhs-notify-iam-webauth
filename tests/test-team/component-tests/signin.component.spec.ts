@@ -1,9 +1,9 @@
 import { randomUUID } from 'node:crypto';
-import { test, expect } from '@playwright/test';
-import { jwtDecode, type JwtPayload } from 'jwt-decode';
-import { CognitoUserHelper, User } from '../helpers/cognito-user-helper';
-import { IamWebAuthSignInPage } from '../pages/iam-webauth-signin-page';
-import { getCookies } from '../helpers/cookies';
+import { expect, test } from '@playwright/test';
+import { type JwtPayload, jwtDecode } from 'jwt-decode';
+import { CognitoUserHelper, User } from '@helpers/cognito-user-helper';
+import { IamWebAuthSignInPage } from '@pages/iam-webauth-signin-page';
+import { getCookies } from '@helpers/cookies';
 
 type Scenario =
   | 'no-client'
@@ -55,7 +55,7 @@ test.describe('SignIn', () => {
   test.beforeAll(async () => {
     await Promise.all(
       Object.entries(scenarios).map(
-        async ([scenario, { clientId, clientConfig }]) => {
+        async ([scenario, { clientConfig, clientId }]) => {
           const user = await cognitoHelper.createUser(
             `playwright-signIn__${scenario}`
           );
@@ -77,7 +77,7 @@ test.describe('SignIn', () => {
   test.afterAll(async () => {
     await Promise.all(
       Object.entries(scenarios).map(
-        async ([scenario, { clientId, clientConfig }]) => {
+        async ([scenario, { clientConfig, clientId }]) => {
           if (clientId) {
             await cognitoHelper.deleteClientGroup(clientId);
 
@@ -98,8 +98,8 @@ test.describe('SignIn', () => {
 
   test.describe('when user is not assigned to a client', () => {
     test('should sign user in with no custom claims in tokens then redirect user to redirect path', async ({
-      page,
       baseURL,
+      page,
     }) => {
       const signInPage = new IamWebAuthSignInPage(page);
 
@@ -137,8 +137,8 @@ test.describe('SignIn', () => {
 
   test.describe('when user is assigned to an unconfigured client', () => {
     test('should sign user in with only clientId in tokens then redirect user to redirect path', async ({
-      page,
       baseURL,
+      page,
     }) => {
       const signInPage = new IamWebAuthSignInPage(page);
 
@@ -182,8 +182,8 @@ test.describe('SignIn', () => {
 
   test.describe('when user is assigned to a fully configured client', () => {
     test('should sign user in with clientId, name and campaignId in tokens then redirect user to redirect path', async ({
-      page,
       baseURL,
+      page,
     }) => {
       const signInPage = new IamWebAuthSignInPage(page);
 
@@ -236,8 +236,8 @@ test.describe('SignIn', () => {
 
   test.describe('when user is assigned to a configured client with no campaignId', () => {
     test('should sign user in with no campaignId in tokens then redirect user to redirect path', async ({
-      page,
       baseURL,
+      page,
     }) => {
       const signInPage = new IamWebAuthSignInPage(page);
 
@@ -284,8 +284,8 @@ test.describe('SignIn', () => {
 
   test.describe('when user is assigned to a configured client with no name', () => {
     test('should sign user in (no client name in id token) then redirect user to redirect path', async ({
-      page,
       baseURL,
+      page,
     }) => {
       const signInPage = new IamWebAuthSignInPage(page);
 

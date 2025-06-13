@@ -15,6 +15,7 @@ export async function getParameter(name = ''): Promise<string> {
   }
 
   const now = Date.now();
+  // eslint-disable-next-line security/detect-object-injection
   const cachedValue = parameterCache[name];
   if (cachedValue && now - cachedValue.cacheTime < CACHE_DURATION_MS) {
     return cachedValue.value;
@@ -26,6 +27,7 @@ export async function getParameter(name = ''): Promise<string> {
     })
   );
   const value = response.Parameter?.Value ?? '';
+  // eslint-disable-next-line security/detect-object-injection
   parameterCache[name] = { value, cacheTime: now };
   return value;
 }

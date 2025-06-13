@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { act, render } from '@testing-library/react';
 import { getCurrentUser } from '@aws-amplify/auth';
-import CIS2CallbackPage from '@/src/app/oauth2/page';
+import CIS2CallbackPage from '@/app/oauth2/page';
 
 const mockRouter = {
   replace: jest.fn(),
@@ -76,7 +75,6 @@ describe('CIS2CallbackPage', () => {
     render(<CIS2CallbackPage />);
 
     for (let i = 0; i < 4; i += 1) {
-      // eslint-disable-next-line no-await-in-loop
       await act(async () => {
         jest.advanceTimersByTime(500);
       });
@@ -99,7 +97,6 @@ describe('CIS2CallbackPage', () => {
     render(<CIS2CallbackPage />);
 
     for (let i = 0; i <= 60; i += 1) {
-      // eslint-disable-next-line no-await-in-loop
       await act(async () => {
         jest.advanceTimersByTime(500);
       });

@@ -1,4 +1,4 @@
-import { formatTime } from '@/src/utils/format-time';
+import { formatTime } from '@/utils/format-time';
 
 describe('formatTime', () => {
   test.each([
@@ -32,7 +32,7 @@ describe('formatTime', () => {
     },
   ])(
     'should return $expected for $remainingTime seconds',
-    ({ remainingTime, expected }) => {
+    ({ expected, remainingTime }) => {
       expect(formatTime(remainingTime)).toBe(expected);
     }
   );

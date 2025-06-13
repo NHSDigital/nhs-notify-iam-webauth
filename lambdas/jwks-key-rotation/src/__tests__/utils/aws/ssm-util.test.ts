@@ -1,9 +1,9 @@
-import { getParameter, putParameter } from '@/src/utils/aws/ssm-util';
 import {
   GetParameterCommand,
   PutParameterCommand,
   SSMClient,
 } from '@aws-sdk/client-ssm';
+import { getParameter, putParameter } from '@/src/utils/aws/ssm-util';
 
 jest.mock('@aws-sdk/client-ssm', () => ({
   ...jest.requireActual('@aws-sdk/client-ssm'),

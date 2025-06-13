@@ -3,7 +3,7 @@ import path from 'node:path';
 import { FullConfig } from '@playwright/test';
 import generate from 'generate-password';
 import { BackendConfigHelper } from 'nhs-notify-iam-webauth-util-backend-config';
-import { AmplifyConfigurationHelper } from '../helpers/amplify-configuration-helper';
+import { AmplifyConfigurationHelper } from '@helpers/amplify-configuration-helper';
 
 async function globalSetup(config: FullConfig) {
   const configHelper = new AmplifyConfigurationHelper();

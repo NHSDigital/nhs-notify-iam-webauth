@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getConstants } from './utils/public-constants';
+import { getConstants } from '@/utils/public-constants';
 
 const { COGNITO_DOMAIN } = getConstants();
 

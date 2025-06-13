@@ -1,20 +1,20 @@
 import {
+  CreateKeyCommand,
+  DescribeKeyCommand,
+  GetPublicKeyCommand,
+  KMSClient,
+  KeySpec,
+  KeyState,
+  KeyUsageType,
+  ScheduleKeyDeletionCommand,
+} from '@aws-sdk/client-kms';
+import {
   createKmsKey,
   deleteKey,
   getKeyState,
   getKmsPublicKey,
 } from '@/src/utils/aws/kms-util';
 import { KMS_NO_OP_ERRORS } from '@/src/utils/constants';
-import {
-  CreateKeyCommand,
-  DescribeKeyCommand,
-  GetPublicKeyCommand,
-  KeySpec,
-  KeyState,
-  KeyUsageType,
-  KMSClient,
-  ScheduleKeyDeletionCommand,
-} from '@aws-sdk/client-kms';
 
 jest.mock('@/src/utils/logger');
 jest.mock('@aws-sdk/client-kms', () => ({
@@ -171,7 +171,7 @@ describe('kms-util', () => {
       // arrange
       class TestError1 extends Error {}
 
-      (jest.mocked(KMS_NO_OP_ERRORS) as Array<unknown>).push(TestError1);
+      (jest.mocked(KMS_NO_OP_ERRORS) as unknown[]).push(TestError1);
 
       const sendSpy = jest.spyOn(KMSClient.prototype, 'send');
       sendSpy.mockImplementation(() => Promise.reject(new TestError1('TEST')));

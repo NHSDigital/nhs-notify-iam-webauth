@@ -1,5 +1,3 @@
-/* eslint-disable security/detect-non-literal-fs-filename */
-
 import fs from 'node:fs';
 
 export type BackendConfig = {
@@ -16,6 +14,7 @@ export type BackendConfig = {
 
 export const BackendConfigHelper = {
   fromTerraformOutputsFile(filepath: string): BackendConfig {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     const outputs = JSON.parse(fs.readFileSync(filepath, 'utf8'));
 
     return {

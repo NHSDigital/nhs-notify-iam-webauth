@@ -36,7 +36,7 @@ async function generateJwksFormat(
 }
 
 export async function updateJwksFile(
-  publicKeys: Array<{ keyId: string; publicKey: Uint8Array }>
+  publicKeys: { keyId: string; publicKey: Uint8Array }[]
 ): Promise<void> {
   const publicKeysArray = await Promise.all(
     publicKeys.map((keyMetadata) =>

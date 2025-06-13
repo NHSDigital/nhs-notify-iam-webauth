@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
-import '@/src/styles/app.scss';
-import content from '@/src/content/content';
-import { ClientLayout } from '@/src/components/molecules/ClientLayout/ClientLayout';
-import { getConstants } from '../utils/public-constants';
+import '@/styles/app.scss';
+import content from '@/content/content';
+import ClientLayout from '@/components/molecules/ClientLayout/ClientLayout';
+import { getConstants } from '@/utils/public-constants';
 
 const { BASE_PATH } = getConstants();
 
@@ -44,9 +44,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
     <html lang='en'>
       <head>
