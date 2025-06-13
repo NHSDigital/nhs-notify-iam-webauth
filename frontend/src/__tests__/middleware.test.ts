@@ -2,9 +2,9 @@
  * @jest-environment node
  */
 import { NextRequest } from 'next/server';
-import { middleware } from '../middleware';
+import { middleware } from '@/middleware';
 
-jest.mock('../utils/public-constants', () => ({
+jest.mock('@/utils/public-constants', () => ({
   getConstants: () => ({
     COGNITO_DOMAIN: 'auth.env.iam.dev.nhsnotify.national.nhs.uk',
   }),

@@ -1,4 +1,4 @@
-import { getConstants } from '@/src/utils/public-constants';
+import { getConstants } from '@/utils/public-constants';
 
 type TestCase = {
   name: string;

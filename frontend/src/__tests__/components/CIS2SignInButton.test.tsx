@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import { CIS2SignInButton } from '@/src/components/CIS2SignInButton/CIS2SignInButton';
+import CIS2SignInButton from '@/components/CIS2SignInButton/CIS2SignInButton';
 
 describe('CIS2SignInButton', () => {
   it('renders CIS2SignInButton correctly', async () => {

@@ -2,12 +2,12 @@ import {
   CreateKeyCommand,
   DescribeKeyCommand,
   GetPublicKeyCommand,
-  KeyState,
   KMSClient,
+  KeyState,
   ScheduleKeyDeletionCommand,
 } from '@aws-sdk/client-kms';
 import { logger } from '@/src/utils/logger';
-import { KMS_NO_OP_ERRORS } from '../constants';
+import { KMS_NO_OP_ERRORS } from '@/src/utils/constants';
 
 const kmsClient = new KMSClient({
   region: process.env.REGION,

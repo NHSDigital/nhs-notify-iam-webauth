@@ -7,7 +7,7 @@ const parameterMatcher = /^([\w -])+=([\w -])+$/;
 const USAGE_TAG_NAME = 'Usage';
 const USAGE_TAG_VALUE = 'CIS2-JWKS-AUTH';
 
-export function getKeyTags(): Array<Tag> {
+export function getKeyTags(): Tag[] {
   const commaSeparatedKeyTags: string = process.env.KEY_TAGS || '';
   if (!commaSeparatedMatcher.test(commaSeparatedKeyTags)) {
     throw new Error(`Invalid tags ${commaSeparatedKeyTags}`);

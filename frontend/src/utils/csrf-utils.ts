@@ -3,8 +3,8 @@
 import { createHmac, randomBytes } from 'node:crypto';
 import { cookies } from 'next/headers';
 import { logger } from '@nhs-notify-iam-webauth/utils-logger';
-import { getEnvironmentVariable } from './get-environment-variable';
-import { getSessionId } from './amplify-utils';
+import { getEnvironmentVariable } from '@/utils/get-environment-variable';
+import { getSessionId } from '@/utils/amplify-utils';
 
 export const generateSessionCsrfToken = async (sessionId: string) => {
   const secret = getEnvironmentVariable('CSRF_SECRET');

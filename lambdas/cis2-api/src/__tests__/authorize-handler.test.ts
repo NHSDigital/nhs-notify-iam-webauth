@@ -1,4 +1,4 @@
-import type { APIGatewayProxyEvent, Context, Callback } from 'aws-lambda';
+import type { APIGatewayProxyEvent, Callback, Context } from 'aws-lambda';
 import { mockDeep } from 'jest-mock-extended';
 import { handler } from '@/src/authorize-handler';
 

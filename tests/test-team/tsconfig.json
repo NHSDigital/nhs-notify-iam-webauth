@@ -1,6 +1,12 @@
 {
   "extends": "@tsconfig/node20/tsconfig.json",
-  "include": [
-    "**/*.ts"
-  ],
+  "include": ["**/*.ts"],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@helpers/*": ["./helpers/*"],
+      "@pages/*": ["./pages/*"],
+      "@config/*": ["./config/*"]
+    }
+  }
 }

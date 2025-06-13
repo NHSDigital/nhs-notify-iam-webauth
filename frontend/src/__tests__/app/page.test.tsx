@@ -2,10 +2,10 @@ import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { UseAuthenticator, useAuthenticator } from '@aws-amplify/ui-react';
 import JsCookie from 'js-cookie';
-import { redirect, RedirectType } from 'next/navigation';
+import { RedirectType, redirect } from 'next/navigation';
 import { mockDeep } from 'jest-mock-extended';
-import { federatedSignIn } from '@/src/utils/federated-sign-in';
-import SignInPage from '@/src/app/page';
+import { federatedSignIn } from '@/utils/federated-sign-in';
+import SignInPage from '@/app/page';
 
 const mockGetSearchParams = jest.fn();
 
@@ -26,15 +26,16 @@ jest.mock('@aws-amplify/ui-react', () => ({
   ),
 }));
 
-jest.mock('@/src/components/CIS2SignInButton/CIS2SignInButton', () => ({
-  CIS2SignInButton: ({ onClick }: { onClick: () => void }) => (
+jest.mock('@/components/CIS2SignInButton/CIS2SignInButton', () => ({
+  __esModule: true,
+  default: ({ onClick }: { onClick: () => void }) => (
     <button type='button' data-testid='mock-cis2-button' onClick={onClick}>
       Mock CIS2 Sign In Button
     </button>
   ),
 }));
 
-jest.mock('@/src/utils/federated-sign-in');
+jest.mock('@/utils/federated-sign-in');
 
 const mockFederatedSignIn = jest.mocked(federatedSignIn);
 const mockUseAuthenticator = jest.mocked(useAuthenticator);

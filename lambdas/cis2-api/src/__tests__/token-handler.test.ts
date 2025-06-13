@@ -1,8 +1,8 @@
-import type { APIGatewayProxyEvent, Context, Callback } from 'aws-lambda';
+import type { APIGatewayProxyEvent, Callback, Context } from 'aws-lambda';
 import { mockDeep } from 'jest-mock-extended';
 import { sign } from 'jsonwebtoken';
 import axios from 'axios';
-import { handler, validateStatus, type Cis2IdToken } from '@/src/token-handler';
+import { type Cis2IdToken, handler, validateStatus } from '@/src/token-handler';
 import { getKmsSigningKeyId } from '@/src/utils/key-directory-repository';
 import { generateJwt } from '@/src/utils/jwt-generator';
 
@@ -211,7 +211,7 @@ describe('token-handler', () => {
   });
 
   test('passes verification checks with valid user attributes using client secret', async () => {
-    const { axiosResponse, axiosPostMock, response } = await setup({
+    const { axiosPostMock, axiosResponse, response } = await setup({
       id_assurance_level: 3,
       authentication_assurance_level: 2,
       auth_time: new Date('2022-01-01 09:00').getTime() / 1000,
@@ -250,7 +250,7 @@ describe('token-handler', () => {
     });
 
     // act
-    const { axiosResponse, axiosPostMock, response } = await setup(
+    const { axiosPostMock, axiosResponse, response } = await setup(
       {
         id_assurance_level: 3,
         authentication_assurance_level: 2,

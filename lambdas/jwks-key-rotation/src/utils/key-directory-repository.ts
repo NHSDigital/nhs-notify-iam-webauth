@@ -14,7 +14,7 @@ export type SigningKeyMetaData = {
   createdDate: string;
 };
 
-export type SigningKeyDirectory = Array<SigningKeyMetaData>;
+export type SigningKeyDirectory = SigningKeyMetaData[];
 
 const $SigningKeyMetaData = schemaFor<SigningKeyMetaData>()(
   z.object({
