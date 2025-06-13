@@ -12,7 +12,6 @@ export default defineConfig({
     {
       name: 'backend',
       testMatch: '*.backend.spec.ts',
-      dependencies: ['backend:setup'],
       retries: 0,
     },
   ],
