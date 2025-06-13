@@ -4,6 +4,7 @@
   "workspaces": [
     "frontend",
     "lambdas/cis2-api",
+    "lambdas/cognito-triggers",
     "lambdas/jwks-key-rotation",
     "tests/test-team",
     "utils/backend-config",

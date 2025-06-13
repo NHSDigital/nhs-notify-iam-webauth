@@ -43,9 +43,9 @@
 |------|-------------|
 | <a name="output_dns_zone"></a> [dns\_zone](#output\_dns\_zone) | n/a |
 | <a name="output_github_pat_ssm_param_name"></a> [github\_pat\_ssm\_param\_name](#output\_github\_pat\_ssm\_param\_name) | n/a |
-| <a name="output_kms_sandbox_arn"></a> [kms\_sandbox\_arn](#output\_kms\_sandbox\_arn) | n/a |
 | <a name="output_log_subscription_role_arn"></a> [log\_subscription\_role\_arn](#output\_log\_subscription\_role\_arn) | n/a |
 | <a name="output_s3_buckets"></a> [s3\_buckets](#output\_s3\_buckets) | n/a |
+| <a name="output_sandbox_kms_key"></a> [sandbox\_kms\_key](#output\_sandbox\_kms\_key) | n/a |
 <!-- vale on -->
 <!-- markdownlint-enable -->
 <!-- END_TF_DOCS -->

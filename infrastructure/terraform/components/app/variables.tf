@@ -53,7 +53,7 @@ variable "default_tags" {
 }
 
 ##
-# Variables specific to the "dnsroot"component
+# Variables specific to the "app"component
 ##
 
 variable "log_retention_in_days" {

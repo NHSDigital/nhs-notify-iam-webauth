@@ -59,3 +59,12 @@ output "key_rotation_lambda_name" {
 output "public_keys_s3_bucket_name" {
   value = module.public_signing_keys.public_keys_s3_bucket_name
 }
+
+output "kms_key_id" {
+  description = "KMS Key Id used to encrypt application data"
+  value       = local.acct.sandbox_kms_key.id
+}
+
+output "client_config_parameter_path_prefix" {
+  value = module.cognito_triggers.client_config_parameter_path_prefix
+}

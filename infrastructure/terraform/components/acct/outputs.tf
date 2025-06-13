@@ -30,8 +30,11 @@ output "s3_buckets" {
   }
 }
 
-output "kms_sandbox_arn" {
-  value = var.support_sandbox_environments ? module.kms_sandbox[0].key_arn : null
+output "sandbox_kms_key" {
+  value = var.support_sandbox_environments ? {
+    arn = module.kms_sandbox[0].key_arn
+    id  = module.kms_sandbox[0].key_id
+  } : null
 }
 
 output "log_subscription_role_arn" {

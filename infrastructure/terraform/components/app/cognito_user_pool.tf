@@ -51,4 +51,11 @@ resource "aws_cognito_user_pool" "main" {
       max_length = 2048
     }
   }
+
+  lambda_config {
+    pre_token_generation_config {
+      lambda_arn     = module.cognito_triggers.pre_token_generation_lambda_function_arn
+      lambda_version = "V2_0"
+    }
+  }
 }

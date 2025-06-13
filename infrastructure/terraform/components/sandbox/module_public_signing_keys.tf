@@ -11,7 +11,7 @@ module "public_signing_keys" {
   project        = var.project
   region         = var.region
   group          = var.group
-  kms_key_arn    = local.acct.kms_sandbox_arn
+  kms_key_arn    = local.acct.sandbox_kms_key.arn
   default_tags   = local.default_tags
 
   dns_zone_id              = local.acct.dns_zone["id"]
