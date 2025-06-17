@@ -1,4 +1,4 @@
-import {GetSecretValueCommand, SecretsManagerClient} from '@aws-sdk/client-secrets-manager';
+import { GetSecretValueCommand, SecretsManagerClient } from '@aws-sdk/client-secrets-manager';
 import { TOTP } from "totp-generator"
 
 // This script is for generating an OTP for manual CIS2 login in a Static Environment
@@ -21,4 +21,4 @@ import { TOTP } from "totp-generator"
   const { otp } = TOTP.generate(totpSecret);
 
   console.log(otp) // eslint-disable-line no-console
-})()
+})();
