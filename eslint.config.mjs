@@ -243,6 +243,15 @@ export default defineConfig([
       'no-relative-import-paths/no-relative-import-paths': 2,
     },
   },
+  {
+    files: ['scripts/**'],
+    rules: {
+      'import-x/no-extraneous-dependencies': [
+        'error',
+        { devDependencies: true },
+      ],
+    },
+  },
 
   // misc rule overrides
   {
@@ -251,6 +260,7 @@ export default defineConfig([
       'no-underscore-dangle': 0,
       'no-await-in-loop': 0,
       'no-plusplus': [2, { allowForLoopAfterthoughts: true }],
+      'unicorn/prefer-top-level-await': 0, // top level await is not available in commonjs
     },
   },
 ]);

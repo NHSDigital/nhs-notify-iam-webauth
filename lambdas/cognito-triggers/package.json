@@ -14,7 +14,6 @@
     "@nhs-notify-iam-webauth/utils-logger": "*"
   },
   "devDependencies": {
-    "@tsconfig/node20": "^20.1.5",
     "@types/aws-lambda": "^8.10.148",
     "aws-sdk-client-mock": "^4.1.0",
     "aws-sdk-client-mock-jest": "^4.1.0",

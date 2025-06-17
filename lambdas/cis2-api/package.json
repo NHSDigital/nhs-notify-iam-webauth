@@ -10,7 +10,6 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@tsconfig/node20": "^20.1.5",
     "@types/node": "^20.17.32",
     "@types/aws-lambda": "^8.10.148",
     "@types/jsonwebtoken": "^9.0.9",

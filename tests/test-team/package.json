@@ -19,7 +19,6 @@
     "@aws-sdk/client-ssm": "3.775.0",
     "@aws-sdk/types": "3.775.0",
     "@playwright/test": "^1.51.1",
-    "@tsconfig/node20": "^20.1.5",
     "@types/node-jose": "^1.1.13",
     "generate-password": "^1.7.1",
     "jwt-decode": "^4.0.0",

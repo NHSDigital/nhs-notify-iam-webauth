@@ -7,8 +7,5 @@
     "lint:fix": "eslint . --fix",
     "test:unit": "echo \"No unit tests\"",
     "typecheck": "tsc --noEmit"
-  },
-  "devDependencies": {
-    "@tsconfig/node20": "^20.1.5"
   }
 }
