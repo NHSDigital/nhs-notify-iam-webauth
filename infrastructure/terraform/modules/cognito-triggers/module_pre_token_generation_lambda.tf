@@ -18,7 +18,7 @@ module "pre_token_generation_lambda" {
   handler_function_name   = "handler"
 
   // function config
-  memory  = 128
+  memory  = 512
   timeout = 3
   runtime = "nodejs20.x"
   lambda_env_vars = {
