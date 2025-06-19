@@ -39,6 +39,7 @@ export default defineConfig([
     '**/dist',
     '**/test-results',
     '**/playwright-report*',
+    'eslint.config.mjs',
   ]),
 
   //imports
@@ -212,6 +213,12 @@ export default defineConfig([
     },
   },
   {
+    files: ['**/*.ts', '**/*.tsx'],
+    rules: {
+      'import-x/no-unresolved': 0, // trust the typescript compiler to catch unresolved imports
+    },
+  },
+  {
     files: ['tests/test-team/**'],
     rules: {
       'import-x/no-extraneous-dependencies': [
@@ -236,6 +243,15 @@ export default defineConfig([
       'no-relative-import-paths/no-relative-import-paths': 2,
     },
   },
+  {
+    files: ['scripts/**'],
+    rules: {
+      'import-x/no-extraneous-dependencies': [
+        'error',
+        { devDependencies: true },
+      ],
+    },
+  },
 
   // misc rule overrides
   {
@@ -243,7 +259,8 @@ export default defineConfig([
       'no-restricted-syntax': 0,
       'no-underscore-dangle': 0,
       'no-await-in-loop': 0,
-      'no-plusplus': [2, { "allowForLoopAfterthoughts": true }]
-    }
-  }
+      'no-plusplus': [2, { allowForLoopAfterthoughts: true }],
+      'unicorn/prefer-top-level-await': 0, // top level await is not available in commonjs
+    },
+  },
 ]);

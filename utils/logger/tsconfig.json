@@ -1,6 +1,5 @@
 {
-  "extends": "@tsconfig/node20/tsconfig.json",
-  "include": ["src/*", "src/**/*", "**/*.ts"],
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "paths": {
       "@/*": ["./*"]

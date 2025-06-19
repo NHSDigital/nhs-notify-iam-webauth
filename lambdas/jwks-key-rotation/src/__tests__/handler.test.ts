@@ -1,4 +1,4 @@
-import { Callback, Context, EventBridgeEvent } from 'aws-lambda';
+import type { Callback, Context, EventBridgeEvent } from 'aws-lambda';
 import { handler } from '@/src/handler';
 import {
   SigningKeyDirectory,

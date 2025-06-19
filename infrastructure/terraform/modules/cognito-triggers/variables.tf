@@ -24,41 +24,41 @@ variable "region" {
 
 variable "group" {
   type        = string
-  description = "The group variables are being inherited from (often synonymous with account short-name)"
+  description = "The group variables are being inherited from (often synonmous with account short-name)"
 }
+
 
 ##
 # tfscaffold variables specific to this component
 ##
 
-# This is the only primary variable to have its value defined as
-# a default within its declaration in this file, because the variables
-# purpose is as an identifier unique to this component, rather
-# then to the environment from where all other variables come.
 variable "component" {
   type        = string
   description = "The variable encapsulating the name of this component"
-  default     = "sbx"
-}
-
-variable "default_tags" {
-  type        = map(string)
-  description = "A map of default tags to apply to all taggable resources within the component"
-  default     = {}
+  default     = "cog"
 }
 
 ##
-# Variables specific to the "sandbox"component
+# Variables specific to this component
 ##
-
-variable "parent_acct_environment" {
-  type        = string
-  description = "Name of the environment responsible for the acct resources used, affects things like DNS zone. Useful for named dev environments"
-  default     = "main"
-}
 
 variable "log_retention_in_days" {
   type        = number
   description = "The retention period in days for the Cloudwatch Logs events to be retained, default of 0 is indefinite"
   default     = 0
+}
+
+variable "kms_key_arn" {
+  type        = string
+  description = "KMS key ARN"
+}
+
+variable "function_s3_bucket" {
+  type        = string
+  description = "Name of S3 bucket to upload lambda artefacts to"
+}
+
+variable "user_pool_id" {
+  type        = string
+  description = "ID of the Cognito user pool the triggers should be applied to"
 }

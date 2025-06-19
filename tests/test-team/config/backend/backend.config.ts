@@ -10,14 +10,8 @@ export default defineConfig({
   workers: 1,
   projects: [
     {
-      name: 'backend:setup',
-      testMatch: 'backend.setup.ts',
-      retries: 0,
-    },
-    {
       name: 'backend',
       testMatch: '*.backend.spec.ts',
-      dependencies: ['backend:setup'],
       retries: 0,
     },
   ],
