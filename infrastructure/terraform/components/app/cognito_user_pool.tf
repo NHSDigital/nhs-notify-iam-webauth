@@ -5,6 +5,8 @@ resource "aws_cognito_user_pool" "main" {
 
   username_attributes = ["email"]
 
+  user_pool_tier = "ESSENTIALS"
+
   admin_create_user_config {
     allow_admin_create_user_only = true
   }
