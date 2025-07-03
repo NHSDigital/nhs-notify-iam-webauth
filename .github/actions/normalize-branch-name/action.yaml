@@ -12,6 +12,8 @@ runs:
       run: |
         # Example: feature/CCM-00000_branch-description
         BRANCH=$(git rev-parse --abbrev-ref HEAD)
+        echo "Github ref: ${{ github.ref }}"
+        echo "BRANCH: ${BRANCH}"
 
         # Example: feature/ccm-00000_branch-description
         LOWER_CASE_BRANCH=$(echo $BRANCH | tr '[:upper:]' '[:lower:]')
