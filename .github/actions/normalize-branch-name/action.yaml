@@ -2,16 +2,17 @@ name: "Normalize branch name"
 description: "Normalize branch name"
 outputs:
   normalized_branch_name:
-    description: 10 character branch identifier (0000-branch)
+    description: generare a short branch identifier that can be used for an environment name
     value: ${{ steps.normalize_branch_name.outputs.normalized_branch_name }}
 runs:
   using: "composite"
   steps:
     - id: normalize_branch_name
+      env:
+        BRANCH: ${{ github.head_ref }}
       shell: bash
       run: |
         # Example: feature/CCM-00000_branch-description
-        BRANCH=${{ github.head_ref }}
         echo "BRANCH: ${BRANCH}"
 
         # Example: feature/ccm-00000_branch-description
