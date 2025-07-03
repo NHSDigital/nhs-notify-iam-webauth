@@ -11,10 +11,7 @@ runs:
       shell: bash
       run: |
         # Example: feature/CCM-00000_branch-description
-        BRANCH=$(git rev-parse --abbrev-ref HEAD)
-        # ${{ toJSON(github) }}
-        echo ${{ toJSON(github) }}
-        echo "Github ref: ${{ github.ref }}"
+        BRANCH=${{ github.head_ref }}
         echo "BRANCH: ${BRANCH}"
 
         # Example: feature/ccm-00000_branch-description
