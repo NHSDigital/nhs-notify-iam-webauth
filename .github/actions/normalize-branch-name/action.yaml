@@ -12,7 +12,8 @@ runs:
       run: |
         # Example: feature/CCM-00000_branch-description
         BRANCH=$(git rev-parse --abbrev-ref HEAD)
-        echo "Github event: ${{ toJSON(github) }}"
+        # ${{ toJSON(github) }}
+        echo ${{ toJSON(github) }}
         echo "Github ref: ${{ github.ref }}"
         echo "BRANCH: ${BRANCH}"
 
