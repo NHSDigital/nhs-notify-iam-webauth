@@ -9,7 +9,7 @@ runs:
   steps:
     - id: normalize_branch_name
       env:
-        BRANCH: ${{ github.head_ref }}
+        BRANCH: ${{ github.head_ref || github.ref_name }}
       shell: bash
       run: |
         # Example: feature/CCM-00000_branch-description
