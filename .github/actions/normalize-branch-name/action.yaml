@@ -1,0 +1,41 @@
+name: "Normalize branch name"
+description: "Normalize branch name"
+outputs:
+  normalized_branch_name:
+    description: generare a short branch identifier that can be used for an environment name
+    value: ${{ steps.normalize_branch_name.outputs.normalized_branch_name }}
+runs:
+  using: "composite"
+  steps:
+    - id: normalize_branch_name
+      env:
+        BRANCH: ${{ github.head_ref || github.ref_name }}
+      shell: bash
+      run: |
+        # Example: feature/CCM-00000_branch-description
+        echo "BRANCH: ${BRANCH}"
+
+        # Example: feature/ccm-00000_branch-description
+        LOWER_CASE_BRANCH=$(echo $BRANCH | tr '[:upper:]' '[:lower:]')
+
+        # Example: 00000_branch-description
+        LEADING_STRIPPED=(${LOWER_CASE_BRANCH##*ccm-})
+
+        if [[ $LOWER_CASE_BRANCH == $LEADING_STRIPPED ]]; then
+          # No CCM ref detected
+          TICKET_NUMBER=""
+        else
+          # Example: 00000
+          TICKET_NUMBER=${LEADING_STRIPPED%%[_-]*}
+        fi
+
+        # Example: 04f106adc56fc0460853351c314b670d  -
+        HASH=$(md5sum <<<"$BRANCH")
+
+        # Example: 0000004f106adc56fc0460853351c314b670d  -
+        LONG_SANDBOX_NAME="$TICKET_NUMBER""$HASH"
+
+        # Example: 0000004f
+        SANDBOX_NAME=${LONG_SANDBOX_NAME:0:8}
+        echo "$SANDBOX_NAME"
+        echo "normalized_branch_name=$SANDBOX_NAME" >> $GITHUB_OUTPUT
