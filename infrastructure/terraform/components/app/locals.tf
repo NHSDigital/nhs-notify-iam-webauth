@@ -24,5 +24,5 @@ locals {
   cis2_idp                  = var.enable_cis2_idp ? [local.cis2_idp_name] : []
   use_custom_cognito_domain = var.branch_name == "main"
 
-  log_destination_arn = var.override_log_destination_arn != "" ? var.override_log_destination_arn : "arn:aws:logs:${var.region}:${var.observability_account_id}:destination:nhs-main-obs-firehose-logs" #Please remove this after we do dev/nonprod cutover for this BC
+  log_destination_arn = var.override_log_destination_arn != "" ? var.override_log_destination_arn : "arn:aws:logs:${var.region}:${var.observability_account_id}:destination:nhs-main-obs-firehose-logs" # TODO CCM-10579 Please remove this after we do dev/nonprod cutover for this BC
 }
