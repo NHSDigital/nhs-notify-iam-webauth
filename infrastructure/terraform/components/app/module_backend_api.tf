@@ -12,7 +12,7 @@ module "backend_api" {
   cis2_url                  = local.cis2_issuer_urls[var.cis2_environment]
   cis2_auth_mode            = var.cis2_auth_mode
   ssm_key_directory_name    = module.public_signing_keys.key_directory_ssm_parameter_name
-  log_destination_arn       = "arn:aws:logs:${var.region}:${var.observability_account_id}:destination:nhs-notify-main-acct-firehose-logs"
+  log_destination_arn       = local.log_destination_arn
   log_subscription_role_arn = local.acct.log_subscription_role_arn
 
   kms_key_arn        = module.kms.key_arn

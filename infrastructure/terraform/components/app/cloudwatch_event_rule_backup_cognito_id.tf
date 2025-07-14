@@ -8,7 +8,7 @@ resource "aws_cloudwatch_event_rule" "backup_cognito_id" {
     "source" : ["aws.cognito-idp"],
     "detail-type" : ["AWS API Call via CloudTrail"],
     "detail" : {
-      "eventSource": ["cognito-idp.amazonaws.com"],
+      "eventSource" : ["cognito-idp.amazonaws.com"],
       "eventName" : [
         "AddCustomAttributes",
         "AdminAddUserToGroup",
