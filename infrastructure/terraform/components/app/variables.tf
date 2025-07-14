@@ -240,3 +240,9 @@ variable "observability_account_id" {
   type        = string
   description = "The Observability Account ID that needs access"
 }
+
+variable "override_log_destination_arn" {
+  type        = string
+  description = "Override the log destination ARN for this component."
+  default     = ""
+}
