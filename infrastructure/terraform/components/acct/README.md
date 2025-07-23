@@ -13,7 +13,10 @@
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_aws_account_id"></a> [aws\_account\_id](#input\_aws\_account\_id) | The AWS Account ID (numeric) | `string` | n/a | yes |
+| <a name="input_budget_amount"></a> [budget\_amount](#input\_budget\_amount) | The budget amount in USD for the account | `number` | `500` | no |
 | <a name="input_component"></a> [component](#input\_component) | The variable encapsulating the name of this component | `string` | `"acct"` | no |
+| <a name="input_cost_alarm_recipients"></a> [cost\_alarm\_recipients](#input\_cost\_alarm\_recipients) | A list of email addresses to receive alarm notifications | `list(string)` | `[]` | no |
+| <a name="input_cost_anomaly_threshold"></a> [cost\_anomaly\_threshold](#input\_cost\_anomaly\_threshold) | The threshold percentage for cost anomaly detection | `number` | `10` | no |
 | <a name="input_default_tags"></a> [default\_tags](#input\_default\_tags) | A map of default tags to apply to all taggable resources within the component | `map(string)` | `{}` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | The name of the tfscaffold environment | `string` | n/a | yes |
 | <a name="input_group"></a> [group](#input\_group) | The group variables are being inherited from (often synonmous with account short-name) | `string` | n/a | yes |
