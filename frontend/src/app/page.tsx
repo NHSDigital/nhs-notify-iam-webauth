@@ -18,13 +18,18 @@ function SignIn() {
     pages: { signInPage: pageContent },
   } = content;
 
-  const { authStatus } = useAuthenticator(authenticatorSelector);
+  const { authStatus, error } = useAuthenticator(authenticatorSelector);
 
   const searchParams = useSearchParams();
 
   const redirectPath = searchParams.get('redirect');
 
   useEffect(() => {
+    if (error) {
+      console.log(error);
+      redirect(`/pre-auth-failed`, RedirectType.push);
+    }
+
     if (authStatus === 'authenticated') {
       redirect(
         path.normalize(
@@ -35,7 +40,7 @@ function SignIn() {
     } else if (authStatus === 'unauthenticated') {
       JsCookie.remove('csrf_token');
     }
-  }, [authStatus, redirectPath]);
+  }, [authStatus, error, redirectPath]);
 
   return (
     <div className='nhsuk-grid-row'>

@@ -21,5 +21,7 @@ resource "aws_cognito_user_pool" "main" {
       lambda_arn     = module.cognito_triggers.pre_token_generation_lambda_function_arn
       lambda_version = "V2_0"
     }
+
+    pre_authentication = module.cognito_triggers.pre_authentication_lambda_function_arn
   }
 }
