@@ -16,23 +16,33 @@ import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner';
 const POLLING_INTERVAL_MS = 500;
 const MAX_POLL_DURATION_MS = 20_000;
 
-function redirectFromStateQuery(searchParams: ReadonlyURLSearchParams): State {
+function redirectFromStateQuery(
+  searchParams: ReadonlyURLSearchParams
+): State & { error: string | null } {
   const stateQuery = searchParams.get('state');
   const redirectSegment = stateQuery?.split('-')?.[1];
   const json = Buffer.from(redirectSegment ?? '', 'hex').toString('utf8');
 
+  const error = searchParams.get('error_description');
+
   try {
     return JSON.parse(json);
   } catch {
-    return { redirectPath: '/templates/message-templates' };
+    return { redirectPath: '/templates/message-templates', error };
   }
 }
 
 // eslint-disable-next-line sonarjs/function-return-type
 export default function CIS2CallbackPage(): ReactNode {
   const router = useRouter();
-  const customState = redirectFromStateQuery(useSearchParams());
-  const destination = `/signin?redirect=${encodeURIComponent(customState.redirectPath)}`;
+  const { error, redirectPath } = redirectFromStateQuery(useSearchParams());
+  const destination = `/signin?redirect=${encodeURIComponent(redirectPath)}`;
+
+  if (error) {
+    console.log(error);
+
+    router.replace('/pre-auth-failure');
+  }
 
   useEffect(() => {
     const startTime = Date.now();
