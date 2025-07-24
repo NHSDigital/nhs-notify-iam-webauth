@@ -26,7 +26,8 @@ function redirectFromStateQuery(
   const error = searchParams.get('error_description');
 
   try {
-    return JSON.parse(json);
+    const state = JSON.parse(json);
+    return { ...state, error };
   } catch {
     return { redirectPath: '/templates/message-templates', error };
   }
