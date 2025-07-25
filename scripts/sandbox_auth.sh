@@ -27,7 +27,7 @@ function gen_temp_password() {
   digits=$(LC_ALL=C tr -dc '0-9' </dev/urandom | head -c 4; echo)
   echo "${upper}-${lower}-${digits}"
 }
- 
+
 declare temp_password
 
 if [[ "$get_user_command_exit_code" -ne 0 ]]; then

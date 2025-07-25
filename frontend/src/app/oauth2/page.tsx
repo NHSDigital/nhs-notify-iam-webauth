@@ -16,28 +16,26 @@ import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner';
 const POLLING_INTERVAL_MS = 500;
 const MAX_POLL_DURATION_MS = 20_000;
 
-function redirectFromStateQuery(
-  searchParams: ReadonlyURLSearchParams
-): State & { error: string | null } {
+function redirectFromStateQuery(searchParams: ReadonlyURLSearchParams): State {
   const stateQuery = searchParams.get('state');
   const redirectSegment = stateQuery?.split('-')?.[1];
   const json = Buffer.from(redirectSegment ?? '', 'hex').toString('utf8');
 
-  const error = searchParams.get('error_description');
-
   try {
-    const state = JSON.parse(json);
-    return { ...state, error };
+    return JSON.parse(json);
   } catch {
-    return { redirectPath: '/templates/message-templates', error };
+    return { redirectPath: '/templates/message-templates' };
   }
 }
 
 // eslint-disable-next-line sonarjs/function-return-type
 export default function CIS2CallbackPage(): ReactNode {
   const router = useRouter();
-  const { error, redirectPath } = redirectFromStateQuery(useSearchParams());
-  const destination = `/signin?redirect=${encodeURIComponent(redirectPath)}`;
+  const searchParams = useSearchParams();
+  const customState = redirectFromStateQuery(searchParams);
+  const destination = `/signin?redirect=${encodeURIComponent(customState.redirectPath)}`;
+
+  const error = searchParams.get('error_description');
 
   if (error) {
     console.log(error);
