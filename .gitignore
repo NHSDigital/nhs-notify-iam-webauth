@@ -9,11 +9,11 @@
 version.json
 *.code-workspace
 !project.code-workspace
-
 # Please, add your custom content below!
 
 # dependencies
-/node_modules
+*/node_modules
+node_modules
 /.pnp
 .pnp.js
 
