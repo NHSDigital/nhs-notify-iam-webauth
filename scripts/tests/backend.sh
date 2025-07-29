@@ -14,6 +14,5 @@ echo "TEST_EXIT_CODE=$TEST_EXIT_CODE"
 
 mkdir -p ../acceptance-test-report
 cp -r ./playwright-report-backend-tests ../acceptance-test-report
-[[ -e test-results ]] && cp -r ./test-results ../acceptance-test-report
 
 exit $TEST_EXIT_CODE
