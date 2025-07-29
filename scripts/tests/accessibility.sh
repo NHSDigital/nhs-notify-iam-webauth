@@ -12,7 +12,7 @@ TEST_EXIT_CODE=0
 npm run test:accessibility || TEST_EXIT_CODE=$?
 echo "TEST_EXIT_CODE=$TEST_EXIT_CODE"
 mkdir -p ./tests/acceptance-test-report
-cp -r tests/accessibility/.reports/accessibility tests/acceptance-test-report
+cp -r /.reports/accessibility tests/acceptance-test-report
 
 npm run app:stop -w frontend
 
