@@ -46,23 +46,9 @@ runs:
       run: |
         make test-${{ inputs.testType }}
 
-    - name: Archive ui test results
-      if: ${{ inputs.testType == 'ui' }}
+    - name: Archive test results
+      if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: UI test report
-        path: "tests/test-team/playwright-report-component-tests"
-
-    - name: Archive backend test results
-      if: ${{ inputs.testType == 'backend' }}
-      uses: actions/upload-artifact@v4
-      with:
-        name: Backend test report
-        path: "tests/test-team/playwright-report-backend-tests"
-
-    - name: Archive accessibility results
-      if: ${{ inputs.testType == 'accessibility' }}
-      uses: actions/upload-artifact@v4
-      with:
-        name: accessibility
-        path: ".reports/accessibility"
+        name: ${{ inputs.testType }} - test report
+        path: "tests/acceptance-test-report"
