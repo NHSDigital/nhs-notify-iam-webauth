@@ -101,7 +101,7 @@ test.describe('jwks-key-rotation', () => {
     const jwksKeyIds = jwksPublicKeys.map((publicKey) => publicKey.kid);
 
     // Verify that the expired key has been removed
-    expect(jwksPublicKeys.length, JSON.stringify(jwksPublicKeys)).toBe(1);
+    expect(jwksPublicKeys.length, JSON.stringify(jwksPublicKeys)).toBe(100);
     expect(
       jwksKeyIds.filter(
         (keyId) => keyId === '00000000-0000-0000-0000-000000000000'

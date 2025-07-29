@@ -99,7 +99,7 @@ test.describe('SignIn', () => {
       await signInPage.cognitoSignIn(users['no-client']?.email as string);
 
       await expect(page).toHaveURL(
-        `${baseURL}/templates/create-and-submit-templates`
+        `${baseURL}/templates/create-and-submit-templatesBROKEN`
       );
 
       const cookies = await getCookies(page);
