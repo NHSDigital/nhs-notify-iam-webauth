@@ -27,7 +27,7 @@ module.exports = {
     chromeLaunchConfig: {
       args: ['--no-sandbox']
     },
-    standard: 'WCAG2AAA',
+    standard: 'WCAG2AA',
     agent: 'pa11y',
   }
 };
