@@ -58,22 +58,20 @@ export const handler: APIGatewayProxyHandler = async (event) => {
   }
 
   const accessTokenBody = new URLSearchParams(event.body);
-  if (process.env.CIS2_AUTH_MODE === 'jwks') {
-    const clientId = accessTokenBody.get('client_id');
-    if (!clientId) {
-      throw new Error('Missing client_id');
-    }
-
-    const keyId = await getKmsSigningKeyId();
-    logger.info(`Generating JWT using KMS Key ${keyId}`);
-    const jwt = await generateJwt(keyId, clientId);
-    accessTokenBody.set(
-      'client_assertion_type',
-      'urn:ietf:params:oauth:client-assertion-type:jwt-bearer'
-    );
-    accessTokenBody.set('client_assertion', jwt);
-    accessTokenBody.delete('client_secret');
+  const clientId = accessTokenBody.get('client_id');
+  if (!clientId) {
+    throw new Error('Missing client_id');
   }
+
+  const keyId = await getKmsSigningKeyId();
+  logger.info(`Generating JWT using KMS Key ${keyId}`);
+  const jwt = await generateJwt(keyId, clientId);
+  accessTokenBody.set(
+    'client_assertion_type',
+    'urn:ietf:params:oauth:client-assertion-type:jwt-bearer'
+  );
+  accessTokenBody.set('client_assertion', jwt);
+  accessTokenBody.delete('client_secret');
 
   const cis2Response = await axios.post<Cis2TokenResponse>(
     tokenUrl,
