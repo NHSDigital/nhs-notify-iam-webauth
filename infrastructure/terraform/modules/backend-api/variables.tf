@@ -58,16 +58,6 @@ variable "cis2_url" {
   description = "CSI from the parent component"
 }
 
-variable "cis2_auth_mode" {
-  type        = string
-  description = "The authentication mode used between NHS Notify and CIS2"
-
-  validation {
-    condition     = contains(["client_secret", "jwks"], var.cis2_auth_mode)
-    error_message = "Allowed values for cis2_auth_mode are \"client_secret\" or \"jwks\"."
-  }
-}
-
 variable "ssm_key_directory_name" {
   type        = string
   description = "An array of KMS signing keys in rotation used for CIS2 authentication"

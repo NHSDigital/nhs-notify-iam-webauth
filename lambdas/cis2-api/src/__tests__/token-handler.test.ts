@@ -15,20 +15,23 @@ jest.mock('@/src/utils/extract-string-record', () => ({
 
 const mockEvent = new URLSearchParams({
   grant_type: 'test_grant',
-  client_id: 'test',
-  client_secret: 'mocksecret',
-  redirect_uri: 'https://test.nhs.uk/oauth2/idpresponse',
-});
-
-const mockEventBlankSecret = new URLSearchParams({
-  grant_type: 'test_grant',
   client_id: 'test-client',
   client_secret: '',
   redirect_uri: 'https://test.nhs.uk/oauth2/idpresponse',
 });
 
 const mockEventBody = mockEvent.toString();
-const mockEventBodyWithoutSecret = mockEventBlankSecret.toString();
+
+const mockCis2Params = new URLSearchParams({
+  grant_type: 'test_grant',
+  client_id: 'test-client',
+  redirect_uri: 'https://test.nhs.uk/oauth2/idpresponse',
+  client_assertion_type:
+    'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
+  client_assertion: 'mock.jwt.test',
+});
+
+const mockCis2Query = mockCis2Params.toString();
 
 const setup = async (jwtPayload: Cis2IdToken, eventBody = mockEventBody) => {
   const jwt = sign(jwtPayload, 'test');
@@ -72,7 +75,6 @@ describe('token-handler', () => {
     process.env.EXPECTED_ID_ASSURANCE_LEVEL = '3';
     process.env.EXPECTED_AUTHENTICATION_ASSURANCE_LEVEL = '2';
     process.env.MAXIMUM_EXPECTED_AUTH_TIME_DIVERGENCE_SECONDS = '60';
-    process.env.CIS2_AUTH_MODE = 'client_secret';
   });
 
   afterAll(() => {
@@ -135,6 +137,10 @@ describe('token-handler', () => {
       status: 400,
     });
 
+    jest
+      .mocked(generateJwt)
+      .mockImplementation(() => Promise.resolve('mock.jwt.test'));
+
     const response = await handler(
       event,
       mockDeep<Context>(),
@@ -143,7 +149,7 @@ describe('token-handler', () => {
 
     expect(axiosPostMock).toHaveBeenCalledWith(
       'cis2-url/access_token',
-      mockEventBody,
+      mockCis2Query,
       expect.anything()
     );
 
@@ -157,6 +163,10 @@ describe('token-handler', () => {
   });
 
   test('403 with invalid id_assurance_level', async () => {
+    jest
+      .mocked(generateJwt)
+      .mockImplementation(() => Promise.resolve('mock.jwt.test'));
+
     const { axiosPostMock, response } = await setup({
       id_assurance_level: 0,
       authentication_assurance_level: 2,
@@ -165,7 +175,7 @@ describe('token-handler', () => {
 
     expect(axiosPostMock).toHaveBeenCalledWith(
       'cis2-url/access_token',
-      mockEventBody,
+      mockCis2Query,
       expect.anything()
     );
     expect(response).toEqual({
@@ -175,6 +185,10 @@ describe('token-handler', () => {
   });
 
   test('403 with invalid authentication_assurance_level', async () => {
+    jest
+      .mocked(generateJwt)
+      .mockImplementation(() => Promise.resolve('mock.jwt.test'));
+
     const { axiosPostMock, response } = await setup({
       id_assurance_level: 3,
       authentication_assurance_level: 0,
@@ -183,7 +197,7 @@ describe('token-handler', () => {
 
     expect(axiosPostMock).toHaveBeenCalledWith(
       'cis2-url/access_token',
-      mockEventBody,
+      mockCis2Query,
       expect.anything()
     );
     expect(response).toEqual({
@@ -193,6 +207,10 @@ describe('token-handler', () => {
   });
 
   test('403 with invalid auth_time', async () => {
+    jest
+      .mocked(generateJwt)
+      .mockImplementation(() => Promise.resolve('mock.jwt.test'));
+
     const { axiosPostMock, response } = await setup({
       id_assurance_level: 3,
       authentication_assurance_level: 2,
@@ -201,7 +219,7 @@ describe('token-handler', () => {
 
     expect(axiosPostMock).toHaveBeenCalledWith(
       'cis2-url/access_token',
-      mockEventBody,
+      mockCis2Query,
       expect.anything()
     );
     expect(response).toEqual({
@@ -210,30 +228,8 @@ describe('token-handler', () => {
     });
   });
 
-  test('passes verification checks with valid user attributes using client secret', async () => {
-    const { axiosPostMock, axiosResponse, response } = await setup({
-      id_assurance_level: 3,
-      authentication_assurance_level: 2,
-      auth_time: new Date('2022-01-01 09:00').getTime() / 1000,
-    });
-
-    expect(axiosPostMock).toHaveBeenCalledWith(
-      'cis2-url/access_token',
-      mockEventBody,
-      expect.anything()
-    );
-    expect(response).toEqual({
-      statusCode: 200,
-      headers: {
-        key: 'value',
-      },
-      body: JSON.stringify(axiosResponse),
-    });
-  });
-
   test('passes verification checks with valid user attributes using jwks', async () => {
     // arrange
-    process.env.CIS2_AUTH_MODE = 'jwks';
     jest
       .mocked(getKmsSigningKeyId)
       .mockImplementation(() => Promise.resolve('test-key-id'));
@@ -256,7 +252,7 @@ describe('token-handler', () => {
         authentication_assurance_level: 2,
         auth_time: new Date('2022-01-01 09:00').getTime() / 1000,
       },
-      mockEventBodyWithoutSecret
+      mockEventBody
     );
 
     // assert
@@ -280,7 +276,6 @@ describe('token-handler', () => {
 
   test('should reject missing client id when using jwks', async () => {
     // arrange
-    process.env.CIS2_AUTH_MODE = 'jwks';
     jest
       .mocked(getKmsSigningKeyId)
       .mockImplementation(() => Promise.resolve('test-key-id'));
