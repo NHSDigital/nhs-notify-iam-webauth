@@ -189,17 +189,6 @@ variable "cis2_environment" {
   }
 }
 
-variable "cis2_auth_mode" {
-  type        = string
-  description = "The authentication mode used between NHS Notify and CIS2"
-  default     = "client_secret"
-
-  validation {
-    condition     = contains(["client_secret", "jwks"], var.cis2_auth_mode)
-    error_message = "Allowed values for cis2_auth_mode are \"client_secret\" or \"jwks\"."
-  }
-}
-
 variable "destination_vault_arn" {
   type        = string
   description = "ARN of the backup vault in the destination account, if this environment should be backed up"

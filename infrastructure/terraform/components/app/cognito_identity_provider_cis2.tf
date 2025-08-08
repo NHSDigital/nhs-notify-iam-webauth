@@ -8,7 +8,6 @@ resource "aws_cognito_identity_provider" "cis2_idp" {
   provider_details = {
     authorize_scopes          = "openid profile email nhsperson associatedorgs"
     client_id                 = aws_ssm_parameter.cis2_client_credentials_client_id.value
-    client_secret             = var.cis2_auth_mode == "client_secret" ? aws_ssm_parameter.cis2_client_credentials_client_secret.value : null
     oidc_issuer               = local.cis2_issuer_urls[var.cis2_environment]
     attributes_url            = "${local.cis2_issuer_urls[var.cis2_environment]}/userinfo"
     authorize_url             = "${module.backend_api.api_base_url}/v1/cis2-authorize"
