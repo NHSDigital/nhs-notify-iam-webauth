@@ -88,9 +88,6 @@ const eventWithGroup = (): PreTokenGenerationV2Event => ({
       'cognito:user_status': 'CONFIRMED',
       email: 'example@example.com',
       email_verified: 'True',
-      given_name: 'Test',
-      family_name: 'Example',
-      display_name: 'Dr Test Example',
       sub: '76c25234-b041-70f2-8ba4-caf538363b35',
     },
   },
@@ -102,6 +99,22 @@ const eventWithGroup = (): PreTokenGenerationV2Event => ({
   userPoolId: 'eu-west-2_W8aROHYoW',
   version: '2',
 });
+
+const eventWithGroupAndIdentity = (): PreTokenGenerationV2Event => {
+  const event = eventWithGroup();
+  return {
+    ...event,
+    request: {
+      ...event.request,
+      userAttributes: {
+        ...event.request.userAttributes,
+        display_name: 'Dr Test Example',
+        given_name: 'Test',
+        family_name: 'Example',
+      },
+    },
+  };
+};
 
 describe('when user has no client group', () => {
   test('does not add any claims', async () => {
@@ -293,7 +306,7 @@ describe('when user has client group', () => {
       });
 
     const result = await new PreTokenGenerationLambda().handler(
-      eventWithGroup()
+      eventWithGroupAndIdentity()
     );
 
     expect(result.response.claimsAndScopeOverrideDetails).toEqual({
