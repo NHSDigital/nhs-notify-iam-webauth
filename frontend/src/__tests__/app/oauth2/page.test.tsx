@@ -135,4 +135,18 @@ describe('CIS2CallbackPage', () => {
       '/signin?redirect=%2Ftemplates%2Fmessage-templates'
     );
   });
+
+  it('redirects if search params contain error indicating pre-auth client check failed', async () => {
+    mockSearchParams.get
+      .mockReturnValueOnce(
+        `code-${encodeState({ redirectPath: '/templates/my-template' })}`
+      )
+      .mockReturnValueOnce('PRE_AUTH_NO_CLIENT_FAILURE');
+
+    render(<CIS2CallbackPage />);
+
+    expect(mockRouter.replace).toHaveBeenCalledWith(
+      '/auth/request-to-be-added-to-a-service'
+    );
+  });
 });

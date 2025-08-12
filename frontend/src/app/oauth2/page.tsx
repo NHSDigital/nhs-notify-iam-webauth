@@ -12,6 +12,7 @@ import { getCurrentUser } from '@aws-amplify/auth';
 import type { State } from '@/utils/federated-sign-in';
 import content from '@/content/content';
 import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner';
+import { noClientErrorTag } from '@/utils/public-constants';
 
 const POLLING_INTERVAL_MS = 500;
 const MAX_POLL_DURATION_MS = 20_000;
@@ -37,13 +38,11 @@ export default function CIS2CallbackPage(): ReactNode {
 
   const error = searchParams.get('error_description');
 
-  if (error) {
-    console.log(error);
-
-    router.replace('/pre-auth-failure');
-  }
-
   useEffect(() => {
+    if (error === noClientErrorTag) {
+      return router.replace(content.pages.oauth2Redirect.noClientRedirectHref);
+    }
+
     const startTime = Date.now();
 
     const timeout: NodeJS.Timeout = setInterval(async () => {
@@ -64,7 +63,7 @@ export default function CIS2CallbackPage(): ReactNode {
     return () => {
       clearInterval(timeout);
     };
-  }, [router, destination]);
+  }, [router, destination, error]);
 
   return <LoadingSpinner text={content.pages.oauth2Redirect.heading} />;
 }

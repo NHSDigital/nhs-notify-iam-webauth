@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RequestToBeAddedToAServicePage renders as expected 1`] = `
+<DocumentFragment>
+  <h1>
+    Request to be added to a service
+  </h1>
+  <h2>
+    If you're an existing NHS Notify user
+  </h2>
+  <p>
+    Contact your onboarding manager or email: 
+    <a
+      href="mailto:england.nhsnotify@nhs.net"
+      rel="noopener noreferrer"
+      target="_blank"
+    >
+      england.nhsnotify@nhs.net
+    </a>
+  </p>
+  <p>
+    Tell us:
+  </p>
+  <ul>
+    <li>
+      your full name
+    </li>
+    <li>
+      the email address you use for your Care Identity
+    </li>
+    <li>
+      the organisation or company you work for
+    </li>
+    <li>
+      the service, programme or project you work in
+    </li>
+  </ul>
+  <h2>
+    If you're an existing NHS Notify user
+  </h2>
+  <p>
+    If you are currently using NHS Notify, raise a request with 
+    <a
+      href=""
+      rel="noopener noreferrer"
+      target="_blank"
+    >
+      ServiceNow
+    </a>
+     to get added to a service
+  </p>
+</DocumentFragment>
+`;

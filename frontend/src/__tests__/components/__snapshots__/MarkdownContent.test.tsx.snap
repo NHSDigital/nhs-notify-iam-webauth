@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MarkdownContent renders markdown paragraphs and links correctly (snapshot) 1`] = `
+<DocumentFragment>
+  <p>
+    This is a paragraph
+  </p>
+  <p>
+    Here is a 
+    <a
+      href="https://example.com"
+      rel="noopener noreferrer"
+      target="_blank"
+    >
+      link
+    </a>
+  </p>
+</DocumentFragment>
+`;
