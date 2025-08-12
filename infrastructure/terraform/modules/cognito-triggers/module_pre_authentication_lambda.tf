@@ -30,4 +30,17 @@ module "pre_authentication_lambda" {
     source_arn     = "arn:aws:cognito-idp:${var.region}:${var.aws_account_id}:userpool/${var.user_pool_id}"
     source_account = var.aws_account_id
   }]
+
+  iam_policy_document = {
+    body = data.aws_iam_policy_document.pre_authentication_lambda.json
+  }
+}
+
+data "aws_iam_policy_document" "pre_authentication_lambda" {
+  statement {
+    sid       = "AllowListCognitoGroups"
+    effect    = "Allow"
+    actions   = ["cognito-idp:AdminListGroupsForUser"]
+    resources = ["arn:aws:cognito-idp:${var.region}:${var.aws_account_id}:userpool/${var.user_pool_id}"]
+  }
 }
