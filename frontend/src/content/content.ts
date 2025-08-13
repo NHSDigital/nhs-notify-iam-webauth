@@ -88,7 +88,7 @@ const requestToBeAddedToClientPage = {
     'After you have been added you will be able to access the service to create and submit templates.',
   ifExistingSubhead: "If you're an existing NHS Notify user",
   ifExistingPara1Md:
-    'If you are currently using NHS Notify, raise a request with [ServiceNow](https://nhsdigitallive.service-now.com/csm?id=sc_cat_item&sys_id=ce81c3ae1b1c5190892d4046b04bcb83) to get added to a service',
+    'If you are currently using NHS Notify, [raise a request with ServiceNow](https://nhsdigitallive.service-now.com/csm?id=sc_cat_item&sys_id=ce81c3ae1b1c5190892d4046b04bcb83) to get added to a service.',
   meta: generateMetaTitle('Request to be added to a service'),
 };
 
