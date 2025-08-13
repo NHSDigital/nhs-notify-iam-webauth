@@ -66,7 +66,7 @@ export class PreTokenGenerationLambda {
       });
     }
 
-    const userAttributes = event.request.userAttributes ?? {};
+    const {userAttributes} = event.request;
 
     const preferredUsername =
       userAttributes.preferred_username || userAttributes.display_name;
