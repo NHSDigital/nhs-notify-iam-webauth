@@ -18,7 +18,6 @@ export default function MarkdownContent({
     <>
       {items.map((item, index) => (
         <Markdown
-          // eslint-disable-next-line react/no-array-index-key
           key={index}
           id={id ? `${id}-${index}` : undefined}
           data-testid={testId ? `${testId}-${index}` : undefined}

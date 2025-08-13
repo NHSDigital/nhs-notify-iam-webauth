@@ -261,6 +261,7 @@ export default defineConfig([
       'no-await-in-loop': 0,
       'no-plusplus': [2, { allowForLoopAfterthoughts: true }],
       'unicorn/prefer-top-level-await': 0, // top level await is not available in commonjs
+      'react/no-array-index-key': 0 // OK for static lists, however using dynamic keys with dynamic lists can cause unnecessary rerenders
     },
   },
 ]);

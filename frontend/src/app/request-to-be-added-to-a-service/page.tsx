@@ -20,7 +20,6 @@ export default function RequestToBeAddedToAServicePage() {
       <p>{page.ifOnboardingPara2}</p>
       <ul>
         {page.ifOnboardingMessageRequirements.map((req, i) => (
-          // eslint-disable-next-line react/no-array-index-key
           <li key={i}>{req}</li>
         ))}
       </ul>
