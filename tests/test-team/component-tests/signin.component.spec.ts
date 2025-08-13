@@ -205,11 +205,7 @@ test.describe('SignIn', () => {
 
       await signInPage.clickSubmitButton();
 
-      await expect(page).toHaveURL('thi;s');
-
-      // await expect(signInPage.errorMessage).toHaveText(
-      //   'PreAuthentication failed with error PRE_AUTH_NO_CLIENT_FAILURE.'
-      // );
+      await expect(page).toHaveURL('/auth/request-to-be-added-to-a-service');
     });
   });
 });

@@ -10,6 +10,8 @@ import { handler } from '@/src/pre-authentication';
 jest.mock('@nhs-notify-iam-webauth/utils-logger', () => ({
   logger: {
     error: jest.fn(),
+    info: jest.fn(),
+    child: jest.fn().mockReturnThis(),
   },
 }));
 

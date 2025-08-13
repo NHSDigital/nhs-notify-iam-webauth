@@ -141,12 +141,14 @@ describe('CIS2CallbackPage', () => {
       .mockReturnValueOnce(
         `code-${encodeState({ redirectPath: '/templates/my-template' })}`
       )
-      .mockReturnValueOnce('PRE_AUTH_NO_CLIENT_FAILURE');
+      .mockReturnValueOnce(
+        'PreAuthentication failed with error: PRE_AUTH_NO_CLIENT_FAILURE.'
+      );
 
     render(<CIS2CallbackPage />);
 
     expect(mockRouter.replace).toHaveBeenCalledWith(
-      '/auth/request-to-be-added-to-a-service'
+      '/request-to-be-added-to-a-service'
     );
   });
 });

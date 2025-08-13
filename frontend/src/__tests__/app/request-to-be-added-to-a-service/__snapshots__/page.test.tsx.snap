@@ -5,9 +5,9 @@ exports[`RequestToBeAddedToAServicePage renders as expected 1`] = `
   <h1>
     Request to be added to a service
   </h1>
-  <h2>
-    If you're an existing NHS Notify user
-  </h2>
+  <h3>
+    If you're onboarding with NHS Notify
+  </h3>
   <p>
     Contact your onboarding manager or email: 
     <a
@@ -35,13 +35,13 @@ exports[`RequestToBeAddedToAServicePage renders as expected 1`] = `
       the service, programme or project you work in
     </li>
   </ul>
-  <h2>
+  <h3>
     If you're an existing NHS Notify user
-  </h2>
+  </h3>
   <p>
     If you are currently using NHS Notify, raise a request with 
     <a
-      href=""
+      href="https://nhsdigitallive.service-now.com/csm?id=sc_cat_item&sys_id=ce81c3ae1b1c5190892d4046b04bcb83"
       rel="noopener noreferrer"
       target="_blank"
     >

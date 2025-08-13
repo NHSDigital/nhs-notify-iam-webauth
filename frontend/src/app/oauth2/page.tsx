@@ -14,6 +14,10 @@ import content from '@/content/content';
 import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner';
 import { noClientErrorTag } from '@/utils/public-constants';
 
+const {
+  pages: { oauth2Redirect: page },
+} = content;
+
 const POLLING_INTERVAL_MS = 500;
 const MAX_POLL_DURATION_MS = 20_000;
 
@@ -39,8 +43,8 @@ export default function CIS2CallbackPage(): ReactNode {
   const error = searchParams.get('error_description');
 
   useEffect(() => {
-    if (error === noClientErrorTag) {
-      return router.replace(content.pages.oauth2Redirect.noClientRedirectHref);
+    if (error && error.includes(noClientErrorTag)) {
+      return router.replace(page.noClientRedirectHref);
     }
 
     const startTime = Date.now();

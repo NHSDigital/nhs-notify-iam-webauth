@@ -9,6 +9,8 @@ import { logger } from '@nhs-notify-iam-webauth/utils-logger';
 const cognito = new CognitoIdentityProvider({ region: 'eu-west-2' });
 
 export const handler = async (event: PreAuthenticationTriggerEvent) => {
+  const userLogger = logger.child({ username: event.userName });
+
   const response = await cognito
     .send(
       new AdminListGroupsForUserCommand({
@@ -17,7 +19,7 @@ export const handler = async (event: PreAuthenticationTriggerEvent) => {
       })
     )
     .catch((error) => {
-      logger.error('Unexpected error during pre-authentication', error);
+      userLogger.error('Unexpected error during pre-authentication', error);
 
       throw new Error('PRE_AUTH_ERROR');
     });
@@ -29,12 +31,14 @@ export const handler = async (event: PreAuthenticationTriggerEvent) => {
   const count = clientGroups?.length ?? 0;
 
   if (count > 1) {
-    logger.error('User belongs to more than one client');
+    userLogger.error('User belongs to more than one client');
 
     throw new Error('PRE_AUTH_ERROR');
   }
 
   if (count === 0) {
+    userLogger.info('User does not belong to a client');
+
     throw new Error('PRE_AUTH_NO_CLIENT_FAILURE');
   }
 

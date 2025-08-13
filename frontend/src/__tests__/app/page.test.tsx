@@ -97,7 +97,7 @@ describe('SignInPage', () => {
     render(<SignInPage />);
 
     expect(mockRedirect).toHaveBeenCalledWith(
-      '/auth/request-to-be-added-to-a-service',
+      '/request-to-be-added-to-a-service',
       RedirectType.push
     );
 
