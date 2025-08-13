@@ -26,7 +26,7 @@ function SignIn() {
   const redirectPath = searchParams.get('redirect');
 
   useEffect(() => {
-    if (error === noClientErrorTag) {
+    if (error && error.includes(noClientErrorTag)) {
       redirect(pageContent.noClientRedirectHref, RedirectType.push);
     }
 

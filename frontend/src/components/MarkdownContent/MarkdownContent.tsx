@@ -1,10 +1,8 @@
 import Markdown from 'markdown-to-jsx';
 import React from 'react';
-import { interpolate } from '@/utils/interpolate';
 
 type MarkdownContentProps = {
   content: string | string[];
-  variables?: Record<string, string | number>;
   id?: string;
   testId?: string;
 };
@@ -13,7 +11,6 @@ export default function MarkdownContent({
   content,
   id,
   testId,
-  variables,
 }: Readonly<MarkdownContentProps>) {
   const items = Array.isArray(content) ? content : [content];
 
@@ -40,7 +37,7 @@ export default function MarkdownContent({
             },
           }}
         >
-          {interpolate(item, variables)}
+          {item}
         </Markdown>
       ))}
     </>

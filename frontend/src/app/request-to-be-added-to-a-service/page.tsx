@@ -15,7 +15,7 @@ export default function RequestToBeAddedToAServicePage() {
   return (
     <>
       <h1>{page.pageHeading}</h1>
-      <h2>{page.ifExistingSubhead}</h2>
+      <h3>{page.ifOnboardingSubhead}</h3>
       <MarkdownContent content={page.ifOnboardingPara1Md} />
       <p>{page.ifOnboardingPara2}</p>
       <ul>
@@ -24,7 +24,7 @@ export default function RequestToBeAddedToAServicePage() {
           <li key={i}>{req}</li>
         ))}
       </ul>
-      <h2>{page.ifExistingSubhead}</h2>
+      <h3>{page.ifExistingSubhead}</h3>
       <MarkdownContent content={page.ifExistingPara1Md} />
     </>
   );

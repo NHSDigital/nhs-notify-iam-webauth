@@ -83,26 +83,6 @@ describe('MarkdownContent', () => {
     expect(container.asFragment()).toMatchSnapshot();
   });
 
-  it('renders interpolated variables correctly', () => {
-    render(
-      <MarkdownContent
-        content={[
-          'Welcome {{name}}, you have {{count}} {{count|message|messages}}.',
-          '[Click here](https://example.com)',
-        ]}
-        variables={{ name: 'Test', count: 2 }}
-      />
-    );
-
-    expect(
-      screen.getByText('Welcome Test, you have 2 messages.')
-    ).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Click here' })).toHaveAttribute(
-      'href',
-      'https://example.com'
-    );
-  });
-
   it('escapes dangerous HTML, scripts, and iframes', () => {
     const segments = [
       '<script>alert("hacked!")</script>',
