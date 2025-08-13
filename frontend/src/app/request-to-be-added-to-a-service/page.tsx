@@ -15,7 +15,7 @@ export default function RequestToBeAddedToAServicePage() {
   return (
     <>
       <h1>{page.pageHeading}</h1>
-      <h3>{page.ifOnboardingSubhead}</h3>
+      <h2 className='nhsuk-heading-m'>{page.ifOnboardingSubhead}</h2>
       <MarkdownContent content={page.ifOnboardingPara1Md} />
       <p>{page.ifOnboardingPara2}</p>
       <ul>
@@ -23,7 +23,7 @@ export default function RequestToBeAddedToAServicePage() {
           <li key={i}>{req}</li>
         ))}
       </ul>
-      <h3>{page.ifExistingSubhead}</h3>
+      <h2 className='nhsuk-heading-m'>{page.ifExistingSubhead}</h2>
       <MarkdownContent content={page.ifExistingPara1Md} />
     </>
   );

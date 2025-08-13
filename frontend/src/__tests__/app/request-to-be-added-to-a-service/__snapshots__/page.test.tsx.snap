@@ -5,9 +5,11 @@ exports[`RequestToBeAddedToAServicePage renders as expected 1`] = `
   <h1>
     Request to be added to a service
   </h1>
-  <h3>
+  <h2
+    class="nhsuk-heading-m"
+  >
     If you're onboarding with NHS Notify
-  </h3>
+  </h2>
   <p>
     Contact your onboarding manager or email: 
     <a
@@ -35,9 +37,11 @@ exports[`RequestToBeAddedToAServicePage renders as expected 1`] = `
       the service, programme or project you work in
     </li>
   </ul>
-  <h3>
+  <h2
+    class="nhsuk-heading-m"
+  >
     If you're an existing NHS Notify user
-  </h3>
+  </h2>
   <p>
     If you are currently using NHS Notify, raise a request with 
     <a
