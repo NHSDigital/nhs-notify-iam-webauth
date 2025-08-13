@@ -1,5 +1,3 @@
-/* eslint-disable sonarjs/no-dead-store */
-
 import type { PreTokenGenerationV2TriggerEvent } from 'aws-lambda';
 import { GetParameterCommand, SSMClient } from '@aws-sdk/client-ssm';
 import { logger } from '@nhs-notify-iam-webauth/utils-logger';
@@ -66,7 +64,7 @@ export class PreTokenGenerationLambda {
       });
     }
 
-    const {userAttributes} = event.request;
+    const { userAttributes } = event.request;
 
     const preferredUsername =
       userAttributes.preferred_username || userAttributes.display_name;
