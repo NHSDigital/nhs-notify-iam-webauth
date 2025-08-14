@@ -3,18 +3,26 @@ import { CognitoUserHelper, User } from '@helpers/cognito-user-helper';
 import { IamWebAuthInactivePage } from '@pages/iam-webauth-inactive-page';
 import { getCookies } from '@helpers/cookies';
 import { IamWebAuthSignInPage } from '@pages/iam-webauth-signin-page';
+import { randomUUID } from 'node:crypto';
 
 test.describe('Inactive', () => {
   let user: User;
 
   const cognitoHelper = new CognitoUserHelper();
 
+  const client = {
+    clientId: randomUUID(),
+    clientConfig: {
+      name: 'inactive client',
+    },
+  };
+
   test.beforeAll(async () => {
-    user = await cognitoHelper.createUser('playwright-inactive');
+    user = await cognitoHelper.createUser('playwright-inactive', client);
   });
 
   test.afterAll(async () => {
-    await cognitoHelper.deleteUser(user.userId);
+    await cognitoHelper.deleteUser(user.userId, client);
   });
 
   test('should sign user out', async ({ baseURL, page }) => {

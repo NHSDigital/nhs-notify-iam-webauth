@@ -68,7 +68,10 @@ describe('SignInPage', () => {
 
   it('redirects using search parameter if already signed in', () => {
     mockUseAuthenticator.mockReturnValueOnce(
-      mockDeep<UseAuthenticator>({ authStatus: 'authenticated' })
+      mockDeep<UseAuthenticator>({
+        authStatus: 'authenticated',
+        error: undefined,
+      })
     );
 
     mockGetSearchParams.mockReturnValueOnce('/example-redirect');
@@ -83,9 +86,30 @@ describe('SignInPage', () => {
     expect(JsCookie.remove).not.toHaveBeenCalled();
   });
 
+  it('redirects if useAuthenticator has a no client error', () => {
+    mockUseAuthenticator.mockReturnValueOnce(
+      mockDeep<UseAuthenticator>({
+        authStatus: 'unauthenticated',
+        error: 'PRE_AUTH_NO_CLIENT_FAILURE',
+      })
+    );
+
+    render(<SignInPage />);
+
+    expect(mockRedirect).toHaveBeenCalledWith(
+      '/request-to-be-added-to-a-service',
+      RedirectType.push
+    );
+
+    expect(JsCookie.remove).toHaveBeenCalledWith('csrf_token');
+  });
+
   it('redirects to /templates/message-templates if already signed in and there is no redirect search parameter', () => {
     mockUseAuthenticator.mockReturnValueOnce(
-      mockDeep<UseAuthenticator>({ authStatus: 'authenticated' })
+      mockDeep<UseAuthenticator>({
+        authStatus: 'authenticated',
+        error: undefined,
+      })
     );
 
     render(<SignInPage />);
