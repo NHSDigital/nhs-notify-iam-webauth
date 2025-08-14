@@ -30,6 +30,10 @@ const scenarios: Record<
 type CustomIdTokenClaims = JwtPayload & {
   'nhs-notify:client-id': string;
   'nhs-notify:client-name': string;
+  preferred_username?: string;
+  given_name?: string;
+  family_name?: string;
+  email?: string;
 };
 
 type CustomAccessTokenClaims = JwtPayload & {
@@ -45,8 +49,14 @@ test.describe('SignIn', () => {
       Object.entries(scenarios).map(
         async ([scenario, { clientConfig, clientId }]) => {
           const user = await cognitoHelper.createUser(
-            `playwright-signIn__${scenario}`
+            `playwright-signIn__${scenario}`,
+            {
+              given_name: 'Test',
+              family_name: 'User',
+              preferred_username: 'Test User',
+            }
           );
+
           users[scenario as Scenario] = user;
 
           if (clientId) {
@@ -86,7 +96,7 @@ test.describe('SignIn', () => {
 
   test.describe('when user is not assigned to a client', () => {
     // This will change with CCM-10430
-    test('should sign user in with no custom claims in tokens then redirect user to redirect path', async ({
+    test('should sign user in with no custom client claims but includes identity claims if present, then redirect user to redirect path', async ({
       baseURL,
       page,
     }) => {
@@ -114,6 +124,10 @@ test.describe('SignIn', () => {
       expect(idToken['nhs-notify:client-id']).toBeUndefined();
       expect(idToken['nhs-notify:client-name']).toBeUndefined();
 
+      expect(idToken.preferred_username).toBe('Test User');
+      expect(idToken.given_name).toBe('Test');
+      expect(idToken.family_name).toBe('User');
+
       const accessToken = jwtDecode<CustomAccessTokenClaims>(
         cookies.accessToken?.value as string
       );
@@ -123,7 +137,7 @@ test.describe('SignIn', () => {
   });
 
   test.describe('when user is assigned to an unconfigured client', () => {
-    test('should sign user in with only clientId in tokens then redirect user to redirect path', async ({
+    test('should sign user in with clientId and identity claims in tokens, then redirect user to redirect path', async ({
       baseURL,
       page,
     }) => {
@@ -155,6 +169,10 @@ test.describe('SignIn', () => {
       );
       expect(idToken['nhs-notify:client-name']).toBeUndefined();
 
+      expect(idToken.preferred_username).toBe('Test User');
+      expect(idToken.given_name).toBe('Test');
+      expect(idToken.family_name).toBe('User');
+
       const accessToken = jwtDecode<CustomAccessTokenClaims>(
         cookies.accessToken?.value as string
       );
@@ -166,7 +184,7 @@ test.describe('SignIn', () => {
   });
 
   test.describe('when user is assigned to a fully configured client', () => {
-    test('should sign user in with clientId and name in tokens then redirect user to redirect path', async ({
+    test('should sign user in with client and identity claims in tokens, then redirect user to redirect path', async ({
       baseURL,
       page,
     }) => {
@@ -201,6 +219,10 @@ test.describe('SignIn', () => {
       expect(idToken['nhs-notify:client-name']).toBe(
         scenario.clientConfig?.name
       );
+
+      expect(idToken.preferred_username).toBe('Test User');
+      expect(idToken.given_name).toBe('Test');
+      expect(idToken.family_name).toBe('User');
 
       const accessToken = jwtDecode<CustomAccessTokenClaims>(
         cookies.accessToken?.value as string
