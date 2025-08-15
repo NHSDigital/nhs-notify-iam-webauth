@@ -35,11 +35,11 @@ export class CognitoUserHelper {
   async createUser(
     username: string,
     client: Client | null,
-    userAttributes?: {
+    userAttributes: {
       given_name?: string;
       family_name?: string;
       preferred_username?: string;
-    }
+    } = {}
   ): Promise<User> {
     // Note: we use a unique prefix to that we don't interfere with other users.
     const email = `${process.env.USER_EMAIL_PREFIX}-${username}@nhs.net`;
@@ -51,12 +51,10 @@ export class CognitoUserHelper {
         UserAttributes: [
           { Name: 'email', Value: email },
           { Name: 'email_verified', Value: 'true' },
-          ...(userAttributes
-            ? Object.entries(userAttributes).map(([Name, Value]) => ({
-                Name,
-                Value,
-              }))
-            : []),
+          ...Object.entries(userAttributes).map(([Name, Value]) => ({
+            Name,
+            Value,
+          })),
         ],
         MessageAction: 'SUPPRESS',
         TemporaryPassword: process.env.TEMPORARY_USER_PASSWORD,
