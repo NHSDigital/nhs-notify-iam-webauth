@@ -1,5 +1,3 @@
-/* eslint-disable sonarjs/no-dead-store */
-
 import type { PreTokenGenerationV2TriggerEvent } from 'aws-lambda';
 import { GetParameterCommand, SSMClient } from '@aws-sdk/client-ssm';
 import { logger } from '@nhs-notify-iam-webauth/utils-logger';
@@ -46,11 +44,14 @@ export class PreTokenGenerationLambda {
     }
 
     if (clientId) {
-      response = PreTokenGenerationLambda.setTokenClaims(event, 'accessToken', {
-        'nhs-notify:client-id': clientId,
-      });
-
-      response = PreTokenGenerationLambda.setTokenClaims(event, 'idToken', {
+      response = PreTokenGenerationLambda.setTokenClaims(
+        response,
+        'accessToken',
+        {
+          'nhs-notify:client-id': clientId,
+        }
+      );
+      response = PreTokenGenerationLambda.setTokenClaims(response, 'idToken', {
         'nhs-notify:client-id': clientId,
       });
 
@@ -58,8 +59,29 @@ export class PreTokenGenerationLambda {
     }
 
     if (clientConfig?.name) {
-      response = PreTokenGenerationLambda.setTokenClaims(event, 'idToken', {
+      response = PreTokenGenerationLambda.setTokenClaims(response, 'idToken', {
         'nhs-notify:client-name': clientConfig.name,
+      });
+    }
+
+    const { userAttributes } = event.request;
+
+    const preferredUsername =
+      userAttributes.preferred_username || userAttributes.display_name;
+
+    if (preferredUsername) {
+      response = PreTokenGenerationLambda.setTokenClaims(response, 'idToken', {
+        preferred_username: preferredUsername,
+      });
+    }
+    if (userAttributes.given_name) {
+      response = PreTokenGenerationLambda.setTokenClaims(response, 'idToken', {
+        given_name: userAttributes.given_name,
+      });
+    }
+    if (userAttributes.family_name) {
+      response = PreTokenGenerationLambda.setTokenClaims(response, 'idToken', {
+        family_name: userAttributes.family_name,
       });
     }
 

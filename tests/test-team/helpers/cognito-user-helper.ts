@@ -32,7 +32,15 @@ export class CognitoUserHelper {
 
   private clients = new Set<string>();
 
-  async createUser(username: string, client: Client | null): Promise<User> {
+  async createUser(
+    username: string,
+    client: Client | null,
+    userAttributes: {
+      given_name?: string;
+      family_name?: string;
+      preferred_username?: string;
+    } = {}
+  ): Promise<User> {
     // Note: we use a unique prefix to that we don't interfere with other users.
     const email = `${process.env.USER_EMAIL_PREFIX}-${username}@nhs.net`;
 
@@ -41,14 +49,12 @@ export class CognitoUserHelper {
         UserPoolId: process.env.AWS_COGNITO_USER_POOL_ID,
         Username: email,
         UserAttributes: [
-          {
-            Name: 'email',
-            Value: email,
-          },
-          {
-            Name: 'email_verified',
-            Value: 'true',
-          },
+          { Name: 'email', Value: email },
+          { Name: 'email_verified', Value: 'true' },
+          ...Object.entries(userAttributes).map(([Name, Value]) => ({
+            Name,
+            Value,
+          })),
         ],
         MessageAction: 'SUPPRESS',
         TemporaryPassword: process.env.TEMPORARY_USER_PASSWORD,
