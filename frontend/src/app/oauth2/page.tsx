@@ -12,6 +12,11 @@ import { getCurrentUser } from '@aws-amplify/auth';
 import type { State } from '@/utils/federated-sign-in';
 import content from '@/content/content';
 import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner';
+import { noClientErrorTag } from '@/utils/public-constants';
+
+const {
+  pages: { oauth2Redirect: page },
+} = content;
 
 const POLLING_INTERVAL_MS = 500;
 const MAX_POLL_DURATION_MS = 20_000;
@@ -31,10 +36,17 @@ function redirectFromStateQuery(searchParams: ReadonlyURLSearchParams): State {
 // eslint-disable-next-line sonarjs/function-return-type
 export default function CIS2CallbackPage(): ReactNode {
   const router = useRouter();
-  const customState = redirectFromStateQuery(useSearchParams());
+  const searchParams = useSearchParams();
+  const customState = redirectFromStateQuery(searchParams);
   const destination = `/signin?redirect=${encodeURIComponent(customState.redirectPath)}`;
 
+  const error = searchParams.get('error_description');
+
   useEffect(() => {
+    if (error && error.includes(noClientErrorTag)) {
+      return router.replace(page.noClientRedirectHref);
+    }
+
     const startTime = Date.now();
 
     const timeout: NodeJS.Timeout = setInterval(async () => {
@@ -55,7 +67,7 @@ export default function CIS2CallbackPage(): ReactNode {
     return () => {
       clearInterval(timeout);
     };
-  }, [router, destination]);
+  }, [router, destination, error]);
 
   return <LoadingSpinner text={content.pages.oauth2Redirect.heading} />;
 }

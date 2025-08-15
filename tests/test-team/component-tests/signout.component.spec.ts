@@ -2,18 +2,26 @@ import { expect, test } from '@playwright/test';
 import { CognitoUserHelper, User } from '@helpers/cognito-user-helper';
 import { IamWebAuthSignInPage } from '@pages/iam-webauth-signin-page';
 import { getCookies } from '@helpers/cookies';
+import { randomUUID } from 'node:crypto';
 
 test.describe('SignOut', () => {
   let user: User;
 
+  const client = {
+    clientId: randomUUID(),
+    clientConfig: {
+      name: 'signout client',
+    },
+  };
+
   const cognitoHelper = new CognitoUserHelper();
 
   test.beforeAll(async () => {
-    user = await cognitoHelper.createUser('playwright-signout');
+    user = await cognitoHelper.createUser('playwright-signout', client);
   });
 
   test.afterAll(async () => {
-    await cognitoHelper.deleteUser(user.userId);
+    await cognitoHelper.deleteUser(user.userId, client);
   });
 
   test('should sign user out', async ({ baseURL, page }) => {

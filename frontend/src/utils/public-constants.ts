@@ -9,3 +9,5 @@ export const getConstants: () => Record<string, string> = () => ({
   TIME_TILL_LOGOUT_SECONDS:
     process.env.NEXT_PUBLIC_TIME_TILL_LOGOUT_SECONDS || '900',
 });
+
+export const noClientErrorTag = 'PRE_AUTH_NO_CLIENT_FAILURE';

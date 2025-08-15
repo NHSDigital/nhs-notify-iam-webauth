@@ -4,8 +4,12 @@ import { authenticatorSelector } from '@/utils/authenticator-selector';
 
 test('authenticatorSelector', () => {
   const mockAuthContext = mockDeep<AuthenticatorServiceFacade>({
-    authStatus: 'authenticated',
+    authStatus: 'unauthenticated',
+    error: 'err',
   });
 
-  expect(authenticatorSelector(mockAuthContext)).toEqual(['authenticated']);
+  expect(authenticatorSelector(mockAuthContext)).toEqual([
+    'unauthenticated',
+    'err',
+  ]);
 });

@@ -19,6 +19,8 @@ export type User = {
   userId: string;
 };
 
+export type Client = { clientId: string; clientConfig?: { name?: string } };
+
 export class CognitoUserHelper {
   private readonly cognito = new CognitoIdentityProviderClient({
     region: 'eu-west-2',
@@ -28,8 +30,11 @@ export class CognitoUserHelper {
     region: 'eu-west-2',
   });
 
+  private clients = new Set<string>();
+
   async createUser(
     username: string,
+    client: Client | null,
     userAttributes?: {
       given_name?: string;
       family_name?: string;
@@ -50,7 +55,7 @@ export class CognitoUserHelper {
             ? Object.entries(userAttributes).map(([Name, Value]) => ({
                 Name,
                 Value,
-            }))
+              }))
             : []),
         ],
         MessageAction: 'SUPPRESS',
@@ -58,17 +63,32 @@ export class CognitoUserHelper {
       })
     );
 
-    if (!user?.User?.Username) {
+    const userId = user?.User?.Username;
+
+    if (!userId) {
       throw new Error('Unable to generate cognito user');
+    }
+
+    if (client) {
+      if (!this.clients.has(client.clientId)) {
+        this.clients.add(client.clientId);
+        await this.createClientGroup(client);
+
+        if (client.clientConfig) {
+          await this.configureClient(client);
+        }
+      }
+
+      await this.addUserToClientGroup(userId, client);
     }
 
     return {
       email,
-      userId: user.User.Username,
+      userId,
     };
   }
 
-  async deleteUser(username: string) {
+  async deleteUser(username: string, client: Client | null) {
     // Note: we must disable the user first before we can delete them
     await this.cognito.send(
       new AdminDisableUserCommand({
@@ -83,54 +103,60 @@ export class CognitoUserHelper {
         Username: username,
       })
     );
+
+    if (client && this.clients.has(client.clientId)) {
+      this.clients.delete(client.clientId);
+      await this.deleteClientGroup(client);
+
+      if (client.clientConfig) {
+        await this.deleteClientConfig(client);
+      }
+    }
   }
 
-  async createClientGroup(clientId: string) {
+  private async createClientGroup(client: Client) {
     await this.cognito.send(
       new CreateGroupCommand({
-        GroupName: `client:${clientId}`,
+        GroupName: `client:${client.clientId}`,
         UserPoolId: process.env.AWS_COGNITO_USER_POOL_ID,
       })
     );
   }
 
-  async deleteClientGroup(clientId: string) {
+  private async deleteClientGroup(client: Client) {
     await this.cognito.send(
       new DeleteGroupCommand({
-        GroupName: `client:${clientId}`,
+        GroupName: `client:${client.clientId}`,
         UserPoolId: process.env.AWS_COGNITO_USER_POOL_ID,
       })
     );
   }
 
-  async addUserToClientGroup(username: string, clientId: string) {
+  private async addUserToClientGroup(username: string, client: Client) {
     await this.cognito.send(
       new AdminAddUserToGroupCommand({
-        GroupName: `client:${clientId}`,
+        GroupName: `client:${client.clientId}`,
         Username: username,
         UserPoolId: process.env.AWS_COGNITO_USER_POOL_ID,
       })
     );
   }
 
-  async removeUserFromClientGroup(username: string, clientId: string) {
+  private async removeUserFromClientGroup(username: string, client: Client) {
     await this.cognito.send(
       new AdminRemoveUserFromGroupCommand({
-        GroupName: `client:${clientId}`,
+        GroupName: `client:${client.clientId}`,
         Username: username,
         UserPoolId: process.env.AWS_COGNITO_USER_POOL_ID,
       })
     );
   }
 
-  async configureClient(
-    clientId: string,
-    clientConfig: { name?: string; campaignId?: string }
-  ) {
+  private async configureClient(client: Client) {
     await this.ssm.send(
       new PutParameterCommand({
-        Name: `${process.env.CLIENT_CONFIG_PARAMETER_PATH_PREFIX}/${clientId}`,
-        Value: JSON.stringify(clientConfig),
+        Name: `${process.env.CLIENT_CONFIG_PARAMETER_PATH_PREFIX}/${client.clientId}`,
+        Value: JSON.stringify(client.clientConfig),
         Type: 'SecureString',
         KeyId: process.env.KMS_KEY_ID,
         Overwrite: true,
@@ -138,10 +164,10 @@ export class CognitoUserHelper {
     );
   }
 
-  async deleteClientConfig(clientId: string) {
+  private async deleteClientConfig(client: Client) {
     await this.ssm.send(
       new DeleteParameterCommand({
-        Name: `${process.env.CLIENT_CONFIG_PARAMETER_PATH_PREFIX}/${clientId}`,
+        Name: `${process.env.CLIENT_CONFIG_PARAMETER_PATH_PREFIX}/${client.clientId}`,
       })
     );
   }

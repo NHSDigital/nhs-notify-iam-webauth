@@ -4,9 +4,11 @@ import { getConstants } from '@/utils/public-constants';
 const { BASE_PATH, TIME_TILL_LOGOUT_SECONDS } = getConstants();
 
 const generateMetaTitle = (title: string) => ({
-  title: `${title} - Create and submit templates - NHS Notify`,
-  description: `${title} - Create and submit templates - NHS Notify`,
+  title: `${title} - NHS Notify`,
+  description: `${title} - NHS Notify`,
 });
+
+const createTitleSegment = 'Create and submit templates';
 
 const headerComponent = {
   serviceName: 'Notify',
@@ -48,33 +50,63 @@ const inactivePage = {
     'Any unsaved changes have been lost.',
     'Sign in again to create and submit a template to NHS Notify.',
   ],
-  meta: generateMetaTitle("You've been signed out"),
+  meta: generateMetaTitle(`You've been signed out - ${createTitleSegment}`),
 };
 
 const cognitoSignInComponent = {
   heading: 'Dev Only - Sign in with Email / Password',
 };
 
-const mainLayout = { ...generateMetaTitle('Sign in') };
+const noClientRedirectHref = '/request-to-be-added-to-a-service';
+
+const mainLayout = { ...generateMetaTitle(`Sign in - ${createTitleSegment}`) };
 
 const signInPage = {
   pageHeading: 'Sign in',
   federatedSignInSectionHeading: 'Sign in using an NHS account',
+  noClientRedirectHref,
 };
 
 const signOutPage = {
   content: 'Signed out',
-  meta: generateMetaTitle('Signed out'),
+  meta: generateMetaTitle(`Signed out - ${createTitleSegment}`),
+};
+
+const requestToBeAddedToClientPage = {
+  pageHeading: 'Request to be added to a service',
+  ifOnboardingSubhead: "If you're onboarding with NHS Notify",
+  ifOnboardingPara1Md:
+    'Contact your onboarding manager or email: [england.nhsnotify@nhs.net](mailto:england.nhsnotify@nhs.net)',
+  ifOnboardingPara2: 'Tell us:',
+  ifOnboardingMessageRequirements: [
+    'your full name',
+    'the email address you use for your Care Identity',
+    'the organisation or company you work for',
+    'the service, programme or project you work in',
+  ],
+  ifOnboardingPara3:
+    'After you have been added you will be able to access the service to create and submit templates.',
+  ifExistingSubhead: "If you're an existing NHS Notify user",
+  ifExistingPara1Md:
+    'If you are currently using NHS Notify, [raise a request with ServiceNow](https://nhsdigitallive.service-now.com/csm?id=sc_cat_item&sys_id=ce81c3ae1b1c5190892d4046b04bcb83) to get added to a service.',
+  meta: generateMetaTitle('Request to be added to a service'),
 };
 
 const oauth2Redirect = {
   heading: 'Redirecting, please wait',
+  noClientRedirectHref,
 };
 
 const content = {
   global: { mainLayout },
   components: { headerComponent, footer, cognitoSignInComponent },
-  pages: { signInPage, inactivePage, signOutPage, oauth2Redirect },
+  pages: {
+    inactivePage,
+    requestToBeAddedToClientPage,
+    oauth2Redirect,
+    signInPage,
+    signOutPage,
+  },
 };
 
 export default content;

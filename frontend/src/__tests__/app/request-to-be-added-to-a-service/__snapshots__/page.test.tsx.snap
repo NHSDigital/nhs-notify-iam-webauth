@@ -1,0 +1,68 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RequestToBeAddedToAServicePage renders as expected 1`] = `
+<DocumentFragment>
+  <div
+    class="nhsuk-grid-row"
+  >
+    <div
+      class="nhsuk-grid-column-two-thirds"
+    >
+      <h1>
+        Request to be added to a service
+      </h1>
+      <h2
+        class="nhsuk-heading-m"
+      >
+        If you're onboarding with NHS Notify
+      </h2>
+      <p>
+        Contact your onboarding manager or email: 
+        <a
+          href="mailto:england.nhsnotify@nhs.net"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          england.nhsnotify@nhs.net
+        </a>
+      </p>
+      <p>
+        Tell us:
+      </p>
+      <ul>
+        <li>
+          your full name
+        </li>
+        <li>
+          the email address you use for your Care Identity
+        </li>
+        <li>
+          the organisation or company you work for
+        </li>
+        <li>
+          the service, programme or project you work in
+        </li>
+      </ul>
+      <p>
+        After you have been added you will be able to access the service to create and submit templates.
+      </p>
+      <h2
+        class="nhsuk-heading-m"
+      >
+        If you're an existing NHS Notify user
+      </h2>
+      <p>
+        If you are currently using NHS Notify, 
+        <a
+          href="https://nhsdigitallive.service-now.com/csm?id=sc_cat_item&sys_id=ce81c3ae1b1c5190892d4046b04bcb83"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          raise a request with ServiceNow
+        </a>
+         to get added to a service.
+      </p>
+    </div>
+  </div>
+</DocumentFragment>
+`;

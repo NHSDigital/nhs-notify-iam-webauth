@@ -3,13 +3,14 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "build-lambda": "rm -rf dist && esbuild --bundle --minify --sourcemap --target=es2020 --platform=node --loader:.node=file --entry-names=[name] --outdir=dist src/pre-token-generation.ts",
+    "build-lambda": "./build.sh",
     "lint": "eslint ./src",
     "lint:fix": "eslint ./src --fix",
     "test:unit": "jest",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@aws-sdk/client-cognito-identity-provider": "3.775.0",
     "@aws-sdk/client-ssm": "3.775.0",
     "@nhs-notify-iam-webauth/utils-logger": "*"
   },

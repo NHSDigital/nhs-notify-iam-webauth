@@ -7,4 +7,5 @@ type UseAuthenticatorSelector = Exclude<
 
 export const authenticatorSelector: UseAuthenticatorSelector = (ctx) => [
   ctx.authStatus,
+  ctx.error,
 ];

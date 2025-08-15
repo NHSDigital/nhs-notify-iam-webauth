@@ -12,19 +12,24 @@ import { federatedSignIn } from '@/utils/federated-sign-in';
 import CIS2SignInButton from '@/components/CIS2SignInButton/CIS2SignInButton';
 import content from '@/content/content';
 import styles from '@/app/page.module.scss';
+import { noClientErrorTag } from '@/utils/public-constants';
 
 function SignIn() {
   const {
     pages: { signInPage: pageContent },
   } = content;
 
-  const { authStatus } = useAuthenticator(authenticatorSelector);
+  const { authStatus, error } = useAuthenticator(authenticatorSelector);
 
   const searchParams = useSearchParams();
 
   const redirectPath = searchParams.get('redirect');
 
   useEffect(() => {
+    if (error && error.includes(noClientErrorTag)) {
+      redirect(pageContent.noClientRedirectHref, RedirectType.push);
+    }
+
     if (authStatus === 'authenticated') {
       redirect(
         path.normalize(
@@ -35,7 +40,7 @@ function SignIn() {
     } else if (authStatus === 'unauthenticated') {
       JsCookie.remove('csrf_token');
     }
-  }, [authStatus, redirectPath]);
+  }, [authStatus, error, redirectPath, pageContent.noClientRedirectHref]);
 
   return (
     <div className='nhsuk-grid-row'>
