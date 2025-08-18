@@ -56,13 +56,21 @@ const eventNoGroup = (): PreTokenGenerationV2Event => ({
   version: '2',
 });
 
-describe('when user has no client group', () => {
-  test('does not add any claims', async () => {
-    const result = await new PreTokenGenerationLambda().handler(eventNoGroup());
-
-    expect(result.response.claimsAndScopeOverrideDetails).toBe(null);
-  });
-});
+const eventNoGroupWithIdentity = (): PreTokenGenerationV2Event => {
+  const event = eventNoGroup();
+  return {
+    ...event,
+    request: {
+      ...event.request,
+      userAttributes: {
+        ...event.request.userAttributes,
+        display_name: 'Dr Test Example',
+        given_name: 'Test',
+        family_name: 'Example',
+      },
+    },
+  };
+};
 
 const eventWithGroup = (): PreTokenGenerationV2Event => ({
   callerContext: {
@@ -90,6 +98,46 @@ const eventWithGroup = (): PreTokenGenerationV2Event => ({
   userName: '76c25234-b041-70f2-8ba4-caf538363b35',
   userPoolId: 'eu-west-2_W8aROHYoW',
   version: '2',
+});
+
+const eventWithGroupAndIdentity = (): PreTokenGenerationV2Event => {
+  const event = eventWithGroup();
+  return {
+    ...event,
+    request: {
+      ...event.request,
+      userAttributes: {
+        ...event.request.userAttributes,
+        display_name: 'Dr Test Example',
+        given_name: 'Test',
+        family_name: 'Example',
+      },
+    },
+  };
+};
+
+describe('when user has no client group', () => {
+  test('does not add any claims', async () => {
+    const result = await new PreTokenGenerationLambda().handler(eventNoGroup());
+
+    expect(result.response.claimsAndScopeOverrideDetails).toBe(null);
+  });
+
+  test('adds preferred_username, given_name and family_name when present', async () => {
+    const result = await new PreTokenGenerationLambda().handler(
+      eventNoGroupWithIdentity()
+    );
+
+    expect(result.response.claimsAndScopeOverrideDetails).toEqual({
+      idTokenGeneration: {
+        claimsToAddOrOverride: {
+          preferred_username: 'Dr Test Example',
+          given_name: 'Test',
+          family_name: 'Example',
+        },
+      },
+    });
+  });
 });
 
 describe('when user has client group', () => {
@@ -244,5 +292,38 @@ describe('when user has client group', () => {
 
     // but give the same result
     expect(result2).toEqual(result);
+  });
+
+  test('merges client claims with identity claims when identity present', async () => {
+    ssmMock
+      .on(GetParameterCommand, {
+        Name: '/nhs-notify-unit-tests/clients/f58d4b65-870c-42c0-8bb6-2941c5be2bec',
+      })
+      .resolvesOnce({
+        Parameter: {
+          Value: JSON.stringify({ name: 'test-client' }),
+        },
+      });
+
+    const result = await new PreTokenGenerationLambda().handler(
+      eventWithGroupAndIdentity()
+    );
+
+    expect(result.response.claimsAndScopeOverrideDetails).toEqual({
+      accessTokenGeneration: {
+        claimsToAddOrOverride: {
+          'nhs-notify:client-id': 'f58d4b65-870c-42c0-8bb6-2941c5be2bec',
+        },
+      },
+      idTokenGeneration: {
+        claimsToAddOrOverride: {
+          'nhs-notify:client-id': 'f58d4b65-870c-42c0-8bb6-2941c5be2bec',
+          'nhs-notify:client-name': 'test-client',
+          preferred_username: 'Dr Test Example',
+          given_name: 'Test',
+          family_name: 'Example',
+        },
+      },
+    });
   });
 });
