@@ -20,9 +20,9 @@
     "jsonwebtoken": "^9.0.2"
   },
   "dependencies": {
-    "@aws-sdk/client-kms": "3.775.0",
-    "@aws-sdk/client-ssm": "3.775.0",
-    "axios": "^1.8.4",
+    "@aws-sdk/client-kms": "3.876.0",
+    "@aws-sdk/client-ssm": "3.876.0",
+    "axios": "^1.11.0",
     "date-fns": "^4.1.0",
     "jwt-decode": "^4.0.0",
     "winston": "^3.17.0",

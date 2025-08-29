@@ -10,8 +10,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@aws-sdk/client-cognito-identity-provider": "3.775.0",
-    "@aws-sdk/client-ssm": "3.775.0",
+    "@aws-sdk/client-cognito-identity-provider": "3.876.0",
+    "@aws-sdk/client-ssm": "3.876.0",
     "@nhs-notify-iam-webauth/utils-logger": "*"
   },
   "devDependencies": {
