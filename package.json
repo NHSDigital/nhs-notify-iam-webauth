@@ -32,7 +32,7 @@
     "@eslint/eslintrc": "^3",
     "@stylistic/eslint-plugin": "^3.1.0",
     "@tsconfig/node20": "^20.1.5",
-    "@typescript-eslint/eslint-plugin": "^8.32.1",
+    "@typescript-eslint/eslint-plugin": "^8.41.0",
     "eslint": "^9.27.0",
     "eslint-config-airbnb-extended": "^1.0.11",
     "eslint-config-next": "^15.3.2",
