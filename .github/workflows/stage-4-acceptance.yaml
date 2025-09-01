@@ -13,13 +13,13 @@ permissions:
   contents: read
 
 jobs:
-  create-sandbox-environment:
-    name: Create Sandbox Environment
+  run-acceptance-tests:
+    name: Run Acceptance Tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5.0.0
 
-      - name: Trigger sandbox environment creation
+      - name: Trigger Sandbox Environment Build
         shell: bash
         env:
           PR_TRIGGER_PAT: ${{ secrets.PR_TRIGGER_PAT }}
@@ -33,7 +33,7 @@ jobs:
             --targetComponent "sandbox" \
             --terraformAction "apply"
 
-      - name: Acceptance Tests
+      - name: Trigger Acceptance Tests
         shell: bash
         env:
           PR_TRIGGER_PAT: ${{ secrets.PR_TRIGGER_PAT }}
