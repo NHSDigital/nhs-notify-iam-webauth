@@ -123,6 +123,7 @@ DISPATCH_EVENT=$(jq -ncM \
 
 echo "[INFO] Triggering workflow '$targetWorkflow' in nhs-notify-internal..."
 
+set -x
 trigger_response=$(curl -s -L \
   --fail \
   -X POST \
@@ -131,6 +132,7 @@ trigger_response=$(curl -s -L \
   -H "X-GitHub-Api-Version: 2022-11-28" \
   "https://api.github.com/repos/NHSDigital/nhs-notify-internal/actions/workflows/$targetWorkflow/dispatches" \
   -d "$DISPATCH_EVENT" 2>&1)
+set +x
 
 if [[ $? -ne 0 ]]; then
   echo "[ERROR] Failed to trigger workflow. Response: $trigger_response"
@@ -146,11 +148,13 @@ workflow_run_url=""
 
 for _ in {1..18}; do
 
+  set -x
   response=$(curl -s -L \
     -H "Accept: application/vnd.github+json" \
     -H "Authorization: Bearer ${PR_TRIGGER_PAT}" \
     -H "X-GitHub-Api-Version: 2022-11-28" \
     "https://api.github.com/repos/NHSDigital/nhs-notify-internal/actions/runs?event=workflow_dispatch")
+  set +x
 
   if ! echo "$response" | jq empty 2>/dev/null; then
     echo "[ERROR] Invalid JSON response from GitHub API during workflow polling:"
