@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v5.0.0
+      - uses: actions/checkout@v5
 
       - name: Trigger dynamic environment destruction
         env:
@@ -38,7 +38,7 @@ jobs:
     name: Destroy Sandbox Environment
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5.0.0
+      - uses: actions/checkout@v5
 
       - name: Trigger sandbox environment destruction
         shell: bash
