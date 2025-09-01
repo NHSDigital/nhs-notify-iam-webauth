@@ -2,75 +2,46 @@ name: Acceptance stage
 
 on:
   workflow_call:
+    inputs:
+      pr_number:
+        required: true
+        type: string
+
 
 permissions:
   id-token: write
   contents: read
 
 jobs:
-  generate-sandbox-name:
-    name: Generate sandbox name
+  run-acceptance-tests:
+    name: Run Acceptance Tests
     runs-on: ubuntu-latest
-    outputs:
-      SANDBOX_NAME: ${{ steps.normalize_branch_name.outputs.normalized_branch_name }}
-    timeout-minutes: 3
     steps:
-      - name: "Checkout code"
-        uses: actions/checkout@v4
-      - name: "Get normalized branch name"
-        id: normalize_branch_name
-        uses: ./.github/actions/normalize-branch-name
+      - uses: actions/checkout@v5.0.0
 
-  sandbox-set-up:
-    name: Step 1
-    needs: generate-sandbox-name
-    uses: ./.github/workflows/dispatch_internal_repo_workflow.yaml
-    secrets: inherit
-    with:
-      jobName: Sandbox set up
-      infraRepoName: nhs-notify-iam-webauth
-      releaseVersion: ${{ github.head_ref || github.ref_name }}
-      targetWorkflow: dispatch-deploy-dynamic-env.yaml
-      targetEnvironment: ${{ needs.generate-sandbox-name.outputs.SANDBOX_NAME }}
-      targetAccountGroup: nhs-notify-iam-dev
-      targetComponent: sandbox
-      terraformAction: apply
+      - name: Trigger Sandbox Environment Build
+        shell: bash
+        env:
+          PR_TRIGGER_PAT: ${{ secrets.PR_TRIGGER_PAT }}
+        run: |
+          .github/scripts/dispatch_internal_repo_workflow.sh \
+            --infraRepoName "nhs-notify-iam-webauth" \
+            --releaseVersion "${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" \
+            --targetWorkflow "dispatch-deploy-dynamic-env.yaml" \
+            --targetEnvironment "pr${{ inputs.pr_number }}" \
+            --targetAccountGroup "nhs-notify-iam-dev" \
+            --targetComponent "sandbox" \
+            --terraformAction "apply"
 
-  acceptance-tests:
-    name: Step 2
-    needs:
-      - sandbox-set-up
-      - generate-sandbox-name
-
-    # Calls out to the nhs-notify-internal repo.
-    # The nhs-notify-internal repo will run the tests
-    # setup in ./.github/actions/acceptance-tests/action.yaml
-    uses: ./.github/workflows/dispatch_internal_repo_workflow.yaml
-    secrets: inherit
-    with:
-      jobName: Acceptance tests
-      infraRepoName: nhs-notify-iam-webauth
-      releaseVersion: ${{ github.head_ref || github.ref_name }}
-      targetWorkflow: dispatch-contextual-tests-dynamic-env.yaml
-      targetEnvironment: ${{ needs.generate-sandbox-name.outputs.SANDBOX_NAME }}
-      targetAccountGroup: nhs-notify-iam-dev
-      targetComponent: sandbox
-
-  sandbox-tear-down:
-    name: Step 3
-    needs:
-      - acceptance-tests
-      - generate-sandbox-name
-    if: always()
-
-    uses: ./.github/workflows/dispatch_internal_repo_workflow.yaml
-    secrets: inherit
-    with:
-      jobName: Sandbox tear down
-      infraRepoName: nhs-notify-iam-webauth
-      releaseVersion: ${{ github.head_ref || github.ref_name }}
-      targetWorkflow: dispatch-deploy-dynamic-env.yaml
-      targetEnvironment: ${{ needs.generate-sandbox-name.outputs.SANDBOX_NAME }}
-      targetAccountGroup: nhs-notify-iam-dev
-      targetComponent: sandbox
-      terraformAction: destroy
+      - name: Trigger Acceptance Tests
+        shell: bash
+        env:
+          PR_TRIGGER_PAT: ${{ secrets.PR_TRIGGER_PAT }}
+        run: |
+          .github/scripts/dispatch_internal_repo_workflow.sh \
+            --infraRepoName "nhs-notify-iam-webauth" \
+            --releaseVersion "${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" \
+            --targetWorkflow "dispatch-contextual-tests-dynamic-env.yaml" \
+            --targetEnvironment "pr${{ inputs.pr_number }}" \
+            --targetAccountGroup "nhs-notify-iam-dev" \
+            --targetComponent "sandbox"
