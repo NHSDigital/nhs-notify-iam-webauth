@@ -12,12 +12,12 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@aws-sdk/client-cognito-identity-provider": "3.775.0",
-    "@aws-sdk/client-lambda": "3.775.0",
-    "@aws-sdk/client-kms": "3.775.0",
-    "@aws-sdk/client-s3": "3.775.0",
-    "@aws-sdk/client-ssm": "3.775.0",
-    "@aws-sdk/types": "3.775.0",
+    "@aws-sdk/client-cognito-identity-provider": "3.876.0",
+    "@aws-sdk/client-lambda": "3.876.0",
+    "@aws-sdk/client-kms": "3.876.0",
+    "@aws-sdk/client-s3": "3.878.0",
+    "@aws-sdk/client-ssm": "3.876.0",
+    "@aws-sdk/types": "3.862.0",
     "@playwright/test": "^1.51.1",
     "@types/node-jose": "^1.1.13",
     "generate-password": "^1.7.1",
