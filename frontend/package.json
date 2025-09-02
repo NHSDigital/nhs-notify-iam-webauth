@@ -52,7 +52,7 @@
     "jest-html-reporter": "^3.10.2",
     "jest-mock-extended": "^3.0.7",
     "jsonwebtoken": "^9.0.2",
-    "pm2": "^5.4.3",
+    "pm2": "^6.0.9",
     "sass": "^1.86.0",
     "ts-jest": "^29.3.0",
     "wait-on": "^8.0.4"
