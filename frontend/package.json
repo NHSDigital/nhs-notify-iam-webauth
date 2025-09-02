@@ -28,7 +28,7 @@
     "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",
     "markdown-to-jsx": "^7.7.13",
-    "next": "^15.3.2",
+    "next": "^15.5.2",
     "nhsuk-frontend": "^9.3.0",
     "nhsuk-react-components": "^5.0.0",
     "path": "^0.12.7",
@@ -52,7 +52,7 @@
     "jest-html-reporter": "^3.10.2",
     "jest-mock-extended": "^3.0.7",
     "jsonwebtoken": "^9.0.2",
-    "pm2": "^5.4.3",
+    "pm2": "^6.0.9",
     "sass": "^1.86.0",
     "ts-jest": "^29.3.0",
     "wait-on": "^8.0.4"
