@@ -17,7 +17,7 @@ jobs:
     name: Run Acceptance Tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5.0.0
+      - uses: actions/checkout@v5
 
       - name: Trigger Sandbox Environment Build
         shell: bash
