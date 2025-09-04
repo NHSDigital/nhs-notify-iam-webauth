@@ -4,7 +4,7 @@ data "aws_cognito_user_pool_client" "client" {
 }
 
 module "amplify_branch" {
-  source = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/amp_branch?ref=v1.0.8"
+  source = "https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.20/terraform-amp_branch.zip"
 
   name         = local.normalised_branch_name
   display_name = local.normalised_branch_name

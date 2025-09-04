@@ -25,7 +25,7 @@
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_amplify_branch"></a> [amplify\_branch](#module\_amplify\_branch) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/amp_branch | v1.0.8 |
+| <a name="module_amplify_branch"></a> [amplify\_branch](#module\_amplify\_branch) | https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.20/terraform-amp_branch.zip | n/a |
 ## Outputs
 
 No outputs.

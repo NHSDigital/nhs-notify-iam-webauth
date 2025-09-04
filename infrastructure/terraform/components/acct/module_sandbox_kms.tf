@@ -1,5 +1,5 @@
 module "kms_sandbox" {
-  source = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/kms?ref=v1.0.8"
+  source = "https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.20/terraform-kms.zip"
 
   count = var.support_sandbox_environments ? 1 : 0
 

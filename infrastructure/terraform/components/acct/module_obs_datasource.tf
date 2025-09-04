@@ -1,5 +1,5 @@
 module "obs_datasource" {
-  source = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/obs-datasource?ref=v2.0.3"
+  source = "https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.20/terraform-obs-datasource.zip"
 
   name = "obs-datasource"
 
