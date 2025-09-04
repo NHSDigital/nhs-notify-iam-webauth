@@ -3,11 +3,6 @@ import { z } from 'zod';
 import { logger } from '@/src/utils/logger';
 import { getParameter } from '@/src/utils/aws/ssm-util';
 
-const schemaFor =
-  <Output, Input = Output>() =>
-  <S extends z.ZodType<Output, z.ZodTypeDef, Input>>(schema: S) =>
-    schema;
-
 export type SigningKeyMetaData = {
   kid: string;
   createdDate: string;
@@ -15,16 +10,12 @@ export type SigningKeyMetaData = {
 
 export type SigningKeyDirectory = SigningKeyMetaData[];
 
-const $SigningKeyMetaData = schemaFor<SigningKeyMetaData>()(
-  z.object({
-    kid: z.string().nonempty(),
-    createdDate: z.string().date(),
-  })
-);
+const $SigningKeyMetaData = z.object({
+  kid: z.string().nonempty(),
+  createdDate: z.iso.date(),
+});
 
-const $SigningKeyDirectory = schemaFor<SigningKeyDirectory>()(
-  z.array($SigningKeyMetaData)
-);
+const $SigningKeyDirectory = z.array($SigningKeyMetaData);
 
 // Ignore any very new keys to allow public key caches to expire
 const keyCoolingOffPeriodMillis = 24 * 60 * 60 * 1000;
