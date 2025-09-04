@@ -4,11 +4,6 @@ import { getParameter, putParameter } from '@/src/utils/aws/ssm-util';
 import { getKeyState } from '@/src/utils/aws/kms-util';
 import { KeyState } from '@aws-sdk/client-kms';
 
-const schemaFor =
-  <Output, Input = Output>() =>
-  <S extends z.ZodType<Output, z.ZodTypeDef, Input>>(schema: S) =>
-    schema;
-
 export type SigningKeyMetaData = {
   kid: string;
   createdDate: string;
@@ -16,16 +11,12 @@ export type SigningKeyMetaData = {
 
 export type SigningKeyDirectory = SigningKeyMetaData[];
 
-const $SigningKeyMetaData = schemaFor<SigningKeyMetaData>()(
-  z.object({
-    kid: z.string().nonempty(),
-    createdDate: z.string().date(),
-  })
-);
+const $SigningKeyMetaData = z.object({
+  kid: z.string().nonempty(),
+  createdDate: z.iso.date(),
+});
 
-const $SigningKeyDirectory = schemaFor<SigningKeyDirectory>()(
-  z.array($SigningKeyMetaData)
-);
+const $SigningKeyDirectory = z.array($SigningKeyMetaData);
 
 const activeKeyStates: Set<KeyState> = new Set([
   KeyState.Enabled,
