@@ -1,6 +1,6 @@
 module "s3bucket_cf_logs" {
   count  = var.deploy_cdn ? 1 : 0
-  source = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/s3bucket?ref=v1.0.9"
+  source = "https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.20/terraform-s3bucket.zip"
   providers = {
     aws = aws.us-east-1
   }

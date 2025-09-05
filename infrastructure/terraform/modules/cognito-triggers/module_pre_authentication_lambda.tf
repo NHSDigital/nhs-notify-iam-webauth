@@ -1,5 +1,5 @@
 module "pre_authentication_lambda" {
-  source = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/lambda?ref=v2.0.11"
+  source = "https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.20/terraform-lambda.zip"
 
   project        = var.project
   environment    = var.environment

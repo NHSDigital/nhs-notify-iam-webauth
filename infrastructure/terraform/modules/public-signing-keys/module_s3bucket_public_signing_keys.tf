@@ -1,5 +1,5 @@
 module "s3bucket_public_signing_keys" {
-  source = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/s3bucket?ref=v1.0.9"
+  source = "https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.20/terraform-s3bucket.zip"
 
   name = "public-keys"
 
