@@ -3,6 +3,11 @@ module "kms_sandbox" {
 
   count = var.support_sandbox_environments ? 1 : 0
 
+  providers = {
+    aws           = aws
+    aws.us-east-1 = aws.us-east-1
+  }
+
   aws_account_id = var.aws_account_id
   component      = var.component
   environment    = var.environment
