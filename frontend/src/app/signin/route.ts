@@ -34,7 +34,8 @@ export const GET = async (request: NextRequest) => {
     }
   }
 
-  const redirectUrl = new URL(request.url);
-  redirectUrl.pathname = redirectPath;
-  return NextResponse.redirect(redirectUrl, 307);
+  return NextResponse.redirect(
+    new URL(redirectPath, request.nextUrl.origin),
+    307
+  );
 };
