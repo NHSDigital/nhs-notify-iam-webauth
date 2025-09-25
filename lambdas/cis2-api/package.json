@@ -22,7 +22,7 @@
   "dependencies": {
     "@aws-sdk/client-kms": "3.876.0",
     "@aws-sdk/client-ssm": "3.876.0",
-    "axios": "^1.11.0",
+    "axios": "^1.12.2",
     "date-fns": "^4.1.0",
     "jwt-decode": "^4.0.0",
     "winston": "^3.17.0",

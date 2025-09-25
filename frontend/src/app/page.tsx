@@ -14,11 +14,11 @@ import content from '@/content/content';
 import styles from '@/app/page.module.scss';
 import { noClientErrorTag } from '@/utils/public-constants';
 
-function SignIn() {
-  const {
-    pages: { signInPage: pageContent },
-  } = content;
+const {
+  pages: { signInPage },
+} = content;
 
+function SignIn() {
   const { authStatus, error } = useAuthenticator(authenticatorSelector);
 
   const searchParams = useSearchParams();
@@ -27,7 +27,7 @@ function SignIn() {
 
   useEffect(() => {
     if (error && error.includes(noClientErrorTag)) {
-      redirect(pageContent.noClientRedirectHref, RedirectType.push);
+      redirect(signInPage.noClientRedirectHref, RedirectType.push);
     }
 
     if (authStatus === 'authenticated') {
@@ -40,15 +40,15 @@ function SignIn() {
     } else if (authStatus === 'unauthenticated') {
       JsCookie.remove('csrf_token');
     }
-  }, [authStatus, error, redirectPath, pageContent.noClientRedirectHref]);
+  }, [authStatus, error, redirectPath]);
 
   return (
     <div className='nhsuk-grid-row'>
       <div className='nhsuk-grid-column-two-thirds'>
-        <h1 className='nhsuk-heading-xl'>{pageContent.pageHeading}</h1>
+        <h1 className='nhsuk-heading-xl'>{signInPage.pageHeading}</h1>
         <div className='nhsuk-u-padding-6 notify-content'>
           <h2 className='nhsuk-heading-m'>
-            {pageContent.federatedSignInSectionHeading}
+            {signInPage.federatedSignInSectionHeading}
           </h2>
           <CIS2SignInButton
             onClick={() =>
@@ -76,8 +76,13 @@ function SignIn() {
 
 export default function SignInPage() {
   return (
-    <Suspense>
-      <SignIn />
-    </Suspense>
+    <>
+      <head>
+        <title>{signInPage.meta.title}</title>
+      </head>
+      <Suspense>
+        <SignIn />
+      </Suspense>
+    </>
   );
 }

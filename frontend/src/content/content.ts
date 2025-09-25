@@ -65,6 +65,7 @@ const signInPage = {
   pageHeading: 'Sign in',
   federatedSignInSectionHeading: 'Sign in using an NHS account',
   noClientRedirectHref,
+  meta: generateMetaTitle(`Sign in - ${createTitleSegment}`),
 };
 
 const signOutPage = {
@@ -95,6 +96,7 @@ const requestToBeAddedToClientPage = {
 const oauth2Redirect = {
   heading: 'Redirecting, please wait',
   noClientRedirectHref,
+  meta: generateMetaTitle(`Redirecting - ${createTitleSegment}`),
 };
 
 const content = {

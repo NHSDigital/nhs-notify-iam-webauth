@@ -10,7 +10,6 @@ export const dynamic = 'force-dynamic';
 
 // https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadata-object
 export const metadata: Metadata = {
-  title: content.global.mainLayout.title,
   description: content.global.mainLayout.description,
   icons: {
     icon: {

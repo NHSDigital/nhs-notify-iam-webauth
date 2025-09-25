@@ -4,15 +4,20 @@ import content from '@/content/content';
 import Inactive from '@/app/inactive/Inactive';
 
 const {
-  pages: {
-    inactivePage: { meta },
-  },
+  pages: { inactivePage },
 } = content;
 
-export const metadata: Metadata = {
-  ...meta,
-};
+const { title, ...pageMetadata } = inactivePage.meta;
+
+export const metadata: Metadata = pageMetadata;
 
 export default function InactivePage() {
-  return <Inactive />;
+  return (
+    <>
+      <head>
+        <title>{title}</title>
+      </head>
+      <Inactive />
+    </>
+  );
 }
