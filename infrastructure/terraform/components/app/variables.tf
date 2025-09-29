@@ -204,7 +204,7 @@ variable "backup_schedule_cron" {
 variable "retention_period" {
   type        = number
   description = "Backup Vault Retention Period"
-  default     = 14
+  default     = 31
 }
 
 variable "backup_report_recipient" {
