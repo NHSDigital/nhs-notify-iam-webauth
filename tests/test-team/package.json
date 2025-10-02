@@ -1,20 +1,8 @@
 {
-  "name": "nhs-notify-iam-webauth-ui-tests",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "test:local-ui": "playwright test --project component -c config/component/component.config.ts",
-    "test:backend": "playwright test --project backend -c config/backend/backend.config.ts",
-    "test:story": "echo 'Not implemented'",
-    "test:unit": "echo 'unit tests not required'",
-    "typecheck": "tsc --noEmit"
-  },
   "devDependencies": {
     "@aws-sdk/client-cognito-identity-provider": "3.876.0",
-    "@aws-sdk/client-lambda": "3.876.0",
     "@aws-sdk/client-kms": "3.876.0",
+    "@aws-sdk/client-lambda": "3.876.0",
     "@aws-sdk/client-s3": "3.878.0",
     "@aws-sdk/client-ssm": "3.876.0",
     "@aws-sdk/types": "3.862.0",
@@ -22,8 +10,20 @@
     "@types/node-jose": "^1.1.13",
     "generate-password": "^1.7.1",
     "jwt-decode": "^4.0.0",
-    "node-jose": "^2.2.0",
     "nhs-notify-iam-webauth-util-backend-config": "^0.0.1",
+    "node-jose": "^2.2.0",
     "winston": "^3.14.2"
-  }
+  },
+  "name": "nhs-notify-iam-webauth-ui-tests",
+  "private": true,
+  "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "test:backend": "playwright test --project backend -c config/backend/backend.config.ts",
+    "test:local-ui": "playwright test --project component -c config/component/component.config.ts",
+    "test:story": "echo 'Not implemented'",
+    "test:unit": "echo 'unit tests not required'",
+    "typecheck": "tsc --noEmit"
+  },
+  "version": "0.1.0"
 }

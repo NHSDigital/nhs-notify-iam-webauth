@@ -38,5 +38,3 @@ data "terraform_remote_state" "app" {
     region = "eu-west-2"
   }
 }
-
-

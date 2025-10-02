@@ -1,92 +1,92 @@
 {
-  "openapi": "3.0.1",
   "info": {
-    "title": "NHS Notify - Web UI - Template Management API",
     "description": "Backend for NHS Notify Template Management Web UI",
+    "title": "NHS Notify - Web UI - Template Management API",
     "version": "v1"
   },
+  "openapi": "3.0.1",
   "paths": {
     "/v1/cis2-authorize": {
       "get": {
-        "summary": "CIS2 authorize proxy",
         "description": "CIS2 authorize proxy",
         "responses": {
           "302": {
-            "description": "302 response",
             "content": {
               "text/html": {
                 "schema": {
                   "type": "object"
                 }
               }
-            }
+            },
+            "description": "302 response"
           },
           "default": {
-            "description": "Error",
             "content": {
               "text/html": {
                 "schema": {
                   "type": "object"
                 }
               }
-            }
+            },
+            "description": "Error"
           }
         },
+        "summary": "CIS2 authorize proxy",
         "x-amazon-apigateway-integration": {
-          "credentials": "${APIG_EXECUTION_ROLE_ARN}",
           "contentHandling": "CONVERT_TO_TEXT",
+          "credentials": "${APIG_EXECUTION_ROLE_ARN}",
           "httpMethod": "POST",
           "passthroughBehavior": "WHEN_NO_TEMPLATES",
-          "uri": "arn:aws:apigateway:${AWS_REGION}:lambda:path/2015-03-31/functions/${AUTHORIZE_LAMBDA_ARN}/invocations",
           "responses": {
             ".*": {
               "statusCode": "200"
             }
           },
           "timeoutInMillis": 29000,
-          "type": "AWS_PROXY"
+          "type": "AWS_PROXY",
+          "uri": "arn:aws:apigateway:${AWS_REGION}:lambda:path/2015-03-31/functions/${AUTHORIZE_LAMBDA_ARN}/invocations"
         }
       }
     },
     "/v1/cis2-token": {
       "post": {
-        "summary": "CIS2 token proxy",
         "description": "CIS2 token proxy",
         "responses": {
           "302": {
-            "description": "302 response",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object"
                 }
               }
-            }
+            },
+            "description": "302 response"
           },
           "default": {
-            "description": "Error",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object"
                 }
               }
-            }
+            },
+            "description": "Error"
           }
         },
+        "summary": "CIS2 token proxy",
         "x-amazon-apigateway-integration": {
-          "credentials": "${APIG_EXECUTION_ROLE_ARN}",
           "contentHandling": "CONVERT_TO_TEXT",
+          "credentials": "${APIG_EXECUTION_ROLE_ARN}",
           "httpMethod": "POST",
           "passthroughBehavior": "WHEN_NO_TEMPLATES",
-          "uri": "arn:aws:apigateway:${AWS_REGION}:lambda:path/2015-03-31/functions/${TOKEN_LAMBDA_ARN}/invocations",
           "responses": {
             ".*": {
               "statusCode": "200"
             }
           },
           "timeoutInMillis": 29000,
-          "type": "AWS_PROXY"
+          "type": "AWS_PROXY",
+          "uri": "arn:aws:apigateway:${AWS_REGION}:lambda:path/2015-03-31/functions/${TOKEN_LAMBDA_ARN}/invocations"
         }
       }
     }

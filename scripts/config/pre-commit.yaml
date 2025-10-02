@@ -3,16 +3,30 @@ repos:
     rev: v5.0.0 # Use the ref you want to point at
     hooks:
       - id: trailing-whitespace
+        exclude: |
+          (?x)^(
+            frontend/src/__tests__/.*\.tsx\.snap |
+            frontend/.*\.min\..*
+          )$
       - id: detect-aws-credentials
         args: [--allow-missing-credentials]
       - id: check-added-large-files
       - id: check-symlinks
       - id: detect-private-key
       - id: end-of-file-fixer
+        exclude: |
+          (?x)^(
+            frontend/src/__tests__/.*\.tsx\.snap |
+            frontend/.*\.min\..*
+          )$
       - id: forbid-new-submodules
       - id: mixed-line-ending
       - id: pretty-format-json
         args: ['--autofix']
+        exclude: |
+          (?x)^(
+            .*/?package-lock.json
+          )$
     # -   id: ...
   - repo: local
     hooks:

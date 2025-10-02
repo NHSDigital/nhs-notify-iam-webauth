@@ -31,4 +31,3 @@ module.exports = {
     agent: 'pa11y',
   }
 };
-
