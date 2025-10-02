@@ -17,7 +17,8 @@ repos:
         exclude: |
           (?x)^(
             frontend/src/__tests__/.*\.tsx\.snap |
-            frontend/.*\.min\..*
+            frontend/.*\.min\..* |
+            .*\.bin
           )$
       - id: forbid-new-submodules
       - id: mixed-line-ending
@@ -25,7 +26,8 @@ repos:
         args: ['--autofix']
         exclude: |
           (?x)^(
-            .*/?package-lock.json
+            .*/?package-lock.json |
+            lambdas/jwks-key-rotation/src/__tests__/utils/test-public-key.jwks.json
           )$
     # -   id: ...
   - repo: local
