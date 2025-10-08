@@ -69,7 +69,10 @@ const signInPage = {
 
 const signOutPage = {
   content: 'Signed out',
-  meta: generateMetaTitle(`Signed out - ${createTitleSegment}`),
+  meta: {
+    title: `Signed out - Create and submit templates - NHS Notify`,
+    description: `Signed out - Create and submit templates - NHS Notify`,
+  },
 };
 
 const requestToBeAddedToClientPage = {

@@ -50,7 +50,9 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <head>
+        <title />
         <script src={`${BASE_PATH}/lib/nhsuk-9.1.0.min.js`} defer />
+        <script src={`${BASE_PATH}/lib/cleanup.js`} defer />
       </head>
       <body suppressHydrationWarning>
         <script src={`${BASE_PATH}/lib/nhs-frontend-js-check.js`} defer />
