@@ -1,15 +1,15 @@
 import React from 'react';
+import { Metadata } from 'next';
 import SignOut from '@/components/molecules/SignOut/SignOut';
 import content from '@/content/content';
-import { Metadata } from 'next';
 
 const {
   pages: { signOutPage },
 } = content;
 
-const { title, ...pageMetadata } = signOutPage.meta;
-
-export const metadata: Metadata = { title, ...pageMetadata };
+export const metadata: Metadata = {
+  ...signOutPage.meta,
+};
 
 export default function SignOutPage() {
   return (
