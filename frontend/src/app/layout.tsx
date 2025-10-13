@@ -12,34 +12,6 @@ export const dynamic = 'force-dynamic';
 export const metadata: Metadata = {
   title: content.global.mainLayout.title,
   description: content.global.mainLayout.description,
-  icons: {
-    icon: {
-      url: `${BASE_PATH}/lib/assets/favicons/favicon-192x192.png`,
-      sizes: '192x192',
-    },
-    shortcut: {
-      url: `${BASE_PATH}/lib/assets/favicons/favicon.ico`,
-      type: 'image/x-icon',
-    },
-    apple: {
-      url: `${BASE_PATH}/lib/assets/favicons/apple-touch-icon-180x180.png`,
-    },
-    other: [
-      {
-        rel: 'mask-icon',
-        url: `${BASE_PATH}/lib/assets/favicons/favicon.svg`,
-        color: '#005eb8',
-      },
-    ],
-  },
-  other: {
-    'msapplication-TileImage': `${BASE_PATH}/lib/assets/favicons/mediumtile-144x144.png`,
-    'msapplication-TileColor': '#005eb8',
-    'msapplication-square70x70logo': `${BASE_PATH}/lib/assets/favicons/smalltile-70x70.png`,
-    'msapplication-square150x150logo': `${BASE_PATH}/lib/assets/favicons/mediumtile-150x150.png`,
-    'msapplication-wide310x150logo': `${BASE_PATH}/lib/assets/favicons/widetile-310x150.png`,
-    'msapplication-square310x310logo': `${BASE_PATH}/lib/assets/favicons/largetile-310x310.png`,
-  },
 };
 
 export default function RootLayout({
@@ -50,9 +22,27 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <head>
-        <title />
+        <link
+          rel='icon'
+          href={`${BASE_PATH}/lib/assets/favicons/favicon.ico`}
+          sizes='48x48'
+        />
+        <link
+          rel='icon'
+          href={`${BASE_PATH}/lib/assets/favicons/favicon.svg`}
+          sizes='any'
+          type='image/svg+xml'
+        />
+        <link
+          rel='mask-icon'
+          href={`${BASE_PATH}/lib/assets/favicons/favicon.svg`}
+          color='#005eb8'
+        />
+        <link
+          rel='apple-touch-icon'
+          href={`${BASE_PATH}/lib/assets/favicons/apple-touch-icon-180x180.png`}
+        />
         <script src={`${BASE_PATH}/lib/nhsuk-9.1.0.min.js`} defer />
-        <script src={`${BASE_PATH}/lib/title-cleanup.js`} defer />
       </head>
       <body suppressHydrationWarning>
         <script src={`${BASE_PATH}/lib/nhs-frontend-js-check.js`} defer />
