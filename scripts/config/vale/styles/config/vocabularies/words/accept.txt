@@ -2,7 +2,6 @@
 Bitwarden
 bot
 Cognito
-Git[Hh]ub
 Cognito
 config
 Cyber
@@ -14,6 +13,7 @@ endfor
 endraw
 env
 Env
+Git[Hh]ub
 GitHub
 Gitleaks
 Grype

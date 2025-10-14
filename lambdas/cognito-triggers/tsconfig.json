@@ -1,12 +1,12 @@
 {
-  "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "isolatedModules": true,
     "paths": {
       "@/*": [
         "./*"
       ]
     },
-    "resolveJsonModule": true,
-    "isolatedModules": true
-  }
+    "resolveJsonModule": true
+  },
+  "extends": "../../tsconfig.json"
 }

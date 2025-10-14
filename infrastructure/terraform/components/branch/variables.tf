@@ -62,4 +62,3 @@ variable "branch_name" {
   description = "The branch name to deploy"
   default     = "branch"
 }
-

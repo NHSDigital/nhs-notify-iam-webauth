@@ -1,13 +1,12 @@
 {
-  "name": "jwks-key-rotation",
-  "main": "handler.ts",
-  "version": "0.0.1",
-  "scripts": {
-    "build-lambda": "rm -rf dist && esbuild --bundle --minify --sourcemap --target=es2020 --platform=node --entry-names=[name] --outdir=dist src/handler.ts",
-    "lint": "eslint ./src",
-    "lint:fix": "eslint ./src --fix",
-    "test:unit": "jest",
-    "typecheck": "tsc --noEmit"
+  "dependencies": {
+    "@aws-sdk/client-kms": "3.876.0",
+    "@aws-sdk/client-s3": "3.878.0",
+    "@aws-sdk/client-ssm": "3.876.0",
+    "@types/node-jose": "^1.1.13",
+    "node-jose": "^2.2.0",
+    "winston": "^3.14.2",
+    "zod": "^3.24.2"
   },
   "description": "Runs periodically to generate a new public-private key pair and update the published public keys",
   "devDependencies": {
@@ -20,13 +19,14 @@
     "jsonwebtoken": "^9.0.2",
     "typescript": "^5.8.2"
   },
-  "dependencies": {
-    "@aws-sdk/client-kms": "3.876.0",
-    "@aws-sdk/client-s3": "3.878.0",
-    "@aws-sdk/client-ssm": "3.876.0",
-    "@types/node-jose": "^1.1.13",
-    "node-jose": "^2.2.0",
-    "winston": "^3.14.2",
-    "zod": "^3.24.2"
-  }
+  "main": "handler.ts",
+  "name": "jwks-key-rotation",
+  "scripts": {
+    "build-lambda": "rm -rf dist && esbuild --bundle --minify --sourcemap --target=es2020 --platform=node --entry-names=[name] --outdir=dist src/handler.ts",
+    "lint": "eslint ./src",
+    "lint:fix": "eslint ./src --fix",
+    "test:unit": "jest",
+    "typecheck": "tsc --noEmit"
+  },
+  "version": "0.0.1"
 }

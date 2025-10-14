@@ -1,14 +1,4 @@
 {
-  "name": "cognito-triggers",
-  "version": "0.0.1",
-  "private": true,
-  "scripts": {
-    "build-lambda": "./build.sh",
-    "lint": "eslint ./src",
-    "lint:fix": "eslint ./src --fix",
-    "test:unit": "jest",
-    "typecheck": "tsc --noEmit"
-  },
   "dependencies": {
     "@aws-sdk/client-cognito-identity-provider": "3.876.0",
     "@aws-sdk/client-ssm": "3.876.0",
@@ -20,5 +10,15 @@
     "aws-sdk-client-mock-jest": "^4.1.0",
     "esbuild": "^0.25.0",
     "jest": "^29.7.0"
-  }
+  },
+  "name": "cognito-triggers",
+  "private": true,
+  "scripts": {
+    "build-lambda": "./build.sh",
+    "lint": "eslint ./src",
+    "lint:fix": "eslint ./src --fix",
+    "test:unit": "jest",
+    "typecheck": "tsc --noEmit"
+  },
+  "version": "0.0.1"
 }

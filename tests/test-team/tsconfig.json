@@ -1,11 +1,17 @@
 {
-  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@helpers/*": ["./helpers/*"],
-      "@pages/*": ["./pages/*"],
-      "@config/*": ["./config/*"]
+      "@config/*": [
+        "./config/*"
+      ],
+      "@helpers/*": [
+        "./helpers/*"
+      ],
+      "@pages/*": [
+        "./pages/*"
+      ]
     }
-  }
+  },
+  "extends": "../../tsconfig.json"
 }

@@ -1,19 +1,19 @@
 {
-  "name": "@nhs-notify-iam-webauth/utils-logger",
-  "version": "0.0.1",
-  "private": true,
-  "main": "src/index.ts",
-  "scripts": {
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "test:unit": "jest",
-    "typecheck": "tsc --noEmit"
-  },
   "dependencies": {
     "winston": "^3.17.0"
   },
   "devDependencies": {
     "jest": "^29.7.0",
     "ts-jest": "^29.3.0"
-  }
+  },
+  "main": "src/index.ts",
+  "name": "@nhs-notify-iam-webauth/utils-logger",
+  "private": true,
+  "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "test:unit": "jest",
+    "typecheck": "tsc --noEmit"
+  },
+  "version": "0.0.1"
 }

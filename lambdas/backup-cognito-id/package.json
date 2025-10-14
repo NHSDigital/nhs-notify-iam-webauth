@@ -1,14 +1,14 @@
 {
-  "name": "backup-cognito-id",
-  "version": "0.0.1",
-  "private": true,
-  "main": "./src/index.js",
-  "scripts": {
-    "test": "jest"
-  },
   "dependencies": {
     "@aws-sdk/client-cognito-identity-provider": "3.876.0",
     "@aws-sdk/client-s3": "3.878.0",
     "aws-sdk-client-mock": "^4.1.0"
-  }
+  },
+  "main": "./src/index.js",
+  "name": "backup-cognito-id",
+  "private": true,
+  "scripts": {
+    "test": "jest"
+  },
+  "version": "0.0.1"
 }

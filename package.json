@@ -1,32 +1,4 @@
 {
-  "name": "nhs-notify-iam-webauth",
-  "private": true,
-  "workspaces": [
-    "frontend",
-    "lambdas/cis2-api",
-    "lambdas/cognito-triggers",
-    "lambdas/jwks-key-rotation",
-    "tests/test-team",
-    "utils/backend-config",
-    "utils/logger"
-  ],
-  "scripts": {
-    "build": "npm run --workspace frontend build --if-present",
-    "build-lambda": "npm run --workspaces build-lambda --if-present",
-    "cis2-otp": "tsx scripts/totp.ts",
-    "create-backend-sandbox": "./scripts/create_backend_sandbox.sh",
-    "destroy-backend-sandbox": "./scripts/destroy_backend_sandbox.sh",
-    "dev": "npm run --workspace frontend dev --if-present",
-    "generate-outputs": "tsx scripts/generate-outputs.ts",
-    "lint": "NODE_OPTIONS='--disable-warning=ExperimentalWarning' npm run --workspaces lint --if-present",
-    "lint:fix": "NODE_OPTIONS='--disable-warning=ExperimentalWarning' npm run --workspaces lint:fix --if-present",
-    "start": "npm run --workspace frontend start --if-present",
-    "test:unit": "npm run --workspaces test:unit --if-present",
-    "test:coverage": "npm run --workspaces test:coverage --if-present",
-    "test:accessibility": "pa11y-ci -c ./tests/accessibility/.pa11y-ci.js",
-    "test:ui": "npm run build && npm -w tests/test-team run test:local-ui",
-    "typecheck": "npm run --workspaces typecheck --if-present"
-  },
   "devDependencies": {
     "@aws-sdk/client-secrets-manager": "^3.876.0",
     "@eslint/eslintrc": "^3",
@@ -52,8 +24,8 @@
     "eslint-plugin-unicorn": "^59.0.1",
     "lcov-result-merger": "^5.0.1",
     "pa11y": "^8.0.0",
-    "pa11y-ci": "^3.1.0",
-    "pa11y-ci-reporter-html": "^6.0.2",
+    "pa11y-ci": "^4.0.1",
+    "pa11y-ci-reporter-html": "^8.0.0",
     "prettier": "^3.5.3",
     "totp-generator": "^1.0.0",
     "ts-node": "^10.9.2",
@@ -61,9 +33,37 @@
     "typescript": "^5.8.2",
     "typescript-eslint": "^8.32.1"
   },
+  "name": "nhs-notify-iam-webauth",
   "overrides": {
     "pa11y-ci": {
       "pa11y": "^8.0.0"
     }
-  }
+  },
+  "private": true,
+  "scripts": {
+    "build": "npm run --workspace frontend build --if-present",
+    "build-lambda": "npm run --workspaces build-lambda --if-present",
+    "cis2-otp": "tsx scripts/totp.ts",
+    "create-backend-sandbox": "./scripts/create_backend_sandbox.sh",
+    "destroy-backend-sandbox": "./scripts/destroy_backend_sandbox.sh",
+    "dev": "npm run --workspace frontend dev --if-present",
+    "generate-outputs": "tsx scripts/generate-outputs.ts",
+    "lint": "NODE_OPTIONS='--disable-warning=ExperimentalWarning' npm run --workspaces lint --if-present",
+    "lint:fix": "NODE_OPTIONS='--disable-warning=ExperimentalWarning' npm run --workspaces lint:fix --if-present",
+    "start": "npm run --workspace frontend start --if-present",
+    "test:accessibility": "pa11y-ci -c ./tests/accessibility/.pa11y-ci.js",
+    "test:coverage": "npm run --workspaces test:coverage --if-present",
+    "test:ui": "npm run build && npm -w tests/test-team run test:local-ui",
+    "test:unit": "npm run --workspaces test:unit --if-present",
+    "typecheck": "npm run --workspaces typecheck --if-present"
+  },
+  "workspaces": [
+    "frontend",
+    "lambdas/cis2-api",
+    "lambdas/cognito-triggers",
+    "lambdas/jwks-key-rotation",
+    "tests/test-team",
+    "utils/backend-config",
+    "utils/logger"
+  ]
 }

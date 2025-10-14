@@ -1,5 +1,4 @@
 {
-  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "paths": {
       "@/*": [
@@ -7,5 +6,6 @@
       ]
     },
     "resolveJsonModule": true
-  }
+  },
+  "extends": "../../tsconfig.json"
 }
