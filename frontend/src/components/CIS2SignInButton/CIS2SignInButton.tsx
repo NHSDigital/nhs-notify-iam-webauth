@@ -1,4 +1,4 @@
-import type { MouseEventHandler } from 'react';
+import { useEffect, useState, type MouseEventHandler } from 'react';
 import { Button } from 'nhsuk-react-components';
 
 export default function CIS2SignInButton({
@@ -6,11 +6,15 @@ export default function CIS2SignInButton({
 }: Readonly<{
   onClick: MouseEventHandler<HTMLButtonElement>;
 }>) {
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => setHydrated(true), []);
+
   return (
     <Button
       alt='Log in with my Care Identity'
       onClick={onClick}
       className='notify-cis2-button'
+      data-hydrated={hydrated}  
     >
       <svg
         version='1.1'
