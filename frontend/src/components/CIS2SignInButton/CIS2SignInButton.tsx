@@ -14,7 +14,7 @@ export default function CIS2SignInButton({
       alt='Log in with my Care Identity'
       onClick={onClick}
       className='notify-cis2-button'
-      data-hydrated={hydrated}  
+      data-hydrated={hydrated}
     >
       <svg
         version='1.1'
