@@ -42,6 +42,22 @@ export default function RootLayout({
           rel='apple-touch-icon'
           href={`${BASE_PATH}/lib/assets/favicons/apple-touch-icon-180x180.png`}
         />
+
+        <link
+          rel='preload'
+          as='font'
+          href='https://assets.nhs.uk/fonts/FrutigerLTW01-55Roman.woff2'
+          type='font/woff2'
+          crossOrigin='anonymous'
+        />
+
+        <link
+          rel='preload'
+          as='font'
+          href='https://assets.nhs.uk/fonts/FrutigerLTW01-65Bold.woff2'
+          type='font/woff2'
+          crossOrigin='anonymous'
+        />
         <script src={`${BASE_PATH}/lib/nhsuk-9.1.0.min.js`} defer />
       </head>
       <body suppressHydrationWarning>
