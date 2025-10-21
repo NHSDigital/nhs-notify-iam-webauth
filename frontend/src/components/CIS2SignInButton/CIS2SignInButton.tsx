@@ -1,4 +1,4 @@
-import { useEffect, useState, type MouseEventHandler } from 'react';
+import { type MouseEventHandler, useEffect, useState } from 'react';
 import { Button } from 'nhsuk-react-components';
 
 export default function CIS2SignInButton({
