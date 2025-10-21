@@ -23,6 +23,7 @@ module "pre_token_generation_lambda" {
   runtime = "nodejs20.x"
   lambda_env_vars = {
     CLIENT_CONFIG_PARAMETER_PATH_PREFIX = local.client_config_parameter_path_prefix
+    USERS_TABLE                         = aws_dynamodb_table.users.name
   }
 
   # logs

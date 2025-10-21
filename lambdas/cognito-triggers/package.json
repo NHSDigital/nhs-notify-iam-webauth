@@ -1,7 +1,9 @@
 {
   "dependencies": {
     "@aws-sdk/client-cognito-identity-provider": "3.876.0",
+    "@aws-sdk/client-dynamodb": "3.913.0",
     "@aws-sdk/client-ssm": "3.876.0",
+    "@aws-sdk/lib-dynamodb": "^3.913.0",
     "@nhs-notify-iam-webauth/utils-logger": "*"
   },
   "devDependencies": {

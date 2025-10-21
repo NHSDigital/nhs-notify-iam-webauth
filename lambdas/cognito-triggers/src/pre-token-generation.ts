@@ -1,6 +1,22 @@
 import type { PreTokenGenerationV2TriggerEvent } from 'aws-lambda';
 import { GetParameterCommand, SSMClient } from '@aws-sdk/client-ssm';
 import { logger } from '@nhs-notify-iam-webauth/utils-logger';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import {
+  DynamoDBDocumentClient,
+  GetCommand,
+  QueryCommand,
+  QueryCommandInput,
+} from '@aws-sdk/lib-dynamodb';
+
+const ddbDocClient = DynamoDBDocumentClient.from(
+  new DynamoDBClient({ region: 'eu-west-2' }),
+  {
+    marshallOptions: { removeUndefinedValues: true },
+  }
+);
+
+const USERS_TABLE = process.env.USERS_TABLE ?? '';
 
 // Based on actual events received in testing, response.claimsAndScopeOverrideDetails can be null
 // This conflicts with the type definition
@@ -33,15 +49,43 @@ export class PreTokenGenerationLambda {
     let clientId = '';
     let clientConfig: ClientConfig | null = null;
 
-    const groups = event.request.groupConfiguration.groupsToOverride;
+    const { userName } = event;
+    console.log(`Processing userName:${userName}`);
 
-    if (groups) {
-      const clientGroup = groups.find((group) => group.startsWith('client:'));
+    const input: QueryCommandInput = {
+      TableName: USERS_TABLE,
+      KeyConditionExpression: '#username = :username',
+      ExpressionAttributeNames: {
+        '#username': 'username',
+      },
+      ExpressionAttributeValues: {
+        ':username': userName,
+      },
+    };
 
-      if (clientGroup) {
-        clientId = clientGroup.replace(/^client:/, '');
+    type UserClient = { username: string; client_id: string };
+    const userClientsResult = await ddbDocClient.send(new QueryCommand(input));
+    const items = userClientsResult.Items ?? ([] as Array<UserClient>);
+
+    console.log(`Found DB results ${JSON.stringify(items)}`);
+    if (items.length > 0) {
+      const firstUserClient = items
+        .sort((item1, item2) => item1.client_id.localCompare(item2.client_id))
+        .find(() => true);
+      clientId = firstUserClient?.client_id ?? '';
+    } else {
+      const groups = event.request.groupConfiguration.groupsToOverride;
+
+      if (groups) {
+        const clientGroup = groups.find((group) => group.startsWith('client:'));
+
+        if (clientGroup) {
+          clientId = clientGroup.replace(/^client:/, '');
+        }
       }
     }
+
+    console.log(`clientId=${clientId}`);
 
     if (clientId) {
       response = PreTokenGenerationLambda.setTokenClaims(
