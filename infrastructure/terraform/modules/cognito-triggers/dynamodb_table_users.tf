@@ -3,10 +3,10 @@ resource "aws_dynamodb_table" "users" {
   billing_mode = "PAY_PER_REQUEST"
 
   hash_key  = "username"
-  range_key = "id"
+  range_key = "client_id"
 
   attribute {
-    name = "client_id"
+    name = "username"
     type = "S"
   }
 
