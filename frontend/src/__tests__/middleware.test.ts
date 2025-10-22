@@ -46,7 +46,7 @@ describe('middleware function', () => {
     ]);
   });
 
-  it('sets CSP in response in dev mode, including unsafe-eval scripts to allow for source maps', () => {
+  it('sets CSP in response in dev mode, including unsafe-eval scripts to allow for source maps and does not upgrade insecure requests', () => {
     // @ts-expect-error assignment to readonly
     process.env.NODE_ENV = 'development';
 
@@ -65,7 +65,6 @@ describe('middleware function', () => {
         /^script-src 'self' 'nonce-[\dA-Za-z]+' 'unsafe-eval'$/
       ),
       expect.stringMatching(/^style-src 'self' 'nonce-[\dA-Za-z]+'$/),
-      'upgrade-insecure-requests',
       '',
     ]);
   });

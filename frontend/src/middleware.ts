@@ -4,7 +4,7 @@ import { getConstants } from '@/utils/public-constants';
 const { COGNITO_DOMAIN } = getConstants();
 
 function getContentSecurityPolicy(nonce: string) {
-  const contentSecurityPolicyDirective = {
+  const contentSecurityPolicyDirective: Record<string, string[]> = {
     'base-uri': [`'self'`],
     'default-src': [`'none'`],
     'frame-ancestors': [`'none'`],
@@ -21,16 +21,18 @@ function getContentSecurityPolicy(nonce: string) {
     'object-src': [`'none'`],
     'script-src': [`'self'`, `'nonce-${nonce}'`],
     'style-src': [`'self'`, `'nonce-${nonce}'`],
-    'upgrade-insecure-requests;': [],
   };
 
   if (process.env.NODE_ENV === 'development') {
     contentSecurityPolicyDirective['script-src'].push(`'unsafe-eval'`);
+  } else {
+    contentSecurityPolicyDirective['upgrade-insecure-requests'] = [];
   }
 
   return Object.entries(contentSecurityPolicyDirective)
     .map(([key, value]) => `${key} ${value.join(' ')}`)
-    .join('; ');
+    .join('; ')
+    .concat(';');
 }
 
 export function middleware(request: NextRequest) {
