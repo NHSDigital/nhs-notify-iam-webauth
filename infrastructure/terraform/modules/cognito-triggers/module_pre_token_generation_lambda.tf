@@ -53,15 +53,32 @@ data "aws_iam_policy_document" "pre_token_generation_lambda" {
   }
 
   statement {
-    sid       = "AllowKMSDecryptClientParameters"
-    effect    = "Allow"
-    actions   = ["kms:Decrypt"]
-    resources = [var.kms_key_arn]
+    sid    = "AllowDynamoAccess"
+    effect = "Allow"
 
-    condition {
-      test     = "StringLike"
-      variable = "kms:EncryptionContext:PARAMETER_ARN"
-      values   = ["arn:aws:ssm:${var.region}:${var.aws_account_id}:parameter${local.client_config_parameter_path_prefix}*"]
-    }
+    actions = [
+      "dynamodb:Query",
+    ]
+
+    resources = [
+      aws_dynamodb_table.users.arn,
+    ]
+  }
+
+  statement {
+    sid    = "AllowKMSAccess"
+    effect = "Allow"
+
+    actions = [
+      "kms:Decrypt",
+      "kms:DescribeKey",
+      "kms:Encrypt",
+      "kms:GenerateDataKey*",
+      "kms:ReEncrypt*",
+    ]
+
+    resources = [
+      var.kms_key_arn
+    ]
   }
 }
