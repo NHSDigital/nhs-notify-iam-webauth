@@ -4,7 +4,6 @@ import { logger } from '@nhs-notify-iam-webauth/utils-logger';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import {
   DynamoDBDocumentClient,
-  GetCommand,
   QueryCommand,
   QueryCommandInput,
 } from '@aws-sdk/lib-dynamodb';

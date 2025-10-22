@@ -20,6 +20,10 @@ module "pre_authentication_lambda" {
   timeout = 3
   runtime = "nodejs20.x"
 
+  lambda_env_vars = {
+    USERS_TABLE = aws_dynamodb_table.users.name
+  }
+
   kms_key_arn           = var.kms_key_arn
   log_retention_in_days = var.log_retention_in_days
 
