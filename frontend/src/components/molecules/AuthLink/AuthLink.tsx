@@ -3,7 +3,6 @@
 import React from 'react';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import content from '@/content/content';
-import styles from '@/components/molecules/AuthLink/AuthLink.module.scss';
 import { authenticatorSelector } from '@/utils/authenticator-selector';
 
 const headerContent = content.components.header;

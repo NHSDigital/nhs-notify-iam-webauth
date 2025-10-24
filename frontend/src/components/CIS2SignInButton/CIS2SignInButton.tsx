@@ -2,7 +2,7 @@ import type { MouseEventHandler } from 'react';
 import { Button } from 'nhsuk-react-components';
 import content from '@/content/content';
 
-export default function CIS2SignInButtonText({
+export default function CIS2SignInButton({
   onClick,
 }: Readonly<{
   onClick: MouseEventHandler<HTMLButtonElement>;
