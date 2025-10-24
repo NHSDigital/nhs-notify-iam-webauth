@@ -14,3 +14,8 @@
   box-shadow: none;
   padding: 0;
 }
+
+.nhsuk-header__service-logo:has(svg):not(:focus):hover::before {
+  content: none;
+  border: none; // remove the pseudo underline on the logo
+}

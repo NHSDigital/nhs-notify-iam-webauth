@@ -10,12 +10,25 @@ const generateMetaTitle = (title: string) => ({
 
 const createTitleSegment = 'Create and submit templates';
 
-const headerComponent = {
+const header = {
   serviceName: 'Notify',
-  serviceLink: `/templates/create-and-submit-templates`,
-  links: {
-    signIn: { text: 'Sign in', href: BASE_PATH },
-    signOut: { text: 'Sign out', href: `${BASE_PATH}/signout` },
+  logoLink: {
+    ariaLabel: 'NHS Notify templates',
+    logoTitle: 'NHS logo',
+    href: '/templates/create-and-submit-templates',
+  },
+  accountInfo: {
+    ariaLabel: 'Account',
+    links: {
+      signIn: {
+        text: 'Sign in',
+        href: BASE_PATH,
+      },
+      signOut: {
+        text: 'Sign out',
+        href: `${BASE_PATH}/signout`,
+      },
+    },
   },
 };
 
@@ -99,7 +112,7 @@ const oauth2Redirect = {
 
 const content = {
   global: { mainLayout },
-  components: { headerComponent, footer, cognitoSignInComponent },
+  components: { header, footer, cognitoSignInComponent },
   pages: {
     inactivePage,
     requestToBeAddedToClientPage,
