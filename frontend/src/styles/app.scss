@@ -9,10 +9,17 @@
   width: 374.38px;
   height: 59px;
   margin: 0;
+  margin-bottom: 16px;
   border: none;
-  background: none;
-  box-shadow: none;
+  background-color: nhsuk.$color_nhsuk-blue;
+  box-shadow: 0 4px 0 nhsuk.nhsuk-colour("dark-blue");
   padding: 0;
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    background-color: nhsuk.$nhsuk-login-button-hover-colour;
+  }
 }
 
 .nhsuk-header__service-logo:has(svg):not(:focus):hover::before {

@@ -32,6 +32,11 @@ const header = {
   },
 };
 
+const cis2Login = {
+  logoTitle: 'NHS logo',
+  buttonText: 'Log in with my Care Identity',
+};
+
 const footer = {
   nhsEngland: 'NHS England',
   supportLinks: 'Support links',
@@ -112,7 +117,7 @@ const oauth2Redirect = {
 
 const content = {
   global: { mainLayout },
-  components: { header, footer, cognitoSignInComponent },
+  components: { header, cis2Login, footer, cognitoSignInComponent },
   pages: {
     inactivePage,
     requestToBeAddedToClientPage,
