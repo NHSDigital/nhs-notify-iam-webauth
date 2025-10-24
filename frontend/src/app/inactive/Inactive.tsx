@@ -8,14 +8,14 @@ import content from '@/content/content';
 
 export default function Inactive() {
   const {
-    components: { headerComponent },
+    components: { header },
     pages: { inactivePage },
   } = content;
 
   const searchParams = useSearchParams().toString();
 
   const signInLink =
-    headerComponent.links.signIn.href +
+    header.accountInfo.links.signIn.href +
     (searchParams ? `?${searchParams}` : '');
 
   const paragraphs = inactivePage.body.map((paragraph, index) => {
@@ -29,7 +29,7 @@ export default function Inactive() {
       <h1>{inactivePage.pageHeading}</h1>
       {paragraphs}
       <Button id='inactive-sign-in' href={signInLink}>
-        {headerComponent.links.signIn.text}
+        {header.accountInfo.links.signIn.text}
       </Button>
     </SignOut>
   );

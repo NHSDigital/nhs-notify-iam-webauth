@@ -2,51 +2,39 @@
 
 exports[`AuthLink - authenticated 1`] = `
 <DocumentFragment>
-  <div
-    class="auth-link"
+  <a
+    class="nhsuk-header__account-link"
     data-testid="auth-link"
+    href="/auth/signout"
+    id="sign-out-link"
   >
-    <a
-      class="auth-link__link"
-      href="/auth/signout"
-      id="sign-out-link"
-    >
-      Sign out
-    </a>
-  </div>
+    Sign out
+  </a>
 </DocumentFragment>
 `;
 
 exports[`AuthLink - configuring 1`] = `
 <DocumentFragment>
-  <div
-    class="auth-link"
+  <a
+    class="nhsuk-header__account-link"
     data-testid="auth-link"
+    href="/auth"
+    id="sign-in-link"
   >
-    <a
-      class="auth-link__link"
-      href="/auth"
-      id="sign-in-link"
-    >
-      Sign in
-    </a>
-  </div>
+    Sign in
+  </a>
 </DocumentFragment>
 `;
 
 exports[`AuthLink - unauthenticated 1`] = `
 <DocumentFragment>
-  <div
-    class="auth-link"
+  <a
+    class="nhsuk-header__account-link"
     data-testid="auth-link"
+    href="/auth"
+    id="sign-in-link"
   >
-    <a
-      class="auth-link__link"
-      href="/auth"
-      id="sign-in-link"
-    >
-      Sign in
-    </a>
-  </div>
+    Sign in
+  </a>
 </DocumentFragment>
 `;
