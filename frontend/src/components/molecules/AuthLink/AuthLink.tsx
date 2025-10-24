@@ -4,10 +4,13 @@ import React from 'react';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import content from '@/content/content';
 import { authenticatorSelector } from '@/utils/authenticator-selector';
+import concatClassNames from '@/utils/concat-class-names';
 
 const headerContent = content.components.header;
 
-export default function AuthLink() {
+export default function AuthLink({
+  className,
+}: Readonly<{ className?: string }>) {
   const { authStatus } = useAuthenticator(authenticatorSelector);
 
   let id = 'sign-in-link';
@@ -21,7 +24,7 @@ export default function AuthLink() {
     <a
       id={id}
       data-testid='auth-link'
-      className='nhsuk-header__account-link'
+      className={concatClassNames('nhsuk-header__account-link', className)}
       href={linkContent.href}
     >
       {linkContent.text}
