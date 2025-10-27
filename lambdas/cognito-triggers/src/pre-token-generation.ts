@@ -49,7 +49,7 @@ export class PreTokenGenerationLambda {
     let clientConfig: ClientConfig | null = null;
 
     const { userName } = event;
-    console.log(`Processing userName:${userName}`);
+    const childLogger = logger.child({ userName });
 
     const input: QueryCommandInput = {
       TableName: USERS_TABLE,
@@ -64,9 +64,9 @@ export class PreTokenGenerationLambda {
 
     type UserClient = { username: string; client_id: string };
     const userClientsResult = await ddbDocClient.send(new QueryCommand(input));
-    const items = userClientsResult.Items ?? ([] as Array<UserClient>);
+    const items = userClientsResult.Items ?? ([] as UserClient[]);
 
-    console.log(`Found DB results ${JSON.stringify(items)}`);
+    childLogger.info(`Found ${items.length} DB results`);
     if (items.length > 0) {
       const firstUserClient = items
         .sort((item1, item2) => item1.client_id.localCompare(item2.client_id))
@@ -84,7 +84,7 @@ export class PreTokenGenerationLambda {
       }
     }
 
-    console.log(`clientId=${clientId}`);
+    childLogger.info(`clientId=${clientId}`);
 
     if (clientId) {
       response = PreTokenGenerationLambda.setTokenClaims(

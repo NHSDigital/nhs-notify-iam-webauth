@@ -42,11 +42,11 @@ export const handler = async (event: PreAuthenticationTriggerEvent) => {
 
   type UserClient = { username: string; client_id: string };
   const userClientsResult = await ddbDocClient.send(new QueryCommand(input));
-  const items = userClientsResult.Items ?? ([] as Array<UserClient>);
+  const items = userClientsResult.Items ?? ([] as UserClient[]);
 
-  userLogger.info(`Found DB results ${JSON.stringify(items)}`);
   let clientCount = items.length;
-  if (clientCount == 0) {
+  userLogger.info(`Found DB results ${clientCount}`);
+  if (clientCount === 0) {
     const response = await cognito
       .send(
         new AdminListGroupsForUserCommand({
