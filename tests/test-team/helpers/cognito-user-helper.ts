@@ -13,10 +13,7 @@ import {
   SSMClient,
 } from '@aws-sdk/client-ssm';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import {
-  DynamoDBDocumentClient,
-  PutCommand,
-} from '@aws-sdk/lib-dynamodb';
+import { DynamoDBDocumentClient, PutCommand } from '@aws-sdk/lib-dynamodb';
 
 const ddbDocClient = DynamoDBDocumentClient.from(
   new DynamoDBClient({ region: 'eu-west-2' }),
@@ -46,6 +43,7 @@ export class CognitoUserHelper {
   });
 
   private clients = new Set<string>();
+
   private clientGroupsToDelete = new Set<string>();
 
   async createUser(
