@@ -68,10 +68,10 @@ export class PreTokenGenerationLambda {
 
     childLogger.info(`Found ${items.length} DB results`);
     if (items.length > 0) {
-      const firstUserClient = items
-        .sort((item1, item2) => item1.client_id.localCompare(item2.client_id))
-        .find(() => true);
-      clientId = firstUserClient?.client_id ?? '';
+      const firstUserClient = items.sort((item1, item2) =>
+        item1.client_id.localeCompare(item2.client_id)
+      )[0];
+      clientId = firstUserClient.client_id as string;
     } else {
       const groups = event.request.groupConfiguration.groupsToOverride;
 
