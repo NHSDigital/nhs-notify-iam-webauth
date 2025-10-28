@@ -3,7 +3,6 @@ import {
   AdminCreateUserCommand,
   AdminDeleteUserCommand,
   AdminDisableUserCommand,
-  AdminRemoveUserFromGroupCommand,
   CognitoIdentityProviderClient,
   CreateGroupCommand,
   DeleteGroupCommand,
@@ -13,13 +12,29 @@ import {
   PutParameterCommand,
   SSMClient,
 } from '@aws-sdk/client-ssm';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import {
+  DynamoDBDocumentClient,
+  PutCommand,
+} from '@aws-sdk/lib-dynamodb';
+
+const ddbDocClient = DynamoDBDocumentClient.from(
+  new DynamoDBClient({ region: 'eu-west-2' }),
+  {
+    marshallOptions: { removeUndefinedValues: true },
+  }
+);
 
 export type User = {
   email: string;
   userId: string;
 };
 
-export type Client = { clientId: string; clientConfig?: { name?: string } };
+export type Client = {
+  clientId: string;
+  useCognitoGroups: boolean;
+  clientConfig?: { name?: string };
+};
 
 export class CognitoUserHelper {
   private readonly cognito = new CognitoIdentityProviderClient({
@@ -31,6 +46,7 @@ export class CognitoUserHelper {
   });
 
   private clients = new Set<string>();
+  private clientGroupsToDelete = new Set<string>();
 
   async createUser(
     username: string,
@@ -70,14 +86,29 @@ export class CognitoUserHelper {
     if (client) {
       if (!this.clients.has(client.clientId)) {
         this.clients.add(client.clientId);
-        await this.createClientGroup(client);
 
         if (client.clientConfig) {
           await this.configureClient(client);
         }
+
+        if (client.useCognitoGroups) {
+          await this.createClientGroup(client);
+        }
       }
 
-      await this.addUserToClientGroup(userId, client);
+      if (client.useCognitoGroups) {
+        await this.addUserToClientGroup(userId, client);
+      } else {
+        ddbDocClient.send(
+          new PutCommand({
+            TableName: process.env.USERS_TABLE ?? '',
+            Item: {
+              username: userId,
+              client_id: client.clientId,
+            },
+          })
+        );
+      }
     }
 
     return {
@@ -102,13 +133,13 @@ export class CognitoUserHelper {
       })
     );
 
-    if (client && this.clients.has(client.clientId)) {
+    if (client && this.clientGroupsToDelete.has(client.clientId)) {
       this.clients.delete(client.clientId);
       await this.deleteClientGroup(client);
+    }
 
-      if (client.clientConfig) {
-        await this.deleteClientConfig(client);
-      }
+    if (client && client.clientConfig) {
+      await this.deleteClientConfig(client);
     }
   }
 
@@ -119,6 +150,7 @@ export class CognitoUserHelper {
         UserPoolId: process.env.AWS_COGNITO_USER_POOL_ID,
       })
     );
+    this.clientGroupsToDelete.add(client.clientId);
   }
 
   private async deleteClientGroup(client: Client) {
@@ -133,16 +165,6 @@ export class CognitoUserHelper {
   private async addUserToClientGroup(username: string, client: Client) {
     await this.cognito.send(
       new AdminAddUserToGroupCommand({
-        GroupName: `client:${client.clientId}`,
-        Username: username,
-        UserPoolId: process.env.AWS_COGNITO_USER_POOL_ID,
-      })
-    );
-  }
-
-  private async removeUserFromClientGroup(username: string, client: Client) {
-    await this.cognito.send(
-      new AdminRemoveUserFromGroupCommand({
         GroupName: `client:${client.clientId}`,
         Username: username,
         UserPoolId: process.env.AWS_COGNITO_USER_POOL_ID,

@@ -1,5 +1,4 @@
 import { GetParameterCommand, SSMClient } from '@aws-sdk/client-ssm';
-import 'aws-sdk-client-mock-jest';
 import {
   PreTokenGenerationLambda,
   type PreTokenGenerationV2Event,

@@ -10,6 +10,7 @@ export type BackendConfig = {
   accountId: string;
   kmsKeyId: string;
   clientConfigParameterPathPrefix: string;
+  usersTableName: string;
 };
 
 export const BackendConfigHelper = {
@@ -29,6 +30,7 @@ export const BackendConfigHelper = {
       kmsKeyId: outputs.kms_key_id.value,
       clientConfigParameterPathPrefix:
         outputs.client_config_parameter_path_prefix.value,
+      usersTableName: outputs.users_table_name.value,
     };
   },
 

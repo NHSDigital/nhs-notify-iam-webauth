@@ -26,6 +26,7 @@ async function globalSetup(config: FullConfig) {
   process.env.TEMPORARY_USER_PASSWORD = temporary;
   process.env.USER_PASSWORD = password;
   process.env.USER_EMAIL_PREFIX = randomUUID().slice(0, 5);
+  process.env.USERS_TABLE = backendConfig.usersTableName;
 
   return config;
 }
