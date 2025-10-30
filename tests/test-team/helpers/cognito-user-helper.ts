@@ -14,6 +14,7 @@ import {
 } from '@aws-sdk/client-ssm';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient, PutCommand } from '@aws-sdk/lib-dynamodb';
+import { randomUUID } from 'node:crypto';
 
 const ddbDocClient = DynamoDBDocumentClient.from(
   new DynamoDBClient({ region: 'eu-west-2' }),
@@ -97,12 +98,23 @@ export class CognitoUserHelper {
       if (client.useCognitoGroups) {
         await this.addUserToClientGroup(userId, client);
       } else {
+        const internalUserId = randomUUID();
         ddbDocClient.send(
           new PutCommand({
             TableName: process.env.USERS_TABLE ?? '',
             Item: {
-              username: userId,
+              PK: `INTERNAL_USER#${internalUserId}`,
+              SK: `CLIENT#${client.clientId}`,
               client_id: client.clientId,
+            },
+          })
+        );
+        ddbDocClient.send(
+          new PutCommand({
+            TableName: process.env.USERS_TABLE ?? '',
+            Item: {
+              PK: `EXTERNAL_USER#${userId}`,
+              SK: `INTERNAL_USER#${internalUserId}`,
             },
           })
         );

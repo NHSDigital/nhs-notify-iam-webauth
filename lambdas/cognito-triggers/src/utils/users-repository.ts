@@ -36,17 +36,14 @@ export async function findInternalUserIdentifier(
       `Multiple internal user identifiers found for external user ${externalUserIdentifier}`
     );
   }
-  const internalUserId = items[0]?.SK.replace('INTERNAL_USER#', '');
-
-  const userLogger = logger.child({ username: externalUserIdentifier });
-  userLogger.info(`Internal user ID: ${internalUserId}`);
-
-  return internalUserId ?? '';
+  return items[0]?.SK.replace('INTERNAL_USER#', '') ?? '';
 }
 
 export async function retrieveInternalUser(
   internalUserId: string
-): Promise<UserClient> {
+): Promise<UserClient | null> {
+  const userLogger = logger.child({ internalUserId });
+
   const input: QueryCommandInput = {
     TableName: USERS_TABLE,
     KeyConditionExpression: 'PK = :partitionKey',
@@ -58,9 +55,10 @@ export async function retrieveInternalUser(
   const userClientsResult = await ddbDocClient.send(new QueryCommand(input));
   const items = userClientsResult.Items ?? ([] as UserClient[]);
   if (items.length !== 1) {
-    throw new Error(
+    userLogger.error(
       `Expected exactly one user client for internal user ID ${internalUserId}, found ${items.length}`
     );
+    return null;
   }
   return items[0] as UserClient;
 }

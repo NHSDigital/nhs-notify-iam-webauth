@@ -1,4 +1,3 @@
-/* eslint-disable import-x/prefer-default-export */
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 
 export const INTERNAL_ID_ATTRIBUTE = 'custom:nhs_notify_user_id';

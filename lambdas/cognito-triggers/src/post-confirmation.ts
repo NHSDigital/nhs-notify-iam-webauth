@@ -1,11 +1,11 @@
 import type { PostConfirmationTriggerEvent } from 'aws-lambda';
 import { logger } from '@nhs-notify-iam-webauth/utils-logger';
-import { findInternalUserIdentifier } from './users-repository';
-import { populateInternalUserId } from './cognito-customisation-util';
+import { findInternalUserIdentifier } from '@/src/utils/users-repository';
+import { populateInternalUserId } from '@/src/utils/cognito-customisation-util';
 
-export const handler = async (event: PostConfirmationTriggerEvent) => {
+export default async function handler(event: PostConfirmationTriggerEvent) {
   const { userName } = event;
-  let userLogger = logger.child({ username: userName });
+  const userLogger = logger.child({ username: userName });
   userLogger.info('Looking up internal user ID from DynamoDB');
 
   const internalUserId = await findInternalUserIdentifier(userName);
@@ -13,8 +13,10 @@ export const handler = async (event: PostConfirmationTriggerEvent) => {
 
   if (internalUserId) {
     await populateInternalUserId(userName, internalUserId, event.userPoolId);
-    userLogger.info(`Populated internal user ID in Cognito attributes ${internalUserId}`);
+    userLogger.info(
+      `Populated internal user ID in Cognito attributes ${internalUserId}`
+    );
   }
 
   return event;
-};
+}

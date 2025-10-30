@@ -1,30 +1,19 @@
 /* eslint-disable import-x/prefer-default-export */
+/* eslint-disable security/detect-object-injection */
 import {
   AdminListGroupsForUserCommand,
   CognitoIdentityProvider,
 } from '@aws-sdk/client-cognito-identity-provider';
 import type { PreAuthenticationTriggerEvent } from 'aws-lambda';
 import { logger } from '@nhs-notify-iam-webauth/utils-logger';
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import {
-  DynamoDBDocumentClient,
-  QueryCommand,
-  QueryCommandInput,
-} from '@aws-sdk/lib-dynamodb';
-import { findInternalUserIdentifier } from './users-repository';
+  findInternalUserIdentifier,
+  retrieveInternalUser,
+} from '@/src/utils/users-repository';
 import {
   INTERNAL_ID_ATTRIBUTE,
   populateInternalUserId,
-} from './cognito-customisation-util';
-
-const ddbDocClient = DynamoDBDocumentClient.from(
-  new DynamoDBClient({ region: 'eu-west-2' }),
-  {
-    marshallOptions: { removeUndefinedValues: true },
-  }
-);
-
-const USERS_TABLE = process.env.USERS_TABLE ?? '';
+} from '@/src/utils/cognito-customisation-util';
 
 const cognito = new CognitoIdentityProvider({ region: 'eu-west-2' });
 
@@ -46,21 +35,16 @@ export const handler = async (event: PreAuthenticationTriggerEvent) => {
 
   userLogger = logger.child({ username: userName, internalUserId });
   userLogger.info('Processing event');
+  let clientCount = 0;
+  if (!internalUserId) {
+    const internalUser = await retrieveInternalUser(internalUserId);
+    if (!internalUser) {
+      userLogger.error('Internal user not found in DynamoDB');
+      throw new Error('PRE_AUTH_ERROR');
+    }
+    clientCount = internalUser.client_id ? 1 : 0;
+  }
 
-  const input: QueryCommandInput = {
-    TableName: USERS_TABLE,
-    KeyConditionExpression: 'PK = :partitionKey',
-    ExpressionAttributeValues: {
-      ':partitionKey': `INTERNAL_USER#${internalUserId}`,
-    },
-  };
-
-  type UserClient = { PK: string; SK: string; client_id: string };
-  const userClientsResult = await ddbDocClient.send(new QueryCommand(input));
-  const items = userClientsResult.Items ?? ([] as UserClient[]);
-
-  let clientCount = items.length;
-  userLogger.info(`Found DB results ${clientCount}`);
   if (clientCount === 0) {
     const response = await cognito
       .send(
@@ -71,7 +55,6 @@ export const handler = async (event: PreAuthenticationTriggerEvent) => {
       )
       .catch((error) => {
         userLogger.error('Unexpected error during pre-authentication', error);
-
         throw new Error('PRE_AUTH_ERROR');
       });
 
@@ -83,13 +66,11 @@ export const handler = async (event: PreAuthenticationTriggerEvent) => {
 
   if (clientCount > 1) {
     userLogger.error('User belongs to more than one client');
-
     throw new Error('PRE_AUTH_ERROR');
   }
 
   if (clientCount === 0) {
     userLogger.info('User does not belong to a client');
-
     throw new Error('PRE_AUTH_NO_CLIENT_FAILURE');
   }
 

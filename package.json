@@ -64,7 +64,6 @@
     "lambdas/jwks-key-rotation",
     "tests/test-team",
     "utils/backend-config",
-    "utils/logger",
-    "data-migration/client-membership-to-ddb"
+    "utils/logger"
   ]
 }

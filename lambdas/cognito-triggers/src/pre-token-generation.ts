@@ -1,23 +1,9 @@
+/* eslint-disable security/detect-object-injection */
 import type { PreTokenGenerationV2TriggerEvent } from 'aws-lambda';
 import { GetParameterCommand, SSMClient } from '@aws-sdk/client-ssm';
 import { logger } from '@nhs-notify-iam-webauth/utils-logger';
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import {
-  DynamoDBDocumentClient,
-  QueryCommand,
-  QueryCommandInput,
-} from '@aws-sdk/lib-dynamodb';
-import { INTERNAL_ID_ATTRIBUTE } from './cognito-customisation-util';
-import { retrieveInternalUser } from './users-repository';
-
-const ddbDocClient = DynamoDBDocumentClient.from(
-  new DynamoDBClient({ region: 'eu-west-2' }),
-  {
-    marshallOptions: { removeUndefinedValues: true },
-  }
-);
-
-const USERS_TABLE = process.env.USERS_TABLE ?? '';
+import { INTERNAL_ID_ATTRIBUTE } from '@/src/utils/cognito-customisation-util';
+import { retrieveInternalUser } from '@/src/utils/users-repository';
 
 // Based on actual events received in testing, response.claimsAndScopeOverrideDetails can be null
 // This conflicts with the type definition
@@ -58,6 +44,9 @@ export class PreTokenGenerationLambda {
 
     if (internalUserId) {
       const internalUser = await retrieveInternalUser(internalUserId);
+      if (!internalUser) {
+        throw new Error('Internal user not found in DynamoDB');
+      }
       clientId = internalUser.client_id;
 
       userLogger.info(`Found client ID from DynamoDB: ${clientId}`);
@@ -166,7 +155,7 @@ export class PreTokenGenerationLambda {
       token === 'accessToken' ? 'accessTokenGeneration' : 'idTokenGeneration';
 
     const tokenGeneration =
-      e.response.claimsAndScopeOverrideDetails?.[key] || {}; // eslint-disable-line security/detect-object-injection
+      e.response.claimsAndScopeOverrideDetails?.[key] || {};
 
     e.response.claimsAndScopeOverrideDetails = {
       ...e.response.claimsAndScopeOverrideDetails,
