@@ -25,6 +25,7 @@ No requirements.
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_pre_authentication_lambda"></a> [pre\_authentication\_lambda](#module\_pre\_authentication\_lambda) | https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.20/terraform-lambda.zip | n/a |
+| <a name="module_pre_sign_up_lambda"></a> [pre\_sign\_up\_lambda](#module\_pre\_sign\_up\_lambda) | https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.20/terraform-lambda.zip | n/a |
 | <a name="module_pre_token_generation_lambda"></a> [pre\_token\_generation\_lambda](#module\_pre\_token\_generation\_lambda) | https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.20/terraform-lambda.zip | n/a |
 ## Outputs
 

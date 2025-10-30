@@ -1,4 +1,4 @@
-module "pre_authentication_lambda" {
+module "pre_sign_up_lambda" {
   source = "https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.20/terraform-lambda.zip"
 
   project        = var.project
@@ -7,13 +7,13 @@ module "pre_authentication_lambda" {
   aws_account_id = var.aws_account_id
   region         = var.region
 
-  function_name = "pre-authentication"
-  description   = "Pre-authentication handler for Cognito user pool"
+  function_name = "pre-sign-up"
+  description   = "Pre-sign-up handler for Cognito user pool"
 
   function_s3_bucket      = var.function_s3_bucket
   function_code_base_path = local.lambdas_dir
   function_code_dir       = "cognito-triggers/dist"
-  function_module_name    = "pre-authentication"
+  function_module_name    = "pre-sign-up"
   handler_function_name   = "handler"
 
   memory  = 512
@@ -36,18 +36,11 @@ module "pre_authentication_lambda" {
   }]
 
   iam_policy_document = {
-    body = data.aws_iam_policy_document.pre_authentication_lambda.json
+    body = data.aws_iam_policy_document.pre_sign_up_lambda.json
   }
 }
 
-data "aws_iam_policy_document" "pre_authentication_lambda" {
-  statement {
-    sid       = "AllowListCognitoGroups"
-    effect    = "Allow"
-    actions   = ["cognito-idp:AdminListGroupsForUser"]
-    resources = ["arn:aws:cognito-idp:${var.region}:${var.aws_account_id}:userpool/${var.user_pool_id}"]
-  }
-
+data "aws_iam_policy_document" "pre_sign_up_lambda" {
   statement {
     sid       = "AllowUpdateCognitoUserAttributes"
     effect    = "Allow"
