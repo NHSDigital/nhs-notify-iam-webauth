@@ -52,7 +52,7 @@ export const handler = async (event: PreAuthenticationTriggerEvent) => {
   const { userName } = event;
   let userLogger = logger.child({ username: userName });
 
-  let internalUserId = event.request.userAttributes.nhsnotify_user_id;
+  let internalUserId = event.request.userAttributes.nhs_notify_user_id;
   if (!internalUserId) {
     userLogger.info('No internal user ID found in Cognito attributes, looking up from DynamoDB');
     internalUserId = await findInternalUserIdentifier(userName);
@@ -61,7 +61,7 @@ export const handler = async (event: PreAuthenticationTriggerEvent) => {
       Username: userName,
       UserAttributes: [
         {
-          Name: 'custom:nhsnotify_user_id',
+          Name: 'custom:nhs_notify_user_id',
           Value: internalUserId,
         },
       ],
