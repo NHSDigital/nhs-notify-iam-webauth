@@ -44,7 +44,7 @@ data "aws_iam_policy_document" "pre_authentication_lambda" {
   statement {
     sid       = "AllowListCognitoGroups"
     effect    = "Allow"
-    actions   = ["cognito-idp:AdminListGroupsForUser"]
+    actions   = ["cognito-idp:AdminListGroupsForUser", "cognito-idp:AdminUpdateUserAttributes"]
     resources = ["arn:aws:cognito-idp:${var.region}:${var.aws_account_id}:userpool/${var.user_pool_id}"]
   }
 
