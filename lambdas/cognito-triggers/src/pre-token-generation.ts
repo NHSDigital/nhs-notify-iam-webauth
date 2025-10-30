@@ -49,7 +49,7 @@ export class PreTokenGenerationLambda {
     let clientConfig: ClientConfig | null = null;
 
     const { userName } = event;
-    const internalUserId = event.request.userAttributes.nhs_notify_user_id;
+    const internalUserId = event.request.userAttributes['custom:nhs_notify_user_id'];
     const childLogger = logger.child({ userName, internalUserId });
 
     childLogger.info(`Processing event ${JSON.stringify(event.request.userAttributes)}`);
