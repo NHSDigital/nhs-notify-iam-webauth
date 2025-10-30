@@ -23,24 +23,63 @@ const USERS_TABLE = process.env.USERS_TABLE ?? '';
 
 const cognito = new CognitoIdentityProvider({ region: 'eu-west-2' });
 
+async function findInternalUserIdentifier(externalUserIdentifier: string): Promise<string> {
+  const input: QueryCommandInput = {
+    TableName: USERS_TABLE,
+    KeyConditionExpression: 'PK = :partitionKey',
+    ExpressionAttributeValues: {
+      ':partitionKey': `EXTERNAL_USER#${externalUserIdentifier}`,
+    },
+  };
+
+  type ExternalUserMapping = { PK: string; SK: string };
+  const result = await ddbDocClient.send(new QueryCommand(input));
+  const items = result.Items ?? ([] as ExternalUserMapping[]);
+  if (items.length > 1) {
+    throw new Error(
+      `Multiple internal user identifiers found for external user ${externalUserIdentifier}`
+    );
+  }
+  const internalUserId = items[0]?.SK.replace('INTERNAL_USER#', '');
+
+  const userLogger = logger.child({ username: externalUserIdentifier });
+  userLogger.info(`Found internal user ID: ${internalUserId}`);
+
+  return internalUserId ?? '';
+}
+
 export const handler = async (event: PreAuthenticationTriggerEvent) => {
   const { userName } = event;
-  const userLogger = logger.child({ username: userName });
+  let userLogger = logger.child({ username: userName });
 
+  let internalUserId = event.request.userAttributes.nhsnotify_user_id;
+  if (!internalUserId) {
+    userLogger.info('No internal user ID found in Cognito attributes, looking up from DynamoDB');
+    internalUserId = await findInternalUserIdentifier(userName);
+    await cognito.adminUpdateUserAttributes({
+      UserPoolId: event.userPoolId,
+      Username: userName,
+      UserAttributes: [
+        {
+          Name: 'custom:nhsnotify_user_id',
+          Value: internalUserId,
+        },
+      ],
+    });
+  }
+
+  userLogger = logger.child({ username: userName, internalUserId });
   userLogger.info('Processing event');
 
   const input: QueryCommandInput = {
     TableName: USERS_TABLE,
-    KeyConditionExpression: '#username = :username',
-    ExpressionAttributeNames: {
-      '#username': 'username',
-    },
+    KeyConditionExpression: 'PK = :partitionKey',
     ExpressionAttributeValues: {
-      ':username': userName,
+      ':partitionKey': `INTERNAL_USER#${internalUserId}`,
     },
   };
 
-  type UserClient = { username: string; client_id: string };
+  type UserClient = { PK: string; SK: string, client_id: string };
   const userClientsResult = await ddbDocClient.send(new QueryCommand(input));
   const items = userClientsResult.Items ?? ([] as UserClient[]);
 

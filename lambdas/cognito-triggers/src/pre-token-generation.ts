@@ -49,20 +49,19 @@ export class PreTokenGenerationLambda {
     let clientConfig: ClientConfig | null = null;
 
     const { userName } = event;
-    const childLogger = logger.child({ userName });
+    const internalUserId = event.request.userAttributes.nhsnotify_user_id;
+    const childLogger = logger.child({ userName, internalUserId });
 
     const input: QueryCommandInput = {
       TableName: USERS_TABLE,
-      KeyConditionExpression: '#username = :username',
-      ExpressionAttributeNames: {
-        '#username': 'username',
-      },
+      KeyConditionExpression: 'PK = :partitionKey',
       ExpressionAttributeValues: {
-        ':username': userName,
+        ':partitionKey': `INTERNAL_USER#${internalUserId}`,
       },
     };
 
-    type UserClient = { username: string; client_id: string };
+    type UserClient = { PK: string; SK: string; client_id: string };
+
     const userClientsResult = await ddbDocClient.send(new QueryCommand(input));
     const items = userClientsResult.Items ?? ([] as UserClient[]);
 

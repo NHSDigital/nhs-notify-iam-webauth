@@ -2,16 +2,16 @@ resource "aws_dynamodb_table" "users" {
   name         = "${local.csi}-users"
   billing_mode = "PAY_PER_REQUEST"
 
-  hash_key  = "username"
-  range_key = "client_id"
+  hash_key  = "PK"
+  range_key = "SK"
 
   attribute {
-    name = "username"
+    name = "PK"
     type = "S"
   }
 
   attribute {
-    name = "client_id"
+    name = "SK"
     type = "S"
   }
 
