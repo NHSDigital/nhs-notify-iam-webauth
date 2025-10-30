@@ -11,6 +11,11 @@ import {
   QueryCommand,
   QueryCommandInput,
 } from '@aws-sdk/lib-dynamodb';
+import { findInternalUserIdentifier } from './users-repository';
+import {
+  INTERNAL_ID_ATTRIBUTE,
+  populateInternalUserId,
+} from './cognito-customisation-util';
 
 const ddbDocClient = DynamoDBDocumentClient.from(
   new DynamoDBClient({ region: 'eu-west-2' }),
@@ -23,53 +28,24 @@ const USERS_TABLE = process.env.USERS_TABLE ?? '';
 
 const cognito = new CognitoIdentityProvider({ region: 'eu-west-2' });
 
-async function findInternalUserIdentifier(externalUserIdentifier: string): Promise<string> {
-  const input: QueryCommandInput = {
-    TableName: USERS_TABLE,
-    KeyConditionExpression: 'PK = :partitionKey',
-    ExpressionAttributeValues: {
-      ':partitionKey': `EXTERNAL_USER#${externalUserIdentifier}`,
-    },
-  };
-
-  type ExternalUserMapping = { PK: string; SK: string };
-  const result = await ddbDocClient.send(new QueryCommand(input));
-  const items = result.Items ?? ([] as ExternalUserMapping[]);
-  if (items.length > 1) {
-    throw new Error(
-      `Multiple internal user identifiers found for external user ${externalUserIdentifier}`
-    );
-  }
-  const internalUserId = items[0]?.SK.replace('INTERNAL_USER#', '');
-
-  const userLogger = logger.child({ username: externalUserIdentifier });
-  userLogger.info(`Found internal user ID: ${internalUserId}`);
-
-  return internalUserId ?? '';
-}
-
 export const handler = async (event: PreAuthenticationTriggerEvent) => {
   const { userName } = event;
   let userLogger = logger.child({ username: userName });
 
-  let internalUserId = event.request.userAttributes['custom:nhs_notify_user_id'];
+  let internalUserId = event.request.userAttributes[INTERNAL_ID_ATTRIBUTE];
   if (!internalUserId) {
-    userLogger.info('No internal user ID found in Cognito attributes, looking up from DynamoDB');
+    userLogger.info(
+      'No internal user ID found in Cognito attributes, looking up from DynamoDB'
+    );
     internalUserId = await findInternalUserIdentifier(userName);
-    await cognito.adminUpdateUserAttributes({
-      UserPoolId: event.userPoolId,
-      Username: userName,
-      UserAttributes: [
-        {
-          Name: 'custom:nhs_notify_user_id',
-          Value: internalUserId,
-        },
-      ],
-    });
+    await populateInternalUserId(userName, internalUserId, event.userPoolId);
+    userLogger.info(
+      `Populated internal user ID in Cognito attributes ${internalUserId}`
+    );
   }
 
   userLogger = logger.child({ username: userName, internalUserId });
-  userLogger.info(`Processing event ${JSON.stringify(event.request.userAttributes)}`);
+  userLogger.info('Processing event');
 
   const input: QueryCommandInput = {
     TableName: USERS_TABLE,
@@ -79,7 +55,7 @@ export const handler = async (event: PreAuthenticationTriggerEvent) => {
     },
   };
 
-  type UserClient = { PK: string; SK: string, client_id: string };
+  type UserClient = { PK: string; SK: string; client_id: string };
   const userClientsResult = await ddbDocClient.send(new QueryCommand(input));
   const items = userClientsResult.Items ?? ([] as UserClient[]);
 

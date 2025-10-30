@@ -7,6 +7,8 @@ import {
   QueryCommand,
   QueryCommandInput,
 } from '@aws-sdk/lib-dynamodb';
+import { INTERNAL_ID_ATTRIBUTE } from './cognito-customisation-util';
+import { retrieveInternalUser } from './users-repository';
 
 const ddbDocClient = DynamoDBDocumentClient.from(
   new DynamoDBClient({ region: 'eu-west-2' }),
@@ -49,31 +51,19 @@ export class PreTokenGenerationLambda {
     let clientConfig: ClientConfig | null = null;
 
     const { userName } = event;
-    const internalUserId = event.request.userAttributes['custom:nhs_notify_user_id'];
-    const childLogger = logger.child({ userName, internalUserId });
+    const internalUserId = event.request.userAttributes[INTERNAL_ID_ATTRIBUTE];
+    const userLogger = logger.child({ userName, internalUserId });
 
-    childLogger.info(`Processing event ${JSON.stringify(event.request.userAttributes)}`);
+    userLogger.info('Processing event');
 
-    const input: QueryCommandInput = {
-      TableName: USERS_TABLE,
-      KeyConditionExpression: 'PK = :partitionKey',
-      ExpressionAttributeValues: {
-        ':partitionKey': `INTERNAL_USER#${internalUserId}`,
-      },
-    };
+    if (internalUserId) {
+      const internalUser = await retrieveInternalUser(internalUserId);
+      clientId = internalUser.client_id;
 
-    type UserClient = { PK: string; client_id: string };
+      userLogger.info(`Found client ID from DynamoDB: ${clientId}`);
+    }
 
-    const userClientsResult = await ddbDocClient.send(new QueryCommand(input));
-    const items = userClientsResult.Items ?? ([] as UserClient[]);
-
-    childLogger.info(`Found ${items.length} DB results`);
-    if (items.length > 0) {
-      const firstUserClient = items.sort((item1, item2) =>
-        item1.client_id.localeCompare(item2.client_id)
-      )[0];
-      clientId = firstUserClient.client_id as string;
-    } else {
+    if (!clientId) {
       const groups = event.request.groupConfiguration.groupsToOverride;
 
       if (groups) {
@@ -85,7 +75,7 @@ export class PreTokenGenerationLambda {
       }
     }
 
-    childLogger.info(`clientId=${clientId}`);
+    userLogger.info(`clientId=${clientId}`);
 
     if (clientId) {
       response = PreTokenGenerationLambda.setTokenClaims(
