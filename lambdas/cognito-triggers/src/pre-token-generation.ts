@@ -52,6 +52,8 @@ export class PreTokenGenerationLambda {
     const internalUserId = event.request.userAttributes.nhs_notify_user_id;
     const childLogger = logger.child({ userName, internalUserId });
 
+    childLogger.info(`Processing event ${JSON.stringify(event.request.userAttributes)}`);
+
     const input: QueryCommandInput = {
       TableName: USERS_TABLE,
       KeyConditionExpression: 'PK = :partitionKey',

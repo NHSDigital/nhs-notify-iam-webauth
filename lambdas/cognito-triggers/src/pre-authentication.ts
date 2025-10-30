@@ -69,7 +69,7 @@ export const handler = async (event: PreAuthenticationTriggerEvent) => {
   }
 
   userLogger = logger.child({ username: userName, internalUserId });
-  userLogger.info('Processing event');
+  userLogger.info(`Processing event ${JSON.stringify(event.request.userAttributes)}`);
 
   const input: QueryCommandInput = {
     TableName: USERS_TABLE,
