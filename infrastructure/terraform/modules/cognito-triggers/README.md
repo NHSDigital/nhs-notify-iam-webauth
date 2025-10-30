@@ -33,6 +33,7 @@ No requirements.
 |------|-------------|
 | <a name="output_client_config_parameter_path_prefix"></a> [client\_config\_parameter\_path\_prefix](#output\_client\_config\_parameter\_path\_prefix) | n/a |
 | <a name="output_pre_authentication_lambda_function_arn"></a> [pre\_authentication\_lambda\_function\_arn](#output\_pre\_authentication\_lambda\_function\_arn) | n/a |
+| <a name="output_pre_sign_up_lambda_function_arn"></a> [pre\_sign\_up\_lambda\_function\_arn](#output\_pre\_sign\_up\_lambda\_function\_arn) | n/a |
 | <a name="output_pre_token_generation_lambda_function_arn"></a> [pre\_token\_generation\_lambda\_function\_arn](#output\_pre\_token\_generation\_lambda\_function\_arn) | n/a |
 | <a name="output_users_table_name"></a> [users\_table\_name](#output\_users\_table\_name) | n/a |
 <!-- vale on -->
