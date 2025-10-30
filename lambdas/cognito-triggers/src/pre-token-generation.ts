@@ -60,7 +60,7 @@ export class PreTokenGenerationLambda {
       },
     };
 
-    type UserClient = { PK: string; SK: string; client_id: string };
+    type UserClient = { PK: string; client_id: string };
 
     const userClientsResult = await ddbDocClient.send(new QueryCommand(input));
     const items = userClientsResult.Items ?? ([] as UserClient[]);
