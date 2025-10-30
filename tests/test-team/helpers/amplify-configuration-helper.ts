@@ -6,6 +6,7 @@ type AmplifyOutput = {
     user_pool_id: string;
     user_pool_client_id: string;
     identity_pool_id: string;
+    users_table_name: string;
   };
 };
 

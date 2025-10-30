@@ -7,6 +7,7 @@ module "cognito_triggers" {
   project        = var.project
   region         = var.region
   group          = var.group
+  csi            = local.csi
 
   function_s3_bucket    = local.acct.s3_buckets["lambda_function_artefacts"]["id"]
   kms_key_arn           = local.acct.sandbox_kms_key.arn

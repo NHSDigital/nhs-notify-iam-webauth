@@ -68,3 +68,7 @@ output "kms_key_id" {
 output "client_config_parameter_path_prefix" {
   value = module.cognito_triggers.client_config_parameter_path_prefix
 }
+
+output "users_table_name" {
+  value = module.cognito_triggers.users_table_name
+}

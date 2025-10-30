@@ -11,17 +11,25 @@ import { getCookies } from '@helpers/cookies';
 
 type Scenario =
   | 'no-client'
+  | 'client-fully-configured-legacy'
   | 'client-fully-configured'
   | 'client-not-configured';
 
 const scenarios: Record<Scenario, Client | null> = {
   'no-client': null,
+  'client-fully-configured-legacy': {
+    clientId: randomUUID(),
+    clientConfig: { name: randomUUID() },
+    useCognitoGroups: true,
+  },
   'client-fully-configured': {
     clientId: randomUUID(),
     clientConfig: { name: randomUUID() },
+    useCognitoGroups: false,
   },
   'client-not-configured': {
     clientId: randomUUID(),
+    useCognitoGroups: false,
   },
 };
 
@@ -120,6 +128,54 @@ test.describe('SignIn', () => {
   });
 
   test.describe('when user is assigned to a fully configured client', () => {
+    test('Using CognitoGroups: should sign user in with client and identity claims in tokens, then redirect user to redirect path', async ({
+      baseURL,
+      page,
+    }) => {
+      const signInPage = new IamWebAuthSignInPage(page);
+
+      await signInPage.loadPage({
+        redirectPath: '/templates/create-and-submit-templates',
+      });
+
+      await signInPage.cognitoSignIn(
+        users['client-fully-configured-legacy']?.email as string
+      );
+
+      await expect(page).toHaveURL(
+        `${baseURL}/templates/create-and-submit-templates`
+      );
+
+      const cookies = await getCookies(page);
+
+      expect(cookies.csrf_token?.sameSite).toEqual('Strict');
+      expect(cookies.csrf_token?.secure).toEqual(true);
+
+      const scenario = scenarios['client-fully-configured-legacy'];
+
+      const idToken = jwtDecode<CustomIdTokenClaims>(
+        cookies.idToken?.value as string
+      );
+
+      expect(idToken['nhs-notify:client-id']).not.toBeUndefined();
+      expect(idToken['nhs-notify:client-id']).toBe(scenario?.clientId);
+      expect(idToken['nhs-notify:client-name']).not.toBeUndefined();
+      expect(idToken['nhs-notify:client-name']).toBe(
+        scenario?.clientConfig?.name
+      );
+
+      expect(idToken.preferred_username).toBe('Test User');
+      expect(idToken.given_name).toBe('Test');
+      expect(idToken.family_name).toBe('User');
+
+      const accessToken = jwtDecode<CustomAccessTokenClaims>(
+        cookies.accessToken?.value as string
+      );
+
+      expect(accessToken['nhs-notify:client-id']).not.toBeUndefined();
+      expect(accessToken['nhs-notify:client-id']).toBe(scenario?.clientId);
+    });
+
     test('should sign user in with client and identity claims in tokens, then redirect user to redirect path', async ({
       baseURL,
       page,

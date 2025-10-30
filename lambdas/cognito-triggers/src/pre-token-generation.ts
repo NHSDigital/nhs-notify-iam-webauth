@@ -1,6 +1,9 @@
+/* eslint-disable security/detect-object-injection */
 import type { PreTokenGenerationV2TriggerEvent } from 'aws-lambda';
 import { GetParameterCommand, SSMClient } from '@aws-sdk/client-ssm';
 import { logger } from '@nhs-notify-iam-webauth/utils-logger';
+import { INTERNAL_ID_ATTRIBUTE } from '@/src/utils/cognito-customisation-util';
+import { retrieveInternalUser } from '@/src/utils/users-repository';
 
 // Based on actual events received in testing, response.claimsAndScopeOverrideDetails can be null
 // This conflicts with the type definition
@@ -33,15 +36,35 @@ export class PreTokenGenerationLambda {
     let clientId = '';
     let clientConfig: ClientConfig | null = null;
 
-    const groups = event.request.groupConfiguration.groupsToOverride;
+    const { userName } = event;
+    const internalUserId = event.request.userAttributes[INTERNAL_ID_ATTRIBUTE];
+    const userLogger = logger.child({ userName, internalUserId });
 
-    if (groups) {
-      const clientGroup = groups.find((group) => group.startsWith('client:'));
+    userLogger.info('Processing event');
 
-      if (clientGroup) {
-        clientId = clientGroup.replace(/^client:/, '');
+    if (internalUserId) {
+      const internalUser = await retrieveInternalUser(internalUserId);
+      if (!internalUser) {
+        throw new Error('Internal user not found in DynamoDB');
+      }
+      clientId = internalUser.client_id;
+
+      userLogger.info(`Found client ID from DynamoDB: ${clientId}`);
+    }
+
+    if (!clientId) {
+      const groups = event.request.groupConfiguration.groupsToOverride;
+
+      if (groups) {
+        const clientGroup = groups.find((group) => group.startsWith('client:'));
+
+        if (clientGroup) {
+          clientId = clientGroup.replace(/^client:/, '');
+        }
       }
     }
+
+    userLogger.info(`clientId=${clientId}`);
 
     if (clientId) {
       response = PreTokenGenerationLambda.setTokenClaims(
@@ -132,7 +155,7 @@ export class PreTokenGenerationLambda {
       token === 'accessToken' ? 'accessTokenGeneration' : 'idTokenGeneration';
 
     const tokenGeneration =
-      e.response.claimsAndScopeOverrideDetails?.[key] || {}; // eslint-disable-line security/detect-object-injection
+      e.response.claimsAndScopeOverrideDetails?.[key] || {};
 
     e.response.claimsAndScopeOverrideDetails = {
       ...e.response.claimsAndScopeOverrideDetails,

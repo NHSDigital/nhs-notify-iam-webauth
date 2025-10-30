@@ -47,6 +47,7 @@
 | <a name="output_public_keys_s3_bucket_name"></a> [public\_keys\_s3\_bucket\_name](#output\_public\_keys\_s3\_bucket\_name) | n/a |
 | <a name="output_redirect_domain"></a> [redirect\_domain](#output\_redirect\_domain) | n/a |
 | <a name="output_signout_redirect_domain"></a> [signout\_redirect\_domain](#output\_signout\_redirect\_domain) | n/a |
+| <a name="output_users_table_name"></a> [users\_table\_name](#output\_users\_table\_name) | n/a |
 <!-- vale on -->
 <!-- markdownlint-enable -->
 <!-- END_TF_DOCS -->
