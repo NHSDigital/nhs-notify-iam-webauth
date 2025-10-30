@@ -15,5 +15,5 @@ npx esbuild \
     src/pre-token-generation.ts \
     src/pre-authentication.ts \
     src/post-confirmation.ts \
-    src/cognito-customisation-util.ts \
-    src/users-repository.ts
+    src/utils/cognito-customisation-util.ts \
+    src/utils/users-repository.ts
