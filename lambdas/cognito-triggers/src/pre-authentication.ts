@@ -36,7 +36,7 @@ export const handler = async (event: PreAuthenticationTriggerEvent) => {
   userLogger = logger.child({ username: userName, internalUserId });
   userLogger.info('Processing event');
   let clientCount = 0;
-  if (!internalUserId) {
+  if (internalUserId) {
     const internalUser = await retrieveInternalUser(internalUserId);
     if (!internalUser) {
       userLogger.error('Internal user not found in DynamoDB');
