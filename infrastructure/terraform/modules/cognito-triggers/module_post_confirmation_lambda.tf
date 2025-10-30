@@ -1,4 +1,4 @@
-module "pre_sign_up_lambda" {
+module "post_confirmation_lambda" {
   source = "https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.20/terraform-lambda.zip"
 
   project        = var.project
@@ -7,13 +7,13 @@ module "pre_sign_up_lambda" {
   aws_account_id = var.aws_account_id
   region         = var.region
 
-  function_name = "pre-sign-up"
-  description   = "Pre-sign-up handler for Cognito user pool"
+  function_name = "post-confirmation"
+  description   = "Post confirmation handler for Cognito user pool"
 
   function_s3_bucket      = var.function_s3_bucket
   function_code_base_path = local.lambdas_dir
   function_code_dir       = "cognito-triggers/dist"
-  function_module_name    = "pre-sign-up"
+  function_module_name    = "post-confirmation"
   handler_function_name   = "handler"
 
   memory  = 512
@@ -36,11 +36,11 @@ module "pre_sign_up_lambda" {
   }]
 
   iam_policy_document = {
-    body = data.aws_iam_policy_document.pre_sign_up_lambda.json
+    body = data.aws_iam_policy_document.post_confirmation_lambda.json
   }
 }
 
-data "aws_iam_policy_document" "pre_sign_up_lambda" {
+data "aws_iam_policy_document" "post_confirmation_lambda" {
   statement {
     sid       = "AllowUpdateCognitoUserAttributes"
     effect    = "Allow"

@@ -1,6 +1,6 @@
 /* eslint-disable import-x/prefer-default-export */
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
-import type { PreSignUpTriggerEvent } from 'aws-lambda';
+import type { PostConfirmationTriggerEvent, PreSignUpTriggerEvent } from 'aws-lambda';
 import { logger } from '@nhs-notify-iam-webauth/utils-logger';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import {
@@ -47,7 +47,7 @@ async function findInternalUserIdentifier(
   return internalUserId ?? '';
 }
 
-export const handler = async (event: PreSignUpTriggerEvent) => {
+export const handler = async (event: PostConfirmationTriggerEvent) => {
   const { userName } = event;
   let userLogger = logger.child({ username: userName });
   userLogger.info('Looking up internal user ID from DynamoDB');

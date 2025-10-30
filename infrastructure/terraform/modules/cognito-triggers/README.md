@@ -24,16 +24,16 @@ No requirements.
 
 | Name | Source | Version |
 |------|--------|---------|
+| <a name="module_post_confirmation_lambda"></a> [post\_confirmation\_lambda](#module\_post\_confirmation\_lambda) | https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.20/terraform-lambda.zip | n/a |
 | <a name="module_pre_authentication_lambda"></a> [pre\_authentication\_lambda](#module\_pre\_authentication\_lambda) | https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.20/terraform-lambda.zip | n/a |
-| <a name="module_pre_sign_up_lambda"></a> [pre\_sign\_up\_lambda](#module\_pre\_sign\_up\_lambda) | https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.20/terraform-lambda.zip | n/a |
 | <a name="module_pre_token_generation_lambda"></a> [pre\_token\_generation\_lambda](#module\_pre\_token\_generation\_lambda) | https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.20/terraform-lambda.zip | n/a |
 ## Outputs
 
 | Name | Description |
 |------|-------------|
 | <a name="output_client_config_parameter_path_prefix"></a> [client\_config\_parameter\_path\_prefix](#output\_client\_config\_parameter\_path\_prefix) | n/a |
+| <a name="output_post_confirmation_lambda_function_arn"></a> [post\_confirmation\_lambda\_function\_arn](#output\_post\_confirmation\_lambda\_function\_arn) | n/a |
 | <a name="output_pre_authentication_lambda_function_arn"></a> [pre\_authentication\_lambda\_function\_arn](#output\_pre\_authentication\_lambda\_function\_arn) | n/a |
-| <a name="output_pre_sign_up_lambda_function_arn"></a> [pre\_sign\_up\_lambda\_function\_arn](#output\_pre\_sign\_up\_lambda\_function\_arn) | n/a |
 | <a name="output_pre_token_generation_lambda_function_arn"></a> [pre\_token\_generation\_lambda\_function\_arn](#output\_pre\_token\_generation\_lambda\_function\_arn) | n/a |
 | <a name="output_users_table_name"></a> [users\_table\_name](#output\_users\_table\_name) | n/a |
 <!-- vale on -->

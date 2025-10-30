@@ -14,4 +14,4 @@ npx esbuild \
     --outdir=dist \
     src/pre-token-generation.ts \
     src/pre-authentication.ts \
-    src/pre-sign-up.ts
+    src/post-confirmation.ts

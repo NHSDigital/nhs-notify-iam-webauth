@@ -23,5 +23,7 @@ resource "aws_cognito_user_pool" "main" {
     }
 
     pre_authentication = module.cognito_triggers.pre_authentication_lambda_function_arn
+
+    post_confirmation = module.cognito_triggers.post_confirmation_lambda_function_arn
   }
 }
