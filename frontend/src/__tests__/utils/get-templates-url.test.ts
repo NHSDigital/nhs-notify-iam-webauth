@@ -23,7 +23,9 @@ describe('getTemplatesUrl', () => {
 
     it('should use https protocol', () => {
       const result = getTemplatesUrl('/templates/message-templates');
-      expect(result).toBe('https://nhsnotify.nhs.uk/templates/message-templates');
+      expect(result).toBe(
+        'https://nhsnotify.nhs.uk/templates/message-templates'
+      );
     });
 
     it('should generate absolute URLs for templates app', () => {
@@ -62,7 +64,9 @@ describe('getTemplatesUrl', () => {
 
     it('should handle query parameters', () => {
       const result = getTemplatesUrl('/templates/message-templates?tab=drafts');
-      expect(result).toBe('http://localhost:3000/templates/message-templates?tab=drafts');
+      expect(result).toBe(
+        'http://localhost:3000/templates/message-templates?tab=drafts'
+      );
     });
 
     it('should fallback to localhost when NOTIFY_DOMAIN_NAME is not set', () => {

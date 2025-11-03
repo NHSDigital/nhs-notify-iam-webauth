@@ -31,7 +31,9 @@ test('returns redirect', async () => {
     secure: true,
   });
   expect(response.status).toEqual(307);
-  expect(response.headers.get('Location')).toEqual('http://localhost:3000/redirect-url');
+  expect(response.headers.get('Location')).toEqual(
+    'http://localhost:3000/redirect-url'
+  );
 });
 
 test('returns redirect - sanitizes redirect path', async () => {
@@ -43,7 +45,9 @@ test('returns redirect - sanitizes redirect path', async () => {
   const response = await GET(request);
 
   expect(response.status).toEqual(307);
-  expect(response.headers.get('Location')).toEqual('http://localhost:3000/redirect-url');
+  expect(response.headers.get('Location')).toEqual(
+    'http://localhost:3000/redirect-url'
+  );
 });
 
 test('returns redirect to /templates/message-templates if no redirect given', async () => {
