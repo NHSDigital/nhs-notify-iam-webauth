@@ -16,6 +16,18 @@ resource "aws_cognito_user_pool" "main" {
     }
   }
 
+  schema {
+    name                     = "nhs_notify_user_id"
+    attribute_data_type      = "String"
+    developer_only_attribute = false
+    mutable                  = true
+    required                 = false
+    string_attribute_constraints {
+      min_length = 0
+      max_length = 2048
+    }
+  }
+
   lambda_config {
     pre_token_generation_config {
       lambda_arn     = module.cognito_triggers.pre_token_generation_lambda_function_arn
