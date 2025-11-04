@@ -3,24 +3,31 @@
 import React from 'react';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import content from '@/content/content';
-import styles from '@/components/molecules/AuthLink/AuthLink.module.scss';
 import { authenticatorSelector } from '@/utils/authenticator-selector';
+import concatClassNames from '@/utils/concat-class-names';
 
-export default function AuthLink() {
+const headerContent = content.components.header;
+
+export default function AuthLink({
+  className,
+}: Readonly<{ className?: string }>) {
   const { authStatus } = useAuthenticator(authenticatorSelector);
 
   let id = 'sign-in-link';
-  let linkContent = content.components.headerComponent.links.signIn;
+  let linkContent = headerContent.accountInfo.links.signIn;
   if (authStatus === 'authenticated') {
     id = 'sign-out-link';
-    linkContent = content.components.headerComponent.links.signOut;
+    linkContent = headerContent.accountInfo.links.signOut;
   }
 
   return (
-    <div className={styles['auth-link']} data-testid='auth-link'>
-      <a id={id} className={styles['auth-link__link']} href={linkContent.href}>
-        {linkContent.text}
-      </a>
-    </div>
+    <a
+      id={id}
+      data-testid='auth-link'
+      className={concatClassNames('nhsuk-header__account-link', className)}
+      href={linkContent.href}
+    >
+      {linkContent.text}
+    </a>
   );
 }
