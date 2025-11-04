@@ -17,6 +17,5 @@ export default async function handler(event: PostConfirmationTriggerEvent) {
       `Populated internal user ID in Cognito attributes ${internalUserId}`
     );
   }
-
   return event;
 }

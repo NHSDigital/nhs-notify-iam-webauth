@@ -13,16 +13,14 @@ const ddbDocClient = DynamoDBDocumentClient.from(
   }
 );
 
-const USERS_TABLE = process.env.USERS_TABLE ?? '';
-
 type ExternalUserMapping = { PK: string; SK: string };
-export type UserClient = { PK: string; client_id: string };
+type User = { PK: string; client_id: string };
 
 export async function findInternalUserIdentifier(
   externalUserIdentifier: string
-): Promise<string> {
+): Promise<string | null> {
   const input: QueryCommandInput = {
-    TableName: USERS_TABLE,
+    TableName: process.env.USERS_TABLE!,
     KeyConditionExpression: 'PK = :partitionKey',
     ExpressionAttributeValues: {
       ':partitionKey': `EXTERNAL_USER#${externalUserIdentifier}`,
@@ -36,16 +34,16 @@ export async function findInternalUserIdentifier(
       `Multiple internal user identifiers found for external user ${externalUserIdentifier}`
     );
   }
-  return items[0]?.SK.replace('INTERNAL_USER#', '') ?? '';
+  return items[0]?.SK.replace('INTERNAL_USER#', '') ?? null;
 }
 
 export async function retrieveInternalUser(
   internalUserId: string
-): Promise<UserClient | null> {
+): Promise<User | null> {
   const userLogger = logger.child({ internalUserId });
 
   const input: QueryCommandInput = {
-    TableName: USERS_TABLE,
+    TableName: process.env.USERS_TABLE!,
     KeyConditionExpression: 'PK = :partitionKey',
     ExpressionAttributeValues: {
       ':partitionKey': `INTERNAL_USER#${internalUserId}`,
@@ -53,12 +51,12 @@ export async function retrieveInternalUser(
   };
 
   const userClientsResult = await ddbDocClient.send(new QueryCommand(input));
-  const items = userClientsResult.Items ?? ([] as UserClient[]);
+  const items = userClientsResult.Items ?? ([] as User[]);
   if (items.length !== 1) {
     userLogger.error(
       `Expected exactly one user client for internal user ID ${internalUserId}, found ${items.length}`
     );
     return null;
   }
-  return items[0] as UserClient;
+  return items[0] as User;
 }
