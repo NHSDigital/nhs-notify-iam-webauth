@@ -52,7 +52,7 @@ test.describe('Inactive', () => {
 
       expect(Object.keys(cookiesPostSignOut)).toHaveLength(0);
     }).toPass({
-      intervals: [250, 500, 1_000, 1_500],
+      intervals: [250, 1000, 1500],
       timeout: 15_000,
     });
 
