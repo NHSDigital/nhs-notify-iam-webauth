@@ -51,10 +51,7 @@ test.describe('Inactive', () => {
       const cookiesPostSignOut = await getCookies(page);
 
       expect(Object.keys(cookiesPostSignOut)).toHaveLength(0);
-    }).toPass({
-      intervals: [250, 1000, 1500],
-      timeout: 15_000,
-    });
+    }).toPass();
 
     await inactivePage.clickSignInButton();
 
