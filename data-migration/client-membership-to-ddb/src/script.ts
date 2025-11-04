@@ -8,79 +8,35 @@ import {
 } from '@aws-sdk/client-cognito-identity-provider';
 import { logger } from './utils/logger';
 import { writeFile, writeFileSync } from 'node:fs';
+import yargs from 'yargs';
+import { hideBin } from 'yargs/helpers';
+import { discoverUserPoolId, retrieveUserGroups, retrieveUsers } from '@/src/utils/aws/cognito-util';
+import { backupDataToS3 } from './utils/backup-util';
 
-const TARGET_USER_POOL_NAME = 'nhs-notify-main-app';
+const params = yargs(hideBin(process.argv))
+  .options({
+    env: {
+      type: 'string',
+      demandOption: true,
+    },
+    dryRun: {
+      type: 'boolean',
+      default: true,
+    },
+  })
+  .parseSync();
 
-const cognito = new CognitoIdentityProvider({ region: 'eu-west-2' });
+async function migrateSingleUser(user: UserType, groups: string[], userPoolId: string, dryRun: boolean) {
 
-async function discoverUserPoolId(): Promise<string> {
-  let paginationToken: string | undefined = undefined;
-  let userPools: UserPoolDescriptionType[] = [];
-  do {
-    const response: ListUserPoolsCommandOutput = await cognito.listUserPools({
-      MaxResults: 60,
-      NextToken: paginationToken,
-    });
 
-    userPools = userPools.concat(response.UserPools ?? []);
-    paginationToken = response.NextToken;
-  } while (paginationToken);
-
-  const userPoolId = userPools.find(
-    (pool) => pool.Name === TARGET_USER_POOL_NAME
-  )?.Id;
-  if (!userPoolId) {
-    throw new Error(`User pool ${TARGET_USER_POOL_NAME} not found`);
-  }
-
-  logger.info(`Discovered user pool ID: ${userPoolId}`);
-  return userPoolId;
-}
-
-async function retrieveUsers(userPoolId: string): Promise<UserType[]> {
-  let paginationToken: string | undefined = undefined;
-  let users: UserType[] = [];
-  do {
-    const response: ListUsersCommandOutput = await cognito.listUsers({
-      UserPoolId: userPoolId,
-      PaginationToken: paginationToken,
-      Limit: 60,
-    });
-
-    users = users.concat(response.Users ?? []);
-    paginationToken = response.PaginationToken;
-  } while (paginationToken);
-
-  logger.info(`Retrieved ${users.length} users from Cognito`);
-
-  return users;
-}
-
-async function retrieveUserGroups(
-  users: UserType[],
-  userPoolId: string
-): Promise<{ user: UserType; groups: string[] }[]> {
-  const combinedResults: { user: UserType; groups: string[] }[] = [];
-  for (const user of users) {
-    const response = await cognito.adminListGroupsForUser({
-      UserPoolId: userPoolId,
-      Username: user.Username!,
-    });
-
-    const groups = response.Groups?.map((group) => group.GroupName!) || [];
-    combinedResults.push({ user, groups });
-  }
-
-  logger.info(
-    `Retrieved groups for ${combinedResults.length} users from Cognito`
-  );
-
-  return combinedResults;
+  // Create internal user
+  // Create external user mapping
+  // Populate custom user attribute
 }
 
 async function runMigration() {
   // Discover user pool ID
-  const userPoolId = await discoverUserPoolId();
+  const userPoolId = await discoverUserPoolId(params.env);
 
   // Extract user from Cognito
   const users = await retrieveUsers(userPoolId);
@@ -89,8 +45,14 @@ async function runMigration() {
   const usersWithGroups = await retrieveUserGroups(users, userPoolId);
 
   // Backup existing data
+  await backupDataToS3(usersWithGroups, params.env);
 
   // Migrate data to DynamoDB
+  usersWithGroups.forEach(async ({ user, groups }) => {
+    logger.info(`Migrating user ${user.Username} with groups: ${groups.join(', ')}`);
+    await migrateSingleUser(user, groups, userPoolId, params.dryRun);
+  });
+
 
   logger.info('Data migration from Cognito to DynamoDB completed successfully');
 }

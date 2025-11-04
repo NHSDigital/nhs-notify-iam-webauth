@@ -5,7 +5,8 @@
     "@aws-sdk/client-s3": "3.919.0",
     "@types/node-jose": "^1.1.13",
     "node-jose": "^2.2.0",
-    "winston": "^3.18.3"
+    "winston": "^3.18.3",
+    "yargs": "^18.0.0"
   },
   "description": "Migration script to move client membership data from Cognito Groups to DynamoDB",
   "devDependencies": {

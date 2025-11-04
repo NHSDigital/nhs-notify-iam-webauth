@@ -6,7 +6,7 @@ import {
 import { logger } from '@/src/utils/logger';
 
 const s3Client = new S3Client({
-  region: process.env.REGION,
+  region: 'eu-west-2',
   retryMode: 'standard',
   maxAttempts: 10,
 });
