@@ -1,5 +1,5 @@
 module "nhse_backup_vault" {
-  source = "https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.23/terraform-aws-backup-source.zip"
+  source = "https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.25/terraform-aws-backup-source.zip"
   count  = var.destination_vault_arn != null ? 1 : 0
 
   component   = var.component
