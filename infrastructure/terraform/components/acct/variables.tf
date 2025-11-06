@@ -105,3 +105,21 @@ variable "kms_deletion_window_test" {
   description = "When a kms key is deleted, how long should it wait in the pending deletion state?"
   default     = "30"
 }
+
+variable "cost_alarm_recipients" {
+  type        = list(string)
+  description = "A list of email addresses to receive alarm notifications"
+  default     = []
+}
+
+variable "budget_amount" {
+  type        = number
+  description = "The budget amount in USD for the account"
+  default     = 500
+}
+
+variable "cost_anomaly_threshold" {
+  type        = number
+  description = "The threshold percentage for cost anomaly detection"
+  default     = 10
+}
