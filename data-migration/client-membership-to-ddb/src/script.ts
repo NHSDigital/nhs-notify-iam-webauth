@@ -1,29 +1,20 @@
-import {
-  CognitoIdentityProvider,
-  ListUserImportJobsCommandOutput,
-  ListUserPoolsCommandOutput,
-  ListUsersCommandOutput,
-  UserPoolDescriptionType,
-  UserType,
-} from '@aws-sdk/client-cognito-identity-provider';
+import { UserType } from '@aws-sdk/client-cognito-identity-provider';
 import { logger } from '@/src/utils/logger';
-import { writeFile, writeFileSync } from 'node:fs';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import {
   discoverUserPoolId,
   retrieveUserGroups,
   retrieveUsers,
+  INTERNAL_ID_ATTRIBUTE,
+  populateInternalUserId,
+  removeUserFromGroup,
 } from '@/src/utils/aws/cognito-util';
 import { backupDataToS3 } from '@/src/utils/backup-util';
 import {
   createUser,
   findInternalUserIdentifier,
 } from '@/src/utils/users-repository';
-import {
-  INTERNAL_ID_ATTRIBUTE,
-  populateInternalUserId,
-} from './utils/aws/cognito-customisation-util';
 
 const params = yargs(hideBin(process.argv))
   .options({
@@ -45,9 +36,7 @@ async function validateUserMigrationPrerequisites(
 ): Promise<boolean> {
   if (clientIds.length !== 1) {
     logger.warn(
-      `User ${user.Username} has ${clientIds.length} associated client IDs (${clientIds.join(
-        ', '
-      )}). Expected exactly 1. Skipping migration for this user.`
+      `User ${user.Username} has ${clientIds.length} associated client IDs (${clientIds.join(',')}). Expected exactly 1. Skipping migration for this user.`
     );
     return false;
   }
@@ -90,10 +79,10 @@ async function migrateSingleUser(
   userPoolId: string,
   env: string,
   dryRun: boolean
-) {
+): Promise<boolean> {
   const clientIds = findClientIdFromGroups(groups, env);
   if (!(await validateUserMigrationPrerequisites(user, env, clientIds))) {
-    return;
+    return false;
   }
   const clientId = clientIds[0];
 
@@ -112,6 +101,15 @@ async function migrateSingleUser(
     userPoolId,
     dryRun
   );
+
+  // Remove user from Cognito group
+  await removeUserFromGroup(
+    userPoolId,
+    user.Username!,
+    `client:${clientId}`,
+    dryRun
+  );
+  return true;
 }
 
 async function runMigration() {
@@ -128,22 +126,39 @@ async function runMigration() {
   await backupDataToS3(usersWithGroups, params.env);
 
   // Migrate data to DynamoDB
-  usersWithGroups.forEach(
-    async (value: { user: UserType; groups: string[] }, index: number) => {
-      const { user, groups } = value;
-
-      await migrateSingleUser(
-        user,
-        groups,
-        userPoolId,
-        params.env,
-        params.dryRun
-      );
-      logger.info(
-        `${index + 1}/${usersWithGroups.length} (${(100.0 * (index + 1)) / usersWithGroups.length}%) Migrated user ${user.Username}`
-      );
-    }
+  let countMigrated = 0;
+  let countSkipped = 0;
+  const sortedUsers = usersWithGroups.sort((a, b) =>
+    a.user.Username!.localeCompare(b.user.Username!)
   );
+
+  for (const userWithGroups of sortedUsers) {
+    const { user, groups } = userWithGroups;
+
+    const migrationResult = await migrateSingleUser(
+      user,
+      groups,
+      userPoolId,
+      params.env,
+      params.dryRun
+    );
+
+    if (migrationResult) {
+      countMigrated++;
+    } else {
+      countSkipped++;
+    }
+
+    logger.info(
+      `Migrated ${countMigrated}, Skipped ${countSkipped}, Total ${countMigrated + countSkipped}/${usersWithGroups.length} (${(100.0 * (countMigrated + countSkipped)) / usersWithGroups.length}%) Processed user ${user.Username}`
+    );
+  }
+
+  logger.info(
+    `User migration summary: Migrated ${countMigrated} users, Skipped ${countSkipped} users.  About to clean up cognito groups.`
+  );
+
+  // Remove empty client groups
 
   logger.info('Data migration from Cognito to DynamoDB completed successfully');
 }

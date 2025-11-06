@@ -7,6 +7,8 @@ import {
 } from '@aws-sdk/client-cognito-identity-provider';
 import { logger } from '@/src/utils/logger';
 
+export const INTERNAL_ID_ATTRIBUTE = 'custom:nhs_notify_user_id';
+
 const TARGET_USER_POOL_NAME = (env: string) => `nhs-notify-${env}-app`;
 
 const cognito = new CognitoIdentityProvider({ region: 'eu-west-2' });
@@ -74,4 +76,49 @@ export async function retrieveUserGroups(
   );
 
   return combinedResults;
+}
+
+export async function populateInternalUserId(
+  userName: string,
+  internalUserId: string,
+  userPoolId: string,
+  dryRun: boolean
+): Promise<void> {
+  if (dryRun) {
+    logger.info(
+      `Would have populated internal user ID ${internalUserId} for user ${userName} in Cognito`
+    );
+    return;
+  }
+
+  await cognito.adminUpdateUserAttributes({
+    UserPoolId: userPoolId,
+    Username: userName,
+    UserAttributes: [
+      {
+        Name: INTERNAL_ID_ATTRIBUTE,
+        Value: internalUserId,
+      },
+    ],
+  });
+}
+
+export async function removeUserFromGroup(
+  userPoolId: string,
+  userName: string,
+  groupName: string,
+  dryRun: boolean
+): Promise<void> {
+  if (dryRun) {
+    logger.info(
+      `Would have removed user ${userName} from group ${groupName} in Cognito`
+    );
+    return;
+  }
+
+  await cognito.adminRemoveUserFromGroup({
+    UserPoolId: userPoolId,
+    Username: userName,
+    GroupName: groupName,
+  });
 }

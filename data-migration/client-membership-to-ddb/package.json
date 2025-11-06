@@ -23,7 +23,7 @@
   "scripts": {
     "lint": "eslint ./src",
     "lint:fix": "eslint ./src --fix",
-    "run-migration": "ts-node src/script.ts",
+    "run-migration": "tsx src/script.ts",
     "test:unit": "jest",
     "typecheck": "tsc --noEmit"
   },
