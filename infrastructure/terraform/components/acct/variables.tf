@@ -105,3 +105,9 @@ variable "kms_deletion_window_test" {
   description = "When a kms key is deleted, how long should it wait in the pending deletion state?"
   default     = "30"
 }
+
+variable "enable_env_destroy_event_rule" {
+  type        = bool
+  description = "Enables the CloudWatch Event Rule for environment destruction failures"
+  default     = false
+}
