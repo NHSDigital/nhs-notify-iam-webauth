@@ -122,3 +122,39 @@ export async function removeUserFromGroup(
     GroupName: groupName,
   });
 }
+
+export async function deleteEmptyClientGroups(
+  userPoolId: string,
+  dryRun: boolean
+): Promise<void> {
+  const listGroupsResponse = await cognito.listGroups({
+    UserPoolId: userPoolId,
+  });
+  const groups = (listGroupsResponse.Groups = listGroupsResponse.Groups || []);
+
+  const clientGroups = groups
+    .map((group) => group.GroupName!)
+    .filter((groupName) => groupName.startsWith('client:'));
+
+  logger.info(`Found ${clientGroups.length} client groups in Cognito`);
+
+  for (const groupName of clientGroups) {
+    const listUsersResponse = await cognito.listUsersInGroup({
+      UserPoolId: userPoolId,
+      GroupName: groupName,
+    });
+    const usersInGroup = listUsersResponse.Users || [];
+
+    if (usersInGroup.length === 0) {
+      if (dryRun) {
+        logger.info(`Would have deleted empty group ${groupName} in Cognito`);
+      } else {
+        await cognito.deleteGroup({
+          UserPoolId: userPoolId,
+          GroupName: groupName,
+        });
+        logger.info(`Deleted empty group ${groupName} in Cognito`);
+      }
+    }
+  }
+}

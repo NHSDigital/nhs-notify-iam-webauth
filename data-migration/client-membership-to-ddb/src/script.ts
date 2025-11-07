@@ -9,6 +9,7 @@ import {
   INTERNAL_ID_ATTRIBUTE,
   populateInternalUserId,
   removeUserFromGroup,
+  deleteEmptyClientGroups,
 } from '@/src/utils/aws/cognito-util';
 import { backupDataToS3 } from '@/src/utils/backup-util';
 import {
@@ -159,6 +160,7 @@ async function runMigration() {
   );
 
   // Remove empty client groups
+  await deleteEmptyClientGroups(userPoolId, params.dryRun);
 
   logger.info('Data migration from Cognito to DynamoDB completed successfully');
 }
