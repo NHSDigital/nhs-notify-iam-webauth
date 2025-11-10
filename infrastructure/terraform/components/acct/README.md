@@ -15,6 +15,7 @@
 | <a name="input_aws_account_id"></a> [aws\_account\_id](#input\_aws\_account\_id) | The AWS Account ID (numeric) | `string` | n/a | yes |
 | <a name="input_component"></a> [component](#input\_component) | The variable encapsulating the name of this component | `string` | `"acct"` | no |
 | <a name="input_default_tags"></a> [default\_tags](#input\_default\_tags) | A map of default tags to apply to all taggable resources within the component | `map(string)` | `{}` | no |
+| <a name="input_enable_env_destroy_event_rule"></a> [enable\_env\_destroy\_event\_rule](#input\_enable\_env\_destroy\_event\_rule) | Enables the CloudWatch Event Rule for environment destruction failures | `bool` | `false` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | The name of the tfscaffold environment | `string` | n/a | yes |
 | <a name="input_group"></a> [group](#input\_group) | The group variables are being inherited from (often synonmous with account short-name) | `string` | n/a | yes |
 | <a name="input_initial_cli_secrets_provision_override"></a> [initial\_cli\_secrets\_provision\_override](#input\_initial\_cli\_secrets\_provision\_override) | A map of default value to intialise SSM secret values with. Only useful for initial setup of the account due to lifecycle rules. | `map(string)` | `{}` | no |
