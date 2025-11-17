@@ -5,8 +5,8 @@ terraform {
       version = "~> 5.50"
     }
     github = {
-      source  = "hashicorp/github"
-      version = "= 6.8.0"
+      source  = "integrations/github"
+      version = "6.8.1"
     }
   }
 
