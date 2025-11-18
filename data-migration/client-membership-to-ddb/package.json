@@ -1,9 +1,10 @@
 {
   "dependencies": {
-    "@aws-sdk/client-cognito-identity-provider": "^3.919.0",
-    "@aws-sdk/client-dynamodb": "3.918.0",
-    "@aws-sdk/client-s3": "3.919.0",
-    "@aws-sdk/lib-dynamodb": "3.918.0",
+    "@aws-sdk/client-cognito-identity-provider": "^3.927.0",
+    "@aws-sdk/client-dynamodb": "3.927.0",
+    "@aws-sdk/client-s3": "3.927.0",
+    "@aws-sdk/client-sts": "3.927.0",
+    "@aws-sdk/lib-dynamodb": "3.927.0",
     "@types/node-jose": "^1.1.13",
     "node-jose": "^2.2.0",
     "winston": "^3.18.3",

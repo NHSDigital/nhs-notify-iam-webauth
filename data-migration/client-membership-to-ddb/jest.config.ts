@@ -29,7 +29,7 @@ const config: Config = {
     },
   },
 
-  collectCoverageFrom: ['src/**/*.ts*'],
+  collectCoverageFrom: ['src/**/*.ts*', 'src/*.ts*'],
 
   // Use this configuration option to add custom reporters to Jest
   reporters: [

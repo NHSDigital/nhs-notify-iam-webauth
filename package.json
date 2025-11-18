@@ -58,6 +58,7 @@
     "typecheck": "npm run --workspaces typecheck --if-present"
   },
   "workspaces": [
+    "data-migration/client-membership-to-ddb",
     "frontend",
     "lambdas/cis2-api",
     "lambdas/cognito-triggers",

@@ -14,7 +14,7 @@ const TARGET_USER_POOL_NAME = (env: string) => `nhs-notify-${env}-app`;
 const cognito = new CognitoIdentityProvider({ region: 'eu-west-2' });
 
 export async function discoverUserPoolId(env: string): Promise<string> {
-  let paginationToken: string | undefined = undefined;
+  let paginationToken: string | undefined;
   let userPools: UserPoolDescriptionType[] = [];
   do {
     const response: ListUserPoolsCommandOutput = await cognito.listUserPools({
@@ -22,7 +22,7 @@ export async function discoverUserPoolId(env: string): Promise<string> {
       NextToken: paginationToken,
     });
 
-    userPools = userPools.concat(response.UserPools ?? []);
+    userPools = [...userPools, ...(response.UserPools ?? [])];
     paginationToken = response.NextToken;
   } while (paginationToken);
 
@@ -38,7 +38,7 @@ export async function discoverUserPoolId(env: string): Promise<string> {
 }
 
 export async function retrieveUsers(userPoolId: string): Promise<UserType[]> {
-  let paginationToken: string | undefined = undefined;
+  let paginationToken: string | undefined;
   let users: UserType[] = [];
   do {
     const response: ListUsersCommandOutput = await cognito.listUsers({
@@ -47,7 +47,7 @@ export async function retrieveUsers(userPoolId: string): Promise<UserType[]> {
       Limit: 60,
     });
 
-    users = users.concat(response.Users ?? []);
+    users = [...users, ...(response.Users ?? [])];
     paginationToken = response.PaginationToken;
   } while (paginationToken);
 
@@ -130,7 +130,7 @@ export async function deleteEmptyClientGroups(
   const listGroupsResponse = await cognito.listGroups({
     UserPoolId: userPoolId,
   });
-  const groups = (listGroupsResponse.Groups = listGroupsResponse.Groups || []);
+  const groups = listGroupsResponse.Groups ?? [];
 
   const clientGroups = groups
     .map((group) => group.GroupName!)

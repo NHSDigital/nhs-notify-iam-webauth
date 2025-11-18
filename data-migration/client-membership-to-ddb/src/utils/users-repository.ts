@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/no-invariant-returns */
 import {
   DynamoDBClient,
   TransactWriteItemsCommand,
@@ -7,7 +8,7 @@ import {
   QueryCommand,
   QueryCommandInput,
 } from '@aws-sdk/lib-dynamodb';
-import { logger } from './logger';
+import { logger } from '@/src/utils/logger';
 
 const ddbDocClient = DynamoDBDocumentClient.from(
   new DynamoDBClient({ region: 'eu-west-2' }),
