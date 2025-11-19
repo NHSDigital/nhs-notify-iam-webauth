@@ -108,7 +108,7 @@ jobs:
     secrets: inherit
   pr-create-dynamic-environment:
     name: Create Dynamic Environment
-    needs: [metadata, test-stage]
+    needs: [metadata]
     runs-on: ubuntu-latest
 
     steps:
