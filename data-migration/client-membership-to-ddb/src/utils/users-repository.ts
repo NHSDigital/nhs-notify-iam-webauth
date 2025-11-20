@@ -24,7 +24,7 @@ const USERS_TABLE_NAME = (env: string) => `nhs-notify-${env}-app-users`;
 export async function findInternalUserIdentifier(
   externalUserIdentifier: string,
   env: string
-): Promise<string | null> {
+): Promise<string | undefined> {
   const input: QueryCommandInput = {
     TableName: USERS_TABLE_NAME(env),
     KeyConditionExpression: 'PK = :partitionKey',
@@ -40,7 +40,7 @@ export async function findInternalUserIdentifier(
       `Multiple internal user identifiers found for external user ${externalUserIdentifier}`
     );
   }
-  return items[0]?.SK.replace('INTERNAL_USER#', '') ?? null;
+  return items[0]?.SK.replace('INTERNAL_USER#', '');
 }
 
 export async function createUser(

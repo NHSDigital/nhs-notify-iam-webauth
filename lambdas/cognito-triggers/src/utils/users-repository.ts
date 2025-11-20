@@ -18,7 +18,7 @@ type User = { PK: string; client_id: string };
 
 export async function findInternalUserIdentifier(
   externalUserIdentifier: string
-): Promise<string | null> {
+): Promise<string | undefined> {
   const input: QueryCommandInput = {
     TableName: process.env.USERS_TABLE!,
     KeyConditionExpression: 'PK = :partitionKey',
@@ -34,7 +34,7 @@ export async function findInternalUserIdentifier(
       `Multiple internal user identifiers found for external user ${externalUserIdentifier}`
     );
   }
-  return items[0]?.SK.replace('INTERNAL_USER#', '') ?? null;
+  return items[0]?.SK.replace('INTERNAL_USER#', '');
 }
 
 export async function retrieveInternalUser(

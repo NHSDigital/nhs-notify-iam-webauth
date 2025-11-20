@@ -79,7 +79,7 @@ describe('users-repository', () => {
       const result = await findInternalUserIdentifier(userName);
 
       // assert
-      expect(result).toBeNull();
+      expect(result).toBeFalsy();
     });
 
     test('should reject multiple external mappings', async () => {

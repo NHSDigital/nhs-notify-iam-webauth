@@ -64,7 +64,7 @@ describe('users-repository', () => {
       );
 
       // assert
-      expect(result).toBeNull();
+      expect(result).toBeFalsy();
     });
 
     test('should throw error if multiple internal user identifiers found', async () => {

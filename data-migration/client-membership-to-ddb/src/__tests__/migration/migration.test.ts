@@ -99,10 +99,7 @@ describe('migration', () => {
     jest
       .mocked(findInternalUserIdentifier)
       .mockImplementation(async (externalId: string) => {
-        if (externalId === 'user5') {
-          return 'internal-user-456';
-        }
-        return null;
+        return externalId === 'user5' ? 'internal-user-456' : undefined;
       });
     jest.mocked(createUser).mockImplementation(async (username: string) => {
       return `internal-user-${username}`;
@@ -234,10 +231,7 @@ describe('migration', () => {
     jest
       .mocked(findInternalUserIdentifier)
       .mockImplementation(async (externalId: string) => {
-        if (externalId === 'user5') {
-          return 'internal-user-456';
-        }
-        return null;
+        return externalId === 'user5' ? 'internal-user-456' : undefined;
       });
     jest.mocked(createUser).mockImplementation(async (username: string) => {
       return `internal-user-${username}`;

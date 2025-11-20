@@ -14,6 +14,4 @@ npx esbuild \
     --outdir=dist \
     src/pre-token-generation.ts \
     src/pre-authentication.ts \
-    src/post-confirmation.ts \
-    src/utils/cognito-customisation-util.ts \
-    src/utils/users-repository.ts
+    src/post-confirmation.ts
