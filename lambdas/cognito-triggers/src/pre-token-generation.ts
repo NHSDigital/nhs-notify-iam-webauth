@@ -50,6 +50,17 @@ export class PreTokenGenerationLambda {
       clientId = internalUser.client_id;
 
       userLogger.info(`Found client ID from DynamoDB: ${clientId}`);
+
+      response = PreTokenGenerationLambda.setTokenClaims(response, 'idToken', {
+        'nhs-notify:internal-user-id': internalUserId,
+      });
+      response = PreTokenGenerationLambda.setTokenClaims(
+        response,
+        'accessToken',
+        {
+          'nhs-notify:internal-user-id': internalUserId,
+        }
+      );
     }
 
     if (!clientId) {

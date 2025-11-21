@@ -142,11 +142,13 @@ describe('pre-token-generation: Client membership held in DDB', () => {
       accessTokenGeneration: {
         claimsToAddOrOverride: {
           'nhs-notify:client-id': 'd4c6208e-8518-4bc4-a451-37e53b915089',
+          'nhs-notify:internal-user-id': 'internal-user-id-123',
         },
       },
       idTokenGeneration: {
         claimsToAddOrOverride: {
           'nhs-notify:client-id': 'd4c6208e-8518-4bc4-a451-37e53b915089',
+          'nhs-notify:internal-user-id': 'internal-user-id-123',
         },
       },
     });
