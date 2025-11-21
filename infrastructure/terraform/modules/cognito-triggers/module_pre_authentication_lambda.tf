@@ -1,5 +1,5 @@
 module "pre_authentication_lambda" {
-  source = "https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.20/terraform-lambda.zip"
+  source = "https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.26/terraform-lambda.zip"
 
   project        = var.project
   environment    = var.environment
@@ -19,6 +19,10 @@ module "pre_authentication_lambda" {
   memory  = 512
   timeout = 3
   runtime = "nodejs20.x"
+
+  lambda_env_vars = {
+    USERS_TABLE = aws_dynamodb_table.users.name
+  }
 
   kms_key_arn           = var.kms_key_arn
   log_retention_in_days = var.log_retention_in_days
@@ -42,5 +46,42 @@ data "aws_iam_policy_document" "pre_authentication_lambda" {
     effect    = "Allow"
     actions   = ["cognito-idp:AdminListGroupsForUser"]
     resources = ["arn:aws:cognito-idp:${var.region}:${var.aws_account_id}:userpool/${var.user_pool_id}"]
+  }
+
+  statement {
+    sid       = "AllowUpdateCognitoUserAttributes"
+    effect    = "Allow"
+    actions   = ["cognito-idp:AdminUpdateUserAttributes"]
+    resources = ["arn:aws:cognito-idp:${var.region}:${var.aws_account_id}:userpool/${var.user_pool_id}"]
+  }
+
+  statement {
+    sid    = "AllowDynamoAccess"
+    effect = "Allow"
+
+    actions = [
+      "dynamodb:Query",
+    ]
+
+    resources = [
+      aws_dynamodb_table.users.arn,
+    ]
+  }
+
+  statement {
+    sid    = "AllowKMSAccess"
+    effect = "Allow"
+
+    actions = [
+      "kms:Decrypt",
+      "kms:DescribeKey",
+      "kms:Encrypt",
+      "kms:GenerateDataKey*",
+      "kms:ReEncrypt*",
+    ]
+
+    resources = [
+      var.kms_key_arn
+    ]
   }
 }

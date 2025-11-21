@@ -13,4 +13,5 @@ npx esbuild \
     --entry-names=[name] \
     --outdir=dist \
     src/pre-token-generation.ts \
-    src/pre-authentication.ts
+    src/pre-authentication.ts \
+    src/post-confirmation.ts
