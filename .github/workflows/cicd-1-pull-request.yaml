@@ -110,7 +110,7 @@ jobs:
     name: Create Dynamic Environment
     needs: [metadata, commit-stage]
     runs-on: ubuntu-latest
-
+    if: needs.metadata.outputs.does_pull_request_exist == 'true' && github.ref != 'refs/heads/main'
     steps:
       - uses: actions/checkout@v5.0.0
       - name: Trigger dynamic environment creation
@@ -130,7 +130,7 @@ jobs:
             --overrides "branch_name=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}"
   acceptance-stage: # Recommended maximum execution time is 10 minutes
     name: "Acceptance stage"
-    needs: [metadata, test-stage, pr-create-dynamic-environment]
+    needs: [metadata, test-stage]
     uses: ./.github/workflows/stage-4-acceptance.yaml
     if: needs.metadata.outputs.does_pull_request_exist == 'true' || (github.event_name == 'pull_request' && (github.event.action == 'opened' || github.event.action == 'reopened')) || (github.event_name == 'push' && github.ref == 'refs/heads/main')
     secrets: inherit
