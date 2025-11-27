@@ -8,12 +8,7 @@ export default function CIS2SignInButton({
   onClick: MouseEventHandler<HTMLButtonElement>;
 }>) {
   return (
-    <Button
-      onClick={onClick}
-      className='notify-cis2-button'
-      type='button'
-      alt={content.components.cis2Login.buttonText}
-    >
+    <Button onClick={onClick} className='notify-cis2-button' type='button'>
       <svg
         className='nhsuk-header__logo'
         xmlns='http://www.w3.org/2000/svg'
