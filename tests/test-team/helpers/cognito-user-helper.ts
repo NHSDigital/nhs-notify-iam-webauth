@@ -14,6 +14,8 @@ import {
   DynamoDBDocumentClient,
   GetCommand,
   PutCommand,
+  QueryCommand,
+  QueryCommandInput,
 } from '@aws-sdk/lib-dynamodb';
 import { randomUUID } from 'node:crypto';
 
@@ -161,54 +163,73 @@ export class CognitoUserHelper {
     );
   }
 
+  private static async findInternalUserIdentifiers(
+    externalUserIdentifier: string
+  ): Promise<string[]> {
+    const input: QueryCommandInput = {
+      TableName: process.env.USERS_TABLE!,
+      KeyConditionExpression: 'PK = :partitionKey',
+      ExpressionAttributeValues: {
+        ':partitionKey': `EXTERNAL_USER#${externalUserIdentifier}`,
+      },
+    };
+
+    const result = await ddbDocClient.send(new QueryCommand(input));
+    const items = result.Items ?? ([] as { PK: string; SK: string }[]);
+    return items.map((item) => item.SK.replace('INTERNAL_USER#', ''));
+  }
+
+  private static async findInternalUserClientId(
+    internalUserId: string
+  ): Promise<string | undefined> {
+    const input: QueryCommandInput = {
+      TableName: process.env.USERS_TABLE!,
+      KeyConditionExpression: 'PK = :partitionKey',
+      ExpressionAttributeValues: {
+        ':partitionKey': `INTERNAL_USER#${internalUserId}`,
+      },
+    };
+
+    const result = await ddbDocClient.send(new QueryCommand(input));
+    const items = result.Items ?? ([] as { client_id: string }[]);
+    return items[0]?.client_id;
+  }
+
   private static async deleteUserRecords(
     externalUserId: string
   ): Promise<void> {
     // Query to find the internal user ID associated with the external user ID
-    const internalUserResponse = await ddbDocClient.send(
-      new GetCommand({
-        TableName: process.env.USERS_TABLE,
-        Key: {
-          PK: `EXTERNAL_USER#${externalUserId}`,
-        },
-      })
-    );
-    const internalUserId = internalUserResponse.Item?.SK;
-    if (!internalUserId) {
-      return;
+    const internalUserIds =
+      await this.findInternalUserIdentifiers(externalUserId);
+
+    for (const internalUserId of internalUserIds) {
+      // Delete the mapping from EXTERNAL_USER to INTERNAL_USER
+      await ddbDocClient.send(
+        new DeleteItemCommand({
+          TableName: process.env.USERS_TABLE,
+          Key: {
+            PK: { S: `EXTERNAL_USER#${externalUserId}` },
+            SK: { S: internalUserId },
+          },
+        })
+      );
+
+      // Retrieve the client ID associated with the internal user
+      const clientId = await this.findInternalUserClientId(internalUserId);
+      if (!clientId) {
+        continue;
+      }
+
+      // Delete the mapping from INTERNAL_USER to CLIENT
+      await ddbDocClient.send(
+        new DeleteItemCommand({
+          TableName: process.env.USERS_TABLE,
+          Key: {
+            PK: { S: internalUserId },
+            SK: { S: `CLIENT#${clientId}` },
+          },
+        })
+      );
     }
-
-    // Delete the mapping from EXTERNAL_USER to INTERNAL_USER
-    await ddbDocClient.send(
-      new DeleteItemCommand({
-        TableName: process.env.USERS_TABLE,
-        Key: {
-          PK: { S: `EXTERNAL_USER#${externalUserId}` },
-          SK: { S: internalUserId },
-        },
-      })
-    );
-
-    // Retrieve the client ID associated with the internal user
-    const clientResponse = await ddbDocClient.send(
-      new GetCommand({
-        TableName: process.env.USERS_TABLE,
-        Key: {
-          PK: internalUserId,
-        },
-      })
-    );
-    const clientId = clientResponse.Item?.client_id;
-
-    // Delete the mapping from INTERNAL_USER to CLIENT
-    await ddbDocClient.send(
-      new DeleteItemCommand({
-        TableName: process.env.USERS_TABLE,
-        Key: {
-          PK: { S: internalUserId },
-          SK: { S: `CLIENT#${clientId}` },
-        },
-      })
-    );
   }
 }
