@@ -12,7 +12,6 @@ import {
 import { DeleteItemCommand, DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import {
   DynamoDBDocumentClient,
-  GetCommand,
   PutCommand,
   QueryCommand,
   QueryCommandInput,
@@ -167,7 +166,7 @@ export class CognitoUserHelper {
     externalUserIdentifier: string
   ): Promise<string[]> {
     const input: QueryCommandInput = {
-      TableName: process.env.USERS_TABLE!,
+      TableName: process.env.USERS_TABLE,
       KeyConditionExpression: 'PK = :partitionKey',
       ExpressionAttributeValues: {
         ':partitionKey': `EXTERNAL_USER#${externalUserIdentifier}`,
@@ -183,7 +182,7 @@ export class CognitoUserHelper {
     internalUserId: string
   ): Promise<string | undefined> {
     const input: QueryCommandInput = {
-      TableName: process.env.USERS_TABLE!,
+      TableName: process.env.USERS_TABLE,
       KeyConditionExpression: 'PK = :partitionKey',
       ExpressionAttributeValues: {
         ':partitionKey': `INTERNAL_USER#${internalUserId}`,
@@ -216,20 +215,18 @@ export class CognitoUserHelper {
 
       // Retrieve the client ID associated with the internal user
       const clientId = await this.findInternalUserClientId(internalUserId);
-      if (!clientId) {
-        continue;
+      if (clientId) {
+        // Delete the mapping from INTERNAL_USER to CLIENT
+        await ddbDocClient.send(
+          new DeleteItemCommand({
+            TableName: process.env.USERS_TABLE,
+            Key: {
+              PK: { S: internalUserId },
+              SK: { S: `CLIENT#${clientId}` },
+            },
+          })
+        );
       }
-
-      // Delete the mapping from INTERNAL_USER to CLIENT
-      await ddbDocClient.send(
-        new DeleteItemCommand({
-          TableName: process.env.USERS_TABLE,
-          Key: {
-            PK: { S: internalUserId },
-            SK: { S: `CLIENT#${clientId}` },
-          },
-        })
-      );
     }
   }
 }
