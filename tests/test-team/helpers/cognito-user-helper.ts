@@ -86,7 +86,7 @@ export class CognitoUserHelper {
       }
 
       const internalUserId = randomUUID();
-      ddbDocClient.send(
+      await ddbDocClient.send(
         new PutCommand({
           TableName: process.env.USERS_TABLE,
           Item: {
@@ -96,7 +96,7 @@ export class CognitoUserHelper {
           },
         })
       );
-      ddbDocClient.send(
+      await ddbDocClient.send(
         new PutCommand({
           TableName: process.env.USERS_TABLE,
           Item: {
