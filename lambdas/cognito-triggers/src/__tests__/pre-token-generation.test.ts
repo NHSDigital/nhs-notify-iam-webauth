@@ -34,7 +34,7 @@ afterAll(() => {
 
 const mockUsername = 'NHSIDP-prod_1234567890';
 
-const eventNoGroup = (): PreTokenGenerationV2Event => ({
+const baseEvent = (): PreTokenGenerationV2Event => ({
   callerContext: {
     awsSdkVersion: 'aws-sdk-unknown-unknown',
     clientId: '1633rn1feb68eltvtqkugqlml',
@@ -62,52 +62,8 @@ const eventNoGroup = (): PreTokenGenerationV2Event => ({
   version: '2',
 });
 
-const eventNoGroupWithIdentity = (): PreTokenGenerationV2Event => {
-  const event = eventNoGroup();
-  return {
-    ...event,
-    request: {
-      ...event.request,
-      userAttributes: {
-        ...event.request.userAttributes,
-        display_name: 'Dr Test Example',
-        given_name: 'Test',
-        family_name: 'Example',
-      },
-    },
-  };
-};
-
-const eventWithGroup = (): PreTokenGenerationV2Event => ({
-  callerContext: {
-    awsSdkVersion: 'aws-sdk-unknown-unknown',
-    clientId: '1633rn1feb68eltvtqkugqlml',
-  },
-  region: 'eu-west-2',
-  request: {
-    groupConfiguration: {
-      groupsToOverride: ['client:f58d4b65-870c-42c0-8bb6-2941c5be2bec'],
-      iamRolesToOverride: [],
-    },
-    scopes: ['aws.cognito.signin.user.admin'],
-    userAttributes: {
-      'cognito:user_status': 'CONFIRMED',
-      email: 'example@example.com',
-      email_verified: 'True',
-      sub: '76c25234-b041-70f2-8ba4-caf538363b35',
-    },
-  },
-  response: {
-    claimsAndScopeOverrideDetails: null,
-  },
-  triggerSource: 'TokenGeneration_Authentication',
-  userName: '76c25234-b041-70f2-8ba4-caf538363b35',
-  userPoolId: 'eu-west-2_W8aROHYoW',
-  version: '2',
-});
-
-const eventWithGroupAndIdentity = (): PreTokenGenerationV2Event => {
-  const event = eventWithGroup();
+const eventWithIdentity = (): PreTokenGenerationV2Event => {
+  const event = baseEvent();
   return {
     ...event,
     request: {
@@ -125,7 +81,7 @@ const eventWithGroupAndIdentity = (): PreTokenGenerationV2Event => {
 describe('pre-token-generation: Client membership held in DDB', () => {
   test('should identify client ID when single client membership is held in DDB', async () => {
     // arrange
-    const event = { ...eventNoGroup() };
+    const event = { ...baseEvent() };
     event.request.userAttributes['custom:nhs_notify_user_id'] =
       'internal-user-id-123';
     jest.mocked(retrieveInternalUser).mockImplementation(async () => ({
@@ -133,11 +89,83 @@ describe('pre-token-generation: Client membership held in DDB', () => {
       SK: 'CLIENT#d4c6208e-8518-4bc4-a451-37e53b915089',
       client_id: 'd4c6208e-8518-4bc4-a451-37e53b915089',
     }));
+    const ssmSendSpy = jest.spyOn(SSMClient.prototype, 'send');
+    ssmSendSpy.mockImplementation(() =>
+      Promise.resolve({
+        Parameter: {
+          Value: JSON.stringify({
+            name: 'test-client',
+          }),
+        },
+      })
+    );
 
     // act
     const result = await new PreTokenGenerationLambda().handler(event);
 
     // assert
+    expect(result.response.claimsAndScopeOverrideDetails).toEqual({
+      accessTokenGeneration: {
+        claimsToAddOrOverride: {
+          'nhs-notify:client-id': 'd4c6208e-8518-4bc4-a451-37e53b915089',
+          'nhs-notify:internal-user-id': 'internal-user-id-123',
+        },
+      },
+      idTokenGeneration: {
+        claimsToAddOrOverride: {
+          'nhs-notify:client-id': 'd4c6208e-8518-4bc4-a451-37e53b915089',
+          'nhs-notify:client-name': 'test-client',
+          'nhs-notify:internal-user-id': 'internal-user-id-123',
+        },
+      },
+    });
+    expect(ssmSendSpy).toHaveBeenCalledWith(expect.any(GetParameterCommand));
+    expect(ssmSendSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        input: {
+          Name: '/nhs-notify-unit-tests/clients/d4c6208e-8518-4bc4-a451-37e53b915089',
+          WithDecryption: true,
+        },
+      })
+    );
+  });
+
+  test('should throw error if internal user not found', async () => {
+    // arrange
+    const event = { ...baseEvent() };
+    event.request.userAttributes['custom:nhs_notify_user_id'] =
+      'internal-user-id-123';
+    jest.mocked(retrieveInternalUser).mockImplementation(async () => null);
+
+    // act/assert
+    await expect(new PreTokenGenerationLambda().handler(event)).rejects.toThrow(
+      'Internal user not found in DynamoDB'
+    );
+  });
+
+  test('handles ssm errors', async () => {
+    const event = { ...baseEvent() };
+    event.request.userAttributes['custom:nhs_notify_user_id'] =
+      'internal-user-id-123';
+    jest.mocked(retrieveInternalUser).mockImplementation(async () => ({
+      PK: 'INTERNAL_USER#internal-user-id-123',
+      SK: 'CLIENT#d4c6208e-8518-4bc4-a451-37e53b915089',
+      client_id: 'd4c6208e-8518-4bc4-a451-37e53b915089',
+    }));
+    const sendSpy = jest.spyOn(SSMClient.prototype, 'send');
+    sendSpy.mockImplementation(() => Promise.reject(new Error('SSM Error')));
+
+    const result = await new PreTokenGenerationLambda().handler(event);
+
+    expect(sendSpy).toHaveBeenCalledWith(expect.any(GetParameterCommand));
+    expect(sendSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        input: {
+          Name: '/nhs-notify-unit-tests/clients/d4c6208e-8518-4bc4-a451-37e53b915089',
+          WithDecryption: true,
+        },
+      })
+    );
     expect(result.response.claimsAndScopeOverrideDetails).toEqual({
       accessTokenGeneration: {
         claimsToAddOrOverride: {
@@ -154,277 +182,197 @@ describe('pre-token-generation: Client membership held in DDB', () => {
     });
   });
 
-  test('should throw error if internal user not found', async () => {
-    // arrange
-    const event = { ...eventNoGroup() };
+  test('handles empty get parameter response from ssm', async () => {
+    const event = { ...baseEvent() };
     event.request.userAttributes['custom:nhs_notify_user_id'] =
       'internal-user-id-123';
-    jest.mocked(retrieveInternalUser).mockImplementation(async () => null);
+    jest.mocked(retrieveInternalUser).mockImplementation(async () => ({
+      PK: 'INTERNAL_USER#internal-user-id-123',
+      SK: 'CLIENT#d4c6208e-8518-4bc4-a451-37e53b915089',
+      client_id: 'd4c6208e-8518-4bc4-a451-37e53b915089',
+    }));
+    const sendSpy = jest.spyOn(SSMClient.prototype, 'send');
+    sendSpy.mockImplementation(() => Promise.resolve({}));
 
-    // act/assert
-    await expect(new PreTokenGenerationLambda().handler(event)).rejects.toThrow(
-      'Internal user not found in DynamoDB'
+    const result = await new PreTokenGenerationLambda().handler(event);
+
+    expect(sendSpy).toHaveBeenCalledWith(expect.any(GetParameterCommand));
+    expect(sendSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        input: {
+          Name: '/nhs-notify-unit-tests/clients/d4c6208e-8518-4bc4-a451-37e53b915089',
+          WithDecryption: true,
+        },
+      })
     );
-  });
-});
-
-describe('pre-token-generation: Client membership held in Cognito Groups', () => {
-  describe('when user has client group', () => {
-    test('adds nhs-notify:client-name claim from ssm response', async () => {
-      const sendSpy = jest.spyOn(SSMClient.prototype, 'send');
-      sendSpy.mockImplementation(() =>
-        Promise.resolve({
-          Parameter: {
-            Value: JSON.stringify({
-              name: 'test-client',
-            }),
-          },
-        })
-      );
-
-      const result = await new PreTokenGenerationLambda().handler(
-        eventWithGroup()
-      );
-
-      expect(sendSpy).toHaveBeenCalledWith(expect.any(GetParameterCommand));
-      expect(sendSpy).toHaveBeenCalledWith(
-        expect.objectContaining({
-          input: {
-            Name: '/nhs-notify-unit-tests/clients/f58d4b65-870c-42c0-8bb6-2941c5be2bec',
-            WithDecryption: true,
-          },
-        })
-      );
-      expect(result.response.claimsAndScopeOverrideDetails).toEqual({
-        accessTokenGeneration: {
-          claimsToAddOrOverride: {
-            'nhs-notify:client-id': 'f58d4b65-870c-42c0-8bb6-2941c5be2bec',
-          },
+    expect(result.response.claimsAndScopeOverrideDetails).toEqual({
+      accessTokenGeneration: {
+        claimsToAddOrOverride: {
+          'nhs-notify:client-id': 'd4c6208e-8518-4bc4-a451-37e53b915089',
+          'nhs-notify:internal-user-id': 'internal-user-id-123',
         },
-        idTokenGeneration: {
-          claimsToAddOrOverride: {
-            'nhs-notify:client-id': 'f58d4b65-870c-42c0-8bb6-2941c5be2bec',
-            'nhs-notify:client-name': 'test-client',
-          },
+      },
+      idTokenGeneration: {
+        claimsToAddOrOverride: {
+          'nhs-notify:client-id': 'd4c6208e-8518-4bc4-a451-37e53b915089',
+          'nhs-notify:internal-user-id': 'internal-user-id-123',
         },
-      });
-    });
-
-    test('adds nhs-notify:client-id claim from group in event, handles ssm errors', async () => {
-      const sendSpy = jest.spyOn(SSMClient.prototype, 'send');
-      sendSpy.mockImplementation(() => Promise.reject(new Error('SSM Error')));
-
-      const result = await new PreTokenGenerationLambda().handler(
-        eventWithGroup()
-      );
-
-      expect(sendSpy).toHaveBeenCalledWith(expect.any(GetParameterCommand));
-      expect(sendSpy).toHaveBeenCalledWith(
-        expect.objectContaining({
-          input: {
-            Name: '/nhs-notify-unit-tests/clients/f58d4b65-870c-42c0-8bb6-2941c5be2bec',
-            WithDecryption: true,
-          },
-        })
-      );
-      expect(result.response.claimsAndScopeOverrideDetails).toEqual({
-        accessTokenGeneration: {
-          claimsToAddOrOverride: {
-            'nhs-notify:client-id': 'f58d4b65-870c-42c0-8bb6-2941c5be2bec',
-          },
-        },
-        idTokenGeneration: {
-          claimsToAddOrOverride: {
-            'nhs-notify:client-id': 'f58d4b65-870c-42c0-8bb6-2941c5be2bec',
-          },
-        },
-      });
-    });
-
-    test('handles empty get parameter response from ssm', async () => {
-      const sendSpy = jest.spyOn(SSMClient.prototype, 'send');
-      sendSpy.mockImplementation(() => Promise.resolve({}));
-
-      const result = await new PreTokenGenerationLambda().handler(
-        eventWithGroup()
-      );
-
-      expect(sendSpy).toHaveBeenCalledWith(expect.any(GetParameterCommand));
-      expect(sendSpy).toHaveBeenCalledWith(
-        expect.objectContaining({
-          input: {
-            Name: '/nhs-notify-unit-tests/clients/f58d4b65-870c-42c0-8bb6-2941c5be2bec',
-            WithDecryption: true,
-          },
-        })
-      );
-      expect(result.response.claimsAndScopeOverrideDetails).toEqual({
-        accessTokenGeneration: {
-          claimsToAddOrOverride: {
-            'nhs-notify:client-id': 'f58d4b65-870c-42c0-8bb6-2941c5be2bec',
-          },
-        },
-        idTokenGeneration: {
-          claimsToAddOrOverride: {
-            'nhs-notify:client-id': 'f58d4b65-870c-42c0-8bb6-2941c5be2bec',
-          },
-        },
-      });
-    });
-
-    test('handles missing client-name in ssm response', async () => {
-      const sendSpy = jest.spyOn(SSMClient.prototype, 'send');
-      sendSpy.mockImplementation(() =>
-        Promise.resolve({
-          Parameter: {
-            Value: JSON.stringify({}),
-          },
-        })
-      );
-
-      const result = await new PreTokenGenerationLambda().handler(
-        eventWithGroup()
-      );
-
-      expect(sendSpy).toHaveBeenCalledWith(expect.any(GetParameterCommand));
-      expect(sendSpy).toHaveBeenCalledWith(
-        expect.objectContaining({
-          input: {
-            Name: '/nhs-notify-unit-tests/clients/f58d4b65-870c-42c0-8bb6-2941c5be2bec',
-            WithDecryption: true,
-          },
-        })
-      );
-      expect(result.response.claimsAndScopeOverrideDetails).toEqual({
-        accessTokenGeneration: {
-          claimsToAddOrOverride: {
-            'nhs-notify:client-id': 'f58d4b65-870c-42c0-8bb6-2941c5be2bec',
-          },
-        },
-        idTokenGeneration: {
-          claimsToAddOrOverride: {
-            'nhs-notify:client-id': 'f58d4b65-870c-42c0-8bb6-2941c5be2bec',
-          },
-        },
-      });
-    });
-
-    test('caches client response from ssm', async () => {
-      const sendSpy = jest.spyOn(SSMClient.prototype, 'send');
-      sendSpy.mockImplementation(() =>
-        Promise.resolve({
-          Parameter: {
-            Value: JSON.stringify({
-              name: 'test-client',
-            }),
-          },
-        })
-      );
-      const lambda = new PreTokenGenerationLambda();
-
-      const result = await lambda.handler(eventWithGroup());
-
-      expect(sendSpy).toHaveBeenCalledWith(expect.any(GetParameterCommand));
-      expect(sendSpy).toHaveBeenCalledWith(
-        expect.objectContaining({
-          input: {
-            Name: '/nhs-notify-unit-tests/clients/f58d4b65-870c-42c0-8bb6-2941c5be2bec',
-            WithDecryption: true,
-          },
-        })
-      );
-      expect(result.response.claimsAndScopeOverrideDetails).toEqual({
-        accessTokenGeneration: {
-          claimsToAddOrOverride: {
-            'nhs-notify:client-id': 'f58d4b65-870c-42c0-8bb6-2941c5be2bec',
-          },
-        },
-        idTokenGeneration: {
-          claimsToAddOrOverride: {
-            'nhs-notify:client-id': 'f58d4b65-870c-42c0-8bb6-2941c5be2bec',
-            'nhs-notify:client-name': 'test-client',
-          },
-        },
-      });
-
-      expect(sendSpy).toHaveBeenCalledTimes(1);
-
-      const result2 = await lambda.handler(eventWithGroup());
-
-      // subsequent invocations for the same client should not hit ssm again
-      expect(sendSpy).toHaveBeenCalledTimes(1);
-
-      // but give the same result
-      expect(result2).toEqual(result);
-    });
-
-    test('merges client claims with identity claims when identity present', async () => {
-      const sendSpy = jest.spyOn(SSMClient.prototype, 'send');
-      sendSpy.mockImplementation(() =>
-        Promise.resolve({
-          Parameter: {
-            Value: JSON.stringify({
-              name: 'test-client',
-            }),
-          },
-        })
-      );
-
-      const result = await new PreTokenGenerationLambda().handler(
-        eventWithGroupAndIdentity()
-      );
-
-      expect(sendSpy).toHaveBeenCalledWith(expect.any(GetParameterCommand));
-      expect(sendSpy).toHaveBeenCalledWith(
-        expect.objectContaining({
-          input: {
-            Name: '/nhs-notify-unit-tests/clients/f58d4b65-870c-42c0-8bb6-2941c5be2bec',
-            WithDecryption: true,
-          },
-        })
-      );
-      expect(result.response.claimsAndScopeOverrideDetails).toEqual({
-        accessTokenGeneration: {
-          claimsToAddOrOverride: {
-            'nhs-notify:client-id': 'f58d4b65-870c-42c0-8bb6-2941c5be2bec',
-          },
-        },
-        idTokenGeneration: {
-          claimsToAddOrOverride: {
-            'nhs-notify:client-id': 'f58d4b65-870c-42c0-8bb6-2941c5be2bec',
-            'nhs-notify:client-name': 'test-client',
-            preferred_username: 'Dr Test Example',
-            given_name: 'Test',
-            family_name: 'Example',
-          },
-        },
-      });
+      },
     });
   });
 
-  describe('when user has no client group', () => {
-    test('does not add any claims', async () => {
-      const result = await new PreTokenGenerationLambda().handler(
-        eventNoGroup()
-      );
+  test('handles missing client-name in ssm response', async () => {
+    const event = { ...baseEvent() };
+    event.request.userAttributes['custom:nhs_notify_user_id'] =
+      'internal-user-id-123';
+    jest.mocked(retrieveInternalUser).mockImplementation(async () => ({
+      PK: 'INTERNAL_USER#internal-user-id-123',
+      SK: 'CLIENT#d4c6208e-8518-4bc4-a451-37e53b915089',
+      client_id: 'd4c6208e-8518-4bc4-a451-37e53b915089',
+    }));
+    const sendSpy = jest.spyOn(SSMClient.prototype, 'send');
+    sendSpy.mockImplementation(() =>
+      Promise.resolve({
+        Parameter: {
+          Value: JSON.stringify({}),
+        },
+      })
+    );
 
-      expect(result.response.claimsAndScopeOverrideDetails).toBe(null);
+    const result = await new PreTokenGenerationLambda().handler(event);
+
+    expect(sendSpy).toHaveBeenCalledWith(expect.any(GetParameterCommand));
+    expect(sendSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        input: {
+          Name: '/nhs-notify-unit-tests/clients/d4c6208e-8518-4bc4-a451-37e53b915089',
+          WithDecryption: true,
+        },
+      })
+    );
+    expect(result.response.claimsAndScopeOverrideDetails).toEqual({
+      accessTokenGeneration: {
+        claimsToAddOrOverride: {
+          'nhs-notify:client-id': 'd4c6208e-8518-4bc4-a451-37e53b915089',
+          'nhs-notify:internal-user-id': 'internal-user-id-123',
+        },
+      },
+      idTokenGeneration: {
+        claimsToAddOrOverride: {
+          'nhs-notify:client-id': 'd4c6208e-8518-4bc4-a451-37e53b915089',
+          'nhs-notify:internal-user-id': 'internal-user-id-123',
+        },
+      },
+    });
+  });
+
+  test('caches client response from ssm', async () => {
+    const event = { ...baseEvent() };
+    event.request.userAttributes['custom:nhs_notify_user_id'] =
+      'internal-user-id-123';
+    jest.mocked(retrieveInternalUser).mockImplementation(async () => ({
+      PK: 'INTERNAL_USER#internal-user-id-123',
+      SK: 'CLIENT#d4c6208e-8518-4bc4-a451-37e53b915089',
+      client_id: 'd4c6208e-8518-4bc4-a451-37e53b915089',
+    }));
+    const sendSpy = jest.spyOn(SSMClient.prototype, 'send');
+    sendSpy.mockImplementation(() =>
+      Promise.resolve({
+        Parameter: {
+          Value: JSON.stringify({
+            name: 'test-client',
+          }),
+        },
+      })
+    );
+    const lambda = new PreTokenGenerationLambda();
+
+    const result = await lambda.handler(event);
+
+    expect(sendSpy).toHaveBeenCalledWith(expect.any(GetParameterCommand));
+    expect(sendSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        input: {
+          Name: '/nhs-notify-unit-tests/clients/d4c6208e-8518-4bc4-a451-37e53b915089',
+          WithDecryption: true,
+        },
+      })
+    );
+    expect(result.response.claimsAndScopeOverrideDetails).toEqual({
+      accessTokenGeneration: {
+        claimsToAddOrOverride: {
+          'nhs-notify:client-id': 'd4c6208e-8518-4bc4-a451-37e53b915089',
+          'nhs-notify:internal-user-id': 'internal-user-id-123',
+        },
+      },
+      idTokenGeneration: {
+        claimsToAddOrOverride: {
+          'nhs-notify:client-id': 'd4c6208e-8518-4bc4-a451-37e53b915089',
+          'nhs-notify:internal-user-id': 'internal-user-id-123',
+          'nhs-notify:client-name': 'test-client',
+        },
+      },
     });
 
-    test('adds preferred_username, given_name and family_name when present', async () => {
-      const result = await new PreTokenGenerationLambda().handler(
-        eventNoGroupWithIdentity()
-      );
+    expect(sendSpy).toHaveBeenCalledTimes(1);
 
-      expect(result.response.claimsAndScopeOverrideDetails).toEqual({
-        idTokenGeneration: {
-          claimsToAddOrOverride: {
-            preferred_username: 'Dr Test Example',
-            given_name: 'Test',
-            family_name: 'Example',
-          },
+    const result2 = await lambda.handler(event);
+
+    // subsequent invocations for the same client should not hit ssm again
+    expect(sendSpy).toHaveBeenCalledTimes(1);
+
+    // but give the same result
+    expect(result2).toEqual(result);
+  });
+
+  test('merges client claims with identity claims when identity present', async () => {
+    const event = { ...eventWithIdentity() };
+    event.request.userAttributes['custom:nhs_notify_user_id'] =
+      'internal-user-id-123';
+    jest.mocked(retrieveInternalUser).mockImplementation(async () => ({
+      PK: 'INTERNAL_USER#internal-user-id-123',
+      SK: 'CLIENT#d4c6208e-8518-4bc4-a451-37e53b915089',
+      client_id: 'd4c6208e-8518-4bc4-a451-37e53b915089',
+    }));
+    const sendSpy = jest.spyOn(SSMClient.prototype, 'send');
+    sendSpy.mockImplementation(() =>
+      Promise.resolve({
+        Parameter: {
+          Value: JSON.stringify({
+            name: 'test-client',
+          }),
         },
-      });
+      })
+    );
+
+    const result = await new PreTokenGenerationLambda().handler(event);
+
+    expect(sendSpy).toHaveBeenCalledWith(expect.any(GetParameterCommand));
+    expect(sendSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        input: {
+          Name: '/nhs-notify-unit-tests/clients/d4c6208e-8518-4bc4-a451-37e53b915089',
+          WithDecryption: true,
+        },
+      })
+    );
+    expect(result.response.claimsAndScopeOverrideDetails).toEqual({
+      accessTokenGeneration: {
+        claimsToAddOrOverride: {
+          'nhs-notify:client-id': 'd4c6208e-8518-4bc4-a451-37e53b915089',
+          'nhs-notify:internal-user-id': 'internal-user-id-123',
+        },
+      },
+      idTokenGeneration: {
+        claimsToAddOrOverride: {
+          'nhs-notify:client-id': 'd4c6208e-8518-4bc4-a451-37e53b915089',
+          'nhs-notify:client-name': 'test-client',
+          'nhs-notify:internal-user-id': 'internal-user-id-123',
+          preferred_username: 'Dr Test Example',
+          given_name: 'Test',
+          family_name: 'Example',
+        },
+      },
     });
   });
 });

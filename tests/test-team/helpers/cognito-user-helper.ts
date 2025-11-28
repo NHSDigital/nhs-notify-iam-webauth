@@ -1,11 +1,8 @@
 import {
-  AdminAddUserToGroupCommand,
   AdminCreateUserCommand,
   AdminDeleteUserCommand,
   AdminDisableUserCommand,
   CognitoIdentityProviderClient,
-  CreateGroupCommand,
-  DeleteGroupCommand,
 } from '@aws-sdk/client-cognito-identity-provider';
 import {
   DeleteParameterCommand,
@@ -30,7 +27,6 @@ export type User = {
 
 export type Client = {
   clientId: string;
-  useCognitoGroups: boolean;
   clientConfig?: { name?: string };
 };
 
@@ -44,8 +40,6 @@ export class CognitoUserHelper {
   });
 
   private clients = new Set<string>();
-
-  private clientGroupsToDelete = new Set<string>();
 
   async createUser(
     username: string,
@@ -89,36 +83,28 @@ export class CognitoUserHelper {
         if (client.clientConfig) {
           await this.configureClient(client);
         }
-
-        if (client.useCognitoGroups) {
-          await this.createClientGroup(client);
-        }
       }
 
-      if (client.useCognitoGroups) {
-        await this.addUserToClientGroup(userId, client);
-      } else {
-        const internalUserId = randomUUID();
-        ddbDocClient.send(
-          new PutCommand({
-            TableName: process.env.USERS_TABLE,
-            Item: {
-              PK: `INTERNAL_USER#${internalUserId}`,
-              SK: `CLIENT#${client.clientId}`,
-              client_id: client.clientId,
-            },
-          })
-        );
-        ddbDocClient.send(
-          new PutCommand({
-            TableName: process.env.USERS_TABLE,
-            Item: {
-              PK: `EXTERNAL_USER#${userId}`,
-              SK: `INTERNAL_USER#${internalUserId}`,
-            },
-          })
-        );
-      }
+      const internalUserId = randomUUID();
+      ddbDocClient.send(
+        new PutCommand({
+          TableName: process.env.USERS_TABLE,
+          Item: {
+            PK: `INTERNAL_USER#${internalUserId}`,
+            SK: `CLIENT#${client.clientId}`,
+            client_id: client.clientId,
+          },
+        })
+      );
+      ddbDocClient.send(
+        new PutCommand({
+          TableName: process.env.USERS_TABLE,
+          Item: {
+            PK: `EXTERNAL_USER#${userId}`,
+            SK: `INTERNAL_USER#${internalUserId}`,
+          },
+        })
+      );
     }
 
     return {
@@ -143,43 +129,9 @@ export class CognitoUserHelper {
       })
     );
 
-    if (client && this.clientGroupsToDelete.has(client.clientId)) {
-      this.clients.delete(client.clientId);
-      await this.deleteClientGroup(client);
-    }
-
     if (client && client.clientConfig) {
       await this.deleteClientConfig(client);
     }
-  }
-
-  private async createClientGroup(client: Client) {
-    await this.cognito.send(
-      new CreateGroupCommand({
-        GroupName: `client:${client.clientId}`,
-        UserPoolId: process.env.AWS_COGNITO_USER_POOL_ID,
-      })
-    );
-    this.clientGroupsToDelete.add(client.clientId);
-  }
-
-  private async deleteClientGroup(client: Client) {
-    await this.cognito.send(
-      new DeleteGroupCommand({
-        GroupName: `client:${client.clientId}`,
-        UserPoolId: process.env.AWS_COGNITO_USER_POOL_ID,
-      })
-    );
-  }
-
-  private async addUserToClientGroup(username: string, client: Client) {
-    await this.cognito.send(
-      new AdminAddUserToGroupCommand({
-        GroupName: `client:${client.clientId}`,
-        Username: username,
-        UserPoolId: process.env.AWS_COGNITO_USER_POOL_ID,
-      })
-    );
   }
 
   private async configureClient(client: Client) {

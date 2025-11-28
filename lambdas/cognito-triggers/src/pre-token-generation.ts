@@ -63,18 +63,6 @@ export class PreTokenGenerationLambda {
       );
     }
 
-    if (!clientId) {
-      const groups = event.request.groupConfiguration.groupsToOverride;
-
-      if (groups) {
-        const clientGroup = groups.find((group) => group.startsWith('client:'));
-
-        if (clientGroup) {
-          clientId = clientGroup.replace(/^client:/, '');
-        }
-      }
-    }
-
     userLogger.info(`clientId=${clientId}`);
 
     if (clientId) {
