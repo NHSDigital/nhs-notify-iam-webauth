@@ -1,4 +1,4 @@
-import handler from '@/src/post-confirmation';
+import { handler } from '@/src/post-confirmation';
 import { PostConfirmationTriggerEvent } from 'aws-lambda';
 import { findInternalUserIdentifier } from '@/src/utils/users-repository';
 import { populateInternalUserId } from '@/src/utils/cognito-customisation-util';
@@ -22,7 +22,7 @@ describe('post-confirmation', () => {
 
     jest
       .mocked(findInternalUserIdentifier)
-      .mockResolvedValue('internal-user-id-123');
+      .mockResolvedValueOnce('internal-user-id-123');
 
     // act
     const result = await handler(event);
@@ -43,8 +43,6 @@ describe('post-confirmation', () => {
       userName: 'test-user',
       userPoolId: 'test-user-pool-id',
     } as PostConfirmationTriggerEvent;
-
-    jest.mocked(findInternalUserIdentifier).mockResolvedValue(null);
 
     // act
     const result = await handler(event);
