@@ -104,7 +104,7 @@ npm run test:unit
 
 ### Playwright automated tests
 
-You'll need to ensure you have an authenticated terminal to `nhs-notify-iam-dev` AWS account. Then run:
+You will need to ensure you have an authenticated terminal to `nhs-notify-iam-dev` AWS account. Then run:
 
 ```bash
 cd tests/test-team
