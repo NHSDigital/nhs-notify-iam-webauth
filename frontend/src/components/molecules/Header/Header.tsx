@@ -1,5 +1,4 @@
 import React from 'react';
-import Link from 'next/link';
 import content from '@/content/content';
 import { HeaderType } from '@/components/molecules/Header/header.types';
 import AuthLink from '@/components/molecules/AuthLink/AuthLink';
@@ -16,11 +15,11 @@ export default function NHSNotifyHeader({ dataTestId }: Readonly<HeaderType>) {
     >
       <div className='nhsuk-header__container nhsuk-width-container'>
         <div className='nhsuk-header__service'>
-          <Link
+          <a
             className='nhsuk-header__service-logo'
             data-testid='header-logo-service-link'
-            href={headerContent.logoLink.href}
             aria-label={headerContent.logoLink.ariaLabel}
+            href={headerContent.logoLink.href}
           >
             <svg
               className='nhsuk-header__logo'
@@ -40,7 +39,7 @@ export default function NHSNotifyHeader({ dataTestId }: Readonly<HeaderType>) {
             <span className='nhsuk-header__service-name'>
               {headerContent.serviceName}
             </span>
-          </Link>
+          </a>
         </div>
         <nav
           className='nhsuk-header__account'
