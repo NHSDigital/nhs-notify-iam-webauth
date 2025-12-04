@@ -8,7 +8,7 @@
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.10.1 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 5.50 |
-| <a name="requirement_github"></a> [github](#requirement\_github) | ~> 6.0 |
+| <a name="requirement_github"></a> [github](#requirement\_github) | 6.8.1 |
 ## Inputs
 
 | Name | Description | Type | Default | Required |
