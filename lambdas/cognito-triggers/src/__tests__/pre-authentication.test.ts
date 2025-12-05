@@ -1,7 +1,11 @@
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import { PreAuthenticationTriggerEvent } from 'aws-lambda';
 import { handler } from '@/src/pre-authentication';
-import { retrieveInternalUser } from '@/src/utils/users-repository';
+import {
+  findInternalUserIdentifier,
+  retrieveInternalUser,
+} from '@/src/utils/users-repository';
+import { populateInternalUserId } from '@/src/utils/cognito-customisation-util';
 
 jest.mock('@nhs-notify-iam-webauth/utils-logger', () => ({
   logger: {
@@ -58,6 +62,38 @@ describe('pre-authentication: Client membership held in DDB', () => {
     expect(result).toEqual(event);
   });
 
+  test('should link up user to DDB using external ID', async () => {
+    // arrange
+    const event: PreAuthenticationTriggerEvent = {
+      ...baseEvent,
+      request: {
+        userAttributes: {},
+      },
+    };
+
+    const mockedFindInternalUserIdentifier = jest
+      .mocked(findInternalUserIdentifier)
+      .mockImplementationOnce(async () => 'internal-user-id');
+    const mockedPopulateInternalUserId = jest.mocked(populateInternalUserId);
+    jest.mocked(retrieveInternalUser).mockImplementationOnce(async () => ({
+      PK: 'INTERNAL_USER#internal-user-id',
+      SK: 'CLIENT#0123456789',
+      client_id: '0123456789',
+    }));
+
+    // act
+    const result = await handler(event);
+
+    // assert
+    expect(result).toEqual(event);
+    expect(mockedFindInternalUserIdentifier).toHaveBeenCalledWith(userName);
+    expect(mockedPopulateInternalUserId).toHaveBeenCalledWith(
+      userName,
+      'internal-user-id',
+      userPoolId
+    );
+  });
+
   test('should reject missing internal user in database', async () => {
     // arrange
     const event: PreAuthenticationTriggerEvent = {
@@ -83,52 +119,6 @@ describe('pre-authentication: Client membership held in DDB', () => {
         Groups: [{ GroupName: 'eu-west-2_000000000_NHSIDP-prod' }],
       })
     );
-
-    // act/assert
-    await expect(handler(baseEvent)).rejects.toThrow(
-      'PRE_AUTH_NO_CLIENT_FAILURE'
-    );
-  });
-});
-
-describe('pre-authentication: Client membership held in Cognito Groups', () => {
-  test('should approve user with Cognito group held client membership', async () => {
-    // arrange
-    const cognitoMock = jest.spyOn(CognitoIdentityProvider.prototype, 'send');
-    cognitoMock.mockImplementation(() =>
-      Promise.resolve({
-        Groups: [
-          { GroupName: 'eu-west-2_000000000_NHSIDP-prod' },
-          { GroupName: 'client:client-id' },
-        ],
-      })
-    );
-
-    // act/assert
-    expect(await handler(baseEvent)).toEqual(baseEvent);
-  });
-
-  test('throws error with message PRE_AUTH_ERROR when more than one client is configured', async () => {
-    // arrange
-    const cognitoMock = jest.spyOn(CognitoIdentityProvider.prototype, 'send');
-    cognitoMock.mockImplementation(() =>
-      Promise.resolve({
-        Groups: [
-          { GroupName: 'eu-west-2_000000000_NHSIDP-prod' },
-          { GroupName: 'client:client-id' },
-          { GroupName: 'client:client-2' },
-        ],
-      })
-    );
-
-    // act/assert
-    await expect(handler(baseEvent)).rejects.toThrow('PRE_AUTH_ERROR');
-  });
-
-  test('throws error with message PRE_AUTH_NO_CLIENT_FAILURE when cognito unexpectedly returns no Groups field on response', async () => {
-    // arrange
-    const cognitoMock = jest.spyOn(CognitoIdentityProvider.prototype, 'send');
-    cognitoMock.mockImplementation(() => Promise.resolve({}));
 
     // act/assert
     await expect(handler(baseEvent)).rejects.toThrow(

@@ -1,19 +1,21 @@
 import {
-  AdminAddUserToGroupCommand,
   AdminCreateUserCommand,
   AdminDeleteUserCommand,
   AdminDisableUserCommand,
   CognitoIdentityProviderClient,
-  CreateGroupCommand,
-  DeleteGroupCommand,
 } from '@aws-sdk/client-cognito-identity-provider';
 import {
   DeleteParameterCommand,
   PutParameterCommand,
   SSMClient,
 } from '@aws-sdk/client-ssm';
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, PutCommand } from '@aws-sdk/lib-dynamodb';
+import { DeleteItemCommand, DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import {
+  DynamoDBDocumentClient,
+  PutCommand,
+  QueryCommand,
+  QueryCommandInput,
+} from '@aws-sdk/lib-dynamodb';
 import { randomUUID } from 'node:crypto';
 
 const ddbDocClient = DynamoDBDocumentClient.from(
@@ -30,7 +32,6 @@ export type User = {
 
 export type Client = {
   clientId: string;
-  useCognitoGroups: boolean;
   clientConfig?: { name?: string };
 };
 
@@ -44,8 +45,6 @@ export class CognitoUserHelper {
   });
 
   private clients = new Set<string>();
-
-  private clientGroupsToDelete = new Set<string>();
 
   async createUser(
     username: string,
@@ -89,36 +88,31 @@ export class CognitoUserHelper {
         if (client.clientConfig) {
           await this.configureClient(client);
         }
-
-        if (client.useCognitoGroups) {
-          await this.createClientGroup(client);
-        }
       }
 
-      if (client.useCognitoGroups) {
-        await this.addUserToClientGroup(userId, client);
-      } else {
-        const internalUserId = randomUUID();
-        ddbDocClient.send(
-          new PutCommand({
-            TableName: process.env.USERS_TABLE,
-            Item: {
-              PK: `INTERNAL_USER#${internalUserId}`,
-              SK: `CLIENT#${client.clientId}`,
-              client_id: client.clientId,
-            },
-          })
-        );
-        ddbDocClient.send(
-          new PutCommand({
-            TableName: process.env.USERS_TABLE,
-            Item: {
-              PK: `EXTERNAL_USER#${userId}`,
-              SK: `INTERNAL_USER#${internalUserId}`,
-            },
-          })
-        );
-      }
+      // Delete any existing user records just in case the tests are being re-run
+      await CognitoUserHelper.deleteUserRecords(userId);
+
+      const internalUserId = randomUUID();
+      await ddbDocClient.send(
+        new PutCommand({
+          TableName: process.env.USERS_TABLE,
+          Item: {
+            PK: `INTERNAL_USER#${internalUserId}`,
+            SK: `CLIENT#${client.clientId}`,
+            client_id: client.clientId,
+          },
+        })
+      );
+      await ddbDocClient.send(
+        new PutCommand({
+          TableName: process.env.USERS_TABLE,
+          Item: {
+            PK: `EXTERNAL_USER#${userId}`,
+            SK: `INTERNAL_USER#${internalUserId}`,
+          },
+        })
+      );
     }
 
     return {
@@ -143,43 +137,9 @@ export class CognitoUserHelper {
       })
     );
 
-    if (client && this.clientGroupsToDelete.has(client.clientId)) {
-      this.clients.delete(client.clientId);
-      await this.deleteClientGroup(client);
-    }
-
     if (client && client.clientConfig) {
       await this.deleteClientConfig(client);
     }
-  }
-
-  private async createClientGroup(client: Client) {
-    await this.cognito.send(
-      new CreateGroupCommand({
-        GroupName: `client:${client.clientId}`,
-        UserPoolId: process.env.AWS_COGNITO_USER_POOL_ID,
-      })
-    );
-    this.clientGroupsToDelete.add(client.clientId);
-  }
-
-  private async deleteClientGroup(client: Client) {
-    await this.cognito.send(
-      new DeleteGroupCommand({
-        GroupName: `client:${client.clientId}`,
-        UserPoolId: process.env.AWS_COGNITO_USER_POOL_ID,
-      })
-    );
-  }
-
-  private async addUserToClientGroup(username: string, client: Client) {
-    await this.cognito.send(
-      new AdminAddUserToGroupCommand({
-        GroupName: `client:${client.clientId}`,
-        Username: username,
-        UserPoolId: process.env.AWS_COGNITO_USER_POOL_ID,
-      })
-    );
   }
 
   private async configureClient(client: Client) {
@@ -200,5 +160,73 @@ export class CognitoUserHelper {
         Name: `${process.env.CLIENT_CONFIG_PARAMETER_PATH_PREFIX}/${client.clientId}`,
       })
     );
+  }
+
+  private static async findInternalUserIdentifiers(
+    externalUserIdentifier: string
+  ): Promise<string[]> {
+    const input: QueryCommandInput = {
+      TableName: process.env.USERS_TABLE,
+      KeyConditionExpression: 'PK = :partitionKey',
+      ExpressionAttributeValues: {
+        ':partitionKey': `EXTERNAL_USER#${externalUserIdentifier}`,
+      },
+    };
+
+    const result = await ddbDocClient.send(new QueryCommand(input));
+    const items = result.Items ?? ([] as { PK: string; SK: string }[]);
+    return items.map((item) => item.SK.replace('INTERNAL_USER#', ''));
+  }
+
+  private static async findInternalUserClientId(
+    internalUserId: string
+  ): Promise<string | undefined> {
+    const input: QueryCommandInput = {
+      TableName: process.env.USERS_TABLE,
+      KeyConditionExpression: 'PK = :partitionKey',
+      ExpressionAttributeValues: {
+        ':partitionKey': `INTERNAL_USER#${internalUserId}`,
+      },
+    };
+
+    const result = await ddbDocClient.send(new QueryCommand(input));
+    const items = result.Items ?? ([] as { client_id: string }[]);
+    return items[0]?.client_id;
+  }
+
+  private static async deleteUserRecords(
+    externalUserId: string
+  ): Promise<void> {
+    // Query to find the internal user ID associated with the external user ID
+    const internalUserIds =
+      await this.findInternalUserIdentifiers(externalUserId);
+
+    for (const internalUserId of internalUserIds) {
+      // Delete the mapping from EXTERNAL_USER to INTERNAL_USER
+      await ddbDocClient.send(
+        new DeleteItemCommand({
+          TableName: process.env.USERS_TABLE,
+          Key: {
+            PK: { S: `EXTERNAL_USER#${externalUserId}` },
+            SK: { S: internalUserId },
+          },
+        })
+      );
+
+      // Retrieve the client ID associated with the internal user
+      const clientId = await this.findInternalUserClientId(internalUserId);
+      if (clientId) {
+        // Delete the mapping from INTERNAL_USER to CLIENT
+        await ddbDocClient.send(
+          new DeleteItemCommand({
+            TableName: process.env.USERS_TABLE,
+            Key: {
+              PK: { S: internalUserId },
+              SK: { S: `CLIENT#${clientId}` },
+            },
+          })
+        );
+      }
+    }
   }
 }

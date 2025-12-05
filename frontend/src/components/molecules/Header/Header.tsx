@@ -18,8 +18,8 @@ export default function NHSNotifyHeader({ dataTestId }: Readonly<HeaderType>) {
           <a
             className='nhsuk-header__service-logo'
             data-testid='header-logo-service-link'
-            href={headerContent.logoLink.href}
             aria-label={headerContent.logoLink.ariaLabel}
+            href={headerContent.logoLink.href}
           >
             <svg
               className='nhsuk-header__logo'

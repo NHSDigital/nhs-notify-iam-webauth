@@ -50,18 +50,17 @@ export class PreTokenGenerationLambda {
       clientId = internalUser.client_id;
 
       userLogger.info(`Found client ID from DynamoDB: ${clientId}`);
-    }
 
-    if (!clientId) {
-      const groups = event.request.groupConfiguration.groupsToOverride;
-
-      if (groups) {
-        const clientGroup = groups.find((group) => group.startsWith('client:'));
-
-        if (clientGroup) {
-          clientId = clientGroup.replace(/^client:/, '');
+      response = PreTokenGenerationLambda.setTokenClaims(response, 'idToken', {
+        'nhs-notify:internal-user-id': internalUserId,
+      });
+      response = PreTokenGenerationLambda.setTokenClaims(
+        response,
+        'accessToken',
+        {
+          'nhs-notify:internal-user-id': internalUserId,
         }
-      }
+      );
     }
 
     userLogger.info(`clientId=${clientId}`);
