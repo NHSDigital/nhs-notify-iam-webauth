@@ -1,5 +1,6 @@
 import { formatTime } from '@/utils/format-time';
 import { getConstants } from '@/utils/public-constants';
+import { getTemplatesUrl } from '@/utils/get-templates-url';
 
 const { BASE_PATH, TIME_TILL_LOGOUT_SECONDS } = getConstants();
 
@@ -15,7 +16,7 @@ const header = {
   logoLink: {
     ariaLabel: 'NHS Notify templates',
     logoTitle: 'NHS logo',
-    href: '/templates/create-and-submit-templates',
+    href: getTemplatesUrl('/templates/create-and-submit-templates'),
   },
   accountInfo: {
     ariaLabel: 'Account',
