@@ -16,8 +16,8 @@
     "nhsuk-frontend": "^10.1.0",
     "nhsuk-react-components": "^5.0.0",
     "path": "^0.12.7",
-    "react": "^19.2.3",
-    "react-dom": "^19.2.3",
+    "react": "^19.0.3",
+    "react-dom": "^19.0.3",
     "whatwg-fetch": "^3.6.20"
   },
   "devDependencies": {
