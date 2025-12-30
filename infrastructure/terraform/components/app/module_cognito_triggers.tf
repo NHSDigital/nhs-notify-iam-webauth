@@ -13,4 +13,7 @@ module "cognito_triggers" {
   kms_key_arn           = module.kms.key_arn
   log_retention_in_days = var.log_retention_in_days
   user_pool_id          = aws_cognito_user_pool.main.id
+
+  log_destination_arn       = local.log_destination_arn
+  log_subscription_role_arn = local.acct.log_subscription_role_arn
 }

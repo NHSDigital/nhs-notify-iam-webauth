@@ -1,5 +1,5 @@
 module "pre_authentication_lambda" {
-  source = "https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.26/terraform-lambda.zip"
+  source = "https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.29/terraform-lambda.zip"
 
   project        = var.project
   environment    = var.environment
@@ -26,6 +26,10 @@ module "pre_authentication_lambda" {
 
   kms_key_arn           = var.kms_key_arn
   log_retention_in_days = var.log_retention_in_days
+
+  send_to_firehose          = var.send_to_firehose
+  log_destination_arn       = var.log_destination_arn
+  log_subscription_role_arn = var.log_subscription_role_arn
 
   permission_statements = [{
     statement_id   = "AllowCognitoInvoke"
