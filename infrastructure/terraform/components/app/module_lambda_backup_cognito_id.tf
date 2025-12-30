@@ -1,5 +1,5 @@
 module "lambda_backup_cognito_id" {
-  source = "https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.20/terraform-lambda.zip"
+  source = "https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.29/terraform-lambda.zip"
   count  = var.destination_vault_arn != null ? 1 : 0
 
   function_name = "backup-cognito-id"
@@ -39,7 +39,6 @@ module "lambda_backup_cognito_id" {
     COGNITO_POOL_ID = aws_cognito_user_pool.main.id
   }
 
-  send_to_firehose          = true
   log_destination_arn       = local.log_destination_arn
   log_subscription_role_arn = local.acct.log_subscription_role_arn
 }
