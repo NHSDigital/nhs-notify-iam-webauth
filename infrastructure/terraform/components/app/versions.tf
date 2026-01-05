@@ -12,3 +12,7 @@ terraform {
 
   required_version = ">= 1.10.1"
 }
+
+provider "github" {
+  owner = "NHSDigital"
+}
