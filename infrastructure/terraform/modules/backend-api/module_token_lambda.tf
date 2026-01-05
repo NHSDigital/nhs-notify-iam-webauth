@@ -1,5 +1,5 @@
 module "token_lambda" {
-  source = "https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.20/terraform-lambda.zip"
+  source = "https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.29/terraform-lambda.zip"
 
   project        = var.project
   environment    = var.environment
@@ -33,7 +33,6 @@ module "token_lambda" {
   function_code_base_path = local.lambdas_dir
   function_code_dir       = "cis2-api/dist"
 
-  send_to_firehose          = true
   log_destination_arn       = var.log_destination_arn
   log_subscription_role_arn = var.log_subscription_role_arn
 

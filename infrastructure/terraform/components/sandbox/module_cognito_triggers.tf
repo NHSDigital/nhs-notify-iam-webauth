@@ -13,4 +13,5 @@ module "cognito_triggers" {
   kms_key_arn           = local.acct.sandbox_kms_key.arn
   log_retention_in_days = var.log_retention_in_days
   user_pool_id          = aws_cognito_user_pool.main.id
+  send_to_firehose      = false
 }
