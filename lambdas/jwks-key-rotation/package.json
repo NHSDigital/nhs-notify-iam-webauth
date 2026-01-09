@@ -6,7 +6,7 @@
     "@types/node-jose": "^1.1.13",
     "node-jose": "^2.2.0",
     "winston": "^3.14.2",
-    "zod": "^3.24.2"
+    "zod": "^4.1.12"
   },
   "description": "Runs periodically to generate a new public-private key pair and update the published public keys",
   "devDependencies": {
