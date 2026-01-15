@@ -29,6 +29,7 @@ resource "aws_amplify_app" "main" {
   environment_variables = {
     AMPLIFY_MONOREPO_APP_ROOT            = "frontend"
     HOSTED_LOGIN_DOMAIN                  = local.auth_domain_name
+    NOTIFY_DOMAIN_NAME                   = local.root_domain_name
     NOTIFY_GROUP                         = var.group
     NOTIFY_ENVIRONMENT                   = var.environment
     NEXT_PUBLIC_ENABLE_COGNITO_IDP       = var.enable_cognito_built_in_idp
