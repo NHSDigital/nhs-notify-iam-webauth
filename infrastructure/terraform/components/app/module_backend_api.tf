@@ -13,6 +13,7 @@ module "backend_api" {
   ssm_key_directory_name    = module.public_signing_keys.key_directory_ssm_parameter_name
   log_destination_arn       = local.log_destination_arn
   log_subscription_role_arn = local.acct.log_subscription_role_arn
+  enable_api_data_trace     = var.enable_api_data_trace
 
   kms_key_arn        = module.kms.key_arn
   function_s3_bucket = local.acct.s3_buckets["lambda_function_artefacts"]["id"]

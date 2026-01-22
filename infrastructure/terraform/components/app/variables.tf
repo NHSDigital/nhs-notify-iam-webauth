@@ -229,3 +229,9 @@ variable "observability_account_id" {
   type        = string
   description = "The Observability Account ID that needs access"
 }
+
+variable "enable_api_data_trace" {
+  type        = bool
+  description = "Enable API Gateway data trace logging"
+  default     = false
+}
