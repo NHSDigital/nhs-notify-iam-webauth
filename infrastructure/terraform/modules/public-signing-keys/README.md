@@ -37,7 +37,7 @@
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_lambda_jwks_key_rotation"></a> [lambda\_jwks\_key\_rotation](#module\_lambda\_jwks\_key\_rotation) | https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.20/terraform-lambda.zip | n/a |
+| <a name="module_lambda_jwks_key_rotation"></a> [lambda\_jwks\_key\_rotation](#module\_lambda\_jwks\_key\_rotation) | https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.29/terraform-lambda.zip | n/a |
 | <a name="module_s3bucket_cf_logs"></a> [s3bucket\_cf\_logs](#module\_s3bucket\_cf\_logs) | https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.20/terraform-s3bucket.zip | n/a |
 | <a name="module_s3bucket_public_signing_keys"></a> [s3bucket\_public\_signing\_keys](#module\_s3bucket\_public\_signing\_keys) | https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.20/terraform-s3bucket.zip | n/a |
 ## Outputs
