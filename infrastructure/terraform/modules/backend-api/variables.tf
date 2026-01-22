@@ -90,3 +90,9 @@ variable "function_s3_bucket" {
   type        = string
   description = "Name of S3 bucket to upload lambda artefacts to"
 }
+
+variable "enable_api_data_trace" {
+  type        = bool
+  description = "Enable API Gateway data trace logging"
+  default     = false
+}
