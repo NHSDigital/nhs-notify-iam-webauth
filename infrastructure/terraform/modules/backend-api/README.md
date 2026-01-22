@@ -13,6 +13,7 @@ No requirements.
 | <a name="input_cis2_url"></a> [cis2\_url](#input\_cis2\_url) | CSI from the parent component | `string` | n/a | yes |
 | <a name="input_component"></a> [component](#input\_component) | The variable encapsulating the name of this component | `string` | `"api"` | no |
 | <a name="input_csi"></a> [csi](#input\_csi) | CSI from the parent component | `string` | n/a | yes |
+| <a name="input_enable_api_data_trace"></a> [enable\_api\_data\_trace](#input\_enable\_api\_data\_trace) | Enable API Gateway data trace logging | `bool` | `false` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | The name of the tfscaffold environment | `string` | n/a | yes |
 | <a name="input_filter_pattern"></a> [filter\_pattern](#input\_filter\_pattern) | Filter pattern to use for the log subscription filter | `string` | `""` | no |
 | <a name="input_function_s3_bucket"></a> [function\_s3\_bucket](#input\_function\_s3\_bucket) | Name of S3 bucket to upload lambda artefacts to | `string` | n/a | yes |
@@ -28,8 +29,8 @@ No requirements.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_authorize_lambda"></a> [authorize\_lambda](#module\_authorize\_lambda) | https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.20/terraform-lambda.zip | n/a |
-| <a name="module_token_lambda"></a> [token\_lambda](#module\_token\_lambda) | https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.20/terraform-lambda.zip | n/a |
+| <a name="module_authorize_lambda"></a> [authorize\_lambda](#module\_authorize\_lambda) | https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.29/terraform-lambda.zip | n/a |
+| <a name="module_token_lambda"></a> [token\_lambda](#module\_token\_lambda) | https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.29/terraform-lambda.zip | n/a |
 ## Outputs
 
 | Name | Description |

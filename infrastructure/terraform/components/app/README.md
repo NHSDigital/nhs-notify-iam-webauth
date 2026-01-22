@@ -35,6 +35,7 @@
 | <a name="input_destination_vault_arn"></a> [destination\_vault\_arn](#input\_destination\_vault\_arn) | ARN of the backup vault in the destination account, if this environment should be backed up | `string` | `null` | no |
 | <a name="input_enable_amplify_basic_auth"></a> [enable\_amplify\_basic\_auth](#input\_enable\_amplify\_basic\_auth) | Enable a basic set of credentials in the form of a dynamically generated username and password for the amplify app branches. Not intended for production use | `bool` | `true` | no |
 | <a name="input_enable_amplify_branch_auto_build"></a> [enable\_amplify\_branch\_auto\_build](#input\_enable\_amplify\_branch\_auto\_build) | Enable automatic building of branches | `bool` | `false` | no |
+| <a name="input_enable_api_data_trace"></a> [enable\_api\_data\_trace](#input\_enable\_api\_data\_trace) | Enable API Gateway data trace logging | `bool` | `false` | no |
 | <a name="input_enable_cis2_idp"></a> [enable\_cis2\_idp](#input\_enable\_cis2\_idp) | Switch to enable the CIS2 Cognito federation | `bool` | `true` | no |
 | <a name="input_enable_cognito_built_in_idp"></a> [enable\_cognito\_built\_in\_idp](#input\_enable\_cognito\_built\_in\_idp) | Enable the use of Cognito as an IDP; CIS2 is preferred | `bool` | `false` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | The name of the tfscaffold environment | `string` | n/a | yes |
@@ -57,7 +58,7 @@
 | <a name="module_backend_api"></a> [backend\_api](#module\_backend\_api) | ../../modules/backend-api | n/a |
 | <a name="module_cognito_triggers"></a> [cognito\_triggers](#module\_cognito\_triggers) | ../../modules/cognito-triggers | n/a |
 | <a name="module_kms"></a> [kms](#module\_kms) | https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.20/terraform-kms.zip | n/a |
-| <a name="module_lambda_backup_cognito_id"></a> [lambda\_backup\_cognito\_id](#module\_lambda\_backup\_cognito\_id) | https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.20/terraform-lambda.zip | n/a |
+| <a name="module_lambda_backup_cognito_id"></a> [lambda\_backup\_cognito\_id](#module\_lambda\_backup\_cognito\_id) | https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.29/terraform-lambda.zip | n/a |
 | <a name="module_nhse_backup_vault"></a> [nhse\_backup\_vault](#module\_nhse\_backup\_vault) | https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.25/terraform-aws-backup-source.zip | n/a |
 | <a name="module_public_signing_keys"></a> [public\_signing\_keys](#module\_public\_signing\_keys) | ../../modules/public-signing-keys | n/a |
 | <a name="module_s3bucket_cognito_backup"></a> [s3bucket\_cognito\_backup](#module\_s3bucket\_cognito\_backup) | https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.20/terraform-s3bucket.zip | n/a |
