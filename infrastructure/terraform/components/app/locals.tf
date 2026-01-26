@@ -22,7 +22,7 @@ locals {
   cis2_idp_name             = "CIS2-${var.cis2_environment}"
   cognito_idp               = var.enable_cognito_built_in_idp ? ["COGNITO"] : []
   cis2_idp                  = var.enable_cis2_idp ? [local.cis2_idp_name] : []
-  use_custom_cognito_domain = var.branch_name == "main"
+  use_custom_cognito_domain = var.branch_name == "main" && !var.disable_custom_cognito_domain
 
   log_destination_arn = "arn:aws:logs:${var.region}:${var.observability_account_id}:destination:nhs-main-obs-firehose-logs"
 }
