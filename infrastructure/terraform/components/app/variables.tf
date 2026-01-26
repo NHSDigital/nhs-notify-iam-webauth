@@ -235,3 +235,9 @@ variable "enable_api_data_trace" {
   description = "Enable API Gateway data trace logging"
   default     = false
 }
+
+variable "disable_custom_cognito_domain" {
+  type        = bool
+  description = "Do not create a custom cognito domain for the user pool"
+  default     = false
+}
