@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@aws-amplify/adapter-nextjs": "^1.5.6",
+    "@aws-amplify/adapter-nextjs": "^1.7.1",
     "@aws-amplify/auth": "^6.11.3",
     "@aws-amplify/client-config": "^1.7.0",
     "@aws-amplify/plugin-types": "^1.8.1",
@@ -12,7 +12,7 @@
     "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",
     "markdown-to-jsx": "^7.7.13",
-    "next": "^15.5.9",
+    "next": "^15.5.11",
     "nhsuk-frontend": "^10.1.0",
     "nhsuk-react-components": "^5.0.0",
     "path": "^0.12.7",
@@ -36,7 +36,6 @@
     "jest-html-reporter": "^3.10.2",
     "jest-mock-extended": "^3.0.7",
     "jsonwebtoken": "^9.0.2",
-    "pm2": "^5.4.3",
     "sass": "^1.86.0",
     "ts-jest": "^29.3.0",
     "wait-on": "^8.0.5"
@@ -48,7 +47,6 @@
   },
   "private": true,
   "scripts": {
-    "app:start": "pm2 start npm -- start",
     "app:stop": "pm2 kill",
     "app:wait": "wait-on -l http://localhost:3000/auth",
     "build": "next build",
