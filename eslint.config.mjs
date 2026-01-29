@@ -20,26 +20,21 @@ import {
 } from 'eslint-config-airbnb-extended';
 import { rules as prettierConfigRules } from 'eslint-config-prettier';
 
-import { dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { FlatCompat } from '@eslint/eslintrc';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
-
 export default defineConfig([
   globalIgnores([
     '**/*/coverage/*',
     '**/.build',
+    '**/.next',
     '**/node_modules',
     '**/dist',
     '**/test-results',
     '**/playwright-report*',
     'eslint.config.mjs',
+    '**/public/**/*.js',
+    '**/next.config.js',
+    '**/next-env.d.ts',
+    '**/amplify_outputs.json',
+    '**/jestamplify_outputs.json',
   ]),
 
   //imports
@@ -134,6 +129,12 @@ export default defineConfig([
   airbnbPlugins.react,
   airbnbPlugins.reactHooks,
   airbnbPlugins.reactA11y,
+  {
+    // React 17+ with new JSX transform doesn't require React in scope
+    rules: {
+      'react/react-in-jsx-scope': 0,
+    },
+  },
 
   // jest
   jest.configs['flat/recommended'],
@@ -168,20 +169,6 @@ export default defineConfig([
     files: ['**/*.html'],
     plugins: { html },
   },
-
-  // Next.js
-  ...compat.config({
-    extends: ['next', 'next/core-web-vitals', 'next/typescript'],
-    settings: {
-      next: {
-        rootDir: 'frontend',
-      },
-    },
-    rules: {
-      // needed because next lint rules look for a pages directory
-      '@next/next/no-html-link-for-pages': 0,
-    },
-  }),
 
   // json
   {
@@ -261,7 +248,7 @@ export default defineConfig([
       'no-await-in-loop': 0,
       'no-plusplus': [2, { allowForLoopAfterthoughts: true }],
       'unicorn/prefer-top-level-await': 0, // top level await is not available in commonjs
-      'react/no-array-index-key': 0 // OK for static lists, however using dynamic keys with dynamic lists can cause unnecessary rerenders
+      'react/no-array-index-key': 0, // OK for static lists, however using dynamic keys with dynamic lists can cause unnecessary rerenders
     },
   },
 ]);
