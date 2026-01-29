@@ -20,6 +20,4 @@ wait $APP_PID 2>/dev/null || true
 mkdir -p ./tests/acceptance-test-report
 cp -r ./.reports/accessibility tests/acceptance-test-report
 
-npm run app:stop -w frontend
-
 exit $TEST_EXIT_CODE
