@@ -10,7 +10,7 @@ export default function CIS2SignInButton({
   return (
     <Button onClick={onClick} className='notify-cis2-button' type='button'>
       <svg
-        className='nhsuk-header__logo'
+        className='notify-cis2-button__logo'
         xmlns='http://www.w3.org/2000/svg'
         viewBox='0 0 200 80'
         height='26'
