@@ -27,7 +27,7 @@ module "lambda_jwks_key_rotation" {
   function_code_dir        = "jwks-key-rotation/dist"
   function_include_common  = true
   function_module_name     = "handler"
-  runtime                  = "nodejs20.x"
+  runtime                  = "nodejs24.x"
   memory                   = 128
   timeout                  = 5
   log_level                = var.log_level

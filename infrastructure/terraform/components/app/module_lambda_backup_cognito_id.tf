@@ -25,7 +25,7 @@ module "lambda_backup_cognito_id" {
   function_include_common = true
   function_module_name    = "index"
   handler_function_name   = "handler"
-  runtime                 = "nodejs20.x"
+  runtime                 = "nodejs24.x"
   memory                  = 128
   timeout                 = 5
   log_level               = var.log_level

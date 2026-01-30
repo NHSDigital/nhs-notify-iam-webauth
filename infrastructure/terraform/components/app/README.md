@@ -33,6 +33,7 @@
 | <a name="input_component"></a> [component](#input\_component) | The variable encapsulating the name of this component | `string` | `"app"` | no |
 | <a name="input_default_tags"></a> [default\_tags](#input\_default\_tags) | A map of default tags to apply to all taggable resources within the component | `map(string)` | `{}` | no |
 | <a name="input_destination_vault_arn"></a> [destination\_vault\_arn](#input\_destination\_vault\_arn) | ARN of the backup vault in the destination account, if this environment should be backed up | `string` | `null` | no |
+| <a name="input_disable_custom_cognito_domain"></a> [disable\_custom\_cognito\_domain](#input\_disable\_custom\_cognito\_domain) | Do not create a custom cognito domain for the user pool | `bool` | `false` | no |
 | <a name="input_enable_amplify_basic_auth"></a> [enable\_amplify\_basic\_auth](#input\_enable\_amplify\_basic\_auth) | Enable a basic set of credentials in the form of a dynamically generated username and password for the amplify app branches. Not intended for production use | `bool` | `true` | no |
 | <a name="input_enable_amplify_branch_auto_build"></a> [enable\_amplify\_branch\_auto\_build](#input\_enable\_amplify\_branch\_auto\_build) | Enable automatic building of branches | `bool` | `false` | no |
 | <a name="input_enable_api_data_trace"></a> [enable\_api\_data\_trace](#input\_enable\_api\_data\_trace) | Enable API Gateway data trace logging | `bool` | `false` | no |

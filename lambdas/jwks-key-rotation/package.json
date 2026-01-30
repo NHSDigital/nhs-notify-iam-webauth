@@ -17,7 +17,7 @@
     "jest-html-reporter": "^3.10.2",
     "jest-mock-extended": "^3.0.7",
     "jsonwebtoken": "^9.0.2",
-    "typescript": "^5.8.2"
+    "typescript": "^5.9.3"
   },
   "main": "handler.ts",
   "name": "jwks-key-rotation",
