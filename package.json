@@ -37,7 +37,8 @@
   "overrides": {
     "pa11y-ci": {
       "pa11y": "^8.0.0"
-    }
+    },
+    "fast-xml-parser": "^5.3.4"
   },
   "private": true,
   "scripts": {

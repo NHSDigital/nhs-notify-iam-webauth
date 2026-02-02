@@ -10,5 +10,8 @@
   "scripts": {
     "test": "jest"
   },
+  "overrides": {
+    "fast-xml-parser": "^5.3.4"
+  },
   "version": "0.0.1"
 }
