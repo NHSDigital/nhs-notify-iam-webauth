@@ -8,7 +8,10 @@
   "name": "backup-cognito-id",
   "private": true,
   "scripts": {
-    "test": "jest"
+    "lint": "eslint ./src",
+    "lint:fix": "eslint ./src --fix",
+    "test:unit": "jest",
+    "typecheck": "tsc --noEmit"
   },
   "version": "0.0.1"
 }
