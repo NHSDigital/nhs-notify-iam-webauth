@@ -163,6 +163,12 @@ export default defineConfig([
 
   // sonar
   sonarjs.configs.recommended,
+  {
+    files: ['**/__tests__/**'],
+    rules: {
+      'sonarjs/hardcoded-secret-signatures': 0,
+    },
+  },
 
   // html
   {
