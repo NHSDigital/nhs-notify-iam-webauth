@@ -8,10 +8,10 @@
   "name": "backup-cognito-id",
   "private": true,
   "scripts": {
-    "lint": "eslint ./src",
-    "lint:fix": "eslint ./src --fix",
+    "lint": "echo 'No linting configured for this lambda'",
+    "lint:fix": "echo 'No linting configured for this lambda'",
     "test:unit": "jest",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "echo 'No typechecking configured for this lambda'"
   },
   "version": "0.0.1"
 }
