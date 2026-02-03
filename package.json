@@ -1,6 +1,6 @@
 {
   "devDependencies": {
-    "@aws-sdk/client-secrets-manager": "^3.876.0",
+    "@aws-sdk/client-secrets-manager": "^3.918.0",
     "@eslint/eslintrc": "^3",
     "@stylistic/eslint-plugin": "^3.1.0",
     "@tsconfig/node24": "^24.0.4",
@@ -35,6 +35,7 @@
   },
   "name": "nhs-notify-iam-webauth",
   "overrides": {
+    "fast-xml-parser": "^5.3.4",
     "pa11y-ci": {
       "pa11y": "^8.0.0"
     }
@@ -59,6 +60,7 @@
   },
   "workspaces": [
     "frontend",
+    "lambdas/backup-cognito-id",
     "lambdas/cis2-api",
     "lambdas/cognito-triggers",
     "lambdas/jwks-key-rotation",

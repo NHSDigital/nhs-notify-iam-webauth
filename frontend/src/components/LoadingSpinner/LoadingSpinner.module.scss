@@ -1,4 +1,5 @@
-@use 'nhsuk-frontend/packages/core/settings/colours' as colours;
+@use 'sass:map';
+@use 'nhsuk-frontend/packages/core/settings/colours-palette' as nhsuk_palette;
 
 .nhsuk-loader {
   position: relative;
@@ -9,9 +10,9 @@
 
 .nhsuk-loader__spinner {
   animation: spin 2.5s linear infinite;
-  border: 10px solid colours.$color_nhsuk-grey-4;
+  border: 10px solid map.get(nhsuk_palette.$nhsuk-colours, 'grey-4');
   border-radius: 50%;
-  border-top: 10px solid colours.$color_nhsuk-blue;
+  border-top: 10px solid map.get(nhsuk_palette.$nhsuk-colours, 'blue');
   display: inline-block;
   height: 120px;
   margin: auto;
