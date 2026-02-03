@@ -49,6 +49,10 @@
   &:hover {
     background-color: nhsuk.$nhsuk-login-button-hover-colour;
   }
+
+  .notify-cis2-button__logo {
+    min-width: 6.25rem;
+  }
 }
 
 .nhsuk-header__service-logo:has(svg):not(:focus):hover::before {
