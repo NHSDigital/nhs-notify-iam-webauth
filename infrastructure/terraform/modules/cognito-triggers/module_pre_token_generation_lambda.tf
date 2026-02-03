@@ -20,7 +20,7 @@ module "pre_token_generation_lambda" {
   // function config
   memory  = 512
   timeout = 3
-  runtime = "nodejs20.x"
+  runtime = "nodejs22.x"
   lambda_env_vars = {
     CLIENT_CONFIG_PARAMETER_PATH_PREFIX = local.client_config_parameter_path_prefix
     USERS_TABLE                         = aws_dynamodb_table.users.name
