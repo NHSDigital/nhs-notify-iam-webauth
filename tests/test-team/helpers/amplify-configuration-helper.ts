@@ -15,6 +15,7 @@ export class AmplifyConfigurationHelper {
 
   constructor() {
     this.configuration = JSON.parse(
+      // eslint-disable-next-line security/detect-non-literal-fs-filename
       fs.readFileSync(
         path.resolve(__dirname, '../../../frontend/amplify_outputs.json'),
         'utf8'

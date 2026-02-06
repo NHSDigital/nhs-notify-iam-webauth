@@ -18,7 +18,7 @@ module "pre_authentication_lambda" {
 
   memory  = 512
   timeout = 3
-  runtime = "nodejs20.x"
+  runtime = "nodejs22.x"
 
   lambda_env_vars = {
     USERS_TABLE = aws_dynamodb_table.users.name

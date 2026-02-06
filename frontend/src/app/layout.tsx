@@ -42,7 +42,7 @@ export default function RootLayout({
           rel='apple-touch-icon'
           href={`${BASE_PATH}/lib/assets/favicons/apple-touch-icon-180x180.png`}
         />
-        <script src={`${BASE_PATH}/lib/nhsuk-9.1.0.min.js`} defer />
+        <script src={`${BASE_PATH}/lib/nhsuk-frontend-10.3.1.min.js`} defer />
       </head>
       <body suppressHydrationWarning>
         <script src={`${BASE_PATH}/lib/nhs-frontend-js-check.js`} defer />
