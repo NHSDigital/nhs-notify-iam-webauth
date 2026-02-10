@@ -1,10 +1,10 @@
 resource "aws_cloudwatch_event_rule" "env_destroy" {
-  count = var.enable_env_destroy_event_rule ? 1 : 0
+  count       = var.enable_env_destroy_event_rule ? 1 : 0
   name        = "${local.csi}-env-destroy"
   description = "Forwards Environment Destroy Failed events to Custom Event Bus in Observability Account"
 
   event_pattern = jsonencode({
-    "source"      = ["notify.envDestroyFailed"],
+    "source" = ["notify.envDestroyFailed"],
   })
 }
 
@@ -16,8 +16,8 @@ resource "aws_cloudwatch_event_target" "env_destroy" {
 }
 
 resource "aws_iam_role" "env_destroy" {
-  count  = var.enable_env_destroy_event_rule ? 1 : 0
-  name = "${local.csi}-env-destroy"
+  count = var.enable_env_destroy_event_rule ? 1 : 0
+  name  = "${local.csi}-env-destroy"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -32,8 +32,8 @@ resource "aws_iam_role" "env_destroy" {
 }
 
 resource "aws_iam_policy" "env_destroy" {
-  count  = var.enable_env_destroy_event_rule ? 1 : 0
-  name = "${local.csi}-env-destroy"
+  count = var.enable_env_destroy_event_rule ? 1 : 0
+  name  = "${local.csi}-env-destroy"
 
   policy = jsonencode({
     Version = "2012-10-17",

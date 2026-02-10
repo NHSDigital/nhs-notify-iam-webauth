@@ -3,11 +3,11 @@
     "@aws-amplify/adapter-nextjs": "^1.7.1",
     "@aws-amplify/auth": "^6.11.3",
     "@aws-amplify/client-config": "^1.7.0",
-    "@aws-amplify/plugin-types": "^1.8.1",
+    "@aws-amplify/plugin-types": "^1.11.2",
     "@aws-amplify/ui-react": "^6.9.4",
     "@nhs-notify-iam-webauth/utils-logger": "^0.0.1",
     "aws-amplify": "^6.15.0",
-    "axios": "^1.12.2",
+    "axios": "^1.13.5",
     "fetch-intercept": "^2.4.0",
     "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",
@@ -43,7 +43,7 @@
   },
   "name": "nhs-notify-iam-webauth-frontend",
   "overrides": {
-    "axios": "^1.12.2",
+    "axios": "^1.13.5",
     "react": "^19.0.0"
   },
   "private": true,
