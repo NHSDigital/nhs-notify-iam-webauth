@@ -1,49 +1,60 @@
 /* eslint-disable import-x/prefer-default-export */
 'use server';
 
-import type { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
-import type { RequestCookie } from 'next/dist/compiled/@edge-runtime/cookies';
+import { AuthSession } from '@aws-amplify/auth';
+import { RequestCookie } from 'next/dist/compiled/@edge-runtime/cookies';
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
-import { getSessionId } from '@/utils/amplify-utils';
+import { getSession, getSessionId } from '@/utils/amplify-utils';
 import { generateSessionCsrfToken } from '@/utils/csrf-utils';
 import { getEnvironmentVariable } from '@/utils/get-environment-variable';
 
-function isCurrentCognitoUserPoolCookie(cookie: RequestCookie) {
-  const poolIdPattern = /^CognitoIdentityServiceProvider\.([^.]+)\./;
+const POOL_CLIENT_ID = getEnvironmentVariable(
+  'NEXT_PUBLIC_USER_POOL_CLIENT_ID'
+);
 
-  const poolIdMatch = poolIdPattern.exec(cookie.name);
-  const poolId = poolIdMatch?.[1];
+const COGNITO_COOKIE_PREFIX = 'CognitoIdentityServiceProvider.';
 
-  return poolId === getEnvironmentVariable('NEXT_PUBLIC_USER_POOL_CLIENT_ID');
-}
-
-/**
- * Deletes all Cognito cookies that are not linked to the current user pool
- */
-function tidyCognitoCookies(cookieStore: ReadonlyRequestCookies) {
-  for (const cookie of cookieStore.getAll()) {
-    if (
-      cookie.name.startsWith('CognitoIdentityServiceProvider.') &&
-      !isCurrentCognitoUserPoolCookie(cookie)
-    ) {
-      console.log(cookie.name);
-      cookieStore.delete(cookie.name);
-    }
+function isIrrelevantCognitoCookie(
+  cookie: RequestCookie,
+  session?: AuthSession
+) {
+  if (!cookie.name.startsWith(COGNITO_COOKIE_PREFIX)) {
+    return false;
   }
+
+  if (!session) {
+    return true;
+  }
+
+  let expectedPrefix = `${COGNITO_COOKIE_PREFIX}${POOL_CLIENT_ID}.`;
+
+  if (session.userSub) {
+    expectedPrefix += `${session.userSub}.`;
+  }
+
+  return !cookie.name.startsWith(expectedPrefix);
 }
 
 export const GET = async (request: NextRequest) => {
-  const sessionId = await getSessionId();
+  const session = await getSession();
+
   const cookieStore = await cookies();
 
-  tidyCognitoCookies(cookieStore);
+  for (const cookie of cookieStore.getAll()) {
+    // Delete all Cognito cookies relating to other user pools / users
+    if (isIrrelevantCognitoCookie(cookie, session)) {
+      cookieStore.delete(cookie.name);
+    }
+  }
 
   let redirectPath =
     `/${request.nextUrl.searchParams.get('redirect') ?? '/templates/message-templates'}`.replace(
       /^\/+/,
       '/'
     );
+
+  const sessionId = await getSessionId();
 
   if (sessionId) {
     const csrfToken = await generateSessionCsrfToken(sessionId);

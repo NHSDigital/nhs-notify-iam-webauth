@@ -6,18 +6,18 @@ import { cookies } from 'next/headers';
 import { NextRequest } from 'next/server';
 import { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
 import { GET } from '@/app/signin/route';
-import { getSessionId } from '@/utils/amplify-utils';
+import { getSession, getSessionId } from '@/utils/amplify-utils';
 import { generateSessionCsrfToken } from '@/utils/csrf-utils';
-import { getEnvironmentVariable } from '@/utils/get-environment-variable';
 
 jest.mock('@/utils/amplify-utils');
 jest.mock('@/utils/csrf-utils');
 jest.mock('next/headers');
-jest.mock('@/utils/get-environment-variable');
+jest.mock('@/utils/get-environment-variable', () => ({
+  getEnvironmentVariable: jest.fn((name: string) => name),
+}));
 
 beforeEach(() => {
   jest.resetAllMocks();
-  jest.mocked(getEnvironmentVariable).mockImplementation((name) => name);
 });
 
 function setupMockCookieStore(mock: Partial<ReadonlyRequestCookies> = {}) {
@@ -103,31 +103,82 @@ test('retains redirect search param on /auth redirect', async () => {
   );
 });
 
-test('deletes all cognito cookies not related to the current cognito user pool client', async () => {
-  jest.mocked(getSessionId).mockResolvedValue('session-id');
-  const cookiesMock = setupMockCookieStore({
-    getAll: jest.fn(() => [
-      {
-        name: 'CognitoIdentityServiceProvider.anotherUserPoolClient.accessToken',
-        value: 'some.old.access.token',
-      },
-      {
-        name: 'CognitoIdentityServiceProvider.NEXT_PUBLIC_USER_POOL_CLIENT_ID.accessToken',
-        value: 'current.access.token',
-      },
-      {
-        name: 'non_cognito_cookie',
-        value: 'some value',
-      },
-    ]),
+describe('cognito cookie cleanup', () => {
+  const deleteSpy = jest.fn();
+
+  beforeEach(() => {
+    jest.mocked(getSessionId).mockResolvedValue('session-id');
+
+    setupMockCookieStore({
+      delete: deleteSpy,
+      getAll: jest.fn(() => [
+        {
+          name: 'CognitoIdentityServiceProvider.anotherUserPoolClient.current-user-sub.accessToken',
+          value: 'old.access.token',
+        },
+        {
+          name: 'CognitoIdentityServiceProvider.NEXT_PUBLIC_USER_POOL_CLIENT_ID.current-user-sub.accessToken',
+          value: 'current.access.token',
+        },
+        {
+          name: 'CognitoIdentityServiceProvider.NEXT_PUBLIC_USER_POOL_CLIENT_ID.another-user-sub.accessToken',
+          value: 'different.access.token',
+        },
+        {
+          name: 'non_cognito_cookie',
+          value: 'some value',
+        },
+      ]),
+    });
+  });
+  test('deletes all cognito cookies not related to the current cognito user pool client and user', async () => {
+    jest.mocked(getSession).mockResolvedValue({
+      userSub: 'current-user-sub',
+    });
+
+    const request = new NextRequest('https://test');
+
+    await GET(request);
+
+    expect(deleteSpy).toHaveBeenCalledTimes(2);
+    expect(deleteSpy).toHaveBeenCalledWith(
+      'CognitoIdentityServiceProvider.anotherUserPoolClient.current-user-sub.accessToken'
+    );
+    expect(deleteSpy).toHaveBeenCalledWith(
+      'CognitoIdentityServiceProvider.NEXT_PUBLIC_USER_POOL_CLIENT_ID.another-user-sub.accessToken'
+    );
   });
 
-  const request = new NextRequest('https://test');
+  test('deletes all cognito cookies from different user pool clients if there is no userSub on the session', async () => {
+    jest.mocked(getSession).mockResolvedValue({});
 
-  await GET(request);
+    const request = new NextRequest('https://test');
 
-  expect(cookiesMock.delete).toHaveBeenCalledTimes(1);
-  expect(cookiesMock.delete).toHaveBeenCalledWith(
-    'CognitoIdentityServiceProvider.anotherUserPoolClient.accessToken'
-  );
+    await GET(request);
+
+    expect(deleteSpy).toHaveBeenCalledTimes(1);
+    expect(deleteSpy).toHaveBeenCalledWith(
+      'CognitoIdentityServiceProvider.anotherUserPoolClient.current-user-sub.accessToken'
+    );
+  });
+
+  test('deletes all cognito cookies if there is no session', async () => {
+    const session = undefined;
+    jest.mocked(getSession).mockResolvedValue(session);
+
+    const request = new NextRequest('https://test');
+
+    await GET(request);
+
+    expect(deleteSpy).toHaveBeenCalledTimes(3);
+    expect(deleteSpy).toHaveBeenCalledWith(
+      'CognitoIdentityServiceProvider.anotherUserPoolClient.current-user-sub.accessToken'
+    );
+    expect(deleteSpy).toHaveBeenCalledWith(
+      'CognitoIdentityServiceProvider.NEXT_PUBLIC_USER_POOL_CLIENT_ID.current-user-sub.accessToken'
+    );
+    expect(deleteSpy).toHaveBeenCalledWith(
+      'CognitoIdentityServiceProvider.NEXT_PUBLIC_USER_POOL_CLIENT_ID.another-user-sub.accessToken'
+    );
+  });
 });
