@@ -29,11 +29,16 @@ function isIrrelevantCognitoCookie(
 
   let expectedPrefix = `${COGNITO_COOKIE_PREFIX}${POOL_CLIENT_ID}.`;
 
+  const lastAuthUserCookieName = `${expectedPrefix}LastAuthUser`;
+
   if (session.userSub) {
     expectedPrefix += `${session.userSub}.`;
   }
 
-  return !cookie.name.startsWith(expectedPrefix);
+  return !(
+    cookie.name === lastAuthUserCookieName ||
+    cookie.name.startsWith(expectedPrefix)
+  );
 }
 
 export const GET = async (request: NextRequest) => {

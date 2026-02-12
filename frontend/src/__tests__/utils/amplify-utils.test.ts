@@ -53,7 +53,7 @@ describe('amplify-utils', () => {
     });
   });
 
-  describe('getAccessToken', () => {
+  describe('getAccessTokenServer', () => {
     test('should return the auth token', async () => {
       fetchAuthSessionMock.mockResolvedValueOnce({
         tokens: {

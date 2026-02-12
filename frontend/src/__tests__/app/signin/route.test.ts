@@ -125,6 +125,14 @@ describe('cognito cookie cleanup', () => {
           value: 'different.access.token',
         },
         {
+          name: 'CognitoIdentityServiceProvider.NEXT_PUBLIC_USER_POOL_CLIENT_ID.LastAuthUser',
+          value: 'different.access.token',
+        },
+        {
+          name: 'CognitoIdentityServiceProvider.anotherUserPoolClient.LastAuthUser',
+          value: 'different.access.token',
+        },
+        {
           name: 'non_cognito_cookie',
           value: 'some value',
         },
@@ -140,9 +148,12 @@ describe('cognito cookie cleanup', () => {
 
     await GET(request);
 
-    expect(deleteSpy).toHaveBeenCalledTimes(2);
+    expect(deleteSpy).toHaveBeenCalledTimes(3);
     expect(deleteSpy).toHaveBeenCalledWith(
       'CognitoIdentityServiceProvider.anotherUserPoolClient.current-user-sub.accessToken'
+    );
+    expect(deleteSpy).toHaveBeenCalledWith(
+      'CognitoIdentityServiceProvider.anotherUserPoolClient.LastAuthUser'
     );
     expect(deleteSpy).toHaveBeenCalledWith(
       'CognitoIdentityServiceProvider.NEXT_PUBLIC_USER_POOL_CLIENT_ID.another-user-sub.accessToken'
@@ -156,9 +167,12 @@ describe('cognito cookie cleanup', () => {
 
     await GET(request);
 
-    expect(deleteSpy).toHaveBeenCalledTimes(1);
+    expect(deleteSpy).toHaveBeenCalledTimes(2);
     expect(deleteSpy).toHaveBeenCalledWith(
       'CognitoIdentityServiceProvider.anotherUserPoolClient.current-user-sub.accessToken'
+    );
+    expect(deleteSpy).toHaveBeenCalledWith(
+      'CognitoIdentityServiceProvider.anotherUserPoolClient.LastAuthUser'
     );
   });
 
@@ -170,7 +184,7 @@ describe('cognito cookie cleanup', () => {
 
     await GET(request);
 
-    expect(deleteSpy).toHaveBeenCalledTimes(3);
+    expect(deleteSpy).toHaveBeenCalledTimes(5);
     expect(deleteSpy).toHaveBeenCalledWith(
       'CognitoIdentityServiceProvider.anotherUserPoolClient.current-user-sub.accessToken'
     );
@@ -179,6 +193,12 @@ describe('cognito cookie cleanup', () => {
     );
     expect(deleteSpy).toHaveBeenCalledWith(
       'CognitoIdentityServiceProvider.NEXT_PUBLIC_USER_POOL_CLIENT_ID.another-user-sub.accessToken'
+    );
+    expect(deleteSpy).toHaveBeenCalledWith(
+      'CognitoIdentityServiceProvider.anotherUserPoolClient.LastAuthUser'
+    );
+    expect(deleteSpy).toHaveBeenCalledWith(
+      'CognitoIdentityServiceProvider.NEXT_PUBLIC_USER_POOL_CLIENT_ID.LastAuthUser'
     );
   });
 });
