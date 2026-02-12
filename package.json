@@ -35,7 +35,7 @@
   },
   "name": "nhs-notify-iam-webauth",
   "overrides": {
-    "fast-xml-parser": "^5.3.4",
+    "fast-xml-parser": "^5.3.5",
     "nhsuk-react-components": {
       "nhsuk-frontend": "^10.3.1"
     },
