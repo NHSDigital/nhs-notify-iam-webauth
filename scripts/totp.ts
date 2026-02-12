@@ -18,15 +18,15 @@ const ssmClient = new SSMClient({
   const parameterValue = Parameter?.Value;
 
   if (!parameterValue) {
-    throw new Error('No Value returned from SSM Parameter Store.')
+    throw new Error('No Value returned from SSM Parameter Store.');
   }
 
   const { totpSecret } = JSON.parse(parameterValue);
   if (!totpSecret) {
-    throw new Error('TOTP Secret not found in Secrets Manager.')
+    throw new Error('TOTP Secret not found in Secrets Manager.');
   }
 
   const { otp } = TOTP.generate(totpSecret);
 
-  console.log(otp) // eslint-disable-line no-console
+  console.log(otp); // eslint-disable-line no-console
 })();
