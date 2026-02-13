@@ -1,12 +1,5 @@
-import { GetSecretValueCommand, SecretsManagerClient } from '@aws-sdk/client-secrets-manager';
 import { GetParameterCommand, SSMClient } from '@aws-sdk/client-ssm';
 import { TOTP } from "totp-generator";
-
-const ssmClient = new SSMClient({
-  region: process.env.REGION,
-  retryMode: 'standard',
-  maxAttempts: 10,
-});
 
 // This script is for generating an OTP for manual CIS2 login in a Static Environment
 // Do not use it for test automation or in sandbox environments!

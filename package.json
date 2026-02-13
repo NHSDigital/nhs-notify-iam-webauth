@@ -47,7 +47,7 @@
   "scripts": {
     "build": "npm run --workspace frontend build --if-present",
     "build-lambda": "npm run --workspaces build-lambda --if-present",
-    "cis2-otp": "tsx scripts/totp.ts",
+    "cis2-totp": "tsx scripts/totp.ts",
     "create-backend-sandbox": "./scripts/create_backend_sandbox.sh",
     "destroy-backend-sandbox": "./scripts/destroy_backend_sandbox.sh",
     "dev": "npm run --workspace frontend dev --if-present",
