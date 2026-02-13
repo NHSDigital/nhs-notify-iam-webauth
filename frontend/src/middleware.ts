@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getConstants } from '@/utils/public-constants';
 
-const { COGNITO_DOMAIN } = getConstants();
+const { COGNITO_DOMAIN, USER_POOL_CLIENT_ID } = getConstants();
+
+const COGNITO_COOKIE_PREFIX = 'CognitoIdentityServiceProvider.';
 
 function getContentSecurityPolicy(nonce: string) {
   const contentSecurityPolicyDirective: Record<string, string[]> = {
@@ -49,6 +51,17 @@ export function middleware(request: NextRequest) {
     },
   });
   response.headers.set('Content-Security-Policy', csp);
+
+  const cookies = request.cookies.getAll();
+
+  for (const cookie of cookies) {
+    if (
+      cookie.name.startsWith(COGNITO_COOKIE_PREFIX) &&
+      !cookie.name.startsWith(`${COGNITO_COOKIE_PREFIX}${USER_POOL_CLIENT_ID}.`)
+    ) {
+      response.cookies.delete(cookie.name);
+    }
+  }
 
   return response;
 }

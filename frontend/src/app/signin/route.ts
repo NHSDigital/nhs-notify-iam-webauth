@@ -7,7 +7,8 @@ import { getSessionId } from '@/utils/amplify-utils';
 import { generateSessionCsrfToken } from '@/utils/csrf-utils';
 
 export const GET = async (request: NextRequest) => {
-  const sessionId = await getSessionId();
+  const sessionId = await getSessionId({ forceRefresh: true });
+
   const cookieStore = await cookies();
 
   let redirectPath =

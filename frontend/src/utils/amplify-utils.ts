@@ -24,8 +24,10 @@ export async function getAccessTokenServer(
   return session?.tokens?.accessToken?.toString();
 }
 
-export const getSessionId = async (): Promise<string | undefined> => {
-  const accessToken = await getAccessTokenServer();
+export const getSessionId = async (
+  options: FetchAuthSessionOptions = {}
+): Promise<string | undefined> => {
+  const accessToken = await getAccessTokenServer(options);
 
   if (!accessToken) {
     return undefined;

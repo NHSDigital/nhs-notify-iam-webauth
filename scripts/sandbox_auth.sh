@@ -4,17 +4,20 @@ set -euo pipefail
 
 root_dir=$(git rev-parse --show-toplevel)
 
-# expect 2 argument to the script
-if [ $# -ne 2 ]; then
-  echo 1>&2 "$0: expected 2 arguments, received $#"
+# expect 1 argument to the script
+if [ $# -ne 1 ]; then
+  echo 1>&2 "$0: expected 1 arguments, received $#"
   exit 2
 fi
 
 email=$1
-password=$2
+
+read -sp "Enter password: " password
+echo
 
 cognito_user_pool_id=$(jq -r .cognito_user_pool_id.value $root_dir/sandbox_tf_outputs.json)
 cognito_user_pool_client_id=$(jq -r .cognito_user_pool_client_id.value $root_dir/sandbox_tf_outputs.json)
+users_table_name=$(jq -r .users_table_name.value $root_dir/sandbox_tf_outputs.json)
 
 set +e # if the user doesn't exist, we expect this command to fail
 get_user_command_output=$(aws cognito-idp admin-get-user --user-pool-id "$cognito_user_pool_id" --username "$email" 2>&1)
@@ -34,15 +37,29 @@ if [[ "$get_user_command_exit_code" -ne 0 ]]; then
   echo "Get user failed - $(xargs <<< $get_user_command_output)"
   echo "Attempting to create user"
 
+  read -p "Enter Notify Client Id to associate user with: " notify_client_id
+  echo
+
   temp_password=$(gen_temp_password)
+  internal_user_id=$(uuidgen | tr '[:upper:]' '[:lower:]')
 
   aws cognito-idp admin-create-user \
     --user-pool-id "${cognito_user_pool_id}" \
     --username "${email}" \
-    --user-attributes Name=email,Value=${email} Name=email_verified,Value=True \
+    --user-attributes Name=email,Value=${email} Name=email_verified,Value=True Name=custom:nhs_notify_user_id,Value=${internal_user_id} \
     --temporary-password "${temp_password}" \
     --desired-delivery-mediums EMAIL \
     --message-action SUPPRESS
+
+  aws dynamodb put-item \
+    --table-name "$users_table_name" \
+    --item "{
+      \"PK\": {\"S\": \"INTERNAL_USER#${internal_user_id}\"},
+      \"SK\": {\"S\": \"CLIENT#${notify_client_id}\"},
+      \"client_id\": {\"S\": \"${notify_client_id}\"}
+    }"
+
+  echo "Created user with internal_user_id: $internal_user_id"
 fi
 
 declare login_password

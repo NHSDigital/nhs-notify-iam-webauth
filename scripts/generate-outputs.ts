@@ -1,4 +1,4 @@
-import { writeFileSync, readFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 
 const inputType = process.argv[2];
 
