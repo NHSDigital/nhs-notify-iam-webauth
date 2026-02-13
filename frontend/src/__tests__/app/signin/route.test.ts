@@ -6,7 +6,7 @@ import { cookies } from 'next/headers';
 import { NextRequest } from 'next/server';
 import { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
 import { GET } from '@/app/signin/route';
-import { getSession, getSessionId } from '@/utils/amplify-utils';
+import { getSessionId } from '@/utils/amplify-utils';
 import { generateSessionCsrfToken } from '@/utils/csrf-utils';
 
 jest.mock('@/utils/amplify-utils');
@@ -41,6 +41,8 @@ test('returns redirect', async () => {
   const request = new NextRequest('https://test?redirect=/redirect-url');
   const response = await GET(request);
 
+  expect(getSessionId).toHaveBeenCalledWith({ forceRefresh: true });
+
   expect(cookieSetMock).toHaveBeenCalledWith('csrf_token', 'csrf', {
     sameSite: 'strict',
     secure: true,
@@ -57,6 +59,8 @@ test('returns redirect - sanitizes redirect path', async () => {
   const request = new NextRequest('https://test?redirect=redirect-url'); // no leading slash in redirect search param value
   const response = await GET(request);
 
+  expect(getSessionId).toHaveBeenCalledWith({ forceRefresh: true });
+
   expect(response.status).toEqual(307);
   expect(response.headers.get('Location')).toEqual('/redirect-url');
 });
@@ -68,6 +72,8 @@ test('returns redirect to /templates/message-templates if no redirect given', as
 
   const request = new NextRequest('https://test');
   const response = await GET(request);
+
+  expect(getSessionId).toHaveBeenCalledWith({ forceRefresh: true });
 
   expect(response.status).toEqual(307);
   expect(response.headers.get('Location')).toEqual(
@@ -82,6 +88,8 @@ test('returns redirect to /auth if no session detected', async () => {
   const request = new NextRequest('https://test');
   const response = await GET(request);
 
+  expect(getSessionId).toHaveBeenCalledWith({ forceRefresh: true });
+
   expect(cookiesMock.delete).toHaveBeenCalledWith('csrf_token');
 
   expect(response.status).toEqual(307);
@@ -95,6 +103,8 @@ test('retains redirect search param on /auth redirect', async () => {
   const request = new NextRequest('https://test?redirect=/redirect-path');
   const response = await GET(request);
 
+  expect(getSessionId).toHaveBeenCalledWith({ forceRefresh: true });
+
   expect(cookiesMock.delete).toHaveBeenCalledWith('csrf_token');
 
   expect(response.status).toEqual(307);
@@ -104,13 +114,10 @@ test('retains redirect search param on /auth redirect', async () => {
 });
 
 describe('cognito cookie cleanup', () => {
-  const deleteSpy = jest.fn();
-
-  beforeEach(() => {
+  test('deletes all cognito cookies not related to the current cognito user pool client', async () => {
     jest.mocked(getSessionId).mockResolvedValue('session-id');
 
-    setupMockCookieStore({
-      delete: deleteSpy,
+    const cookieStore = setupMockCookieStore({
       getAll: jest.fn(() => [
         {
           name: 'CognitoIdentityServiceProvider.anotherUserPoolClient.current-user-sub.accessToken',
@@ -121,16 +128,12 @@ describe('cognito cookie cleanup', () => {
           value: 'current.access.token',
         },
         {
-          name: 'CognitoIdentityServiceProvider.NEXT_PUBLIC_USER_POOL_CLIENT_ID.another-user-sub.accessToken',
-          value: 'different.access.token',
-        },
-        {
           name: 'CognitoIdentityServiceProvider.NEXT_PUBLIC_USER_POOL_CLIENT_ID.LastAuthUser',
-          value: 'different.access.token',
+          value: 'userId1',
         },
         {
           name: 'CognitoIdentityServiceProvider.anotherUserPoolClient.LastAuthUser',
-          value: 'different.access.token',
+          value: 'userId2',
         },
         {
           name: 'non_cognito_cookie',
@@ -138,67 +141,90 @@ describe('cognito cookie cleanup', () => {
         },
       ]),
     });
+
+    const request = new NextRequest('https://test');
+
+    await GET(request);
+
+    expect(getSessionId).toHaveBeenCalledWith({ forceRefresh: true });
+
+    expect(cookieStore.delete).toHaveBeenCalledTimes(2);
+    expect(cookieStore.delete).toHaveBeenCalledWith(
+      'CognitoIdentityServiceProvider.anotherUserPoolClient.current-user-sub.accessToken'
+    );
+    expect(cookieStore.delete).toHaveBeenCalledWith(
+      'CognitoIdentityServiceProvider.anotherUserPoolClient.LastAuthUser'
+    );
   });
-  test('deletes all cognito cookies not related to the current cognito user pool client and user', async () => {
-    jest.mocked(getSession).mockResolvedValue({
-      userSub: 'current-user-sub',
+
+  test('does not delete anything if there are no irrelevant cognito cookies', async () => {
+    jest.mocked(getSessionId).mockResolvedValue('session-id');
+
+    const cookieStore = setupMockCookieStore({
+      getAll: jest.fn(() => [
+        {
+          name: 'CognitoIdentityServiceProvider.NEXT_PUBLIC_USER_POOL_CLIENT_ID.current-user-sub.accessToken',
+          value: 'current.access.token',
+        },
+        {
+          name: 'CognitoIdentityServiceProvider.NEXT_PUBLIC_USER_POOL_CLIENT_ID.LastAuthUser',
+          value: 'userId1',
+        },
+        {
+          name: 'non_cognito_cookie',
+          value: 'some value',
+        },
+      ]),
     });
 
     const request = new NextRequest('https://test');
 
     await GET(request);
 
-    expect(deleteSpy).toHaveBeenCalledTimes(3);
-    expect(deleteSpy).toHaveBeenCalledWith(
-      'CognitoIdentityServiceProvider.anotherUserPoolClient.current-user-sub.accessToken'
-    );
-    expect(deleteSpy).toHaveBeenCalledWith(
-      'CognitoIdentityServiceProvider.anotherUserPoolClient.LastAuthUser'
-    );
-    expect(deleteSpy).toHaveBeenCalledWith(
-      'CognitoIdentityServiceProvider.NEXT_PUBLIC_USER_POOL_CLIENT_ID.another-user-sub.accessToken'
-    );
+    expect(getSessionId).toHaveBeenCalledWith({ forceRefresh: true });
+
+    expect(cookieStore.delete).not.toHaveBeenCalled();
   });
 
-  test('deletes all cognito cookies from different user pool clients if there is no userSub on the session', async () => {
-    jest.mocked(getSession).mockResolvedValue({});
-
-    const request = new NextRequest('https://test');
-
-    await GET(request);
-
-    expect(deleteSpy).toHaveBeenCalledTimes(2);
-    expect(deleteSpy).toHaveBeenCalledWith(
-      'CognitoIdentityServiceProvider.anotherUserPoolClient.current-user-sub.accessToken'
-    );
-    expect(deleteSpy).toHaveBeenCalledWith(
-      'CognitoIdentityServiceProvider.anotherUserPoolClient.LastAuthUser'
-    );
-  });
-
-  test('deletes all cognito cookies if there is no session', async () => {
+  test('deletes irrelevant cognito cookies and the csrf token if there is no session', async () => {
     const session = undefined;
-    jest.mocked(getSession).mockResolvedValue(session);
+    jest.mocked(getSessionId).mockResolvedValue(session);
+
+    const cookieStore = setupMockCookieStore({
+      getAll: jest.fn(() => [
+        {
+          name: 'CognitoIdentityServiceProvider.anotherUserPoolClient.current-user-sub.accessToken',
+          value: 'old.access.token',
+        },
+        {
+          name: 'CognitoIdentityServiceProvider.anotherUserPoolClient.LastAuthUser',
+          value: 'userId2',
+        },
+        {
+          name: 'non_cognito_cookie',
+          value: 'some value',
+        },
+        {
+          name: 'csrf_token',
+          value: 'some value',
+        },
+      ]),
+    });
 
     const request = new NextRequest('https://test');
 
     await GET(request);
 
-    expect(deleteSpy).toHaveBeenCalledTimes(5);
-    expect(deleteSpy).toHaveBeenCalledWith(
+    // when called with `forceRefresh` then `getSessionId` clears the existing auth cookies
+    expect(getSessionId).toHaveBeenCalledWith({ forceRefresh: true });
+
+    expect(cookieStore.delete).toHaveBeenCalledTimes(3);
+    expect(cookieStore.delete).toHaveBeenCalledWith(
       'CognitoIdentityServiceProvider.anotherUserPoolClient.current-user-sub.accessToken'
     );
-    expect(deleteSpy).toHaveBeenCalledWith(
-      'CognitoIdentityServiceProvider.NEXT_PUBLIC_USER_POOL_CLIENT_ID.current-user-sub.accessToken'
-    );
-    expect(deleteSpy).toHaveBeenCalledWith(
-      'CognitoIdentityServiceProvider.NEXT_PUBLIC_USER_POOL_CLIENT_ID.another-user-sub.accessToken'
-    );
-    expect(deleteSpy).toHaveBeenCalledWith(
+    expect(cookieStore.delete).toHaveBeenCalledWith(
       'CognitoIdentityServiceProvider.anotherUserPoolClient.LastAuthUser'
     );
-    expect(deleteSpy).toHaveBeenCalledWith(
-      'CognitoIdentityServiceProvider.NEXT_PUBLIC_USER_POOL_CLIENT_ID.LastAuthUser'
-    );
+    expect(cookieStore.delete).toHaveBeenCalledWith('csrf_token');
   });
 });

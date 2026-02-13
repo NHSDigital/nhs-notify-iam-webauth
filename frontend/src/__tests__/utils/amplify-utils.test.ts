@@ -3,12 +3,7 @@
  */
 import { sign } from 'jsonwebtoken';
 import { fetchAuthSession } from 'aws-amplify/auth/server';
-import {
-  getAccessTokenServer,
-  getSession,
-  getSessionId,
-} from '@/utils/amplify-utils';
-import { AuthSession } from '@aws-amplify/auth';
+import { getAccessTokenServer, getSessionId } from '@/utils/amplify-utils';
 
 jest.mock('aws-amplify/auth/server');
 jest.mock('@aws-amplify/adapter-nextjs/api');
@@ -24,68 +19,37 @@ jest.mock('@amplify_outputs', () => ({
 const fetchAuthSessionMock = jest.mocked(fetchAuthSession);
 
 describe('amplify-utils', () => {
-  describe('getSession', () => {
-    test('should return the auth session', async () => {
-      const session: AuthSession = {
-        userSub: 'sub',
-        tokens: {
-          accessToken: {
-            payload: {},
-          },
+  test('getAccessTokenServer - should return the auth token', async () => {
+    fetchAuthSessionMock.mockResolvedValueOnce({
+      tokens: {
+        accessToken: {
+          toString: () => 'mockToken',
+          payload: {},
         },
-      };
-
-      fetchAuthSessionMock.mockResolvedValueOnce(session);
-
-      const result = await getSession();
-
-      expect(result).toEqual(session);
+      },
     });
 
-    test('should return undefined an error occurs', async () => {
-      fetchAuthSessionMock.mockImplementationOnce(() => {
-        throw new Error('JWT Expired');
-      });
+    const result = await getAccessTokenServer();
 
-      const result = await getSession();
-
-      expect(result).toBeUndefined();
-    });
+    expect(result).toEqual('mockToken');
   });
 
-  describe('getAccessTokenServer', () => {
-    test('should return the auth token', async () => {
-      fetchAuthSessionMock.mockResolvedValueOnce({
-        tokens: {
-          accessToken: {
-            toString: () => 'mockToken',
-            payload: {},
-          },
-        },
-      });
+  test('getAccessTokenServer - should return undefined when no auth session', async () => {
+    fetchAuthSessionMock.mockResolvedValueOnce({});
 
-      const result = await getAccessTokenServer();
+    const result = await getAccessTokenServer();
 
-      expect(result).toEqual('mockToken');
+    expect(result).toBeUndefined();
+  });
+
+  test('getAccessTokenServer - should return undefined an error occurs', async () => {
+    fetchAuthSessionMock.mockImplementationOnce(() => {
+      throw new Error('JWT Expired');
     });
 
-    test('should return undefined when no auth session', async () => {
-      fetchAuthSessionMock.mockResolvedValueOnce({});
+    const result = await getAccessTokenServer();
 
-      const result = await getAccessTokenServer();
-
-      expect(result).toBeUndefined();
-    });
-
-    test('should return undefined an error occurs', async () => {
-      fetchAuthSessionMock.mockImplementationOnce(() => {
-        throw new Error('JWT Expired');
-      });
-
-      const result = await getAccessTokenServer();
-
-      expect(result).toBeUndefined();
-    });
+    expect(result).toBeUndefined();
   });
 
   describe('getSessionId', () => {

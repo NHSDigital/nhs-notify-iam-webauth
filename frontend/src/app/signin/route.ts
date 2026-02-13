@@ -1,11 +1,9 @@
 /* eslint-disable import-x/prefer-default-export */
 'use server';
 
-import { AuthSession } from '@aws-amplify/auth';
-import { RequestCookie } from 'next/dist/compiled/@edge-runtime/cookies';
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
-import { getSession, getSessionId } from '@/utils/amplify-utils';
+import { getSessionId } from '@/utils/amplify-utils';
 import { generateSessionCsrfToken } from '@/utils/csrf-utils';
 import { getEnvironmentVariable } from '@/utils/get-environment-variable';
 
@@ -15,42 +13,17 @@ const POOL_CLIENT_ID = getEnvironmentVariable(
 
 const COGNITO_COOKIE_PREFIX = 'CognitoIdentityServiceProvider.';
 
-function isIrrelevantCognitoCookie(
-  cookie: RequestCookie,
-  session?: AuthSession
-) {
-  if (!cookie.name.startsWith(COGNITO_COOKIE_PREFIX)) {
-    return false;
-  }
-
-  if (!session) {
-    return true;
-  }
-
-  let expectedPrefix = `${COGNITO_COOKIE_PREFIX}${POOL_CLIENT_ID}.`;
-
-  const lastAuthUserCookieName = `${expectedPrefix}LastAuthUser`;
-
-  if (session.userSub) {
-    expectedPrefix += `${session.userSub}.`;
-  }
-
-  return !(
-    cookie.name === lastAuthUserCookieName ||
-    cookie.name.startsWith(expectedPrefix)
-  );
-}
-
 export const GET = async (request: NextRequest) => {
-  const session = await getSession({ forceRefresh: true });
+  const sessionId = await getSessionId({ forceRefresh: true });
 
   const cookieStore = await cookies();
 
   for (const cookie of cookieStore.getAll()) {
-    // Delete all Cognito cookies relating to other user pools / users
-    if (isIrrelevantCognitoCookie(cookie, session)) {
+    if (
+      cookie.name.startsWith(COGNITO_COOKIE_PREFIX) &&
+      !cookie.name.startsWith(`${COGNITO_COOKIE_PREFIX}${POOL_CLIENT_ID}.`)
+    )
       cookieStore.delete(cookie.name);
-    }
   }
 
   let redirectPath =
@@ -58,8 +31,6 @@ export const GET = async (request: NextRequest) => {
       /^\/+/,
       '/'
     );
-
-  const sessionId = await getSessionId();
 
   if (sessionId) {
     const csrfToken = await generateSessionCsrfToken(sessionId);

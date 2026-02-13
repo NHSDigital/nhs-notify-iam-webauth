@@ -35,6 +35,7 @@ function SignIn() {
         await fetchAuthSession({ forceRefresh: true });
       } catch {
         // Session is invalid, Amplify will update authStatus
+        // Unauthenticated case handled in other `useEffect`
       } finally {
         setSessionValidated(true);
       }

@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers';
 import { createServerRunner } from '@aws-amplify/adapter-nextjs';
 import { fetchAuthSession } from 'aws-amplify/auth/server';
-import { AuthSession, FetchAuthSessionOptions, JWT } from '@aws-amplify/auth';
+import { FetchAuthSessionOptions, JWT } from '@aws-amplify/auth';
 import { jwtDecode } from 'jwt-decode';
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -11,29 +11,23 @@ export const { runWithAmplifyServerContext } = createServerRunner({
   config,
 });
 
-export async function getSession(
-  options: FetchAuthSessionOptions = {}
-): Promise<AuthSession | undefined> {
-  try {
-    return await runWithAmplifyServerContext({
-      nextServerContext: { cookies },
-      operation: (ctx) => fetchAuthSession(ctx, options),
-    });
-  } catch {
-    return undefined;
-  }
-}
-
 export async function getAccessTokenServer(
   options: FetchAuthSessionOptions = {}
 ): Promise<string | undefined> {
-  const session = await getSession(options);
+  const session = await runWithAmplifyServerContext({
+    nextServerContext: { cookies },
+    operation: (ctx) => fetchAuthSession(ctx, options),
+  }).catch(() => {
+    // no-op
+  });
 
   return session?.tokens?.accessToken?.toString();
 }
 
-export const getSessionId = async (): Promise<string | undefined> => {
-  const accessToken = await getAccessTokenServer();
+export const getSessionId = async (
+  options: FetchAuthSessionOptions = {}
+): Promise<string | undefined> => {
+  const accessToken = await getAccessTokenServer(options);
 
   if (!accessToken) {
     return undefined;
