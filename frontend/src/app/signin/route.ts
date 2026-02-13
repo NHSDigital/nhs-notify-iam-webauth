@@ -42,7 +42,7 @@ function isIrrelevantCognitoCookie(
 }
 
 export const GET = async (request: NextRequest) => {
-  const session = await getSession();
+  const session = await getSession({ forceRefresh: true });
 
   const cookieStore = await cookies();
 
