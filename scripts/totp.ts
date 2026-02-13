@@ -16,7 +16,7 @@ import { TOTP } from "totp-generator";
 
   const { totpSecret } = JSON.parse(parameterValue);
   if (!totpSecret) {
-    throw new Error('TOTP Secret not found in Secrets Manager.');
+    throw new Error('TOTP Secret not found in parameter value.');
   }
 
   const { otp } = TOTP.generate(totpSecret);
