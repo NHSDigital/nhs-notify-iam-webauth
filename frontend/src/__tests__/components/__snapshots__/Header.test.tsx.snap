@@ -18,7 +18,7 @@ exports[`Header component renders component correctly 1`] = `
           aria-label="NHS Notify templates"
           class="nhsuk-header__service-logo"
           data-testid="header-logo-service-link"
-          href="/templates/create-and-submit-templates"
+          href="http://localhost:3000/templates/create-and-submit-templates"
         >
           <svg
             class="nhsuk-header__logo"
