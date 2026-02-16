@@ -1,6 +1,6 @@
 {
   "devDependencies": {
-    "@aws-sdk/client-secrets-manager": "^3.918.0",
+    "@aws-sdk/client-ssm": "^3.987.0",
     "@eslint/eslintrc": "^3",
     "@stylistic/eslint-plugin": "^3.1.0",
     "@tsconfig/node22": "^22.0.5",
@@ -35,7 +35,7 @@
   },
   "name": "nhs-notify-iam-webauth",
   "overrides": {
-    "fast-xml-parser": "^5.3.4",
+    "fast-xml-parser": "^5.3.5",
     "nhsuk-react-components": {
       "nhsuk-frontend": "^10.3.1"
     },
@@ -47,7 +47,7 @@
   "scripts": {
     "build": "npm run --workspace frontend build --if-present",
     "build-lambda": "npm run --workspaces build-lambda --if-present",
-    "cis2-otp": "tsx scripts/totp.ts",
+    "cis2-totp": "tsx scripts/totp.ts",
     "create-backend-sandbox": "./scripts/create_backend_sandbox.sh",
     "destroy-backend-sandbox": "./scripts/destroy_backend_sandbox.sh",
     "dev": "npm run --workspace frontend dev --if-present",
