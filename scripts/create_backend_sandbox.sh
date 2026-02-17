@@ -9,7 +9,7 @@ if [ $# -ne 1 ]; then
 fi
 
 ENVIRONMENT=$1
-COMPONENT="sandbox"
+COMPONENT="sbx"
 AWS_ACCOUNT_ID="$(aws sts get-caller-identity --query Account --output text)"
 AWS_REGION="eu-west-2"
 PROJECT="nhs-notify"
