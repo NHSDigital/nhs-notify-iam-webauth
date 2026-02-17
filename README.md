@@ -16,7 +16,7 @@ Read more about the technical design at [REFCOM-2024-007: WebUI User Auth](https
 
 ### Development and Tools
 
-- Install `asdf` [HERE](https://asdf-vm.com/guide/getting-started.html#_2-download-asdf). We use this tool to manage the required version for packages (this can be found in the `.tool-versions` file at the root of the project) on the project. You can use other tools usch as `brew`, `apt`, etc, but you will be risking having different package versions to other developers.
+- [Install `asdf` HERE](https://asdf-vm.com/guide/getting-started.html#_2-download-asdf). We use this tool to manage the required version for packages (this can be found in the `.tool-versions` file at the root of the project) on the project. You can use other tools usch as `brew`, `apt`, etc, but you will be risking having different package versions to other developers.
 - Then you need to install the following plugins:
 
   ```shell
@@ -63,11 +63,20 @@ You can point the app at any existing Cognito instance, not necessarily one you 
 
 ### Setup a user in Cognito
 
-In order to use a new Cognito user pool, you can run the sandbox auth script with your chosen email and password:
+#### Script
+
+In order to use a new Cognito user pool, you can run the sandbox auth script with your chosen email:
 
 ```bash
-./scripts/sandbox_auth.sh email password
+./scripts/sandbox_auth.sh email
 ```
+
+The script will ask for your users password.
+If the user exists, it will sign in with this password.
+If no user exists for the email, it will create one in Cognito. In this case, it will also ask for a notify client id to associate the user with.
+You can then use this email/password to sign into the sandbox environment via the UI
+
+#### Manual setup
 
 You can also manually create a user in that user pool:
 

@@ -1,5 +1,6 @@
-import { render } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { fetchAuthSession } from '@aws-amplify/auth';
 import { UseAuthenticator, useAuthenticator } from '@aws-amplify/ui-react';
 import JsCookie from 'js-cookie';
 import { RedirectType, redirect } from 'next/navigation';
@@ -37,57 +38,83 @@ jest.mock('@/components/CIS2SignInButton/CIS2SignInButton', () => ({
 
 jest.mock('@/utils/federated-sign-in');
 
+jest.mock('@aws-amplify/auth');
+
 const mockFederatedSignIn = jest.mocked(federatedSignIn);
 const mockUseAuthenticator = jest.mocked(useAuthenticator);
 const mockRedirect = jest.mocked(redirect);
+const mockFetchAuthSession = jest.mocked(fetchAuthSession);
 
 describe('SignInPage', () => {
   const originalCognitoIdpSetting = process.env.NEXT_PUBLIC_ENABLE_COGNITO_IDP;
+
+  beforeEach(() => {
+    mockFetchAuthSession.mockResolvedValue({});
+    mockGetSearchParams.mockReturnValue(null);
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
   it('renders', async () => {
     process.env.NEXT_PUBLIC_ENABLE_COGNITO_IDP = 'false';
 
     const container = render(<SignInPage />);
 
-    expect(JsCookie.remove).toHaveBeenCalledWith('csrf_token');
+    expect(fetchAuthSession).toHaveBeenCalledWith({ forceRefresh: true });
+
+    await waitFor(() => {
+      expect(JsCookie.remove).toHaveBeenCalledWith('csrf_token');
+    });
 
     expect(container.asFragment()).toMatchSnapshot();
 
     process.env.NEXT_PUBLIC_ENABLE_COGNITO_IDP = originalCognitoIdpSetting;
   });
 
-  it('renders with cognito login form if env var switch is enabled', () => {
+  it('renders with cognito login form if env var switch is enabled', async () => {
     process.env.NEXT_PUBLIC_ENABLE_COGNITO_IDP = 'true';
 
     const container = render(<SignInPage />);
 
+    expect(fetchAuthSession).toHaveBeenCalledWith({ forceRefresh: true });
+
+    await waitFor(() => {
+      expect(JsCookie.remove).toHaveBeenCalledWith('csrf_token');
+    });
+
     expect(container.asFragment()).toMatchSnapshot();
 
     process.env.NEXT_PUBLIC_ENABLE_COGNITO_IDP = originalCognitoIdpSetting;
   });
 
-  it('redirects using search parameter if already signed in', () => {
-    mockUseAuthenticator.mockReturnValueOnce(
+  it('redirects using search parameter if already signed in', async () => {
+    mockUseAuthenticator.mockReturnValue(
       mockDeep<UseAuthenticator>({
         authStatus: 'authenticated',
         error: undefined,
       })
     );
 
-    mockGetSearchParams.mockReturnValueOnce('/example-redirect');
+    mockGetSearchParams.mockReturnValue('/example-redirect');
 
     render(<SignInPage />);
 
-    expect(mockRedirect).toHaveBeenCalledWith(
-      '/signin?redirect=%2Fexample-redirect',
-      RedirectType.push
-    );
+    expect(fetchAuthSession).toHaveBeenCalledWith({ forceRefresh: true });
+
+    await waitFor(() => {
+      expect(mockRedirect).toHaveBeenCalledWith(
+        '/signin?redirect=%2Fexample-redirect',
+        RedirectType.push
+      );
+    });
 
     expect(JsCookie.remove).not.toHaveBeenCalled();
   });
 
-  it('redirects if useAuthenticator has a no client error', () => {
-    mockUseAuthenticator.mockReturnValueOnce(
+  it('redirects if useAuthenticator has a no client error', async () => {
+    mockUseAuthenticator.mockReturnValue(
       mockDeep<UseAuthenticator>({
         authStatus: 'unauthenticated',
         error: 'PRE_AUTH_NO_CLIENT_FAILURE',
@@ -96,16 +123,20 @@ describe('SignInPage', () => {
 
     render(<SignInPage />);
 
-    expect(mockRedirect).toHaveBeenCalledWith(
-      '/request-to-be-added-to-a-service',
-      RedirectType.push
-    );
+    expect(fetchAuthSession).toHaveBeenCalledWith({ forceRefresh: true });
+
+    await waitFor(() => {
+      expect(mockRedirect).toHaveBeenCalledWith(
+        '/request-to-be-added-to-a-service',
+        RedirectType.push
+      );
+    });
 
     expect(JsCookie.remove).toHaveBeenCalledWith('csrf_token');
   });
 
-  it('redirects to /templates/message-templates if already signed in and there is no redirect search parameter', () => {
-    mockUseAuthenticator.mockReturnValueOnce(
+  it('redirects to /templates/message-templates if already signed in and there is no redirect search parameter', async () => {
+    mockUseAuthenticator.mockReturnValue(
       mockDeep<UseAuthenticator>({
         authStatus: 'authenticated',
         error: undefined,
@@ -114,10 +145,14 @@ describe('SignInPage', () => {
 
     render(<SignInPage />);
 
-    expect(mockRedirect).toHaveBeenCalledWith(
-      '/signin?redirect=%2Ftemplates%2Fmessage-templates',
-      RedirectType.push
-    );
+    expect(fetchAuthSession).toHaveBeenCalledWith({ forceRefresh: true });
+
+    await waitFor(() => {
+      expect(mockRedirect).toHaveBeenCalledWith(
+        '/signin?redirect=%2Ftemplates%2Fmessage-templates',
+        RedirectType.push
+      );
+    });
   });
 
   describe('CIS2 login', () => {
@@ -138,7 +173,7 @@ describe('SignInPage', () => {
     it('sets redirect based on search params when clicking cis2 button', async () => {
       const user = userEvent.setup();
 
-      mockGetSearchParams.mockReturnValueOnce('/example-redirect');
+      mockGetSearchParams.mockReturnValue('/example-redirect');
 
       const container = render(<SignInPage />);
 

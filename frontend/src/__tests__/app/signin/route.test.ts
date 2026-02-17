@@ -13,20 +13,33 @@ jest.mock('@/utils/amplify-utils');
 jest.mock('@/utils/csrf-utils');
 jest.mock('next/headers');
 
+beforeEach(() => {
+  jest.resetAllMocks();
+});
+
+function setupMockCookieStore(mock: Partial<ReadonlyRequestCookies> = {}) {
+  const cookieStore = mockDeep<ReadonlyRequestCookies>({
+    getAll: jest.fn(() => []),
+    ...mock,
+  });
+
+  jest.mocked(cookies).mockResolvedValue(cookieStore);
+
+  return cookieStore;
+}
+
 test('returns redirect', async () => {
   jest.mocked(getSessionId).mockResolvedValue('session-id');
   jest.mocked(generateSessionCsrfToken).mockResolvedValue('csrf');
 
-  const cookieSetMock = jest.fn();
-  const cookiesMock = mockDeep<ReadonlyRequestCookies>({
-    set: cookieSetMock,
-  });
-  jest.mocked(cookies).mockResolvedValue(cookiesMock);
+  const cookieStore = setupMockCookieStore();
 
   const request = new NextRequest('https://test?redirect=/redirect-url');
   const response = await GET(request);
 
-  expect(cookieSetMock).toHaveBeenCalledWith('csrf_token', 'csrf', {
+  expect(getSessionId).toHaveBeenCalledWith({ forceRefresh: true });
+
+  expect(cookieStore.set).toHaveBeenCalledWith('csrf_token', 'csrf', {
     sameSite: 'strict',
     secure: true,
   });
@@ -37,10 +50,12 @@ test('returns redirect', async () => {
 test('returns redirect - sanitizes redirect path', async () => {
   jest.mocked(getSessionId).mockResolvedValue('session-id');
   jest.mocked(generateSessionCsrfToken).mockResolvedValue('csrf');
-  jest.mocked(cookies).mockResolvedValue(mockDeep<ReadonlyRequestCookies>());
+  setupMockCookieStore();
 
   const request = new NextRequest('https://test?redirect=redirect-url'); // no leading slash in redirect search param value
   const response = await GET(request);
+
+  expect(getSessionId).toHaveBeenCalledWith({ forceRefresh: true });
 
   expect(response.status).toEqual(307);
   expect(response.headers.get('Location')).toEqual('/redirect-url');
@@ -49,10 +64,12 @@ test('returns redirect - sanitizes redirect path', async () => {
 test('returns redirect to /templates/message-templates if no redirect given', async () => {
   jest.mocked(getSessionId).mockResolvedValue('session-id');
   jest.mocked(generateSessionCsrfToken).mockResolvedValue('csrf');
-  jest.mocked(cookies).mockResolvedValue(mockDeep<ReadonlyRequestCookies>({}));
+  setupMockCookieStore();
 
   const request = new NextRequest('https://test');
   const response = await GET(request);
+
+  expect(getSessionId).toHaveBeenCalledWith({ forceRefresh: true });
 
   expect(response.status).toEqual(307);
   expect(response.headers.get('Location')).toEqual(
@@ -62,11 +79,12 @@ test('returns redirect to /templates/message-templates if no redirect given', as
 
 test('returns redirect to /auth if no session detected', async () => {
   jest.mocked(getSessionId).mockResolvedValue('');
-  const cookiesMock = mockDeep<ReadonlyRequestCookies>();
-  jest.mocked(cookies).mockResolvedValue(cookiesMock);
+  const cookiesMock = setupMockCookieStore();
 
   const request = new NextRequest('https://test');
   const response = await GET(request);
+
+  expect(getSessionId).toHaveBeenCalledWith({ forceRefresh: true });
 
   expect(cookiesMock.delete).toHaveBeenCalledWith('csrf_token');
 
@@ -76,11 +94,12 @@ test('returns redirect to /auth if no session detected', async () => {
 
 test('retains redirect search param on /auth redirect', async () => {
   jest.mocked(getSessionId).mockResolvedValue('');
-  const cookiesMock = mockDeep<ReadonlyRequestCookies>();
-  jest.mocked(cookies).mockResolvedValue(cookiesMock);
+  const cookiesMock = setupMockCookieStore();
 
   const request = new NextRequest('https://test?redirect=/redirect-path');
   const response = await GET(request);
+
+  expect(getSessionId).toHaveBeenCalledWith({ forceRefresh: true });
 
   expect(cookiesMock.delete).toHaveBeenCalledWith('csrf_token');
 

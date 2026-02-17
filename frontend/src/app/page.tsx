@@ -1,6 +1,6 @@
 'use client';
 
-import React, { Suspense, useEffect } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { RedirectType, redirect, useSearchParams } from 'next/navigation';
 import { Authenticator, useAuthenticator } from '@aws-amplify/ui-react';
 import JsCookie from 'js-cookie';
@@ -13,6 +13,7 @@ import CIS2SignInButton from '@/components/CIS2SignInButton/CIS2SignInButton';
 import content from '@/content/content';
 import styles from '@/app/page.module.scss';
 import { noClientErrorTag } from '@/utils/public-constants';
+import { fetchAuthSession } from '@aws-amplify/auth';
 
 function SignIn() {
   const {
@@ -25,22 +26,48 @@ function SignIn() {
 
   const redirectPath = searchParams.get('redirect');
 
-  useEffect(() => {
-    if (error && error.includes(noClientErrorTag)) {
-      redirect(pageContent.noClientRedirectHref, RedirectType.push);
-    }
+  const [sessionValidated, setSessionValidated] = useState(false);
 
-    if (authStatus === 'authenticated') {
-      redirect(
-        path.normalize(
-          `/signin?redirect=${encodeURIComponent(redirectPath ?? '/templates/message-templates')}`
-        ),
-        RedirectType.push
-      );
-    } else if (authStatus === 'unauthenticated') {
-      JsCookie.remove('csrf_token');
+  useEffect(() => {
+    // Force Amplify to validate the session against Cognito
+    const validateSession = async () => {
+      try {
+        await fetchAuthSession({ forceRefresh: true });
+      } catch {
+        // Session is invalid, Amplify will update authStatus
+        // Unauthenticated case handled in other `useEffect`
+      } finally {
+        setSessionValidated(true);
+      }
+    };
+
+    validateSession();
+  }, []);
+
+  useEffect(() => {
+    if (sessionValidated) {
+      if (error && error.includes(noClientErrorTag)) {
+        redirect(pageContent.noClientRedirectHref, RedirectType.push);
+      }
+
+      if (authStatus === 'authenticated') {
+        redirect(
+          path.normalize(
+            `/signin?redirect=${encodeURIComponent(redirectPath ?? '/templates/message-templates')}`
+          ),
+          RedirectType.push
+        );
+      } else if (authStatus === 'unauthenticated') {
+        JsCookie.remove('csrf_token');
+      }
     }
-  }, [authStatus, error, redirectPath, pageContent.noClientRedirectHref]);
+  }, [
+    sessionValidated,
+    authStatus,
+    error,
+    redirectPath,
+    pageContent.noClientRedirectHref,
+  ]);
 
   return (
     <div className='nhsuk-grid-row'>
