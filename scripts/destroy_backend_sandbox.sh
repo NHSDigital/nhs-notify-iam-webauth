@@ -25,7 +25,7 @@ cd $terraform_dir
 ./bin/terraform.sh \
   --project $PROJECT \
   --region $AWS_REGION \
-  --component sandbox \
+  --component sbx \
   --environment $identifier \
   --group $GROUP \
   --action destroy \
