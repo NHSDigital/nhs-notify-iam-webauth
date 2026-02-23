@@ -1,0 +1,23 @@
+{
+  "dependencies": {
+    "@aws-sdk/client-cognito-identity-provider": "^3.993.0",
+    "winston": "^3.19.0",
+    "yargs": "^18.0.0"
+  },
+  "description": "Migration script to migrate dev-only Cognito users from one account to another",
+  "devDependencies": {
+    "@aws-sdk/types": "3.862.0",
+    "@types/node": "^20.17.32",
+    "typescript": "^5.8.2"
+  },
+  "main": "script.ts",
+  "name": "cognito-user-migration",
+  "scripts": {
+    "lint": "eslint ./src",
+    "lint:fix": "eslint ./src --fix",
+    "run-migration": "tsx src/script.ts",
+    "test:unit": "jest",
+    "typecheck": "tsc --noEmit"
+  },
+  "version": "0.0.1"
+}
