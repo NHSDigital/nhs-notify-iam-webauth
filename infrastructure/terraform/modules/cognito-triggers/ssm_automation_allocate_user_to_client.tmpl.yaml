@@ -1,0 +1,142 @@
+schemaVersion: '0.3'
+description: |
+  # Allocate internal / external users to a client - ${CSI}
+
+  This automation assigns a user to a client by:
+  1. Verifying the user exists in Cognito
+  2. Generating a unique internal user ID
+  3. Creating database records linking the user to the client
+  4. Updating the user's Cognito profile with the internal ID
+
+  **IMPORTANT**: This automation modifies AWS Cognito user attributes and DynamoDB records.
+
+  ## Requirements
+
+  Before running, you must have:
+  - The CIS2 identifier (Cognito username) of the user to assign
+  - The Client ID to assign the user to
+
+  ## How to use
+
+  1. Enter the required information in each input box below
+  2. Click "Execute" to start the automation
+  3. Monitor progress - green ticks indicate success, red crosses indicate failures
+  4. If a step fails, review the error message and verify your inputs
+assumeRole: ${EXECUTION_ROLE_ARN}
+parameters:
+  UserId:
+    type: String
+    description: 'CIS2 identifier (Cognito Username). Example: user@nhs.net or 123456789012'
+    allowedPattern: '^[a-zA-Z0-9@._-]+$'
+  ClientId:
+    type: String
+    description: 'Client identifier. Example: 550e8400-e29b-41d4-a716-446655440000'
+mainSteps:
+  - name: AssertCognitoUserExists
+    description: Verify that the specified user exists in the Cognito User Pool
+    action: aws:executeAwsApi
+    onFailure: Abort
+    nextStep: AssertClientParameterExists
+    isEnd: false
+    inputs:
+      Service: cognito-idp
+      Api: AdminGetUser
+      UserPoolId: '${USER_POOL_ID}'
+      Username: '{{ UserId }}'
+  - name: AssertClientParameterExists
+    description: Verify that the SSM client parameter exists for the provided Client ID
+    action: aws:executeAwsApi
+    onFailure: Abort
+    nextStep: GenerateInternalUserId
+    isEnd: false
+    inputs:
+      Service: ssm
+      Api: GetParameter
+      Name: '/${CSI}/clients/{{ ClientId }}'
+  - name: GenerateInternalUserId
+    description: Generate a unique internal user identifier (UUID)
+    action: aws:executeScript
+    onFailure: Abort
+    nextStep: PutDynamoRecords
+    isEnd: false
+    inputs:
+      Runtime: python3.11
+      Handler: generate_uuid
+      Script: |
+        import uuid
+
+        def generate_uuid(event, context):
+            internal_user_id = str(uuid.uuid4())
+            return {"internalUserId": internal_user_id}
+    outputs:
+      - Name: InternalUserId
+        Selector: $.Payload.internalUserId
+        Type: String
+  - name: PutDynamoRecords
+    description: Create database records linking the user to the client
+    action: aws:executeAwsApi
+    onFailure: Abort
+    nextStep: UpdateCognitoAttribute
+    isEnd: false
+    inputs:
+      Service: dynamodb
+      Api: TransactWriteItems
+      TransactItems:
+        - Put:
+            TableName: '${DYNAMO_TABLE_NAME}'
+            Item:
+              PK:
+                S: INTERNAL_USER#{{ GenerateInternalUserId.InternalUserId }}
+              SK:
+                S: CLIENT#{{ ClientId }}
+              client_id:
+                S: '{{ ClientId }}'
+        - Put:
+            TableName: '${DYNAMO_TABLE_NAME}'
+            Item:
+              PK:
+                S: EXTERNAL_USER#{{ UserId }}
+              SK:
+                S: INTERNAL_USER#{{ GenerateInternalUserId.InternalUserId }}
+  - name: UpdateCognitoAttribute
+    description: Update the user's Cognito profile with the internal user ID
+    action: aws:executeAwsApi
+    onFailure: Abort
+    nextStep: OutputSummary
+    isEnd: false
+    inputs:
+      Service: cognito-idp
+      Api: AdminUpdateUserAttributes
+      UserPoolId: '${USER_POOL_ID}'
+      Username: '{{ UserId }}'
+      UserAttributes:
+        - Name: custom:nhs_notify_user_id
+          Value: '{{ GenerateInternalUserId.InternalUserId }}'
+  - name: OutputSummary
+    description: Display a summary of the completed allocation
+    action: aws:executeScript
+    isEnd: true
+    inputs:
+      Runtime: python3.11
+      Handler: output_summary
+      InputPayload:
+        userId: '{{ UserId }}'
+        clientId: '{{ ClientId }}'
+        internalUserId: '{{ GenerateInternalUserId.InternalUserId }}'
+      Script: |
+        def output_summary(event, context):
+            return {
+                'message': 'User allocation completed successfully',
+                'details': {
+                    'externalUserId': event['userId'],
+                    'clientId': event['clientId'],
+                    'internalUserId': event['internalUserId']
+                }
+            }
+    outputs:
+      - Name: Summary
+        Selector: $.Payload
+        Type: StringMap
+outputs:
+  - GenerateInternalUserId.InternalUserId
+  - OutputSummary.Summary
