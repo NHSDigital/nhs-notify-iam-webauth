@@ -14,10 +14,10 @@ module "public_signing_keys" {
   kms_key_arn    = local.acct.sandbox_kms_key.arn
   default_tags   = local.default_tags
 
-  dns_zone_id              = local.acct.dns_zone["id"]
-  s3_access_logs_bucket_id = local.acct.s3_buckets["access_logs"]["id"]
+  dns_zone_id                 = local.acct.dns_zone["id"]
+  s3_access_logs_bucket_id    = local.acct.s3_buckets["access_logs"]["id"]
   s3_access_logs_us_bucket_id = local.acct.s3_buckets["access_logs_us"]["id"]
-  function_s3_bucket       = local.acct.s3_buckets["lambda_function_artefacts"]["id"]
+  function_s3_bucket          = local.acct.s3_buckets["lambda_function_artefacts"]["id"]
 
   deploy_cdn                = false
   protect_public_key_bucket = false
