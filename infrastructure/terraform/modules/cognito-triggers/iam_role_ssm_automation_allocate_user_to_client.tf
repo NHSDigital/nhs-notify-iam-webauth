@@ -69,16 +69,6 @@ resource "aws_iam_policy" "ssm_automation_allocate_user" {
         ]
         Resource = "arn:aws:ssm:${var.region}:${var.aws_account_id}:parameter/${var.csi}/clients/*"
       },
-      {
-        Sid    = "CloudWatchLogsAccess"
-        Effect = "Allow"
-        Action = [
-          "logs:CreateLogGroup",
-          "logs:CreateLogStream",
-          "logs:PutLogEvents"
-        ]
-        Resource = "arn:aws:logs:${var.region}:${var.aws_account_id}:log-group:/aws/ssm/*"
-      }
     ]
   })
 }
