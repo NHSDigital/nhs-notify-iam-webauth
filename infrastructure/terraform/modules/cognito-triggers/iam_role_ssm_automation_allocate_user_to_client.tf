@@ -43,6 +43,7 @@ resource "aws_iam_policy" "ssm_automation_allocate_user" {
         Sid    = "DynamoDBWriteAccess"
         Effect = "Allow"
         Action = [
+          "dynamodb:ConditionCheckItem",
           "dynamodb:PutItem",
           "dynamodb:TransactWriteItems"
         ]

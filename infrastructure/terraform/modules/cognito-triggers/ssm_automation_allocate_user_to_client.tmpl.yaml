@@ -1,33 +1,73 @@
 schemaVersion: '0.3'
 description: |
-  # Allocate internal / external users to a client - ${CSI}
+  # Allocate a user to a client (automated runbook)
 
-  This automation assigns a user to a client by:
-  1. Verifying the user exists in Cognito
-  2. Generating a unique internal user ID
-  3. Creating database records linking the user to the client
-  4. Updating the user's Cognito profile with the internal ID
+  This runbook replaces the [manual process](https://nhsd-confluence.digital.nhs.uk/spaces/RIS/pages/1129816976/Operational+playbook+-+WebUI+-+Assigning+users+to+a+client#OperationalplaybookWebUIAssigninguserstoaclient-Allocatingausertoaclient) for linking a Cognito user to an NHS Notify client. This runbook is _only_ for assigning a client to a user for the **first time**.
 
-  **IMPORTANT**: This automation modifies AWS Cognito user attributes and DynamoDB records.
+  To reassign a user to a client you must follow a manual process.
 
-  ## Requirements
+  ## What this automation does
 
-  Before running, you must have:
-  - The CIS2 identifier (Cognito username) of the user to assign
-  - The Client ID to assign the user to
+  When you run the **Allocate user to client** automation, will:
 
-  ## How to use
+  1. Check the user exists in Cognito
+  2. Check the client exists by validating the SSM parameter path:
+      - `/${CSI}/clients/THE_CLIENT_ID_YOU_SUPPLIED`
+  3. Generate a new internal user ID (UUID)
+  4. Creates **new** user-mapping records to DynamoDB in one transaction
+  5. Update the Cognito user attribute `custom:nhs_notify_user_id` with the generated internal user ID
+  6. Return a summary of what was updated
 
-  1. Enter the required information in each input box below
-  2. Click "Execute" to start the automation
-  3. Monitor progress - green ticks indicate success, red crosses indicate failures
-  4. If a step fails, review the error message and verify your inputs
+  ## Inputs you need
+
+  - **UserId**: the user’s Cognito User name / User ID (Sub)
+  - **ClientId**: the target client identifier
+
+  ## Before you run it
+
+  - Ask the user to attempt sign-in first if needed (so they exist in Cognito).
+
+  ## How to run
+  1. Leave as 'Simple execution'
+  2. Enter input parameters:
+      - `UserId`
+      - `ClientId`
+  3. Ignore 'CloudWatch alarm - optional'
+  4. Ignore 'Tags - optional'
+  5. Click **Execute** and monitor each 'Executed step'
+
+  ## What success looks like
+
+  You should see all steps complete, and the final output includes:
+
+  - `externalUserId`
+  - `clientId`
+  - `internalUserId`
+
+  ## Troubleshooting
+
+  If an 'Executed step' has failed then click the 'Step ID' link to view the 'Execution detail'. On this screen you will see a 'VerificationErrorMessage' which contains the details of the error.
+
+  For any Errors not covered below, contact an on-support developer.
+
+  ### "AssertCognitoUserExists" step fails
+
+  #### Error: An error occurred (UserNotFoundException) when calling the AdminGetUser operation: User does not exist.
+
+  - The user is not in Cognito yet
+  - Ask the user to sign in once, then retry
+
+  ### "AssertClientParameterExists" step fails
+
+  #### Error: An error occurred (ParameterNotFound) when calling the GetParameter operation:
+
+  - The client parameter path does not exist: `/${CSI}/clients/THE_CLIENT_ID_YOU_SUPPLIED`
+  - You will need to follow the process for creating the client
 assumeRole: ${EXECUTION_ROLE_ARN}
 parameters:
   UserId:
     type: String
-    description: 'CIS2 identifier (Cognito Username). Example: user@nhs.net or 123456789012'
-    allowedPattern: '^[a-zA-Z0-9@._-]+$'
+    description: 'CIS2 identifier (Cognito User name). Example: CIS2-live_123456789101'
   ClientId:
     type: String
     description: 'Client identifier. Example: 550e8400-e29b-41d4-a716-446655440000'
@@ -84,6 +124,7 @@ mainSteps:
       TransactItems:
         - Put:
             TableName: '${DYNAMO_TABLE_NAME}'
+            ConditionExpression: attribute_not_exists(PK) AND attribute_not_exists(SK)
             Item:
               PK:
                 S: INTERNAL_USER#{{ GenerateInternalUserId.InternalUserId }}
@@ -93,6 +134,7 @@ mainSteps:
                 S: '{{ ClientId }}'
         - Put:
             TableName: '${DYNAMO_TABLE_NAME}'
+            ConditionExpression: attribute_not_exists(PK) AND attribute_not_exists(SK)
             Item:
               PK:
                 S: EXTERNAL_USER#{{ UserId }}
