@@ -31,6 +31,7 @@
 | <a name="input_protect_public_key_bucket"></a> [protect\_public\_key\_bucket](#input\_protect\_public\_key\_bucket) | Prevent bucket deletion if objects remain in the bucket.  Prevents accidental deletion of the bucket. | `bool` | `true` | no |
 | <a name="input_region"></a> [region](#input\_region) | The AWS Region | `string` | n/a | yes |
 | <a name="input_s3_access_logs_bucket_id"></a> [s3\_access\_logs\_bucket\_id](#input\_s3\_access\_logs\_bucket\_id) | S3 bucket ID for Access Logs | `string` | n/a | yes |
+| <a name="input_s3_access_logs_us_bucket_id"></a> [s3\_access\_logs\_us\_bucket\_id](#input\_s3\_access\_logs\_us\_bucket\_id) | S3 bucket ID for Access Logs in us-east-1 | `string` | n/a | yes |
 | <a name="input_send_to_firehose"></a> [send\_to\_firehose](#input\_send\_to\_firehose) | Send logs to firehose | `bool` | `true` | no |
 | <a name="input_waf_rate_limit_cdn"></a> [waf\_rate\_limit\_cdn](#input\_waf\_rate\_limit\_cdn) | The rate limit is the maximum number of CDN requests from a single IP address that are allowed in a five-minute period | `number` | `20000` | no |
 ## Modules
@@ -38,7 +39,7 @@
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_lambda_jwks_key_rotation"></a> [lambda\_jwks\_key\_rotation](#module\_lambda\_jwks\_key\_rotation) | https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.29/terraform-lambda.zip | n/a |
-| <a name="module_s3bucket_cf_logs"></a> [s3bucket\_cf\_logs](#module\_s3bucket\_cf\_logs) | https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.20/terraform-s3bucket.zip | n/a |
+| <a name="module_s3bucket_cf_logs"></a> [s3bucket\_cf\_logs](#module\_s3bucket\_cf\_logs) | https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/3.0.4/terraform-s3bucket.zip | n/a |
 | <a name="module_s3bucket_public_signing_keys"></a> [s3bucket\_public\_signing\_keys](#module\_s3bucket\_public\_signing\_keys) | https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.20/terraform-s3bucket.zip | n/a |
 ## Outputs
 
