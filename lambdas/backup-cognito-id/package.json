@@ -1,7 +1,7 @@
 {
   "dependencies": {
-    "@aws-sdk/client-cognito-identity-provider": "3.918.0",
-    "@aws-sdk/client-s3": "3.918.0",
+    "@aws-sdk/client-cognito-identity-provider": "3.995.0",
+    "@aws-sdk/client-s3": "3.995.0",
     "aws-sdk-client-mock": "^4.1.0"
   },
   "main": "./src/index.js",

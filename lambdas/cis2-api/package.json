@@ -1,7 +1,7 @@
 {
   "dependencies": {
-    "@aws-sdk/client-kms": "3.918.0",
-    "@aws-sdk/client-ssm": "3.918.0",
+    "@aws-sdk/client-kms": "3.995.0",
+    "@aws-sdk/client-ssm": "3.995.0",
     "axios": "^1.13.5",
     "date-fns": "^4.1.0",
     "jwt-decode": "^4.0.0",

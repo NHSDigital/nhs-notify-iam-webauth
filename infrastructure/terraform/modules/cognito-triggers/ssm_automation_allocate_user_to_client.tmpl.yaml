@@ -1,0 +1,184 @@
+schemaVersion: '0.3'
+description: |
+  # Allocate a user to a client (automated runbook)
+
+  This runbook replaces the [manual process](https://nhsd-confluence.digital.nhs.uk/spaces/RIS/pages/1129816976/Operational+playbook+-+WebUI+-+Assigning+users+to+a+client#OperationalplaybookWebUIAssigninguserstoaclient-Allocatingausertoaclient) for linking a Cognito user to an NHS Notify client. This runbook is _only_ for assigning a client to a user for the **first time**.
+
+  To reassign a user to a client you must follow a manual process.
+
+  ## What this automation does
+
+  When you run the **Allocate user to client** automation, will:
+
+  1. Check the user exists in Cognito
+  2. Check the client exists by validating the SSM parameter path:
+      - `/${CSI}/clients/THE_CLIENT_ID_YOU_SUPPLIED`
+  3. Generate a new internal user ID (UUID)
+  4. Creates **new** user-mapping records to DynamoDB in one transaction
+  5. Update the Cognito user attribute `custom:nhs_notify_user_id` with the generated internal user ID
+  6. Return a summary of what was updated
+
+  ## Inputs you need
+
+  - **UserId**: the user’s Cognito User name / User ID (Sub)
+  - **ClientId**: the target client identifier
+
+  ## Before you run it
+
+  - Ask the user to attempt sign-in first if needed (so they exist in Cognito).
+
+  ## How to run
+  1. Leave as 'Simple execution'
+  2. Enter input parameters:
+      - `UserId`
+      - `ClientId`
+  3. Ignore 'CloudWatch alarm - optional'
+  4. Ignore 'Tags - optional'
+  5. Click **Execute** and monitor each 'Executed step'
+
+  ## What success looks like
+
+  You should see all steps complete, and the final output includes:
+
+  - `externalUserId`
+  - `clientId`
+  - `internalUserId`
+
+  ## Troubleshooting
+
+  If an 'Executed step' has failed then click the 'Step ID' link to view the 'Execution detail'. On this screen you will see a 'VerificationErrorMessage' which contains the details of the error.
+
+  For any Errors not covered below, contact an on-support developer.
+
+  ### "AssertCognitoUserExists" step fails
+
+  #### Error: An error occurred (UserNotFoundException) when calling the AdminGetUser operation: User does not exist.
+
+  - The user is not in Cognito yet
+  - Ask the user to sign in once, then retry
+
+  ### "AssertClientParameterExists" step fails
+
+  #### Error: An error occurred (ParameterNotFound) when calling the GetParameter operation:
+
+  - The client parameter path does not exist: `/${CSI}/clients/THE_CLIENT_ID_YOU_SUPPLIED`
+  - You will need to follow the process for creating the client
+assumeRole: ${EXECUTION_ROLE_ARN}
+parameters:
+  UserId:
+    type: String
+    description: 'CIS2 identifier (Cognito User name). Example: CIS2-live_123456789101'
+  ClientId:
+    type: String
+    description: 'Client identifier. Example: 550e8400-e29b-41d4-a716-446655440000'
+mainSteps:
+  - name: AssertCognitoUserExists
+    description: Verify that the specified user exists in the Cognito User Pool
+    action: aws:executeAwsApi
+    onFailure: Abort
+    nextStep: AssertClientParameterExists
+    isEnd: false
+    inputs:
+      Service: cognito-idp
+      Api: AdminGetUser
+      UserPoolId: '${USER_POOL_ID}'
+      Username: '{{ UserId }}'
+  - name: AssertClientParameterExists
+    description: Verify that the SSM client parameter exists for the provided Client ID
+    action: aws:executeAwsApi
+    onFailure: Abort
+    nextStep: GenerateInternalUserId
+    isEnd: false
+    inputs:
+      Service: ssm
+      Api: GetParameter
+      Name: '/${CSI}/clients/{{ ClientId }}'
+  - name: GenerateInternalUserId
+    description: Generate a unique internal user identifier (UUID)
+    action: aws:executeScript
+    onFailure: Abort
+    nextStep: PutDynamoRecords
+    isEnd: false
+    inputs:
+      Runtime: python3.11
+      Handler: generate_uuid
+      Script: |
+        import uuid
+
+        def generate_uuid(event, context):
+            internal_user_id = str(uuid.uuid4())
+            return {"internalUserId": internal_user_id}
+    outputs:
+      - Name: InternalUserId
+        Selector: $.Payload.internalUserId
+        Type: String
+  - name: PutDynamoRecords
+    description: Create database records linking the user to the client
+    action: aws:executeAwsApi
+    onFailure: Abort
+    nextStep: UpdateCognitoAttribute
+    isEnd: false
+    inputs:
+      Service: dynamodb
+      Api: TransactWriteItems
+      TransactItems:
+        - Put:
+            TableName: '${DYNAMO_TABLE_NAME}'
+            ConditionExpression: attribute_not_exists(PK) AND attribute_not_exists(SK)
+            Item:
+              PK:
+                S: INTERNAL_USER#{{ GenerateInternalUserId.InternalUserId }}
+              SK:
+                S: CLIENT#{{ ClientId }}
+              client_id:
+                S: '{{ ClientId }}'
+        - Put:
+            TableName: '${DYNAMO_TABLE_NAME}'
+            ConditionExpression: attribute_not_exists(PK) AND attribute_not_exists(SK)
+            Item:
+              PK:
+                S: EXTERNAL_USER#{{ UserId }}
+              SK:
+                S: INTERNAL_USER#{{ GenerateInternalUserId.InternalUserId }}
+  - name: UpdateCognitoAttribute
+    description: Update the user's Cognito profile with the internal user ID
+    action: aws:executeAwsApi
+    onFailure: Abort
+    nextStep: OutputSummary
+    isEnd: false
+    inputs:
+      Service: cognito-idp
+      Api: AdminUpdateUserAttributes
+      UserPoolId: '${USER_POOL_ID}'
+      Username: '{{ UserId }}'
+      UserAttributes:
+        - Name: custom:nhs_notify_user_id
+          Value: '{{ GenerateInternalUserId.InternalUserId }}'
+  - name: OutputSummary
+    description: Display a summary of the completed allocation
+    action: aws:executeScript
+    isEnd: true
+    inputs:
+      Runtime: python3.11
+      Handler: output_summary
+      InputPayload:
+        userId: '{{ UserId }}'
+        clientId: '{{ ClientId }}'
+        internalUserId: '{{ GenerateInternalUserId.InternalUserId }}'
+      Script: |
+        def output_summary(event, context):
+            return {
+                'message': 'User allocation completed successfully',
+                'details': {
+                    'externalUserId': event['userId'],
+                    'clientId': event['clientId'],
+                    'internalUserId': event['internalUserId']
+                }
+            }
+    outputs:
+      - Name: Summary
+        Selector: $.Payload
+        Type: StringMap
+outputs:
+  - GenerateInternalUserId.InternalUserId
+  - OutputSummary.Summary

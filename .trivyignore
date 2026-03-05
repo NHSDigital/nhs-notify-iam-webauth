@@ -3,7 +3,3 @@ CVE-2026-27699 # https://avd.aquasec.com/nvd/cve-2026-26996 - basic-ftp - brough
 
 # All CVEs below are tracked for remediation under the following Jira ticket:
 # https://nhsd-jira.digital.nhs.uk/browse/CCM-14700
-
-CVE-2026-26996 # https://avd.aquasec.com/nvd/cve-2026-26996 - minimatch - used by several dependencies, most notably eslint. we need to do the eslint v9 upgrade.
-CVE-2026-27903 # https://avd.aquasec.com/nvd/cve-2026-27903 - minimatch - used by several dependencies, most notably eslint. we need to do the eslint v9 upgrade.
-CVE-2026-27904 # https://avd.aquasec.com/nvd/cve-2026-27904 - minimatch - used by several dependencies, most notably eslint. we need to do the eslint v9 upgrade.
