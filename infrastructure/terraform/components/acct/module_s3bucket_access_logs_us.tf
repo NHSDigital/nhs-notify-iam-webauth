@@ -1,11 +1,11 @@
-module "s3bucket_cf_logs" {
-  count  = var.deploy_cdn ? 1 : 0
+module "s3bucket_access_logs_us" {
   source = "https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/3.0.4/terraform-s3bucket.zip"
+
+  name = "access-logs"
+
   providers = {
     aws = aws.us-east-1
   }
-
-  name = "cf-logs"
 
   aws_account_id = var.aws_account_id
   region         = "us-east-1"
@@ -13,50 +13,23 @@ module "s3bucket_cf_logs" {
   environment    = var.environment
   component      = var.component
 
-  acl        = "private"
-  versioning = true
-
-  bucket_logging_target = {
-    bucket = var.s3_access_logs_us_bucket_id
-  }
-
-  object_ownership = "ObjectWriter"
+  acl           = "private"
+  force_destroy = false
+  versioning    = true
 
   lifecycle_rules = [
     {
-      prefix  = ""
       enabled = true
-
-      transition = [
-        {
-          days          = "90"
-          storage_class = "STANDARD_IA"
-        },
-        {
-          days          = "180"
-          storage_class = "GLACIER"
-        }
-      ]
-
-      expiration = {
-        days = "365"
-      }
-
 
       noncurrent_version_transition = [
         {
           noncurrent_days = "30"
           storage_class   = "STANDARD_IA"
-        },
-        {
-          noncurrent_days = "180"
-          storage_class   = "GLACIER"
         }
-
       ]
 
       noncurrent_version_expiration = {
-        noncurrent_days = "365"
+        noncurrent_days = "90"
       }
 
       abort_incomplete_multipart_upload = {
@@ -66,7 +39,7 @@ module "s3bucket_cf_logs" {
   ]
 
   policy_documents = [
-    data.aws_iam_policy_document.s3bucket_cf_logs[0].json
+    data.aws_iam_policy_document.s3bucket_access_logs_us.json
   ]
 
   public_access = {
@@ -77,12 +50,11 @@ module "s3bucket_cf_logs" {
   }
 
   default_tags = {
-    Name = "Cloudfront Logs"
+    Name = "S3 bucket access logs"
   }
 }
 
-data "aws_iam_policy_document" "s3bucket_cf_logs" {
-  count = var.deploy_cdn ? 1 : 0
+data "aws_iam_policy_document" "s3bucket_access_logs_us" {
   statement {
     sid    = "DontAllowNonSecureConnection"
     effect = "Deny"
@@ -92,8 +64,8 @@ data "aws_iam_policy_document" "s3bucket_cf_logs" {
     ]
 
     resources = [
-      module.s3bucket_cf_logs[0].arn,
-      "${module.s3bucket_cf_logs[0].arn}/*",
+      module.s3bucket_access_logs_us.arn,
+      "${module.s3bucket_access_logs_us.arn}/*",
     ]
 
     principals {
@@ -115,26 +87,6 @@ data "aws_iam_policy_document" "s3bucket_cf_logs" {
   }
 
   statement {
-    effect  = "Allow"
-    actions = ["s3:PutObject"]
-    resources = [
-      "${module.s3bucket_cf_logs[0].arn}/*",
-    ]
-
-    principals {
-      type        = "Service"
-      identifiers = ["logging.s3.amazonaws.com"]
-    }
-    condition {
-      test     = "StringEquals"
-      variable = "aws:SourceAccount"
-      values = [
-        var.aws_account_id
-      ]
-    }
-  }
-
-  statement {
     sid    = "AllowManagedAccountsToList"
     effect = "Allow"
 
@@ -143,7 +95,7 @@ data "aws_iam_policy_document" "s3bucket_cf_logs" {
     ]
 
     resources = [
-      module.s3bucket_cf_logs[0].arn,
+      module.s3bucket_access_logs_us.arn,
     ]
 
     principals {
@@ -163,13 +115,34 @@ data "aws_iam_policy_document" "s3bucket_cf_logs" {
     ]
 
     resources = [
-      "${module.s3bucket_cf_logs[0].arn}/*",
+      "${module.s3bucket_access_logs_us.arn}/*",
     ]
 
     principals {
       type = "AWS"
       identifiers = [
         "arn:aws:iam::${var.aws_account_id}:root"
+      ]
+    }
+  }
+
+  statement {
+    sid    = "AllowS3AccessLogging"
+    effect = "Allow"
+
+    actions = [
+      "s3:PutObject",
+    ]
+
+    resources = [
+      "${module.s3bucket_access_logs_us.arn}/*",
+    ]
+
+    principals {
+      type = "Service"
+
+      identifiers = [
+        "logging.s3.amazonaws.com",
       ]
     }
   }
