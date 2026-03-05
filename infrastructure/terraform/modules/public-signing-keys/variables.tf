@@ -65,6 +65,11 @@ variable "s3_access_logs_bucket_id" {
   description = "S3 bucket ID for Access Logs"
 }
 
+variable "s3_access_logs_us_bucket_id" {
+  type        = string
+  description = "S3 bucket ID for Access Logs in us-east-1"
+}
+
 variable "dns_zone_id" {
   type        = string
   description = "The base DNS zone ID"
