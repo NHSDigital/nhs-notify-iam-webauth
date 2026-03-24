@@ -7,7 +7,8 @@ nodejs 22.22.0
 pre-commit 3.6.0
 terraform 1.10.1
 terraform-docs 0.19.0
-trivy 0.69.2
+# TODO - Re-visit Trivy usage https://nhsd-jira.digital.nhs.uk/browse/CCM-15549
+# trivy 0.69.2
 vale 3.6.0
 # python 3.13.2
 
