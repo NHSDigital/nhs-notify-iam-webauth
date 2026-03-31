@@ -26,7 +26,8 @@ jobs:
       version: ${{ steps.variables.outputs.version }}
     steps:
       - name: "Checkout code"
-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4      - name: "Set CI/CD variables"
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - name: "Set CI/CD variables"
         id: variables
         run: |
           datetime=$(date -u +'%Y-%m-%dT%H:%M:%S%z')
@@ -55,7 +56,8 @@ jobs:
     timeout-minutes: 3
     steps:
       - name: "Checkout code"
-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4      - name: "Get the artefacts"
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - name: "Get the artefacts"
         run: |
           echo "Getting the artefacts created by the build stage ..."
           # Use either action/cache or action/upload-artifact
