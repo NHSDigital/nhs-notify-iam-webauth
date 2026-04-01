@@ -1,5 +1,0 @@
-CVE-2026-1615 # https://avd.aquasec.com/nvd/cve-2026-1615 - jsonpath - fixed version not available. This is a dev-dependecy brought in by pa11y. pa11y will be removed soon (TODO: CCM-13084)
-CVE-2026-27699 # https://avd.aquasec.com/nvd/cve-2026-26996 - basic-ftp - brought in via pa11y which will be removed imminently - TODO CCM-13084 remove this
-
-# All CVEs below are tracked for remediation under the following Jira ticket:
-# https://nhsd-jira.digital.nhs.uk/browse/CCM-14700
