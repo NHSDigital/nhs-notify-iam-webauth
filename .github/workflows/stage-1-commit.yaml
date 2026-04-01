@@ -165,7 +165,7 @@ jobs:
   #   if: needs.detect-terraform-changes.outputs.terraform_changed == 'true'
   #   steps:
   #     - name: "Checkout code"
-  #       uses: actions/checkout@v4
+  #       uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
   #     - name: "Setup ASDF"
   #       uses: asdf-vm/actions/setup@1902764435ca0dd2f3388eea723a4f92a4eb8302
   #     - name: "Trivy IaC Scan"
@@ -179,7 +179,7 @@ jobs:
   #   timeout-minutes: 10
   #   steps:
   #     - name: "Checkout code"
-  #       uses: actions/checkout@v4
+  #       uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
   #     - name: "Setup ASDF"
   #       uses: asdf-vm/actions/setup@1902764435ca0dd2f3388eea723a4f92a4eb8302
   #     - name: "Trivy Package Scan"
