@@ -1,4 +1,4 @@
-# TODO - Re-visit Trivy usage https://nhsd-jira.digital.nhs.uk/browse/CCM-15549
+#TODO - Re-visit Trivy usage https://nhsd-jira.digital.nhs.uk/browse/CCM-15549
 # name: "Trivy IaC Scan"
 # description: "Scan Terraform IaC using Trivy"
 # runs:
